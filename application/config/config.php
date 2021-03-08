@@ -1,5 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+date_default_timezone_set('Asia/Jakarta');
+setlocale(LC_ALL, 'IND');
 
 /*
 |--------------------------------------------------------------------------
@@ -22,13 +24,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | If you need to allow multiple domains, remember that this file is still
 | a PHP script and you can easily do that on your own.
 |
-| Choose Type 'Development' or 'Production'.
+| Choose Environment Type 'Local' or 'Server'.
 |
 */
-$type = 'Production';
+$env_type = 'Local';
 
-if($type == 'Development'){
-    $root = "http://localhost/cbt";
+if($env_type == 'Local'){
+    $root = "http://localhost/cbt/";
     /*
     |--------------------------------------------------------------------------
     | Base URL
@@ -40,15 +42,15 @@ if($type == 'Development'){
     | Assets Base URL
     |--------------------------------------------------------------------------
     */
-    $config['_assets_website'] = $root."assets/website";
-    $config['_assets_admin'] = $root."assets/admin";
+    $config['_assets_website'] = $root."assets/website/";
+    $config['_assets_admin'] = $root."assets/admin/";
     /*
     |--------------------------------------------------------------------------
     | Other Base URL (Type Below Here)
     |--------------------------------------------------------------------------
     */
-    $config['_dir_website'] = $root."storage/website";
-    $config['_dir_admin'] = $root."storage/admin";
+    $config['_dir_website'] = $root."storage/website/";
+    $config['_dir_admin'] = $root."storage/admin/";
 } else {
     $root = 'https://'. $_SERVER['HTTP_HOST'] .'/';
     /*
@@ -62,15 +64,15 @@ if($type == 'Development'){
     | Assets Base URL
     |--------------------------------------------------------------------------
     */
-    $config['_assets_website'] = $root."assets/website";
-    $config['_assets_admin'] = $root."assets/admin";
+    $config['_assets_website'] = $root."assets/website/";
+    $config['_assets_admin'] = $root."assets/admin/";
     /*
     |--------------------------------------------------------------------------
     | Other Base URL (Type Below Here)
     |--------------------------------------------------------------------------
     */
-    $config['_dir_website'] = $root."storage/website";
-    $config['_dir_admin'] = $root."storage/admin";
+    $config['_dir_website'] = $root."storage/website/";
+    $config['_dir_admin'] = $root."storage/admin/";
 }
 
 /*
