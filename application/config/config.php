@@ -50,8 +50,7 @@ if($type == 'Development'){
     $config['_dir_website'] = $root."storage/website";
     $config['_dir_admin'] = $root."storage/admin";
 } else {
-    $root=(isset($_SERVER['HTTPS']) ? "https://" : "http://").$_SERVER['HTTP_HOST'];
-    $root.= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
+    $root = 'https://'. $_SERVER['HTTP_HOST'] .'/';
     /*
     |--------------------------------------------------------------------------
     | Base URL
