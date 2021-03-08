@@ -25,7 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Choose Type 'Development' or 'Production'.
 |
 */
-$type = 'Development';
+$type = 'Production';
 
 if($type == 'Development'){
     $root = "http://localhost/cbt";
