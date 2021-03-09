@@ -3,7 +3,8 @@
     <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Elements 404 by BuildWith Angga</title>
+      <title>404</title>
+      <link rel="shortcut icon" href="<?php echo config_item('_assets_general'); ?>favicon/favicon.ico">
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     </head>
     <body>
@@ -99,14 +100,12 @@
             <h1 class="title-text-empty-4-7"
             style="color: #FFFFFF;">Opss! Something Missing</h1>
             <p class="lg-show-empty-4-7 title-caption-empty-4-7"
-            style="color: #707092;">The page you’re looking for isn’t found. We<br>
-                suggest you Back to Homepage.</p>
+            style="color: #707092;">Halaman yang anda cari tidak ditemukan.</p>
             <p class="lg-hide-empty-4-7 title-caption-empty-4-7"
-            style="color: #707092;">The page you’re looking for isn’t found. We
-                suggest you Back to Homepage.</p>
+            style="color: #707092;">Halaman yang anda cari tidak ditemukan.</p>
             <div class="d-flex justify-content-center">
                 <button class="btn btn-empty-4-7 d-inline-flex"
-                style="background: #524EEE;" onclick="goBack()">Back to Homepage</button>
+                style="background: #524EEE;" onclick="goBack()">Kembali</button>
             </div>
         </div>
     </div>

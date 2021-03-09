@@ -3,7 +3,21 @@
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Candra Aji Pamungkas | candraajipamungkas@gmail.com">
+    <meta name="description" content="Aplikasi ujian online &amp; solusi menyelenggarakan ujian online berbasis komputer dengan mudah cepat dan praktis">
+    <link rel="shortcut icon" href="<?php echo config_item('_assets_general'); ?>favicon/favicon.ico">
+    <meta property="og:description" content="Aplikasi ujian online &amp; solusi menyelenggarakan ujian online berbasis komputer dengan mudah cepat dan praktis">
+    <meta property="og:title" content="Aplikasi Ujian Online">
+    <meta name="twitter:description" content="Aplikasi ujian online &amp; solusi menyelenggarakan ujian online berbasis komputer dengan mudah cepat dan praktis">
+    <meta name="twitter:title" content="Aplikasi Ujian Online">
+
+    <title>Ujian Online</title>
+
+    <noscript>
+          <meta http-equiv="Refresh" content="0;<?php echo base_url(); ?>javascript-not-available">
+    </noscript>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -13,27 +27,11 @@
 
     <!-- FONT -->
     <link href="https://fonts.cdnfonts.com/css/arial-rounded-mt-bold" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap" rel="stylesheet">
     
     <!-- ICON -->
-    <link rel="stylesheet" href="<?php echo config_item('_assets_website'); ?>css/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?php echo config_item('_assets_general'); ?>font-awesome/css/font-awesome.min.css">
+  
 
-    <title>Ujian Online</title>
-  </head>
-  <body oncopy="return false" oncut="return false" onpaste="return false">
-    <nav class="navbar fixed-top navbar-expand-md custom-navbar navbar-dark">
-        <!-- 324x112dp -->
-        <img class="navbar-brand" src="https://see.fontimg.com/api/renderfont4/BW768/eyJyIjoiZnMiLCJoIjo2NCwidyI6MTAwMCwiZnMiOjY0LCJmZ2MiOiIjMUVBREZGIiwiYmdjIjoiI0ZGRkZGRiIsInQiOjF9/dWppYW4gb25saW5l/gv-time-regular.png" id="logo_custom" width="10%"  alt="logo">
-        <button class="navbar-toggler navbar-toggler-right custom-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-            <span class="navbar-toggler-icon "></span>
-        </button>
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#offer"><i class="fa fa-user" aria-hidden="true"></i> <b>Akun</b></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-sign-out" aria-hidden="true"></i> <b>Keluar</b></a>
-                </li>
-            </ul>
-        </div>  
-    </nav>
+    

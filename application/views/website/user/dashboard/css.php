@@ -1,6 +1,7 @@
 <style>
     .sesi-head{
         font-size: 20px;
+        letter-spacing: 0.5px;
     }
 
     .sesi-detail{

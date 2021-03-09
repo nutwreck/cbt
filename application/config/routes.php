@@ -50,18 +50,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'Home';
-$route['404_override'] = 'my404';
+$route['404_override'] = 'My404';
+$route['javascript-not-available'] = 'JS_detect';
 $route['translate_uri_dashes'] = FALSE;
 
 /*
 |
-| START WEBSITE URL
+| START WEBSITE URL FOR USER ONLY
 |
 */
-$route['ujian'] = 'website/Ujian';
-$route['ujian/lembar-soal'] = 'website/Ujian/lembar_soal';
+$route['dashboard'] = 'website/user/Dashboard';
+$route['pre-ujian'] = 'website/user/Ujian/mulai_ujian';
+$route['ujian'] = 'website/user/Ujian';
 /*
 |
-| END WEBSITE URL
+| END WEBSITE URL FOR USER ONLY
 |
 */

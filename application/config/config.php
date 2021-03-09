@@ -37,20 +37,6 @@ if($env_type == 'Local'){
     |--------------------------------------------------------------------------
     */
     $config['base_url'] = $root;
-    /*
-    |--------------------------------------------------------------------------
-    | Assets Base URL
-    |--------------------------------------------------------------------------
-    */
-    $config['_assets_website'] = $root."assets/website/";
-    $config['_assets_admin'] = $root."assets/admin/";
-    /*
-    |--------------------------------------------------------------------------
-    | Other Base URL (Type Below Here)
-    |--------------------------------------------------------------------------
-    */
-    $config['_dir_website'] = $root."storage/website/";
-    $config['_dir_admin'] = $root."storage/admin/";
 } else {
     $root = 'https://'. $_SERVER['HTTP_HOST'] .'/';
     /*
@@ -59,13 +45,15 @@ if($env_type == 'Local'){
     |--------------------------------------------------------------------------
     */
     $config['base_url'] = $root;
-    /*
+}
+/*
     |--------------------------------------------------------------------------
     | Assets Base URL
     |--------------------------------------------------------------------------
     */
     $config['_assets_website'] = $root."assets/website/";
     $config['_assets_admin'] = $root."assets/admin/";
+    $config['_assets_general'] = $root."assets/general/";
     /*
     |--------------------------------------------------------------------------
     | Other Base URL (Type Below Here)
@@ -73,7 +61,7 @@ if($env_type == 'Local'){
     */
     $config['_dir_website'] = $root."storage/website/";
     $config['_dir_admin'] = $root."storage/admin/";
-}
+    $config['_dir_general'] = $root."storage/general/";
 
 /*
 |--------------------------------------------------------------------------
