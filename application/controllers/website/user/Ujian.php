@@ -30,7 +30,7 @@ class Ujian extends CI_Controller {
     */
 
     private function _generate_view($view, $data){
-        $this->load->view('website/_template/header');
+        $this->load->view('website/_template/header', $data['title_header']);
         $this->load->view($view['css_additional']);
         $this->load->view('website/_template/content');
         $this->load->view($view['menu_header']);
@@ -49,6 +49,7 @@ class Ujian extends CI_Controller {
     public function index(){
         //for passing data to view
         $data['content'] = [];
+        $data['title_header'] = ['title' => 'Ujian Online'];
 
         //for load view
         $view['css_additional'] = 'website/user/ujian/css';
@@ -63,12 +64,13 @@ class Ujian extends CI_Controller {
     public function mulai_ujian(){
         //for passing data to view
         $data['content'] = [];
+        $data['title_header'] = ['title' => 'Persiapan dan Petunjuk Pengerjaan'];
 
         //for load view
         $view['css_additional'] = 'website/user/ujian/css';
-        $view['menu_header'] = 'website/_template/menu_ujian';
+        $view['menu_header'] = 'website/_template/menu_empty';
         $view['content'] = 'website/user/ujian/mulai_ujian/content';
-        $view['js_additional'] = 'website/user/ujian/js';
+        $view['js_additional'] = 'website/user/ujian/mulai_ujian/js';
 
         //get function view website
         $this->_generate_view($view, $data);

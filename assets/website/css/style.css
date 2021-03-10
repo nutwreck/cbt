@@ -25,6 +25,9 @@
 .font-roboto{
     font-family: 'Roboto', sans-serif;
 }
+.font-poppins{
+  font-family: 'Poppins', sans-serif;
+}
 
 .offset-text-bg {
     display: inline-block;

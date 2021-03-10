@@ -30,7 +30,7 @@ class Dashboard extends CI_Controller {
     */
 
     private function _generate_view($view, $data){
-        $this->load->view('website/_template/header');
+        $this->load->view('website/_template/header', $data['title_header']);
         $this->load->view($view['css_additional']);
         $this->load->view('website/_template/content');
         $this->load->view($view['menu_header']);
@@ -49,6 +49,7 @@ class Dashboard extends CI_Controller {
     public function index(){ //
         //for passing data to view
         $data['content'] = [];
+        $data['title_header'] = ['title' => 'Daftar Sesi Ujian'];
 
         //for load view
         $view['css_additional'] = 'website/user/dashboard/css';

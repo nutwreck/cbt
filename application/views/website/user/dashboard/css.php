@@ -1,3 +1,10 @@
+<!-- 
+|
+| CSS By Candra Aji Pamungkas
+| candraajipamungkas@gmail.com
+|
+-->
+
 <style>
     .sesi-head{
         font-size: 20px;

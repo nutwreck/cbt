@@ -1,0 +1,24 @@
+[data-theme="dark"] {
+  background-color: #111 !important;
+}
+
+[data-theme="dark"] .bg-light {
+  background-color: #333 !important;
+}
+
+[data-theme="dark"] .bg-white.custom-navbar {
+  background-color: #000 !important;
+}
+
+[data-theme="dark"] .custom-navbar {
+  box-shadow: none;
+}
+
+[data-theme="dark"] .dark-mode-text {
+  color: #eee !important;;
+}
+
+
+[data-theme="dark"] .bg-black {
+  background-color: #eee !important;
+}

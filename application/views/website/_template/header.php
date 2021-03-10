@@ -13,7 +13,7 @@
     <meta name="twitter:description" content="Aplikasi ujian online &amp; solusi menyelenggarakan ujian online berbasis komputer dengan mudah cepat dan praktis">
     <meta name="twitter:title" content="Aplikasi Ujian Online">
 
-    <title>Ujian Online</title>
+    <title><?=$title?></title>
 
     <noscript>
           <meta http-equiv="Refresh" content="0;<?php echo base_url(); ?>javascript-not-available">
@@ -29,6 +29,7 @@
     <link href="https://fonts.cdnfonts.com/css/arial-rounded-mt-bold" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
     
     <!-- ICON -->
     <link rel="stylesheet" href="<?php echo config_item('_assets_general'); ?>font-awesome/css/font-awesome.min.css">
