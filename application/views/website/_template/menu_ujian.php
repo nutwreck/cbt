@@ -7,10 +7,10 @@
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-            <div data-intro="Pindah ke dark mode jika anda kurang nyaman dengan warna latar putih." data-position="left" class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="darkSwitch" />
-                <label class="custom-control-label dark-mode-text" for="darkSwitch">Dark Mode</label>
-            </div>
+                <div data-intro="Pindah ke dark mode jika anda kurang nyaman dengan warna latar putih." data-position="left" class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="darkSwitch" />
+                    <label class="custom-control-label dark-mode-text" for="darkSwitch">Dark Mode</label>
+                </div>
             </li>
         </ul>
     </div>  

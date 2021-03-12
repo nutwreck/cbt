@@ -7,6 +7,8 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/3.3.1/introjs.min.css" integrity="sha512-631ugrjzlQYCOP9P8BOLEMFspr5ooQwY3rgt8SMUa+QqtVMbY/tniEUOcABHDGjK50VExB4CNc61g5oopGqCEw==" crossorigin="anonymous" />
 <link rel="stylesheet" href="<?php echo config_item('_assets_website'); ?>dark-mode-switch/dark-mode.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css" integrity="sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw" crossorigin="anonymous">
+<link rel="stylesheet" href="<?php echo config_item('_assets_website'); ?>css/opsi.css" />
 
 <style>
     .box {
@@ -133,10 +135,81 @@
         font-size:17px;
     }
 
+    .sidenav {
+        width: 25%;
+        position: fixed;
+        z-index: 1;
+        right: 10px;
+        top:100px;
+        background: rgb(9,165,255);
+        background: -moz-linear-gradient(90deg, rgba(9,165,255,1) 0%, rgba(81,230,218,1) 100%);
+        background: -webkit-linear-gradient(90deg, rgba(9,165,255,1) 0%, rgba(81,230,218,1) 100%);
+        background: linear-gradient(90deg, rgba(9,165,255,1) 0%, rgba(81,230,218,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#09a5ff",endColorstr="#51e6da",GradientType=1);
+        overflow-x: hidden;
+        padding: 8px 0;
+        border-radius: 25px;
+    }
+
+    .sidenav a {
+        padding: 1% 5% 1% 5%;
+        text-decoration: none;
+        font-size: 18px;
+        color: white;
+        display: block;
+    }
+
+    .sidenav a:hover {
+        color: #064579;
+    }
+
+    .collapsible {
+        display: none;
+        overflow: hidden;
+    }
+
+    .content {
+        display: block;
+    }
+
+    .main {
+        margin-top: 100px;
+        width: 75%;
+        padding: 0px 10px;
+    }
+
+    .math{
+        width:10%;
+    }
+
+    .button-round {
+        display: inline-block;
+        position: relative;
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        margin: 2%;
+    }
+
     @media only screen and (max-width: 420px) {
         .base-timer {
             left: 33%;
             margin-right: -33%;
+        }
+        .sidenav {padding-top: 2%}
+        .sidenav a {font-size: 18px;}
+        .main {width: 100%;margin-top: 180px;}
+        .sidenav {width: 90%; right:0px; margin: 0 5% 0 5%}
+        .content {
+            display: none;
+            overflow: hidden;
+        }
+        .collapsible {
+            display: block;
+            padding: 0% 7% 0% 7%;
+        }
+        .collapsible button {
+            border: 2px solid #ffffff;
         }
     }
     @media (min-width: 420px)  and (max-width: 780px) {
