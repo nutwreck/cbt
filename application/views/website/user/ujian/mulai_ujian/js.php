@@ -9,7 +9,7 @@
         startTimer();
     }
     function back_dashboard(){
-        window.location.href = "<?php echo base_url(); ?>dashboard";
+        window.location.href = base_url + "dashboard";
     }
 
     // Credit Countdown By: Mateusz Rybczonec
@@ -67,7 +67,7 @@
         setTimeout(function(){ document.getElementById("app").innerHTML = "<h5 class='text-center'>Mengalihkan.</h5>"; }, 500);
         setTimeout(function(){ document.getElementById("app").innerHTML = "<h5 class='text-center'>Mengalihkan..</h5>"; }, 1000);
         setTimeout(function(){ document.getElementById("app").innerHTML = "<h5 class='text-center'>Mengalihkan...</h5>"; }, 1500);
-        setTimeout(function(){ window.location.href = "<?php echo base_url(); ?>ujian"; }, 1700);
+        setTimeout(function(){ window.location.href = base_url + "ujian"; }, 1700);
     }
 
     function startTimer() {

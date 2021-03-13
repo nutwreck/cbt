@@ -9,7 +9,7 @@
         border-radius: 3px;
         border: 1px solid #D1D3D4;
         font-weight: normal;
-        padding: 5px 0 5px 50px;  
+        padding: 5px 10px 5px 50px;  
     }
     
     .funkyradio input[type="radio"]:empty,
@@ -20,7 +20,6 @@
     .funkyradio input[type="radio"]:empty ~ label,
     .funkyradio input[type="checkbox"]:empty ~ label {
         position: relative;
-        line-height: 2em;
         /*text-indent: 3.25em;*/
         margin-top: 5px;
         cursor: pointer;
@@ -115,7 +114,7 @@
     }
     .huruf_opsi {
         margin-left: -36px;
-        top: 50%;
-        transform: translate(0, -50%) ;
+       /*  top: 50%;
+        transform: translate(0, -50%) ; */
         position: absolute;
     }

@@ -33,6 +33,9 @@
     
     <!-- ICON -->
     <link rel="stylesheet" href="<?php echo config_item('_assets_general'); ?>font-awesome/css/font-awesome.min.css">
+
+    <!-- POP UP -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
   
 
     

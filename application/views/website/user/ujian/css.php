@@ -191,37 +191,60 @@
         margin: 2%;
     }
 
+    .sisawaktu-title{
+        margin-bottom:-3.5%;
+    }
+
+    .sisawaktu{
+        font-size:2em;
+        color: red;
+    }
+
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: hidden; /* Enable scroll if needed */
+    }
+
+    .modal-content {
+        margin: 20% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    #msg_title_away{
+        font-size: 1.6em;
+    }
+
+    #msg_content_away #msg_footer_away{
+        font-size: 1.2em;
+    }
+
+    /* ***************** */
+    /* Responsive device */
+    /* ***************** */
     @media only screen and (max-width: 420px) {
-        .base-timer {
-            left: 33%;
-            margin-right: -33%;
-        }
+        .base-timer {left: 33%; margin-right: -33%;}
         .sidenav {padding-top: 2%}
         .sidenav a {font-size: 18px;}
         .main {width: 100%;margin-top: 180px;}
         .sidenav {width: 90%; right:0px; margin: 0 5% 0 5%}
-        .content {
-            display: none;
-            overflow: hidden;
-        }
-        .collapsible {
-            display: block;
-            padding: 0% 7% 0% 7%;
-        }
-        .collapsible button {
-            border: 2px solid #ffffff;
-        }
+        .content {display: none; overflow: hidden;}
+        .collapsible {display: block; padding: 0% 7% 0% 7%;}
+        .collapsible button {border: 2px solid #ffffff;}
+        .modal-content {margin: 50% auto;}
     }
     @media (min-width: 420px)  and (max-width: 780px) {
-        .base-timer {
-            left: 38%;
-            margin-right: -38%;
-        }
+        .base-timer {left: 38%; margin-right: -38%;}
+        .modal-content {margin: 30% auto;}
     }
     @media (min-width: 780px) and (max-width: 920px) {
-        .base-timer {
-            left: 42%;
-            margin-right: -42%;
-        }
+        .base-timer {left: 42%; margin-right: -42%;}
     }
 </style>

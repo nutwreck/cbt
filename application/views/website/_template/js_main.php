@@ -9,9 +9,13 @@
     <link rel="stylesheet" href="<?php echo config_item('_assets_general'); ?>offline/themes/offline-theme-default.css">
     <link rel="stylesheet" href="<?php echo config_item('_assets_general'); ?>offline/themes/offline-language-english.css">
 
-    <script>
+    <!-- POP UP FROM PHP TO JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+    <script type="text/javascript"> //DOCUMENT SET ROOT
         $(document).ready(function() {
-            Offline.options = {
+            //Offline JS check koneksi internet user
+            Offline.options = { 
                 // to check the connection status immediatly on page load.
                 checkOnLoad: false,
 
@@ -31,4 +35,72 @@
                 requests: true
             };
         });
+    </script>
+
+    <script type="text/javascript">
+
+        var base_url = '<?=base_url()?>'; //GLOBAL CONFIG UNTUK BASE URL SEMUA YANG DIPAKAI DI JS
+
+        //SISA WAKTU UJIAN / TIMER
+        function sisawaktu(t) {
+            var time = new Date(t);
+            var n = new Date();
+            var x = setInterval(function() {
+                var now = new Date().getTime();
+                var dis = time.getTime() - now;
+                var h = Math.floor((dis % (1000 * 60 * 60 * 60)) / (1000 * 60 * 60));
+                var m = Math.floor((dis % (1000 * 60 * 60)) / (1000 * 60));
+                var s = Math.floor((dis % (1000 * 60)) / (1000));
+                h = ("0" + h).slice(-2);
+                m = ("0" + m).slice(-2);
+                s = ("0" + s).slice(-2);
+                var cd = h + ":" + m + ":" + s;
+                $('.sisawaktu').html(cd);
+            }, 100);
+            setTimeout(function() {
+                waktuHabis();
+            }, (time.getTime() - n.getTime()));
+        }
+
+        //KONFIGURASI UNTUK REQUEST POST DATA KE CONTROLLER
+        function ajaxcsrf() {
+            var csrfname = '<?= $this->security->get_csrf_token_name() ?>';
+            var csrfhash = '<?= $this->security->get_csrf_hash() ?>';
+            var csrf = {};
+            csrf[csrfname] = csrfhash;
+            $.ajaxSetup({
+                "data": csrf
+            });
+        }
+    </script>
+
+    <script type="text/javascript"> //POP UP
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "2000",
+            "hideDuration": "2000",
+            "timeOut": "7000",
+            "extendedTimeOut": "2000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut",
+            "escapeHtml": "true"
+        }
+
+        <?php if($this->session->flashdata('success')){ ?>
+            toastr.success("<?php echo $this->session->flashdata('success'); ?>");
+        <?php }else if($this->session->flashdata('error')){  ?>
+            toastr.error("<?php echo $this->session->flashdata('error'); ?>");
+        <?php }else if($this->session->flashdata('warning')){  ?>
+            toastr.warning("<?php echo $this->session->flashdata('warning'); ?>");
+        <?php }else if($this->session->flashdata('info')){  ?>
+            toastr.info("<?php echo $this->session->flashdata('info'); ?>");
+        <?php } ?>
     </script>
