@@ -61,7 +61,7 @@ class Ujian extends CI_Controller {
         $this->_generate_view($view, $data);
     }
 
-    public function designtwo(){
+   /*  public function ujian_page_next_design(){ //UNTUK TAMPILAN UJIAN KEDEPANNYA
         //for passing data to view
         $data['content'] = [];
         $data['title_header'] = ['title' => 'Ujian Online'];
@@ -69,12 +69,12 @@ class Ujian extends CI_Controller {
         //for load view
         $view['css_additional'] = 'website/user/ujian/css';
         $view['menu_header'] = 'website/_template/menu_ujian';
-        $view['content'] = 'website/user/ujian/content2';
+        $view['content'] = 'website/user/ujian/next_design/content';
         $view['js_additional'] = 'website/user/ujian/js';
 
         //get function view website
         $this->_generate_view($view, $data);
-    }
+    } */
 
     public function mulai_ujian(){
         //for passing data to view

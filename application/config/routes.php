@@ -62,7 +62,7 @@ $route['translate_uri_dashes'] = FALSE;
 $route['dashboard'] = 'website/user/Dashboard';
 $route['pre-ujian'] = 'website/user/Ujian/mulai_ujian';
 $route['ujian'] = 'website/user/Ujian';
-$route['ujian2'] = 'website/user/Ujian/designtwo';
+/* $route['ujian2'] = 'website/user/Ujian/ujian_page_next_design'; */
 /*
 |
 | END WEBSITE URL FOR USER ONLY

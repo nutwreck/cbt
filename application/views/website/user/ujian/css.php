@@ -135,7 +135,7 @@
         font-size:17px;
     }
 
-    .sidenav {
+    /* .sidenav { FOR NEXT DESIGN UJIAN
         width: 25%;
         position: fixed;
         z-index: 1;
@@ -149,7 +149,7 @@
         overflow-x: hidden;
         padding: 8px 0;
         border-radius: 25px;
-    }
+    } 
 
     .sidenav a {
         padding: 1% 5% 1% 5%;
@@ -161,12 +161,12 @@
 
     .sidenav a:hover {
         color: #064579;
-    }
+    } 
 
     .collapsible {
         display: none;
         overflow: hidden;
-    }
+    } 
 
     .content {
         display: block;
@@ -176,7 +176,7 @@
         margin-top: 100px;
         width: 75%;
         padding: 0px 10px;
-    }
+    } */
 
     .math{
         width:10%;
@@ -189,6 +189,9 @@
         width: 50px;
         border-radius: 50%;
         margin: 2%;
+        padding: 0;
+        font-size: 100%;
+        font-weight: bold;
     }
 
     .sisawaktu-title{
@@ -231,13 +234,13 @@
     /* ***************** */
     @media only screen and (max-width: 420px) {
         .base-timer {left: 33%; margin-right: -33%;}
-        .sidenav {padding-top: 2%}
+        /* .sidenav {padding-top: 2%} FOR NEXT DESIGN UJIAN
         .sidenav a {font-size: 18px;}
         .main {width: 100%;margin-top: 180px;}
         .sidenav {width: 90%; right:0px; margin: 0 5% 0 5%}
         .content {display: none; overflow: hidden;}
-        .collapsible {display: block; padding: 0% 7% 0% 7%;}
-        .collapsible button {border: 2px solid #ffffff;}
+        .collapsible {display: block; padding: 0% 7% 0% 7%;} 
+        .collapsible button {border: 2px solid #ffffff;} */
         .modal-content {margin: 50% auto;}
     }
     @media (min-width: 420px)  and (max-width: 780px) {

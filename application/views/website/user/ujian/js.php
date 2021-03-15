@@ -1,4 +1,4 @@
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/3.3.1/intro.min.js" integrity="sha512-NC1GtvckWJQLUHrSQp5+4ydIv6gW8kfP4Ewrwv8Y1xU1h9GTTaXDTnWl+kjHcZNCaX8ySFNSpPmtt/B4SUaDsQ==" crossorigin="anonymous"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/3.3.1/intro.min.js" integrity="sha512-NC1GtvckWJQLUHrSQp5+4ydIv6gW8kfP4Ewrwv8Y1xU1h9GTTaXDTnWl+kjHcZNCaX8ySFNSpPmtt/B4SUaDsQ==" crossorigin="anonymous"></script>
 <script src="<?php echo config_item('_assets_website'); ?>dark-mode-switch/dark-mode-switch.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js" integrity="sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js" integrity="sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
@@ -13,18 +13,23 @@
 </script>
 
 <!-- User pindah tab lain atau pindah dari browser aktif sekarang -->
-<script>
-    var modal = document.getElementById("myModal");
-    var timeleftout = 10;
-    var timeleftin  = 10;
-
+<script type="text/javascript">
     document.addEventListener("visibilitychange", event => {
+        var modal = document.getElementById("alert-away");
+        var timeleft  = 5;
+
         if (document.visibilityState == "visible") {
-            document.getElementById("msg_content_away").innerHTML = "Sistem mendeteksi anda meninggalkan halaman ini";
-            modal.style.display = "block";
+            var openBlockTimer = setInterval(function(){
+            timeleft--;
+            document.getElementById("countdownblocktimer").innerHTML = timeleft;
+            if(timeleft == 0){
+                clearInterval(openBlockTimer);
+                modal.style.display = "none";
+            } }, 1000);
         } else {
-            document.getElementById("msg_title_away").innerHTML = "PESAN!";
-            document.getElementById("msg_content_away").innerHTML = "Sistem mendeteksi anda meninggalkan halaman ini";
+            document.getElementById("msg_title_away").innerHTML = "PESAN SISTEM!";
+            document.getElementById("msg_content_away").innerHTML = "Anda terdeteksi meninggalkan halaman ini.";
+            document.getElementById("msg_footer_away").innerHTML = "Tunggu waktu penalti selesai untuk dapat melanjutkan pengerjaan soal kembali.";
             modal.style.display = "block";
         }
     })
@@ -38,8 +43,8 @@
     }).start()
 </script>
 
-<!-- For Mobile Menu SideBar -->
-<script>
+<!-- For Mobile Menu SideBar --> 
+<!-- <script> FOR NEXT DESIGN UJIAN
     var coll = document.getElementsByClassName("collapsible");
     var i;
 
@@ -56,7 +61,7 @@
             }
         });
     }
-</script>
+</script> -->
 
 <!-- NAVIGASI TOOGLE SOAL -->
 <script>
@@ -99,6 +104,7 @@
         var newFontSize = parseInt(fontSize)+1;
         
         $('.card-text').css('font-size', newFontSize+'px')
+        $('.huruf_opsi').css('font-size', newFontSize+'px')
     })
 
     $('#_decrease').on('click', function() {
@@ -106,9 +112,11 @@
         var newFontSize = parseInt(fontSize)-1;
         
         $('.card-text').css('font-size', newFontSize+'px')
+        $('.huruf_opsi').css('font-size', newFontSize+'px')
     })
 
     $('#_reset').on('click', function() {
         $('.card-text').css('font-size', '16px')
+        $('.huruf_opsi').css('font-size', '16px')
     })
 </script>
