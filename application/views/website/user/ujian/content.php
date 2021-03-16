@@ -1,5 +1,5 @@
 <?php
-$waktu_habis = strtotime('2021-03-15 19:34:40');
+$waktu_habis = strtotime('2021-03-16 19:34:40');
 if(time() >= $waktu_habis)
 {
     $this->session->set_flashdata('error', 'Waktu ujian telah berakhir!');
@@ -41,7 +41,7 @@ if(time() >= $waktu_habis)
                     <div class="card-body">
                         <div class="text-center">
                             <h5 class="sisawaktu-title font-poppins">Sisa Waktu</h5>
-                            <span class="sisawaktu font-arial-bold" data-intro="Sisa waktu pengerjaan anda." data-position="left" data-time="2021-03-15 19:34:40"></span>
+                            <span class="sisawaktu font-arial-bold" data-intro="Sisa waktu pengerjaan anda." data-position="left" data-time="2021-03-16 19:34:40"></span>
                             <div class="row mt-3">
                                 <div class="col" data-intro="Untuk menampilkan dan menyembunyikan navigasi soal." data-position="left">
                                     <button class="btn btn-md btn-primary" onclick="toggle_soal()"><i id="toogle-navigasi-ico" class="fa fa-chevron-circle-up" aria-hidden="true"></i> Navigasi</button>
