@@ -38,7 +38,7 @@ if($env_type == 'Local'){
     */
     $config['base_url'] = $root;
 } else {
-    $root = 'https://'. $_SERVER['HTTP_HOST'] .'/';
+    $root = 'https://cbt.candraajipamungkas.xyz/';
     /*
     |--------------------------------------------------------------------------
     | Base URL
