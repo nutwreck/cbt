@@ -92,7 +92,8 @@
 <!-- TIMER -->
 <script>
     function waktuHabis() {
-        alert('Waktu ujian telah habis!');
+        alert('');
+        swal("Informasi", "Waktu ujian telah habis!", "info");
         window.location.href = base_url + 'dashboard';
     }
 </script>
@@ -119,4 +120,18 @@
         $('.card-text').css('font-size', '16px')
         $('.huruf_opsi').css('font-size', '16px')
     })
+</script>
+
+<!-- SELESAI MENGERJAKAN -->
+<script>
+    function done_soal(){
+        swal({ title: "Good job!",
+            text: "Anda sudah menyelesaikan pengerjaan soal ini",
+            button: "Dashboard",
+            icon: "success"}).then(okay => {
+            if (okay) {
+                window.location.href = base_url + 'dashboard';
+            }
+        });
+    }
 </script>

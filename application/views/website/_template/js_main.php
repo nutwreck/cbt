@@ -12,6 +12,9 @@
     <!-- POP UP FROM PHP TO JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
+    <!-- ALERT -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
     <script type="text/javascript"> //DOCUMENT SET ROOT
         $(document).ready(function() {
             //Offline JS check koneksi internet user

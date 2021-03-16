@@ -61,4 +61,23 @@ class Dashboard extends CI_Controller {
         $this->_generate_view($view, $data);
     }
 
+    public function history_ujian(){
+        //for passing data to view
+        $data['content'] = [];
+        $data['title_header'] = ['title' => 'Daftar History Ujian'];
+
+        //for load view
+        $view['css_additional'] = 'website/user/history_ujian/css';
+        $view['menu_header'] = 'website/_template/menu';
+        $view['content'] = 'website/user/history_ujian/content';
+        $view['js_additional'] = 'website/user/history_ujian/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function detail_history_ujian(){
+        
+    }
+
 }

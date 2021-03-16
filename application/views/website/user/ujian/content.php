@@ -47,7 +47,7 @@ if(time() >= $waktu_habis)
                                     <button class="btn btn-md btn-primary" onclick="toggle_soal()"><i id="toogle-navigasi-ico" class="fa fa-chevron-circle-up" aria-hidden="true"></i> Navigasi</button>
                                 </div>
                                 <div class="col" data-intro="Jika anda sudah selesai mengerjakan sebelum waktu habis." data-position="left">
-                                    <button class="btn btn-md btn-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Selesai</button>
+                                    <button class="btn btn-md btn-success" onclick="done_soal()"><i class="fa fa-check-circle" aria-hidden="true"></i> Selesai</button>
                                 </div>
                             </div>
                         </div>
@@ -69,6 +69,9 @@ if(time() >= $waktu_habis)
                             <button id="_increase" class="btn btn-sm text-primary bg-white" data-intro="Memperbesar ukuran huruf pada lembar soal anda." data-position="up"><i class="fa fa-plus-square" aria-hidden="true" title="Zoom In"></i></button>
                             <button id="_reset" class="btn btn-sm text-primary bg-white" data-intro="Mengembalikan ukuran huruf seperti semula pada lembar soal anda." data-position="up"><i class="fa fa-refresh" aria-hidden="true" title="Default"></i></button>
                             <button id="_decrease" class="btn btn-sm text-primary bg-white" data-intro="Memperkecil ukuran huruf pada lembar soal anda." data-position="up"><i class="fa fa-minus-square" aria-hidden="true" title="Zoom Out"></i></button>
+                            <span class="btn-nxt-brf-hrd">|</span>
+                            <button id="_decrease" class="btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+                            <button id="_decrease" class="btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
                         </div>
                     </div>
                 </div>

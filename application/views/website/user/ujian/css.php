@@ -195,7 +195,7 @@
     }
 
     .sisawaktu-title{
-        margin-bottom:-3.5%;
+        margin-bottom:-2%;
     }
 
     .sisawaktu{
@@ -242,12 +242,15 @@
         .collapsible {display: block; padding: 0% 7% 0% 7%;} 
         .collapsible button {border: 2px solid #ffffff;} */
         .modal-content {margin: 50% auto;}
+        .btn-nxt-brf-hrd {display: none;}
     }
     @media (min-width: 420px)  and (max-width: 780px) {
         .base-timer {left: 38%; margin-right: -38%;}
         .modal-content {margin: 30% auto;}
+        .btn-nxt-brf-hrd {display: none;}
     }
     @media (min-width: 780px) and (max-width: 920px) {
         .base-timer {left: 42%; margin-right: -42%;}
+        .btn-nxt-brf-hrd {display: none;}
     }
 </style>

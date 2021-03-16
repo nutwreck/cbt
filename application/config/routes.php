@@ -60,6 +60,8 @@ $route['translate_uri_dashes'] = FALSE;
 |
 */
 $route['dashboard'] = 'website/user/Dashboard';
+$route['history'] = 'website/user/Dashboard/history_ujian';
+$route['detail-history'] = 'website/user/Dashboard/detail_history_ujian';
 $route['pre-ujian'] = 'website/user/Ujian/mulai_ujian';
 $route['ujian'] = 'website/user/Ujian';
 /* $route['ujian2'] = 'website/user/Ujian/ujian_page_next_design'; */

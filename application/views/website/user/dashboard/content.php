@@ -14,7 +14,7 @@
                 <span class="glyphicon glyphicon-info-sign"></span><i class="fa fa-info-circle" aria-hidden="true"></i> <strong>Informasi</strong>
                 <hr class="message-inner-separator">
                 <p>
-                    Dibawah ini ditampilkan daftar tes anda, diurutkan berdasarkan waktu paling pendek.</p>
+                    Dibawah ini ditampilkan daftar ujian anda, diurutkan berdasarkan waktu paling pendek.</p>
             </div>
         </div>
     </div>
