@@ -78,6 +78,10 @@ $route['ujian'] = 'website/user/Ujian';
 */
 $route['lembaga/dashboard'] = 'website/lembaga/Dashboard';
 $route['lembaga/materi'] = 'website/lembaga/Tes_online/materi';
+$route['lembaga/add-materi'] = 'website/lembaga/Tes_online/add_materi';
+$route['lembaga/edit-materi/(:num)'] = 'website/lembaga/Tes_online/edit_materi/$1';
+$route['lembaga/delete-materi/(:num)'] = 'website/lembaga/Tes_online/delete_materi/$1';
+$route['lembaga/active-materi/(:num)'] = 'website/lembaga/Tes_online/active_materi/$1';
 $route['lembaga/paket-soal'] = 'website/lembaga/Tes_online/paket_soal';
 $route['lembaga/logout'] = 'website/lembaga/Dashboard/logout';
 /*
