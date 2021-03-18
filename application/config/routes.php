@@ -70,3 +70,18 @@ $route['ujian'] = 'website/user/Ujian';
 | END WEBSITE URL FOR USER ONLY
 |
 */
+
+/*
+|
+| START WEBSITE URL FOR LEMBAGA ONLY
+|
+*/
+$route['lembaga/dashboard'] = 'website/lembaga/Dashboard';
+$route['lembaga/materi'] = 'website/lembaga/Tes_online/materi';
+$route['lembaga/paket-soal'] = 'website/lembaga/Tes_online/paket_soal';
+$route['lembaga/logout'] = 'website/lembaga/Dashboard/logout';
+/*
+|
+| START WEBSITE URL FOR LEMBAGA ONLY
+|
+*/
