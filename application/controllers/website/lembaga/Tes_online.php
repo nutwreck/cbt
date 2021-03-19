@@ -138,6 +138,7 @@ class Tes_online extends CI_Controller {
 
     public function submit_add_materi(){
         $data['name'] = ucwords($this->input->post('materi', TRUE));
+        $data['created_datetime'] = date('Y-m-d H:i:s');
         $tbl = $this->tbl_materi;
         $input = $this->general->input_data($tbl, $data);
 
@@ -163,6 +164,7 @@ class Tes_online extends CI_Controller {
     public function submit_edit_materi(){
         $id = $this->input->post('id', TRUE);
         $data['name'] = strtoupper($this->input->post('materi', TRUE));
+        $data['updated_datetime'] = date('Y-m-d H:i:s');
         $tbl = $this->tbl_materi;
         $update = $this->general->update_data($tbl, $data, $id);
 
@@ -193,7 +195,7 @@ class Tes_online extends CI_Controller {
 
     public function paket_soal(){
         //for passing data to view
-        $data['content'] = [];
+        $data['content']['paket_soal'] = $this->tes->get_paket_soal();
         $data['title_header'] = ['title' => 'Paket Soal'];
 
         //for load view
@@ -203,6 +205,21 @@ class Tes_online extends CI_Controller {
 
         //get function view website
         $this->_generate_view($view, $data);
+    }
+
+    public function add_paket_soal(){
+         //for passing data to view
+         $data['content']['get_materi'] = $this->tes->get_materi_enable();
+         $data['content']['get_kelas'] = $this->tes->get_kelas_enable();
+         $data['title_header'] = ['title' => 'Tambah Paket Soal'];
+ 
+         //for load view
+         $view['css_additional'] = 'website/lembaga/tes_online/paket_soal/css';
+         $view['content'] = 'website/lembaga/tes_online/paket_soal/add';
+         $view['js_additional'] = 'website/lembaga/tes_online/paket_soal/js';
+ 
+         //get function view website
+         $this->_generate_view($view, $data);
     }
 
 }

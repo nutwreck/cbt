@@ -11,8 +11,8 @@
                                             <span class="glyphicon glyphicon-info-sign"></span><i class="fa fa-info-circle" aria-hidden="true"></i> <strong>Informasi</strong>
                                             <hr class="message-inner-separator">
                                             <p>
-                                                Pembeda jurusan (<b>SD, SMP, SMA, Dll</b>) bisa diinput saat pembuatan <b>paket soal</b>.<br />
-                                                Untuk itu <b>penamaan materi</b> tidak perlu dicantumkan <b>nama jurusannya</b>.
+                                                Pembeda tingkatan (<b>SD, SMP, SMA, Dll</b>) bisa diinput saat pembuatan <b>paket soal</b>.<br />
+                                                Untuk itu <b>penamaan materi</b> tidak perlu dicantumkan <b>nama tingkatannya</b>.
                                             </p>
                                         </div>
                                     </div>
