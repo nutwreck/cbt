@@ -11,6 +11,7 @@ class Tes_online extends CI_Controller {
 	 */
 
     private $tbl_materi = 'materi'; //SET TABEL MATERI
+    private $tbl_paket_soal = 'paket_soal'; //SET TABEL PAKET SOAL
 
     public function __construct(){
           parent::__construct();
@@ -225,9 +226,15 @@ class Tes_online extends CI_Controller {
     }
 
     public function submit_add_paket_soal(){
-        $data['name'] = $this->input->post('name', TRUE);
-        $data['kelas_id'] = $this->input->post('kelas', TRUE);
-        $data['materi_id'] = $this->input->post('materi', TRUE);
+        $data['name'] = ucwords($this->input->post('name', TRUE));
+        $kelas  = $this->input->post('kelas', TRUE);
+        $exp_kelas = explode("|", $kelas);
+        $data['kelas_id'] = $exp_kelas[0];
+        $data['kelas_name'] = $exp_kelas[1];
+        $materi  = $this->input->post('materi', TRUE);
+        $exp_materi = explode("|", $materi);
+        $data['materi_id'] = $exp_materi[0];
+        $data['materi_name'] = $exp_materi[1];
         $data['detail_mode_jwb_id'] = $this->input->post('mode_jawaban', TRUE);
         $data['is_acak_soal'] = $this->input->post('acak_soal', TRUE);
         $data['is_acak_jawaban'] = $this->input->post('acak_jawaban', TRUE);
@@ -240,10 +247,77 @@ class Tes_online extends CI_Controller {
         $data['file'] = $this->input->post('petunjuk_audio', TRUE);
         $data['created_datetime'] = date('Y-m-d H:i:s');
 
-        echo '<pre>';
+        $tbl = $this->tbl_paket_soal;
+        $input = $this->general->input_data($tbl, $data);
+
+        $urly = 'lembaga/paket-soal';
+        $urlx = 'lembaga/add-paket-soal';
+        $this->input_end($input, $urly, $urlx);
+        /* echo '<pre>';
         var_dump($data);
-        echo $data['petunjuk'];
-        die();
+        die(); */
+    }
+
+    public function editor_paket_soal(){ //upload image dipaket soal petunjuk pengerjaan 
+        $_token = $this->input->post('_token', TRUE);
+        $validation = config_item('_token_petunjuk_paket_data');
+        $target_dir = $this->input->post('folder', TRUE);
+
+        if($validation != $validation || empty($_token)){
+            $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
+            redirect('lembaga/add-paket-soal');
+        } else {
+            if(!file_exists($target_dir)){
+                mkdir($target_dir,0777);
+            }
+
+            $config['upload_path']          = $target_dir;
+            $config['allowed_types']        = 'jpg|png|jpeg';
+            $config['max_size']             = 500;
+            $config['remove_spaces']        = TRUE;        
+            $config['encrypt_name']         = TRUE;
+
+            $this->load->library('upload', $config);
+
+            if ( ! $this->upload->do_upload('file')) {
+                $error = array('error' => $this->upload->display_errors());
+                var_dump($error);
+            }
+            else {
+                $data = array('upload_data' => $this->upload->data());
+                $datas = array(
+                    'link' => base_url().'storage/website/lembaga/grandsbmptn/paket_soal/'.$data['upload_data']['file_name'],
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+                echo json_encode($datas);
+            }
+        }
+    }
+
+    public function editor_paket_soal_delete(){ //hapus upload image dipaket soal petunjuk pengerjaan
+        $_token = $this->input->post('_token', TRUE);
+        $validation = config_item('_token_petunjuk_paket_data');
+        $src = $this->input->post('src', TRUE); 
+        $file_name = str_replace(base_url(), '', $src);
+
+        if($validation != $validation || empty($_token)){
+            $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
+            redirect('lembaga/add-paket-soal');
+        } else {
+            if(unlink($file_name)){
+                $datas = array(
+                    'text' => 'Success Delete Data Image',
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+            } else {
+                $datas = array(
+                    'text' => 'Failed Delete Data Image',
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+            }
+
+            echo json_encode($datas);
+        }
     }
 
 }

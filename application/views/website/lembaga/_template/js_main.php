@@ -21,6 +21,11 @@
     <!-- pop up -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
+    <script> /* Universal Config */
+        var base_url = '<?=base_url()?>';
+        var csrfname = '<?= $this->security->get_csrf_token_name() ?>';
+    </script>
+
     <script type="text/javascript">
         toastr.options = {
             "closeButton": true,
@@ -49,4 +54,17 @@
         <?php }else if($this->session->flashdata('info')){  ?>
             toastr.info("<?php echo $this->session->flashdata('info'); ?>");
         <?php } ?>
+    </script>
+
+    <script>
+        //KONFIGURASI UNTUK REQUEST POST DATA KE CONTROLLER
+        function ajaxcsrf() {
+            var csrfname = '<?= $this->security->get_csrf_token_name() ?>';
+            var csrfhash = '<?= $this->security->get_csrf_hash() ?>';
+            var csrf = {};
+            csrf[csrfname] = csrfhash;
+            $.ajaxSetup({
+                "data": csrf
+            });
+        }
     </script>

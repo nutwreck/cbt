@@ -4,7 +4,7 @@
         <div class="container-fluid">
                 <div class="card">
                     <div class="card-header">Tambah Paket Soal</div>
-                        <form action="<?php echo base_url(); ?>website/lembaga/Tes_online/submit_add_paket_soal" class="form-paket-soal" method="POST" novalidate="novalidate" enctype="multipart/form-data" onsubmit="return note_editor()">
+                        <form action="<?php echo base_url(); ?>website/lembaga/Tes_online/submit_add_paket_soal" class="form-paket-soal" method="POST" novalidate="novalidate" enctype="multipart/form-data">
                         <input type="hidden" id="csrf-hash-form" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" style="display: none">
                             <div class="card-body">
                                 <div class="row">
@@ -26,7 +26,7 @@
                                             <select class="selectpicker" data-live-search="true" data-width="auto" name="kelas" required>
                                                 <option data-tokens="0">Pilih</option>
                                                 <?php foreach($get_kelas as $val_kelas){ ?>
-                                                    <option data-tokens="<?=$val_kelas->description?>" value="<?=$val_kelas->kelas_id?>"><?=$val_kelas->description?></option>
+                                                    <option data-tokens="<?=$val_kelas->description?>" value="<?=$val_kelas->kelas_id?>|<?=$val_kelas->description?>"><?=$val_kelas->description?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -41,7 +41,7 @@
                                             <select class="selectpicker" data-live-search="true" data-width="auto" name="materi" required>
                                                 <option data-tokens="0">Pilih</option>
                                                 <?php foreach($get_materi as $val_materi){ ?>
-                                                    <option data-tokens="<?=$val_materi->name?>" value="<?=$val_materi->id?>"><?=$val_materi->name?></option>
+                                                    <option data-tokens="<?=$val_materi->name?>" value="<?=$val_materi->id?>|<?=$val_materi->name?>"><?=$val_materi->name?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>

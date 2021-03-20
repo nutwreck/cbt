@@ -54,9 +54,9 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td><h6><?=$value->nama_paket_soal?><br /><?=$value->materi_name?> <?=$value->kelas_name?></h6></td>
+                                        <td><h5><?=$value->nama_paket_soal?><br /><small><?=$value->materi_name?> <?=$value->kelas_name?></small></h5></td>
                                         <td><h6>Admin<br /><small><?=$value->created_datetime?></small></h6></td>
-                                        <td><h6 class="text-danger"><small><?=$value->updated_datetime?></small></h6></td>
+                                        <td><h6 class="text-danger"><small><?=$value->updated_datetime?></small></h6><p><?=$value->petunjuk?></p></td>
                                         <td><?=$value->status_paket_soal?></td>
                                     </tr>
                                 <?php } ?>

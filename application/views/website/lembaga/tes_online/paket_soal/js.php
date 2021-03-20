@@ -18,6 +18,15 @@
     }
 </script>
 
+<!-- KATEX -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+
+        });
+    });
+</script>
+
 <script>
     $(function(){
         $('.form-paket-soal').find('input[type=text],textarea').filter(':visible:first').focus();
@@ -25,6 +34,52 @@
 </script>
 
 <script>
+    var IMAGE_FOLDER = 'storage/website/lembaga/grandsbmptn/paket_soal/';
+    function uploadFileEditor($summernote,file)
+	{
+        var csrfhash = document.getElementById('csrf-hash-form').value;
+		var formData = new FormData();
+		formData.append("file", file);
+		formData.append("folder", IMAGE_FOLDER);
+		formData.append('_token', '388f8e8621faaf2a89834c8646271bd7');
+        formData.append(csrfname, csrfhash);
+		$.ajax({
+			url: base_url+'website/lembaga/Tes_online/editor_paket_soal',
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			type: 'POST',
+			success: function (response) {
+                obj = JSON.parse(response);
+                document.getElementById('csrf-hash-form').value = obj.csrf;
+				$summernote.summernote('insertImage', obj.link, function ($image) {
+					$image.attr('src', obj.link);
+				});
+			}
+		});
+	}
+    function deleteFileEditor(src) {
+        var csrfhash = document.getElementById('csrf-hash-form').value;
+        var formData = new FormData();
+		formData.append("src", src);
+        formData.append('_token', '388f8e8621faaf2a89834c8646271bd7');
+        formData.append(csrfname, csrfhash);
+        console.log(formData);
+        $.ajax({
+            data: formData,
+            type: "POST",
+            url: base_url+'website/lembaga/Tes_online/editor_paket_soal_delete', // replace with your url
+            cache: false,
+            contentType: false,
+			processData: false,
+            success: function(response) {
+                obj = JSON.parse(response);
+                document.getElementById('csrf-hash-form').value = obj.csrf;
+                console.log(obj.text);
+            }
+        });
+    }
     $('#summernote').summernote({
         placeholder: 'Masukkan petunjuk pengerjaan soal (jika ada)',
         dialogsInBody: true,
@@ -33,6 +88,7 @@
         height: 200,
         codeviewFilter: false,
         codeviewIframeFilter: true,
+        maximumImageFileSize:500000,
         toolbar: [
           ['style', ['style','fontname', 'fontsize', 'undo', 'redo']],
           ['font', ['bold', 'italic', 'underline', 'clear']],
@@ -43,15 +99,17 @@
           ['insert', ['link', 'picture']],
           ['view', ['codeview']],
           ['katex', ['math']]
-        ]
+        ],
+        callbacks: {
+            onImageUpload: function (files) {
+                uploadFileEditor($(this), files[0]);
+            },
+            onMediaDelete : function(target) {
+                deleteFileEditor(target[0].src);
+            }
+        }
     });
     // @param {String} color
     $('#summernote').summernote('backColor', 'transparent');
     $('#summernote').summernote('foreColor', 'black');
-</script>
-
-<script>
-    function note_editor() {
-        $('textarea[name="petunjuk_text"]').html($('#summernote').code());
-    }
 </script>

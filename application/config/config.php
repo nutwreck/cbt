@@ -491,7 +491,7 @@ $config['csrf_token_name'] = 'csrf_token_nutwreck';
 $config['csrf_cookie_name'] = 'csrf_cookie_nutwreck';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = TRUE;
-$config['csrf_exclude_uris'] = array();
+$config['csrf_exclude_uris'] = array(''); /* website/lembaga/Tes_online/editor_paket_soal */
 
 /*
 |--------------------------------------------------------------------------
@@ -559,3 +559,15 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
+
+/*
+|---------------------------------------------------------------------------
+| RESTRICT AREA (TOKENISASI)
+|---------------------------------------------------------------------------
+|
+| Semua token untuk validasi pertukaran data dimasukkan dibawah ini
+| Use For :
+| + Summernote Image
+|
+*/
+$config['_token_petunjuk_paket_data'] = '388f8e8621faaf2a89834c8646271bd7'; //paket-soal-data

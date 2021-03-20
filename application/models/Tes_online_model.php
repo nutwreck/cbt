@@ -37,7 +37,7 @@ class Tes_online_model extends CI_Model{
     }
 
     public function get_paket_soal(){
-        return $this->db->select('paket_soal_id, nama_paket_soal, materi_name, kelas_name, created_datetime, updated_datetime, status_paket_soal')
+        return $this->db->select('paket_soal_id, nama_paket_soal, materi_name, kelas_name, created_datetime, updated_datetime, status_paket_soal, petunjuk')
                     ->order_by('is_enable DESC', 'id DESC')
                     ->get('v_paket_soal')->result();
     }
