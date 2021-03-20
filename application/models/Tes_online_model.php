@@ -20,8 +20,20 @@ class Tes_online_model extends CI_Model{
 
     public function get_kelas_enable(){
         return $this->db->select('kelas_id, description')
-                    ->order_by('kelas_id DESC')
+                    ->order_by('group_kelas_id ASC')
                     ->get_where('v_kelas', array('is_enable_kelas' => 1, 'is_enable_groupkelas' => 1))->result();
+    }
+
+    public function get_mode_jawaban_enable(){
+        return $this->db->select('id, name')
+                    ->order_by('id ASC')
+                    ->get_where('detail_mode_jawaban', array('is_enable' => 1))->result();
+    }
+
+    public function get_skala_nilai_enable(){
+        return $this->db->select('id, detail')
+                    ->order_by('id ASC')
+                    ->get_where('pengaturan_universal', array('name' => 'SKALA NILAI', 'is_enable' => 1))->result();
     }
 
     public function get_paket_soal(){

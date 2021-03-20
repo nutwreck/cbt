@@ -211,6 +211,8 @@ class Tes_online extends CI_Controller {
          //for passing data to view
          $data['content']['get_materi'] = $this->tes->get_materi_enable();
          $data['content']['get_kelas'] = $this->tes->get_kelas_enable();
+         $data['content']['get_mode_jawaban'] = $this->tes->get_mode_jawaban_enable();
+         $data['content']['get_skala_nilai'] = $this->tes->get_skala_nilai_enable();
          $data['title_header'] = ['title' => 'Tambah Paket Soal'];
  
          //for load view
@@ -220,6 +222,28 @@ class Tes_online extends CI_Controller {
  
          //get function view website
          $this->_generate_view($view, $data);
+    }
+
+    public function submit_add_paket_soal(){
+        $data['name'] = $this->input->post('name', TRUE);
+        $data['kelas_id'] = $this->input->post('kelas', TRUE);
+        $data['materi_id'] = $this->input->post('materi', TRUE);
+        $data['detail_mode_jwb_id'] = $this->input->post('mode_jawaban', TRUE);
+        $data['is_acak_soal'] = $this->input->post('acak_soal', TRUE);
+        $data['is_acak_jawaban'] = $this->input->post('acak_jawaban', TRUE);
+        $data['pengaturan_universal_id'] = $this->input->post('skala_nilai', TRUE);
+        $data['skor_null'] = $this->input->post('skor_tdk_jwb', TRUE);
+        $data['is_continuous'] = $this->input->post('continous', TRUE);
+        $data['is_jawab'] = $this->input->post('menjawab', TRUE);
+        $data['petunjuk'] = $this->input->post('petunjuk_text', TRUE);
+        $data['visual_limit'] = $this->input->post('audio_limit', TRUE);
+        $data['file'] = $this->input->post('petunjuk_audio', TRUE);
+        $data['created_datetime'] = date('Y-m-d H:i:s');
+
+        echo '<pre>';
+        var_dump($data);
+        echo $data['petunjuk'];
+        die();
     }
 
 }
