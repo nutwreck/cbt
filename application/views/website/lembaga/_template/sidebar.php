@@ -10,10 +10,10 @@
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
                         <li class="active">
-                            <a href="<?php echo base_url(); ?>lembaga/dashboard"><i class="fas fa-tachometer-alt"></i>Dashboard</a>
+                            <a href="<?php echo base_url(); ?>lembaga/dashboard"><i class="fa fa-tachometer"></i>Dashboard</a>
                         </li>
                         <li class="has-sub">
-                            <a class="js-arrow" href="#"><i class="fas fa-book"></i>Tes Online</a>
+                            <a class="js-arrow" href="#"><i class="fa fa-book"></i>Tes Online</a>
                             <ul class="list-unstyled navbar__sub-list js-sub-list">
                                 <li>
                                     <a href="<?php echo base_url(); ?>lembaga/materi">Materi</a>

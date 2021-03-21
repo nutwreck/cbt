@@ -17,7 +17,6 @@
     <!-- Fontfaces CSS-->
     <link href="<?php echo config_item('_assets_general'); ?>css/font-face.css" rel="stylesheet" media="all">
     <link href="<?php echo config_item('_assets_general'); ?>font-awesome/css/font-awesome.min.css" rel="stylesheet" media="all">
-    <link href="<?php echo config_item('_assets_general'); ?>font-awesome-5/css/fontawesome-all.min.css" rel="stylesheet" media="all">
     <link href="<?php echo config_item('_assets_general'); ?>mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
 
     <!-- Bootstrap CSS-->

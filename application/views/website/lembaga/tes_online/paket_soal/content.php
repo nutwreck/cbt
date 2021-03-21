@@ -40,8 +40,8 @@
                                         <td><?=$no++?></td>
                                         <td>
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-primary"><i class="fa fa-cogs" aria-hidden="true"></i></button>
-                                                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <a href="<?=base_url()?>lembaga/list-soal/<?=urlencode(base64_encode($value->paket_soal_id))?>" class="btn btn-primary"><i class="fa fa-book" aria-hidden="true" title="List Soal"></i></a>
+                                                <button type="button" class="btn btn-warning dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
                                                 <div class="dropdown-menu">
@@ -56,7 +56,7 @@
                                         </td>
                                         <td><h5><?=$value->nama_paket_soal?><br /><small><?=$value->materi_name?> <?=$value->kelas_name?></small></h5></td>
                                         <td><h6>Admin<br /><small><?=$value->created_datetime?></small></h6></td>
-                                        <td><h6 class="text-danger"><small><?=$value->updated_datetime?></small></h6><p><?=$value->petunjuk?></p></td>
+                                        <td><h6 class="text-danger"><small><?=$value->updated_datetime?></small></h6></td>
                                         <td><?=$value->status_paket_soal?></td>
                                     </tr>
                                 <?php } ?>

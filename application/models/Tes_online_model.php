@@ -30,6 +30,18 @@ class Tes_online_model extends CI_Model{
                     ->get_where('detail_mode_jawaban', array('is_enable' => 1))->result();
     }
 
+    public function get_jenis_soal_enable(){
+        return $this->db->select('id, name')
+                    ->order_by('id ASC')
+                    ->get_where('group_mode_jawaban', array('is_enable' => 1))->result();
+    }
+
+    public function get_tipe_kesulitan_enable(){
+        return $this->db->select('id, name')
+                    ->order_by('id ASC')
+                    ->get_where('tipe_kesulitan', array('is_enable' => 1))->result();
+    }
+
     public function get_skala_nilai_enable(){
         return $this->db->select('id, detail')
                     ->order_by('id ASC')
@@ -40,6 +52,16 @@ class Tes_online_model extends CI_Model{
         return $this->db->select('paket_soal_id, nama_paket_soal, materi_name, kelas_name, created_datetime, updated_datetime, status_paket_soal, petunjuk')
                     ->order_by('is_enable DESC', 'id DESC')
                     ->get('v_paket_soal')->result();
+    }
+
+    public function get_total_mode_jwb($paket_soal_id){
+        return $this->db->select('count_pilgan')
+                    ->get_where('v_paket_soal', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->row();
+    }
+
+    public function get_total_soal($paket_soal_id){
+        return $this->db->select('total_soal')
+                    ->get_where('v_paket_soal', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->row();
     }
 
 }

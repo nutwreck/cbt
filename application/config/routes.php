@@ -84,6 +84,8 @@ $route['lembaga/delete-materi/(:num)'] = 'website/lembaga/Tes_online/delete_mate
 $route['lembaga/active-materi/(:num)'] = 'website/lembaga/Tes_online/active_materi/$1';
 $route['lembaga/paket-soal'] = 'website/lembaga/Tes_online/paket_soal';
 $route['lembaga/add-paket-soal'] = 'website/lembaga/Tes_online/add_paket_soal';
+$route['lembaga/list-soal/(:any)'] = 'website/lembaga/Tes_online/list_soal/$1';
+$route['lembaga/add-soal/(:any)'] = 'website/lembaga/Tes_online/add_soal/$1';
 $route['lembaga/logout'] = 'website/lembaga/Dashboard/logout';
 /*
 |

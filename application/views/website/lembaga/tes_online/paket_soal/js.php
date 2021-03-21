@@ -18,15 +18,6 @@
     }
 </script>
 
-<!-- KATEX -->
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        renderMathInElement(document.body, {
-
-        });
-    });
-</script>
-
 <script>
     $(function(){
         $('.form-paket-soal').find('input[type=text],textarea').filter(':visible:first').focus();

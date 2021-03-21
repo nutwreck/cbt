@@ -242,7 +242,7 @@ class Tes_online extends CI_Controller {
         $data['skor_null'] = $this->input->post('skor_tdk_jwb', TRUE);
         $data['is_continuous'] = $this->input->post('continous', TRUE);
         $data['is_jawab'] = $this->input->post('menjawab', TRUE);
-        $data['petunjuk'] = $this->input->post('petunjuk_text', TRUE);
+        $data['petunjuk'] = $this->input->post('petunjuk_text');
         $data['visual_limit'] = $this->input->post('audio_limit', TRUE);
         $data['file'] = $this->input->post('petunjuk_audio', TRUE);
         $data['created_datetime'] = date('Y-m-d H:i:s');
@@ -253,9 +253,6 @@ class Tes_online extends CI_Controller {
         $urly = 'lembaga/paket-soal';
         $urlx = 'lembaga/add-paket-soal';
         $this->input_end($input, $urly, $urlx);
-        /* echo '<pre>';
-        var_dump($data);
-        die(); */
     }
 
     public function editor_paket_soal(){ //upload image dipaket soal petunjuk pengerjaan 
@@ -318,6 +315,41 @@ class Tes_online extends CI_Controller {
 
             echo json_encode($datas);
         }
+    }
+
+    public function list_soal($id_paket_soal){
+        //for passing data to view
+        $data['content']['id_paket_soal'] = $id_paket_soal;
+        $data['title_header'] = ['title' => 'Daftar Soal'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/soal/css';
+        $view['content'] = 'website/lembaga/tes_online/soal/content';
+        $view['js_additional'] = 'website/lembaga/tes_online/soal/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function add_soal($id_paket_soal){
+        //for passing data to view
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+        $mode_jawaban = $this->tes->get_total_mode_jwb($paket_soal_id); //Untuk soal pilihan ganda
+        $total_soal = $this->tes->get_total_soal($paket_soal_id); //Total soal
+        $data['content']['id_paket_soal'] = $id_paket_soal;
+        $data['content']['count_pilihan_ganda'] = intval($mode_jawaban->count_pilgan);
+        $data['content']['total_soal'] = intval($total_soal->total_soal);
+        $data['content']['jenis_soal'] = $this->tes->get_jenis_soal_enable();
+        $data['content']['tipe_kesulitan'] = $this->tes->get_tipe_kesulitan_enable();
+        $data['title_header'] = ['title' => 'Tambah Soal'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/soal/css';
+        $view['content'] = 'website/lembaga/tes_online/soal/add';
+        $view['js_additional'] = 'website/lembaga/tes_online/soal/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
     }
 
 }

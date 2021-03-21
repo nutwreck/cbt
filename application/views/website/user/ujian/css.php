@@ -11,6 +11,14 @@
 <link rel="stylesheet" href="<?php echo config_item('_assets_website'); ?>css/opsi.css" />
 
 <style>
+    .box-head {
+        border-radius: 25px;
+        background: #ffffff;
+        padding: 0.5%;
+        margin:0.5%;
+        width: 100%;
+        height: auto;
+    }
     .box {
         width:85%;
         height:auto;
