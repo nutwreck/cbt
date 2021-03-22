@@ -11,8 +11,9 @@
                             </div>
                         </div>
                     </div>
-                        <form action="<?php echo base_url(); ?>website/lembaga/Tes_online/submit_add_paket_soal" class="form-paket-soal" method="POST" novalidate="novalidate" enctype="multipart/form-data">
+                        <form action="<?php echo base_url(); ?>website/lembaga/Tes_online/submit_add_soal" class="form-soal" method="POST" novalidate="novalidate" enctype="multipart/form-data">
                         <input type="hidden" id="csrf-hash-form" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" style="display: none">
+                        <input type="hidden" id="id_paket_soal" name="id_paket_soal" value="<?=$id_paket_soal?>" style="display: none">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-sm-12 col-lg-3" style="margin-top:1%">
@@ -30,7 +31,7 @@
                                     </div>
                                     <div class="col-sm-12 col-lg-9">
                                         <div class="form-group">
-                                            <select class="selectpicker" data-live-search="true" data-width="auto" name="jenis_soal" required>
+                                            <select id="pilihan_jenis_soal" class="selectpicker" data-live-search="true" data-width="auto" name="jenis_soal" required onchange="choosen_exam()">
                                                 <option data-tokens="0">Pilih</option>
                                                 <?php foreach($jenis_soal as $val_jenis_soal){ ?>
                                                     <option data-tokens="<?=$val_jenis_soal->name?>" value="<?=$val_jenis_soal->id?>"><?=$val_jenis_soal->name?></option>
@@ -123,7 +124,7 @@
                                     </div>
                                 </div>
                                 <hr />
-                                <div class="row">
+                                <div id="content_jawaban" class="row" style="display:block;">
                                     <div class="col-sm-12">
                                     <table class="table table-bordered table-responsive">
                                         <thead class="table-primary text-center">
@@ -141,7 +142,7 @@
                                                 <td class="text-center font-weight-bold"><?=$alpha++?></td>
                                                 <td class="text-center">
                                                     <div class="form-check">
-                                                        <input class="form-check-input position-static" type="radio" name="tanda_jawaban[]" id="blankRadio<?=$x?>">
+                                                        <input class="form-check-input position-static" type="radio" name="tanda_jawaban" value="<?=$x?>" id="blankRadio<?=$x?>">
                                                     </div>
                                                 </td>
                                                 <td>

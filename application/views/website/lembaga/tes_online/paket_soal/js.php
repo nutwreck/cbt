@@ -56,7 +56,6 @@
 		formData.append("src", src);
         formData.append('_token', '388f8e8621faaf2a89834c8646271bd7');
         formData.append(csrfname, csrfhash);
-        console.log(formData);
         $.ajax({
             data: formData,
             type: "POST",

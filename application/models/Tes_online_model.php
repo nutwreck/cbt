@@ -64,4 +64,37 @@ class Tes_online_model extends CI_Model{
                     ->get_where('v_paket_soal', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->row();
     }
 
+    public function save_soal($data){
+        $this->db->trans_start();
+        $query = $this->db->insert('bank_soal', $data);
+        $id_insert = $this->db->insert_id();
+        if ($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return null;
+		} else{
+			$this->db->trans_commit();
+			return $id_insert;
+		}
+    }
+
+    public function save_jawaban($datas){
+        $this->db->trans_start();
+        $query = $this->db->insert_batch('jawaban',$datas);
+        if ($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return null;
+		} else{
+			$this->db->trans_commit();
+			return $query;
+		}
+    }
+
+    /* SET @r=0;
+UPDATE (SELECT id FROM bank_soal ORDER BY id ASC) A
+    LEFT JOIN bank_soal B USING (id)
+    SET B.id = B.id,B.no_soal = @r:= (@r+1)
+    WHERE B.paket_soal_id = 6
+    AND B.is_enable = 1
+; */ //UPDATE URUTAN NO SOAL/JAWABAN JIKA NANTINYA DIBUTUHKAN
+
 }

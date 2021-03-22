@@ -260,7 +260,7 @@ class Tes_online extends CI_Controller {
         $validation = config_item('_token_petunjuk_paket_data');
         $target_dir = $this->input->post('folder', TRUE);
 
-        if($validation != $validation || empty($_token)){
+        if($validation != $_token || empty($_token)){
             $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
             redirect('lembaga/add-paket-soal');
         } else {
@@ -283,7 +283,7 @@ class Tes_online extends CI_Controller {
             else {
                 $data = array('upload_data' => $this->upload->data());
                 $datas = array(
-                    'link' => base_url().'storage/website/lembaga/grandsbmptn/paket_soal/'.$data['upload_data']['file_name'],
+                    'link' => base_url().$target_dir.$data['upload_data']['file_name'],
                     'csrf' => $this->security->get_csrf_hash()
                 );
                 echo json_encode($datas);
@@ -297,7 +297,7 @@ class Tes_online extends CI_Controller {
         $src = $this->input->post('src', TRUE); 
         $file_name = str_replace(base_url(), '', $src);
 
-        if($validation != $validation || empty($_token)){
+        if($validation != $_token || empty($_token)){
             $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
             redirect('lembaga/add-paket-soal');
         } else {
@@ -350,6 +350,122 @@ class Tes_online extends CI_Controller {
 
         //get function view website
         $this->_generate_view($view, $data);
+    }
+
+    public function submit_add_soal(){
+        $paket_soal_id = $this->input->post('id_paket_soal'); //EncryptIdPaketSoal
+        $type_exam = $this->input->post('jenis_soal', TRUE);
+        //SAVE SOAL
+        $data['paket_soal_id']  = base64_decode(urldecode($this->input->post('id_paket_soal', TRUE)));
+        $data['group_mode_jwb_id']  = $this->input->post('jenis_soal', TRUE);
+        $data['no_soal']  = $this->input->post('no_soal', TRUE);
+        $data['name']  = $this->input->post('soal');
+        $data['kata_kunci']  = $this->input->post('kata_kunci', TRUE);
+        $data['tipe_kesulitan_id']  = $this->input->post('tipe_kesulitan', TRUE);
+        $data['is_acak_soal']  = $this->input->post('acak_soal', TRUE);
+        $data['is_acak_jawaban']  = $this->input->post('acak_jawaban', TRUE);
+        $data['file']  = $this->input->post('soal_audio', TRUE);
+        $data['created_datetime']  = date('Y-m-d H:i:s');
+
+        $save_soal = $this->tes->save_soal($data);
+
+        //SAVE JAWABAN
+        if($save_soal) {
+            if($type_exam == 1){ //Tipe pilihan ganda memerlukan jawaban
+                $jawaban = $this->input->post('jawaban');
+                $skor_jawaban = $this->input->post('skor_jawaban', TRUE);
+                $tandai_jawaban  = $this->input->post('tanda_jawaban', TRUE);
+                $order = 1;
+                $datas = array();
+                foreach($jawaban as $key=>$value) {
+                    $datas[]  = array(
+                            'bank_soal_id' => $save_soal,
+                            'order' => $order,
+                            'name' => $jawaban[$key],
+                            'score' => $skor_jawaban[$key],
+                            'is_key' => $order == $tandai_jawaban ? 1 : 0,
+                            'created_datetime' => date('Y-m-d H:i:s')
+                        );
+                    $order++;
+                }
+
+                $save_jawaban = $this->tes->save_jawaban($datas);
+
+                $urly = 'lembaga/list-soal/'.$paket_soal_id;
+                $urlx = 'lembaga/add-soal/'.$paket_soal_id;
+                $this->input_end($save_jawaban, $urly, $urlx);
+            } else { //tipe essay tidak perlu jawaban
+                $this->session->set_flashdata('success', 'Data berhasil ditambahkan');
+		        redirect('lembaga/list-soal/'.$paket_soal_id);
+            }
+        } else {
+            $this->session->set_flashdata('error', 'Data gagal disimpan! Ulangi kembali');
+		    redirect('lembaga/add-soal/'.$paket_soal_id);
+        }
+    }
+
+    public function editor_soal(){ //upload image disoal
+        $_token = $this->input->post('_token', TRUE);
+        $validation = config_item('_token_input_soal_data');
+        $target_dir = $this->input->post('folder', TRUE);
+        $paket_soal_id = urlencode(base64_encode($this->input->post('id_paket_soal')));
+
+        if($validation != $_token || empty($_token)){
+            $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
+            redirect('lembaga/add-soal/'.$paket_soal_id);
+        } else {
+            if(!file_exists($target_dir)){
+                mkdir($target_dir,0777);
+            }
+
+            $config['upload_path']          = $target_dir;
+            $config['allowed_types']        = 'jpg|png|jpeg';
+            $config['max_size']             = 500;
+            $config['remove_spaces']        = TRUE;        
+            $config['encrypt_name']         = TRUE;
+
+            $this->load->library('upload', $config);
+
+            if ( ! $this->upload->do_upload('file')) {
+                $error = array('error' => $this->upload->display_errors());
+                var_dump($error);
+            }
+            else {
+                $data = array('upload_data' => $this->upload->data());
+                $datas = array(
+                    'link' => base_url().$target_dir.$data['upload_data']['file_name'],
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+                echo json_encode($datas);
+            }
+        }
+    }
+
+    public function editor_soal_delete(){ //hapus upload image dipaket soal petunjuk pengerjaan
+        $_token = $this->input->post('_token', TRUE);
+        $validation = config_item('_token_input_soal_data');
+        $src = $this->input->post('src', TRUE); 
+        $file_name = str_replace(base_url(), '', $src);
+        $paket_soal_id = urlencode(base64_encode($this->input->post('id_paket_soal')));
+
+        if($validation != $_token || empty($_token)){
+            $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
+            redirect('lembaga/add-soal/'.$paket_soal_id);
+        } else {
+            if(unlink($file_name)){
+                $datas = array(
+                    'text' => 'Success Delete Data Image',
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+            } else {
+                $datas = array(
+                    'text' => 'Failed Delete Data Image',
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+            }
+
+            echo json_encode($datas);
+        }
     }
 
 }
