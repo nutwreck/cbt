@@ -8,7 +8,6 @@
         border-radius: 25px;
         background: #ffffff;
         padding: 0.5%;
-        margin:0.5%;
         width: 100%;
         height: auto;
     }
@@ -22,6 +21,14 @@
         padding: 0;
         font-size: 100%;
         font-weight: bold;
+    }
+    .custom-file-input {
+        cursor: pointer;
+    }
+    .custom-file-label {
+        display: inline-block;
+        z-index: 0;
+        cursor: pointer;
     }
     .math{width:10%;}
     .button-config{text-align: right;}

@@ -54,6 +54,11 @@ class Tes_online_model extends CI_Model{
                     ->get('v_paket_soal')->result();
     }
 
+    public function get_paket_soal_by_id($paket_data_id){
+        return $this->db->select('paket_soal_id, nama_paket_soal, materi_name, kelas_name, total_soal, petunjuk, is_acak_soal, is_acak_jawaban')
+                    ->get_where('v_paket_soal', array('paket_soal_id' => $paket_data_id))->row();
+    }
+
     public function get_total_mode_jwb($paket_soal_id){
         return $this->db->select('count_pilgan')
                     ->get_where('v_paket_soal', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->row();
@@ -62,6 +67,32 @@ class Tes_online_model extends CI_Model{
     public function get_total_soal($paket_soal_id){
         return $this->db->select('total_soal')
                     ->get_where('v_paket_soal', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->row();
+    }
+
+    public function get_all_soal_by_id($paket_soal_id){
+        /* $config_acakan_soal = $this->get_paket_soal_by_id($paket_soal_id);
+        $order = $config_acakan_soal->is_acak_soal==1 ? 'rand()' : 'id ASC'; */
+        $order = 'id ASC';
+        return $this->db->select('id, RANK() OVER ( ORDER BY '.$order.' ) no_soal', FALSE)
+                    ->order_by($order)
+                    ->get_where('bank_soal', array('paket_soal_id' => $paket_soal_id))->result();
+    }
+
+    public function get_soal_by_id($paket_soal_id, $bank_soal_id){
+        return $this->db->select('bank_soal_id, paket_soal_id, group_mode_jwb_id, group_mode_jwb_name, is_acak_soal, acak_soal
+                                , is_acak_jawaban, acak_jawaban, no_soal, bank_soal_name, kata_kunci, tipe_kesulitan_id
+                                , tipe_kesulitan_name')
+                    ->limit(1)
+                    ->get_where('v_bank_soal', array('paket_soal_id' => $paket_soal_id, 'bank_soal_id' => $bank_soal_id))->row();
+    }
+
+    public function get_jawaban_by_id($bank_soal_id, $paket_soal_id){
+        /* $config_acakan_jwb = $this->get_paket_soal_by_id($paket_soal_id);
+        $order = $config_acakan_jwb->is_acak_jawaban==1 ? 'rand()' : 'order ASC, id ASC'; */
+        $order = 'order ASC, id ASC';
+        return $this->db->select('id, bank_soal_id, order, name, score, is_key')
+                    ->order_by($order)
+                    ->get_where('jawaban', array('bank_soal_id' => $bank_soal_id))->result();
     }
 
     public function save_soal($data){

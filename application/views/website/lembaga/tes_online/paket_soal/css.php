@@ -8,9 +8,16 @@
 .note-math{ /* untuk katex jika sudah dipindahkan ke text editor */
     color:black;
 }
-
 .label-text{
     text-align: right;
+}
+.custom-file-input {
+        cursor: pointer;
+    }
+.custom-file-label {
+    display: inline-block;
+    z-index: 0;
+    cursor: pointer;
 }
 
 @media (max-width: 991px) {

@@ -32,7 +32,6 @@
                                     <div class="col-sm-12 col-lg-9">
                                         <div class="form-group">
                                             <select id="pilihan_jenis_soal" class="selectpicker" data-live-search="true" data-width="auto" name="jenis_soal" required onchange="choosen_exam()">
-                                                <option data-tokens="0">Pilih</option>
                                                 <?php foreach($jenis_soal as $val_jenis_soal){ ?>
                                                     <option data-tokens="<?=$val_jenis_soal->name?>" value="<?=$val_jenis_soal->id?>"><?=$val_jenis_soal->name?></option>
                                                 <?php } ?>
@@ -67,7 +66,6 @@
                                     <div class="col-sm-12 col-lg-9">
                                         <div class="form-group">
                                             <select class="selectpicker" data-live-search="true" data-width="auto" name="tipe_kesulitan" required>
-                                                <option data-tokens="0">Pilih</option>
                                                 <?php foreach($tipe_kesulitan as $val_kesulitan){ ?>
                                                     <option data-tokens="<?=$val_kesulitan->name?>" value="<?=$val_kesulitan->id?>"><?=$val_kesulitan->name?></option>
                                                 <?php } ?>
@@ -82,8 +80,8 @@
                                     <div class="col-sm-12 col-lg-9">
                                         <div class="form-group">
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="soal_audio">
-                                                <label class="custom-file-label" for="soal_audio">Pilih Audio</label>
+                                                <input type="file" class="custom-file-input" id="soal_audio" name="soal_audio">
+                                                <label id="file-name" class="custom-file-label" for="soal_audio">Pilih Audio</label>
                                             </div>
                                         </div>
                                     </div>

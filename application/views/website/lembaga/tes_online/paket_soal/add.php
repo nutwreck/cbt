@@ -211,7 +211,7 @@
                                         <div class="form-group">
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" id="petunjuk_audio">
-                                                <label class="custom-file-label" for="petunjuk_audio">Pilih Audio</label>
+                                                <label id="file-name" class="custom-file-label" for="petunjuk_audio">Pilih Audio</label>
                                             </div>
                                         </div>
                                     </div>

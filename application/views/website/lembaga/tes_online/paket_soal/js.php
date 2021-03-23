@@ -25,6 +25,13 @@
 </script>
 
 <script>
+    if (document.getElementById('#petunjuk_audio') != null) 
+        document.querySelector("#petunjuk_audio").onchange = function(){
+            document.querySelector("#file-name").textContent = this.files[0].name;
+        }
+</script>
+
+<script>
     var IMAGE_FOLDER = 'storage/website/lembaga/grandsbmptn/paket_soal/';
     function uploadFileEditor($summernote,file)
 	{

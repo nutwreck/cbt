@@ -247,6 +247,31 @@ class Tes_online extends CI_Controller {
         $data['file'] = $this->input->post('petunjuk_audio', TRUE);
         $data['created_datetime'] = date('Y-m-d H:i:s');
 
+        $allowed_type 	= [
+            "audio/mpeg", "audio/mpg", "audio/mpeg3", "audio/mp3", "audio/x-wav", "audio/wave", "audio/wav"
+        ];
+        $config['upload_path']      = FCPATH.'storage/website/lembaga/grandsbmptn/paket_soal/';
+        $config['allowed_types']    = 'mpeg|mpg|mpeg3|mp3|wav|wave';
+        $config['encrypt_name']     = TRUE;
+        $_upload_path = $config['upload_path'];
+
+        if(!file_exists($_upload_path)){
+            mkdir($_upload_path,0777);
+        }
+        
+        $this->load->library('upload', $config);
+
+        if(!empty($_FILES['petunjuk_audio']['name'])){
+            if (!$this->upload->do_upload('petunjuk_audio')){
+                $error = $this->upload->display_errors();
+                show_error($error, 500, 'File Soal Error');
+                exit();
+            }else{
+                $data['file'] = $this->upload->data('file_name');
+                $data['tipe_file'] = $this->upload->data('file_type');
+            }
+        }
+
         $tbl = $this->tbl_paket_soal;
         $input = $this->general->input_data($tbl, $data);
 
@@ -277,8 +302,12 @@ class Tes_online extends CI_Controller {
             $this->load->library('upload', $config);
 
             if ( ! $this->upload->do_upload('file')) {
-                $error = array('error' => $this->upload->display_errors());
-                var_dump($error);
+                $datas = array(
+                    'link' => '',
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+               /*  $error = array('error' => $this->upload->display_errors());
+                var_dump($error); */
             }
             else {
                 $data = array('upload_data' => $this->upload->data());
@@ -286,8 +315,8 @@ class Tes_online extends CI_Controller {
                     'link' => base_url().$target_dir.$data['upload_data']['file_name'],
                     'csrf' => $this->security->get_csrf_hash()
                 );
-                echo json_encode($datas);
             }
+            echo json_encode($datas);
         }
     }
 
@@ -319,7 +348,12 @@ class Tes_online extends CI_Controller {
 
     public function list_soal($id_paket_soal){
         //for passing data to view
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
         $data['content']['id_paket_soal'] = $id_paket_soal;
+        $data['content']['paket_soal'] = $this->tes->get_paket_soal_by_id($paket_soal_id);
+        $data['content']['id_soal_list'] = $this->tes->get_all_soal_by_id($paket_soal_id);
+        $first_exam = $data['content']['id_soal_list'][0]; //Ambil Id Pertama soal yang muncul
+        $data['content']['soal_first_list'] = $first_exam->id;
         $data['title_header'] = ['title' => 'Daftar Soal'];
 
         //for load view
@@ -329,6 +363,79 @@ class Tes_online extends CI_Controller {
 
         //get function view website
         $this->_generate_view($view, $data);
+    }
+
+    public function get_detail_exam(){ //PENGAMBILAN SOAL 1 PER SATU
+        $jawaban_soal = [];
+        $header_soal = '';
+        $content_soal = '';
+        $datas = [];
+        $soal = '';
+        $jawaban = '';
+
+        $paket_soal_id = $this->input->post('paket_soal_id');
+        $_token = $this->input->post('_token', TRUE);
+        $validation = config_item('_token_tampil_soal');
+        $bank_soal_id = $this->input->post('bank_soal_id', TRUE);
+        $nomor_soal = $this->input->post('nomor_soal', TRUE);
+        $id_paket_soal = base64_decode(urldecode($paket_soal_id));
+
+        if($validation != $_token || empty($_token)){
+            $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
+            redirect('lembaga/list-soal/'.$paket_soal_id);
+        } else {
+            $soal = $this->tes->get_soal_by_id($id_paket_soal, $bank_soal_id);
+            $jawaban = $this->tes->get_jawaban_by_id($bank_soal_id, $id_paket_soal);
+            
+            $acak_soal_badge = $soal->is_acak_soal == 1 ? 'badge-success' : 'badge-danger';
+            $acak_soal_icon = $soal->is_acak_soal == 1 ? 'fa-check' : 'fa-close';
+            $acak_jwb_badge = $soal->is_acak_jawaban == 1 ? 'badge-success' : 'badge-danger';
+            $acak_jwb_icon = $soal->is_acak_jawaban == 1 ? 'fa-check' : 'fa-close';
+
+            $header_soal = '
+            <div class="row">
+                <div class="col-8 p-1">
+                    <h5 class="text-white">
+                        <i class="fa fa-braille" aria-hidden="true"></i> Soal No '.$nomor_soal.'
+                        <span class="badge badge-success">'.$soal->group_mode_jwb_name.'</span>
+                        <span class="badge '.$acak_soal_badge.'">
+                            <i class="fa '.$acak_soal_icon.'" aria-hidden="true"></i> Acak Soal
+                        </span>
+                        <span class="badge '.$acak_jwb_badge.'">
+                            <i class="fa '.$acak_jwb_icon.'" aria-hidden="true"></i> Acak Jawaban
+                        </span>
+                    </h5>
+                </div>
+                <div class="col-4 text-right">
+                        <button class="btn btn-sm btn-success" title="Edit Soal"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                        <button class="btn btn-sm btn-danger" title="Hapus Soal"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                </div>
+            </div>';
+
+            $content_soal = '<div class="card-text text-justify">'.$soal->bank_soal_name.'</div>';
+
+            $opsi = config_item('_def_opsi_jawaban');
+            foreach($jawaban as $key_jawaban => $val_jawaban) {
+                $is_key = $val_jawaban->is_key == 1 ? 'checked' : '';
+                $jawaban_soal[] = '<div class="funkyradio-success">
+                        <input type="radio" id="opsi_'.$opsi.'" name="opsi" value="'.$val_jawaban->order.'" '.$is_key.'> 
+                        <label for="opsi_'.$opsi.'">
+                            <div class="huruf_opsi">'.$opsi.'</div> 
+                            <div class="card-text">'.$val_jawaban->name.'</div>
+                        </label>
+                    </div>';
+                $opsi++;
+            };
+
+            $datas = array(
+                'header_soal' => $header_soal,
+                'content_soal' => $content_soal,
+                'jawaban_soal' => implode(" ",$jawaban_soal),
+                'csrf' => $this->security->get_csrf_hash()
+            );
+            
+            echo json_encode($datas);
+        }
     }
 
     public function add_soal($id_paket_soal){
@@ -366,6 +473,32 @@ class Tes_online extends CI_Controller {
         $data['is_acak_jawaban']  = $this->input->post('acak_jawaban', TRUE);
         $data['file']  = $this->input->post('soal_audio', TRUE);
         $data['created_datetime']  = date('Y-m-d H:i:s');
+
+        $allowed_type 	= [
+            "audio/mpeg", "audio/mpg", "audio/mpeg3", "audio/mp3", "audio/x-wav", "audio/wave", "audio/wav"
+        ];
+        $_id_paket_soal = $data['paket_soal_id'];
+        $config['upload_path']      = FCPATH.'storage/website/lembaga/grandsbmptn/paket_soal/soal_'.$_id_paket_soal.'/';
+        $config['allowed_types']    = 'mpeg|mpg|mpeg3|mp3|wav|wave';
+        $config['encrypt_name']     = TRUE;
+        $_upload_path = $config['upload_path'];
+
+        if(!file_exists($_upload_path)){
+            mkdir($_upload_path,0777);
+        }
+        
+        $this->load->library('upload', $config);
+
+        if(!empty($_FILES['soal_audio']['name'])){
+            if (!$this->upload->do_upload('soal_audio')){
+                $error = $this->upload->display_errors();
+                show_error($error, 500, 'File Soal Error');
+                exit();
+            }else{
+                $data['file'] = $this->upload->data('file_name');
+                $data['tipe_file'] = $this->upload->data('file_type');
+            }
+        }
 
         $save_soal = $this->tes->save_soal($data);
 
@@ -427,8 +560,12 @@ class Tes_online extends CI_Controller {
             $this->load->library('upload', $config);
 
             if ( ! $this->upload->do_upload('file')) {
-                $error = array('error' => $this->upload->display_errors());
-                var_dump($error);
+                $datas = array(
+                    'link' => '',
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+                /* $error = array('error' => $this->upload->display_errors());
+                var_dump($error); */
             }
             else {
                 $data = array('upload_data' => $this->upload->data());
@@ -436,8 +573,8 @@ class Tes_online extends CI_Controller {
                     'link' => base_url().$target_dir.$data['upload_data']['file_name'],
                     'csrf' => $this->security->get_csrf_hash()
                 );
-                echo json_encode($datas);
             }
+            echo json_encode($datas);
         }
     }
 

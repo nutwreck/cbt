@@ -572,7 +572,7 @@ $config['proxy_ips'] = '';
 */
 $config['_token_petunjuk_paket_data'] = '388f8e8621faaf2a89834c8646271bd7'; //paket-soal-data
 $config['_token_input_soal_data'] = '8c064f61a5d9059125ea94df78809fef'; //soal-data
-
+$config['_token_tampil_soal'] = '206b3a13a65afd2ea84090f6276d63f5'; //tampil-soal
 /*
 |---------------------------------------------------------------------------
 | OPSI JAWABAN

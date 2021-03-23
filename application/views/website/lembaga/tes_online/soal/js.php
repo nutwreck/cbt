@@ -19,10 +19,26 @@
     }
 </script>
 
+<!-- GET FIRST EXAM -->
+<script>
+    $( document ).ready(function() {
+        var id_soal = document.getElementById('bank_soal_first_id').innerHTML;
+        if(id_soal != '')
+            get_soal(id_soal, 1);
+    });
+</script>
+
 <script>
     $(function(){
         $('.form-soal').find('input[type=text],textarea').filter(':visible:first').focus();
     });
+</script>
+
+<script>
+    if (document.getElementById('#soal_audio') != null) 
+        document.querySelector("#soal_audio").onchange = function(){
+            document.querySelector("#file-name").textContent = this.files[0].name;
+        }
 </script>
 
 <!-- PEMILIHAN PERGANTIAN VIEW TIPE SOAL -->
@@ -93,7 +109,7 @@
             success: function(response) {
                 obj = JSON.parse(response);
                 document.getElementById('csrf-hash-form').value = obj.csrf;
-                console.log(obj.text);
+                /* console.log(obj.text); */
             }
         });
     }
@@ -128,4 +144,40 @@
     // @param {String} color
     $('.summernote').summernote('backColor', 'transparent');
     $('.summernote').summernote('foreColor', 'black');
+</script>
+
+<script>
+    function get_soal(id_soal, no_soal){
+        /* console.log(no_soal); */
+        var obj;
+        var csrfname = document.getElementById('csrf-name-form').innerHTML;
+        var csrfhash = document.getElementById('csrf-hash-form').value;
+        var paket_soal_id = document.getElementById('paket_soal_id').innerHTML;
+        var formData = new FormData();
+		formData.append("bank_soal_id", id_soal);
+        formData.append("paket_soal_id", paket_soal_id);
+        formData.append("nomor_soal", no_soal);
+        formData.append("_token", '206b3a13a65afd2ea84090f6276d63f5');
+        formData.append(csrfname, csrfhash);
+        /* console.log(formData); */
+        $.ajax({
+            data: formData,
+            type: "POST",
+            url: base_url+'website/lembaga/Tes_online/get_detail_exam',
+            cache: false,
+            contentType: false,
+			processData: false,
+            success: function(response) {
+                obj = JSON.parse(response);
+                /* console.log(obj); */
+                document.getElementById('csrf-hash-form').value = obj.csrf;
+                //HEADER SOAL SHOW
+                document.getElementById("header-soal").innerHTML = obj.header_soal;
+                //CONTENT SOAL SHOW
+                document.getElementById("content-soal").innerHTML = obj.content_soal;
+                //JAWABAN SOAL SHOW
+                document.getElementById("jawaban-soal").innerHTML = obj.jawaban_soal;
+            }
+        });
+    }
 </script>
