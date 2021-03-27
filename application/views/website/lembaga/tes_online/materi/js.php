@@ -2,15 +2,15 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script>
 
 <script>
-$(document).ready(function() {
-    $('#table_materi').DataTable( {
-        
+    $(document).ready(function() {
+        $('#table_materi').DataTable( {
+            
+        } );
     } );
-} );
 
-function add_data() {
-    window.location.href = "<?php echo base_url(); ?>lembaga/add-materi";
-}
+    function add_data() {
+        window.location.href = "<?php echo base_url(); ?>lembaga/add-materi";
+    }
 </script>
 
 <!-- Info Close -->
@@ -19,5 +19,29 @@ function add_data() {
         var cont = document.getElementById('info_user');
         cont.style.display = 'none';
         document.getElementById('content_add').className = 'col-lg-6'; //Ganti ukuran form add
+    }
+</script>
+
+<!-- Validasi Form Add -->
+<script type = "text/javascript">
+    function validate_addform(){
+        if( document.formadd.materi.value == "" ) {
+            document.getElementById('materi_er').innerHTML = 'Wajib diisi!';
+            document.formadd.materi.focus() ;
+            return false;
+        }
+        return( true );
+    }
+</script>
+
+<!-- Validasi Form Edit -->
+<script type = "text/javascript">
+    function validate_editform(){
+        if( document.formedit.materi.value == "" ) {
+            document.getElementById('materi_er').innerHTML = 'Wajib diisi!';
+            document.formedit.materi.focus() ;
+            return false;
+        }
+        return( true );
     }
 </script>

@@ -28,12 +28,13 @@
                                 <div class="card">
                                     <div class="card-header">Tambah Materi</div>
                                     <div class="card-body">
-                                        <form action="<?php echo base_url(); ?>website/lembaga/Tes_online/submit_edit_materi" method="post" novalidate="novalidate">
+                                        <form id="formedit" name="formedit" action="<?php echo base_url(); ?>website/lembaga/Tes_online/submit_edit_materi" method="post" onsubmit = "return(validate_editform());">
                                         <input type="hidden" id="csrf-hash-form" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" style="display: none">
                                         <input type="hidden" id="id" name="id" value="<?=$id?>" style="display: none">
                                             <div class="form-group">
                                                 <label for="nama" class="control-label mb-1">Nama Materi</label>
-                                                <input id="materi" name="materi" type="text" class="form-control" aria-required="true" aria-invalid="false" placeholder="Masukkan nama materi" value="<?=$name?>" required>
+                                                <small for="nama" id="materi_er" class="bg-danger text-white"></small>
+                                                <input id="materi" name="materi" type="text" class="form-control" aria-required="true" aria-invalid="false" placeholder="Masukkan nama materi" value="<?=$name?>">
                                             </div>
                                             <div>
                                                 <button type="submit" class="btn btn-lg btn-info btn-block">

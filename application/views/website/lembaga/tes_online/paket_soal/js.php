@@ -18,12 +18,14 @@
     }
 </script>
 
+<!-- Fokus pada inputan pertama ketika halaman form add di load -->
 <script>
     $(function(){
         $('.form-paket-soal').find('input[type=text],textarea').filter(':visible:first').focus();
     });
 </script>
 
+<!-- Nama file muncul saat upload -->
 <script>
     if (document.getElementById('#petunjuk_audio') != null) 
         document.querySelector("#petunjuk_audio").onchange = function(){
@@ -31,6 +33,7 @@
         }
 </script>
 
+<!-- Fungsi summernote -->
 <script>
     var IMAGE_FOLDER = 'storage/website/lembaga/grandsbmptn/paket_soal/';
     function uploadFileEditor($summernote,file)
@@ -109,4 +112,31 @@
     // @param {String} color
     $('#summernote').summernote('backColor', 'transparent');
     $('#summernote').summernote('foreColor', 'black');
+</script>
+
+<!-- Validasi Form Add -->
+<script type = "text/javascript">
+    function validate_addform(){
+        if( document.formadd.kelas.value == "-1" ) {
+            document.getElementById('kelas_er').innerHTML = 'Kelas wajib dipilih!';
+            document.formadd.kelas.focus();
+            return false;
+        }
+        if( document.formadd.materi.value == "-1" ) {
+            document.getElementById('materi_er').innerHTML = 'Materi wajib dipilih!';
+            document.formadd.materi.focus();
+            return false;
+        }
+        if( document.formadd.mode_jawaban.value == "-1" ) {
+            document.getElementById('mode_jawaban_er').innerHTML = 'Mode jawaban wajib dipilih!';
+            document.formadd.mode_jawaban.focus();
+            return false;
+        }
+        if( document.formadd.skala_nilai.value == "-1" ) {
+            document.getElementById('skala_nilai_er').innerHTML = 'Skala nilai wajib dipilih!';
+            document.formadd.skala_nilai.focus();
+            return false;
+        }
+        return( true );
+    }
 </script>

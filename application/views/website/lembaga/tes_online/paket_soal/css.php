@@ -12,8 +12,8 @@
     text-align: right;
 }
 .custom-file-input {
-        cursor: pointer;
-    }
+    cursor: pointer;
+}
 .custom-file-label {
     display: inline-block;
     z-index: 0;

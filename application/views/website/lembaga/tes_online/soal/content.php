@@ -12,7 +12,7 @@
                         <p id="paket_soal_id" style="display:none;"><?=$id_paket_soal?></p>
                         <p id="bank_soal_first_id" style="display:none;"><?=isset($soal_first_list) ? $soal_first_list : ''?></p>
                         <a href="<?=base_url()?>lembaga/add-soal/<?=$id_paket_soal?>" class="btn btn-sm btn-primary m-1">Tambah Soal</a>
-                        <button class="btn btn-sm btn-danger m-1">Kosongkan</button>
+                        <button class="btn btn-sm btn-danger m-1" onclick="empty_paket_soal(<?=$id_paket_soal_val?>)">Kosongkan</button>
                         <button class="btn btn-sm btn-outline-secondary m-1" onclick="return toggle_soal()">Toogle Soal</button>
                     </div>
                 </div>

@@ -19,12 +19,13 @@
     }
 </script>
 
-<!-- GET FIRST EXAM -->
+<!-- Amnil id soal pertama yang muncul berdasarkan sistem -->
 <script>
     $( document ).ready(function() {
-        var id_soal = document.getElementById('bank_soal_first_id').innerHTML;
-        if(id_soal != '')
+        if(document.getElementById("bank_soal_first_id") != null){
+            var id_soal = document.getElementById('bank_soal_first_id').innerHTML;
             get_soal(id_soal, 1);
+        }
     });
 </script>
 
@@ -34,6 +35,7 @@
     });
 </script>
 
+<!-- Untuk menampilkan nama file saat upload soal audio -->
 <script>
     if (document.getElementById('#soal_audio') != null) 
         document.querySelector("#soal_audio").onchange = function(){
@@ -46,10 +48,16 @@
     function choosen_exam(){
         var type_exam = document.getElementById('pilihan_jenis_soal').value;
         var content_jawaban = document.getElementById('content_jawaban');
+        var content_acak_jawaban_head = document.getElementById('content_acak_jawaban_head');
+        var content_acak_jawaban_body = document.getElementById('content_acak_jawaban_body');
         if(type_exam == '1'){ //1 PILIHAN GANDA //2 ESSAY
             content_jawaban.style.display = 'block';
+            content_acak_jawaban_head.style.display = 'block';
+            content_acak_jawaban_body.style.display = 'block';
         } else {
             content_jawaban.style.display = 'none';
+            content_acak_jawaban_head.style.display = 'none';
+            content_acak_jawaban_body.style.display = 'none';
         }
     }
 </script>
@@ -179,5 +187,22 @@
                 document.getElementById("jawaban-soal").innerHTML = obj.jawaban_soal;
             }
         });
+    }
+</script>
+
+<!-- Validasi Form Add -->
+<script type = "text/javascript">
+    function validate_addform(){
+        if( document.formadd.jenis_soal.value == "-1" ) {
+            document.getElementById('jenis_soal_er').innerHTML = 'Jenis soal wajib dipilih!';
+            document.formadd.jenis_soal.focus();
+            return false;
+        }
+        if( document.formadd.tipe_kesulitan.value == "-1" ) {
+            document.getElementById('tipe_kesulitan_er').innerHTML = 'Tipe kesulitan wajib dipilih!';
+            document.formadd.tipe_kesulitan.focus();
+            return false;
+        }
+        return( true );
     }
 </script>

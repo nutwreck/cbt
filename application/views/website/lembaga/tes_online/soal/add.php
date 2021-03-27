@@ -11,7 +11,7 @@
                             </div>
                         </div>
                     </div>
-                        <form action="<?php echo base_url(); ?>website/lembaga/Tes_online/submit_add_soal" class="form-soal" method="POST" novalidate="novalidate" enctype="multipart/form-data">
+                        <form id="formadd" name="formadd" action="<?php echo base_url(); ?>website/lembaga/Tes_online/submit_add_soal" class="form-soal" method="POST" enctype="multipart/form-data" onsubmit="return(validate_addform());">
                         <input type="hidden" id="csrf-hash-form" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" style="display: none">
                         <input type="hidden" id="id_paket_soal" name="id_paket_soal" value="<?=$id_paket_soal?>" style="display: none">
                             <div class="card-body">
@@ -31,11 +31,13 @@
                                     </div>
                                     <div class="col-sm-12 col-lg-9">
                                         <div class="form-group">
-                                            <select id="pilihan_jenis_soal" class="selectpicker" data-live-search="true" data-width="auto" name="jenis_soal" required onchange="choosen_exam()">
+                                            <select id="pilihan_jenis_soal" class="form-control selectpicker" data-live-search="true" data-width="auto" name="jenis_soal" required onchange="choosen_exam()">
+                                                <option value = "-1" selected>Pilih</option>
                                                 <?php foreach($jenis_soal as $val_jenis_soal){ ?>
                                                     <option data-tokens="<?=$val_jenis_soal->name?>" value="<?=$val_jenis_soal->id?>"><?=$val_jenis_soal->name?></option>
                                                 <?php } ?>
                                             </select>
+                                            <small for="jenis_soal" id="jenis_soal_er" class="bg-danger text-white"></small>
                                         </div>
                                     </div>
                                 </div>
@@ -55,7 +57,7 @@
                                     </div>
                                     <div class="col-sm-12 col-lg-9">
                                         <div class="form-group">
-                                            <input id="kata_kunci" name="kata_kunci" type="text" class="form-control" aria-required="true" aria-invalid="false" placeholder="Ex : matriks, vector, determinan (Pisahkan dengan tanda kome)" required>
+                                            <input id="kata_kunci" name="kata_kunci" type="text" class="form-control" aria-required="true" aria-invalid="false" placeholder="Ex : matriks, vector, determinan (Pisahkan dengan tanda koma)">
                                         </div>
                                     </div>
                                 </div>
@@ -65,11 +67,13 @@
                                     </div>
                                     <div class="col-sm-12 col-lg-9">
                                         <div class="form-group">
-                                            <select class="selectpicker" data-live-search="true" data-width="auto" name="tipe_kesulitan" required>
+                                            <select class="form-control selectpicker" data-live-search="true" data-width="auto" name="tipe_kesulitan" required>
+                                                <option value = "-1" selected>Pilih</option>
                                                 <?php foreach($tipe_kesulitan as $val_kesulitan){ ?>
                                                     <option data-tokens="<?=$val_kesulitan->name?>" value="<?=$val_kesulitan->id?>"><?=$val_kesulitan->name?></option>
                                                 <?php } ?>
                                             </select>
+                                            <small for="tipe_kesulitan" id="tipe_kesulitan_er" class="bg-danger text-white"></small>
                                         </div>
                                     </div>
                                 </div>
@@ -102,10 +106,10 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-12 col-lg-3" style="margin-top:0.3%">
+                                    <div id="content_acak_jawaban_head" class="col-sm-12 col-lg-3" style="margin-top:0.3%">
                                         <h5 class="label-text">Acak Jawaban</h5>
                                     </div>
-                                    <div class="col-sm-12 col-lg-9">
+                                    <div id="content_acak_jawaban_body" class="col-sm-12 col-lg-9">
                                         <div class="custom-control custom-radio custom-control-inline">
                                             <input type="radio" class="custom-control-input" id="acak_jawaban_tidak" name="acak_jawaban" required value="0" checked>
                                             <label class="custom-control-label" for="acak_jawaban_tidak">Tidak</label>
@@ -113,11 +117,6 @@
                                         <div class="custom-control custom-radio custom-control-inline">
                                             <input type="radio" class="custom-control-input" id="acak_jawaban_ya" name="acak_jawaban" required value="1">
                                             <label class="custom-control-label" for="acak_jawaban_ya">Ya</label>
-                                        </div>
-                                        <div class="alert alert-info">
-                                            <p>
-                                                Pemilihan acak soal & jawaban diatas jika ya maka akan <b>dirandom secara default oleh sistem</b>. Anda tetap <b>harus memilih soal / jawaban yang akan diacak</b> saat pembuatan soal nantinya.
-                                            </p>
                                         </div>
                                     </div>
                                 </div>

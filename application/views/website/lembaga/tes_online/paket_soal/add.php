@@ -4,7 +4,7 @@
         <div class="container-fluid">
                 <div class="card">
                     <div class="card-header">Tambah Paket Soal</div>
-                        <form action="<?php echo base_url(); ?>website/lembaga/Tes_online/submit_add_paket_soal" class="form-paket-soal" method="POST" novalidate="novalidate" enctype="multipart/form-data">
+                        <form id="formadd" name="formadd" action="<?php echo base_url(); ?>website/lembaga/Tes_online/submit_add_paket_soal" class="form-paket-soal" method="POST" enctype="multipart/form-data" onsubmit="return(validate_addform());">
                         <input type="hidden" id="csrf-hash-form" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" style="display: none">
                             <div class="card-body">
                                 <div class="row">
@@ -23,12 +23,13 @@
                                     </div>
                                     <div class="col-sm-12 col-lg-9">
                                         <div class="form-group">
-                                            <select class="selectpicker" data-live-search="true" data-width="auto" name="kelas" required>
-                                                <option data-tokens="0">Pilih</option>
+                                            <select class="form-control selectpicker" data-live-search="true" data-width="auto" name="kelas" required>
+                                                <option value = "-1" selected>Pilih</option>
                                                 <?php foreach($get_kelas as $val_kelas){ ?>
                                                     <option data-tokens="<?=$val_kelas->description?>" value="<?=$val_kelas->kelas_id?>|<?=$val_kelas->description?>"><?=$val_kelas->description?></option>
                                                 <?php } ?>
                                             </select>
+                                            <small for="kelas" id="kelas_er" class="bg-danger text-white"></small>
                                         </div>
                                     </div>
                                 </div>
@@ -38,12 +39,13 @@
                                     </div>
                                     <div class="col-sm-12 col-lg-9">
                                         <div class="form-group">
-                                            <select class="selectpicker" data-live-search="true" data-width="auto" name="materi" required>
-                                                <option data-tokens="0">Pilih</option>
+                                            <select class="form-control selectpicker" data-live-search="true" data-width="auto" name="materi" required>
+                                                <option value = "-1" selected>Pilih</option>
                                                 <?php foreach($get_materi as $val_materi){ ?>
                                                     <option data-tokens="<?=$val_materi->name?>" value="<?=$val_materi->id?>|<?=$val_materi->name?>"><?=$val_materi->name?></option>
                                                 <?php } ?>
                                             </select>
+                                            <small for="materi" id="materi_er" class="bg-danger text-white"></small>
                                         </div>
                                         <div class="alert alert-info">
                                             <p>
@@ -59,12 +61,13 @@
                                     </div>
                                     <div class="col-sm-12 col-lg-9">
                                         <div class="form-group">
-                                            <select class="selectpicker" data-live-search="true" data-width="auto" name="mode_jawaban" required>
-                                                <option data-tokens="0">Pilih</option>
+                                            <select class="form-control selectpicker" data-live-search="true" data-width="auto" name="mode_jawaban" required>
+                                                <option value = "-1" selected>Pilih</option>
                                                 <?php foreach($get_mode_jawaban as $val_mode_jwb){ ?>
                                                     <option data-tokens="<?=$val_mode_jwb->name?>" value="<?=$val_mode_jwb->id?>"><?=$val_mode_jwb->name?></option>
                                                 <?php } ?>
                                             </select>
+                                            <small for="mode_jawaban" id="mode_jawaban_er" class="bg-danger text-white"></small>
                                         </div>
                                         <div class="alert alert-info">
                                             <p>
@@ -114,11 +117,13 @@
                                     </div>
                                     <div class="col-sm-12 col-lg-9">
                                         <div class="form-group">
-                                            <select class="selectpicker" data-live-search="true" data-width="auto" name="skala_nilai" required>
+                                            <select class="form-control selectpicker" data-live-search="true" data-width="auto" name="skala_nilai" required>
+                                                <option value = "-1" selected>Pilih</option>
                                                 <?php foreach($get_skala_nilai as $val_skala_nilai){ ?>
                                                     <option data-tokens="<?=$val_skala_nilai->detail?>" value="<?=$val_skala_nilai->id?>"><?=$val_skala_nilai->detail?></option>
                                                 <?php } ?>
                                             </select>
+                                            <small for="skala_nilai" id="skala_nilai_er" class="bg-danger text-white"></small>
                                         </div>
                                         <div class="alert alert-info">
                                             <p>

@@ -264,7 +264,7 @@ class Tes_online extends CI_Controller {
         if(!empty($_FILES['petunjuk_audio']['name'])){
             if (!$this->upload->do_upload('petunjuk_audio')){
                 $error = $this->upload->display_errors();
-                show_error($error, 500, 'File Soal Error');
+                show_error($error, 500, 'File Audio Petunjuk Error');
                 exit();
             }else{
                 $data['file'] = $this->upload->data('file_name');
@@ -350,8 +350,9 @@ class Tes_online extends CI_Controller {
         //for passing data to view
         $paket_soal_id = base64_decode(urldecode($id_paket_soal));
         $data['content']['id_paket_soal'] = $id_paket_soal;
+        $data['content']['id_paket_soal_val'] = $paket_soal_id;
         $data['content']['paket_soal'] = $this->tes->get_paket_soal_by_id($paket_soal_id);
-        $data['content']['id_soal_list'] = $this->tes->get_all_soal_by_id($paket_soal_id);
+        $data['content']['id_soal_list'] = $this->tes->get_all_soal_by_paketid($paket_soal_id);
         $first_exam = $data['content']['id_soal_list'][0]; //Ambil Id Pertama soal yang muncul
         $data['content']['soal_first_list'] = $first_exam->id;
         $data['title_header'] = ['title' => 'Daftar Soal'];
@@ -391,6 +392,7 @@ class Tes_online extends CI_Controller {
             $acak_soal_icon = $soal->is_acak_soal == 1 ? 'fa-check' : 'fa-close';
             $acak_jwb_badge = $soal->is_acak_jawaban == 1 ? 'badge-success' : 'badge-danger';
             $acak_jwb_icon = $soal->is_acak_jawaban == 1 ? 'fa-check' : 'fa-close';
+            $cek_group_mode_jwb = $soal->group_mode_jwb_id == 1 ? '' : 'style="display:none;"'; //1 Pilihan ganda 2 essay
 
             $header_soal = '
             <div class="row">
@@ -401,7 +403,7 @@ class Tes_online extends CI_Controller {
                         <span class="badge '.$acak_soal_badge.'">
                             <i class="fa '.$acak_soal_icon.'" aria-hidden="true"></i> Acak Soal
                         </span>
-                        <span class="badge '.$acak_jwb_badge.'">
+                        <span '.$cek_group_mode_jwb.' class="badge '.$acak_jwb_badge.'">
                             <i class="fa '.$acak_jwb_icon.'" aria-hidden="true"></i> Acak Jawaban
                         </span>
                     </h5>
@@ -492,7 +494,7 @@ class Tes_online extends CI_Controller {
         if(!empty($_FILES['soal_audio']['name'])){
             if (!$this->upload->do_upload('soal_audio')){
                 $error = $this->upload->display_errors();
-                show_error($error, 500, 'File Soal Error');
+                show_error($error, 500, 'File Audio Soal Error');
                 exit();
             }else{
                 $data['file'] = $this->upload->data('file_name');
