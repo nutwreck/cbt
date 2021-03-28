@@ -580,3 +580,4 @@ $config['_token_tampil_soal'] = '206b3a13a65afd2ea84090f6276d63f5'; //tampil-soa
 |
 */
 $config['_def_opsi_jawaban'] = 'A';
+$config['_def_opsi_urutan'] = '1';

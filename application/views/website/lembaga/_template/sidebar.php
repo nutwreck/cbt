@@ -21,6 +21,9 @@
                                 <li>
                                     <a href="<?php echo base_url(); ?>lembaga/paket-soal">Paket Soal</a>
                                 </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>lembaga/sesi-pelaksana">Sesi Pelaksana</a>
+                                </li>
                             </ul>
                         </li>
                         <li>

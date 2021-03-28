@@ -281,6 +281,8 @@ class Tes_online extends CI_Controller {
     }
 
     public function editor_paket_soal(){ //upload image dipaket soal petunjuk pengerjaan 
+        $data = [];
+        $datas = [];
         $_token = $this->input->post('_token', TRUE);
         $validation = config_item('_token_petunjuk_paket_data');
         $target_dir = $this->input->post('folder', TRUE);
@@ -321,6 +323,7 @@ class Tes_online extends CI_Controller {
     }
 
     public function editor_paket_soal_delete(){ //hapus upload image dipaket soal petunjuk pengerjaan
+        $datas = [];
         $_token = $this->input->post('_token', TRUE);
         $validation = config_item('_token_petunjuk_paket_data');
         $src = $this->input->post('src', TRUE); 
@@ -378,6 +381,7 @@ class Tes_online extends CI_Controller {
         $_token = $this->input->post('_token', TRUE);
         $validation = config_item('_token_tampil_soal');
         $bank_soal_id = $this->input->post('bank_soal_id', TRUE);
+        $bank_soal_id_crypt = urlencode(base64_encode($bank_soal_id));
         $nomor_soal = $this->input->post('nomor_soal', TRUE);
         $id_paket_soal = base64_decode(urldecode($paket_soal_id));
 
@@ -409,8 +413,8 @@ class Tes_online extends CI_Controller {
                     </h5>
                 </div>
                 <div class="col-4 text-right">
-                        <button class="btn btn-sm btn-success" title="Edit Soal"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                        <button class="btn btn-sm btn-danger" title="Hapus Soal"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                        <a href="'.base_url().'lembaga/edit-soal/'.$paket_soal_id.'/'.$bank_soal_id_crypt.'/'.$nomor_soal.'" class="btn btn-sm btn-success" title="Edit Soal"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                        <a href="'.base_url().'lembaga/disable-soal/'.$paket_soal_id.'/'.$bank_soal_id_crypt.'" class="btn btn-sm btn-danger" title="Hapus Soal"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                 </div>
             </div>';
 
@@ -540,6 +544,8 @@ class Tes_online extends CI_Controller {
     }
 
     public function editor_soal(){ //upload image disoal
+        $data = [];
+        $datas = [];
         $_token = $this->input->post('_token', TRUE);
         $validation = config_item('_token_input_soal_data');
         $target_dir = $this->input->post('folder', TRUE);
@@ -581,6 +587,7 @@ class Tes_online extends CI_Controller {
     }
 
     public function editor_soal_delete(){ //hapus upload image dipaket soal petunjuk pengerjaan
+        $datas = [];
         $_token = $this->input->post('_token', TRUE);
         $validation = config_item('_token_input_soal_data');
         $src = $this->input->post('src', TRUE); 
@@ -605,6 +612,38 @@ class Tes_online extends CI_Controller {
 
             echo json_encode($datas);
         }
+    }
+
+    public function edit_soal($id_paket_soal, $id_bank_soal, $nomor_soal){
+        //for passing data to view
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+        $bank_soal_id = base64_decode(urldecode($id_bank_soal));
+        $soal_detail = $this->tes->get_soal_by_id($paket_soal_id, $bank_soal_id); //Detail soal
+        $jawaban_detail = $this->tes->get_jawaban_detail($bank_soal_id); //Detail jawaban
+        $data['content']['id_paket_soal'] = $id_paket_soal;
+        $data['content']['id_bank_soal'] = $bank_soal_id;
+        $data['content']['nomor_soal'] = $nomor_soal;
+        $data['content']['soal_detail'] = $soal_detail;
+        $data['content']['jawaban_detail'] = $jawaban_detail;
+        $data['content']['jenis_soal'] = $this->tes->get_jenis_soal_selected($soal_detail->group_mode_jwb_id);
+        $data['content']['tipe_kesulitan'] = $this->tes->get_tipe_kesulitan_selected($soal_detail->tipe_kesulitan_id);
+        $data['title_header'] = ['title' => 'Edit Soal'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/soal/css';
+        $view['content'] = 'website/lembaga/tes_online/soal/edit';
+        $view['js_additional'] = 'website/lembaga/tes_online/soal/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function disable_soal($paket_soal_id, $id_bank_soal){
+
+    }
+
+    public function sesi_pelaksana(){
+
     }
 
 }

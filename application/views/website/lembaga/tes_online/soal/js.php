@@ -26,6 +26,9 @@
             var id_soal = document.getElementById('bank_soal_first_id').innerHTML;
             get_soal(id_soal, 1);
         }
+        if(document.getElementById("pilihan_jenis_soal") != null){
+            choosen_exam();
+        }
     });
 </script>
 
@@ -152,6 +155,7 @@
     // @param {String} color
     $('.summernote').summernote('backColor', 'transparent');
     $('.summernote').summernote('foreColor', 'black');
+    $('.summernote').summernote('code');
 </script>
 
 <script>

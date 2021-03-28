@@ -86,6 +86,9 @@ $route['lembaga/paket-soal'] = 'website/lembaga/Tes_online/paket_soal';
 $route['lembaga/add-paket-soal'] = 'website/lembaga/Tes_online/add_paket_soal';
 $route['lembaga/list-soal/(:any)'] = 'website/lembaga/Tes_online/list_soal/$1';
 $route['lembaga/add-soal/(:any)'] = 'website/lembaga/Tes_online/add_soal/$1';
+$route['lembaga/edit-soal/(:any)/(:any)/(:num)'] = 'website/lembaga/Tes_online/edit_soal/$1/$2/$3';
+$route['lembaga/disable-soal/(:any)/(:any)'] = 'website/lembaga/Tes_online/disable_soal/$1/$2';
+$route['lembaga/sesi-pelaksana'] = 'website/lembaga/Tes_online/sesi_pelaksana';
 $route['lembaga/logout'] = 'website/lembaga/Dashboard/logout';
 /*
 |

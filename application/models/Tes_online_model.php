@@ -79,7 +79,7 @@ class Tes_online_model extends CI_Model{
     public function get_soal_by_id($paket_soal_id, $bank_soal_id){
         return $this->db->select('bank_soal_id, paket_soal_id, group_mode_jwb_id, group_mode_jwb_name, is_acak_soal, acak_soal
                                 , is_acak_jawaban, acak_jawaban, no_soal, bank_soal_name, kata_kunci, tipe_kesulitan_id
-                                , tipe_kesulitan_name')
+                                , tipe_kesulitan_name, file')
                     ->get_where('v_bank_soal', array('paket_soal_id' => $paket_soal_id, 'bank_soal_id' => $bank_soal_id, 'is_enable' => 1))->row();
     }
 
@@ -90,6 +90,24 @@ class Tes_online_model extends CI_Model{
         return $this->db->select('id, bank_soal_id, order, name, score, is_key')
                     ->order_by($order)
                     ->get_where('jawaban', array('bank_soal_id' => $bank_soal_id, 'is_enable' => 1))->result();
+    }
+
+    public function get_jawaban_detail($bank_soal_id){
+        return $this->db->select('id, bank_soal_id, order, name, score, is_key')
+                    ->order_by('order ASC, id ASC')
+                    ->get_where('jawaban', array('bank_soal_id' => $bank_soal_id, 'is_enable' => 1))->result();
+    }
+
+    public function get_jenis_soal_selected($group_mode_jwb_id){
+        return $this->db->select('id, name')
+                    ->order_by('id ASC')
+                    ->get_where('group_mode_jawaban', array('id !=' => $group_mode_jwb_id, 'is_enable' => 1))->result();
+    }
+
+    public function get_tipe_kesulitan_selected($tipe_kesulitan_id){
+        return $this->db->select('id, name')
+                    ->order_by('id ASC')
+                    ->get_where('tipe_kesulitan', array('id !=' => $tipe_kesulitan_id, 'is_enable' => 1))->result();
     }
 
     public function save_soal($data){
