@@ -84,10 +84,15 @@ $route['lembaga/delete-materi/(:num)'] = 'website/lembaga/Tes_online/delete_mate
 $route['lembaga/active-materi/(:num)'] = 'website/lembaga/Tes_online/active_materi/$1';
 $route['lembaga/paket-soal'] = 'website/lembaga/Tes_online/paket_soal';
 $route['lembaga/add-paket-soal'] = 'website/lembaga/Tes_online/add_paket_soal';
+$route['lembaga/detail-paket-soal/(:any)'] = 'website/lembaga/Tes_online/get_detail_paket_data/$1';
+$route['lembaga/edit-paket-soal/(:any)'] = 'website/lembaga/Tes_online/edit_paket_data/$1';
+$route['lembaga/disable-paket-soal/(:any)'] = 'website/lembaga/Tes_online/disable_paket_data/$1';
+$route['lembaga/active-paket-soal/(:any)'] = 'website/lembaga/Tes_online/active_paket_data/$1';
 $route['lembaga/list-soal/(:any)'] = 'website/lembaga/Tes_online/list_soal/$1';
 $route['lembaga/add-soal/(:any)'] = 'website/lembaga/Tes_online/add_soal/$1';
 $route['lembaga/edit-soal/(:any)/(:any)/(:num)'] = 'website/lembaga/Tes_online/edit_soal/$1/$2/$3';
-$route['lembaga/disable-soal/(:any)/(:any)'] = 'website/lembaga/Tes_online/disable_soal/$1/$2';
+$route['lembaga/disable-soal/(:any)/(:any)/(:num)'] = 'website/lembaga/Tes_online/disable_soal/$1/$2/$3';
+$route['lembaga/drop-all/(:any)'] = 'website/lembaga/Tes_online/disable_all_soal/$1';
 $route['lembaga/sesi-pelaksana'] = 'website/lembaga/Tes_online/sesi_pelaksana';
 $route['lembaga/logout'] = 'website/lembaga/Dashboard/logout';
 /*

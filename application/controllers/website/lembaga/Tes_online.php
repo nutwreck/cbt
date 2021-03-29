@@ -208,6 +208,22 @@ class Tes_online extends CI_Controller {
         $this->_generate_view($view, $data);
     }
 
+    public function get_detail_paket_data($id_paket_soal){
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+
+        //for passing data to view
+        $data['content']['paket_soal'] = $this->tes->get_paket_soal_by_id($paket_soal_id);
+        $data['title_header'] = ['title' => 'Detail Paket Soal'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/paket_soal/css';
+        $view['content'] = 'website/lembaga/tes_online/paket_soal/detail';
+        $view['js_additional'] = 'website/lembaga/tes_online/paket_soal/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
     public function add_paket_soal(){
          //for passing data to view
          $data['content']['get_materi'] = $this->tes->get_materi_enable();
@@ -278,6 +294,122 @@ class Tes_online extends CI_Controller {
         $urly = 'lembaga/paket-soal';
         $urlx = 'lembaga/add-paket-soal';
         $this->input_end($input, $urly, $urlx);
+    }
+
+    public function edit_paket_data($id_paket_soal){
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+
+        //for passing data to view
+        $paket_soal = $this->tes->get_paket_soal_by_id($paket_soal_id);
+        $data['content']['id_paket_soal'] = $id_paket_soal;
+        $data['content']['paket_soal'] = $paket_soal;
+        $data['content']['get_materi'] = $this->tes->get_materi_selected($paket_soal->materi_id);
+        $data['content']['get_kelas'] = $this->tes->get_kelas_selected($paket_soal->kelas_id);
+        $data['content']['get_mode_jawaban'] = $this->tes->get_mode_jawaban_selected($paket_soal->detail_mode_jwb_id);
+        $data['content']['get_skala_nilai'] = $this->tes->get_skala_nilai_selected($paket_soal->pengaturan_universal_id);
+        $data['title_header'] = ['title' => 'Edit Paket Soal'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/paket_soal/css';
+        $view['content'] = 'website/lembaga/tes_online/paket_soal/edit';
+        $view['js_additional'] = 'website/lembaga/tes_online/paket_soal/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_edit_paket_soal(){
+        $id_paket_soal = $this->input->post('id_paket_soal');
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+        $data['name'] = ucwords($this->input->post('name', TRUE));
+        $kelas  = $this->input->post('kelas', TRUE);
+        $exp_kelas = explode("|", $kelas);
+        $data['kelas_id'] = $exp_kelas[0];
+        $data['kelas_name'] = $exp_kelas[1];
+        $materi  = $this->input->post('materi', TRUE);
+        $exp_materi = explode("|", $materi);
+        $data['materi_id'] = $exp_materi[0];
+        $data['materi_name'] = $exp_materi[1];
+        $data['detail_mode_jwb_id'] = $this->input->post('mode_jawaban', TRUE);
+        $data['is_acak_soal'] = $this->input->post('acak_soal', TRUE);
+        $data['is_acak_jawaban'] = $this->input->post('acak_jawaban', TRUE);
+        $data['pengaturan_universal_id'] = $this->input->post('skala_nilai', TRUE);
+        $data['skor_null'] = $this->input->post('skor_tdk_jwb', TRUE);
+        $data['is_continuous'] = $this->input->post('continous', TRUE);
+        $data['is_jawab'] = $this->input->post('menjawab', TRUE);
+        $data['petunjuk'] = $this->input->post('petunjuk_text');
+        $data['visual_limit'] = $this->input->post('audio_limit', TRUE);
+        $data['file'] = $this->input->post('petunjuk_audio', TRUE);
+        $old_name_audio = $this->input->post('old_name_audio');
+            if($old_name_audio == NULL || $old_name_audio == ''){
+                $old_name_audio_x = NULL;
+            } else {
+                $old_name_audio_x = $old_name_audio;
+            }
+        $old_type_audio = $this->input->post('old_type_audio');
+            if($old_type_audio == NULL || $old_type_audio == ''){
+                $old_type_audio_x = NULL;
+            } else {
+                $old_type_audio_x = $old_type_audio;
+            }
+        $data['updated_datetime'] = date('Y-m-d H:i:s');
+
+        $allowed_type 	= [
+            "audio/mpeg", "audio/mpg", "audio/mpeg3", "audio/mp3", "audio/x-wav", "audio/wave", "audio/wav"
+        ];
+        $config['upload_path']      = FCPATH.'storage/website/lembaga/grandsbmptn/paket_soal/';
+        $config['allowed_types']    = 'mpeg|mpg|mpeg3|mp3|wav|wave';
+        $config['encrypt_name']     = TRUE;
+        $_upload_path = $config['upload_path'];
+
+        if(!file_exists($_upload_path)){
+            mkdir($_upload_path,0777);
+        }
+        
+        $this->load->library('upload', $config);
+
+        if(!empty($_FILES['petunjuk_audio']['name'])){
+            if (!$this->upload->do_upload('petunjuk_audio')){
+                $error = $this->upload->display_errors();
+                show_error($error, 500, 'File Audio Petunjuk Error');
+                exit();
+            }else{
+                $data['file'] = $this->upload->data('file_name');
+                $data['tipe_file'] = $this->upload->data('file_type');
+            }
+        } else {
+            $data['file'] = $old_name_audio_x;
+            $data['tipe_file'] = $old_type_audio_x;
+        }
+
+        $tbl = $this->tbl_paket_soal;
+        $input = $this->general->update_data($tbl, $data, $paket_soal_id);
+
+        $urly = 'lembaga/paket-soal';
+        $urlx = 'lembaga/edit-paket-soal/'.$id_paket_soal;
+        $this->update_end($input, $urly, $urlx);
+    }
+
+    public function disable_paket_data($id_paket_soal){
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+
+        $tbl = $this->tbl_paket_soal;
+        $delete = $this->general->delete_data($tbl, $paket_soal_id);
+
+        $urly = 'lembaga/paket-soal';
+        $urlx = 'lembaga/paket-soal';
+        $this->delete_end($delete, $urly, $urlx);
+    }
+
+    public function active_paket_data($id_paket_soal){
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+
+        $tbl = $this->tbl_paket_soal;
+        $active = $this->general->active_data($tbl, $paket_soal_id);
+
+        $urly = 'lembaga/paket-soal';
+        $urlx = 'lembaga/paket-soal';
+        $this->active_end($active, $urly, $urlx);
     }
 
     public function editor_paket_soal(){ //upload image dipaket soal petunjuk pengerjaan 
@@ -353,11 +485,10 @@ class Tes_online extends CI_Controller {
         //for passing data to view
         $paket_soal_id = base64_decode(urldecode($id_paket_soal));
         $data['content']['id_paket_soal'] = $id_paket_soal;
-        $data['content']['id_paket_soal_val'] = $paket_soal_id;
         $data['content']['paket_soal'] = $this->tes->get_paket_soal_by_id($paket_soal_id);
         $data['content']['id_soal_list'] = $this->tes->get_all_soal_by_paketid($paket_soal_id);
-        $first_exam = $data['content']['id_soal_list'][0]; //Ambil Id Pertama soal yang muncul
-        $data['content']['soal_first_list'] = $first_exam->id;
+        $first_exam = $data['content']['id_soal_list'] != NULL ? $data['content']['id_soal_list'][0] : NULL; //Ambil Id Pertama soal yang muncul
+        $data['content']['soal_first_list'] = $first_exam != NULL ? $first_exam->id : NULL;
         $data['title_header'] = ['title' => 'Daftar Soal'];
 
         //for load view
@@ -414,7 +545,7 @@ class Tes_online extends CI_Controller {
                 </div>
                 <div class="col-4 text-right">
                         <a href="'.base_url().'lembaga/edit-soal/'.$paket_soal_id.'/'.$bank_soal_id_crypt.'/'.$nomor_soal.'" class="btn btn-sm btn-success" title="Edit Soal"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                        <a href="'.base_url().'lembaga/disable-soal/'.$paket_soal_id.'/'.$bank_soal_id_crypt.'" class="btn btn-sm btn-danger" title="Hapus Soal"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                        <a href="'.base_url().'lembaga/disable-soal/'.$paket_soal_id.'/'.$bank_soal_id_crypt.'/'.$nomor_soal.'" class="btn btn-sm btn-danger" title="Hapus Soal" onclick="return confirm('."'Apakah kamu yakin menghapus soal no $nomor_soal ? Setelah soal ini dihapus otomatis sistem akan mengurutkan urutan soal kembali'".')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                 </div>
             </div>';
 
@@ -621,7 +752,7 @@ class Tes_online extends CI_Controller {
         $soal_detail = $this->tes->get_soal_by_id($paket_soal_id, $bank_soal_id); //Detail soal
         $jawaban_detail = $this->tes->get_jawaban_detail($bank_soal_id); //Detail jawaban
         $data['content']['id_paket_soal'] = $id_paket_soal;
-        $data['content']['id_bank_soal'] = $bank_soal_id;
+        $data['content']['id_bank_soal'] = $id_bank_soal;
         $data['content']['nomor_soal'] = $nomor_soal;
         $data['content']['soal_detail'] = $soal_detail;
         $data['content']['jawaban_detail'] = $jawaban_detail;
@@ -638,11 +769,137 @@ class Tes_online extends CI_Controller {
         $this->_generate_view($view, $data);
     }
 
-    public function disable_soal($paket_soal_id, $id_bank_soal){
+    public function submit_edit_soal(){
+        $paket_soal_id = $this->input->post('id_paket_soal'); //EncryptIdPaketSoal
+        $bank_soal_id = $this->input->post('id_bank_soal'); //EncryptIdBankSoal
+        $type_exam = $this->input->post('jenis_soal', TRUE);
+        $nomor_soal = $this->input->post('no_soal', TRUE);
+        //SAVE SOAL
+        $id_bank_soal = base64_decode(urldecode($bank_soal_id));
+        $data['paket_soal_id']  = base64_decode(urldecode($this->input->post('id_paket_soal', TRUE)));
+        $data['group_mode_jwb_id']  = $this->input->post('jenis_soal', TRUE);
+        $data['no_soal']  = $nomor_soal;
+        $data['name']  = $this->input->post('soal');
+        $data['kata_kunci']  = $this->input->post('kata_kunci', TRUE);
+        $data['tipe_kesulitan_id']  = $this->input->post('tipe_kesulitan', TRUE);
+        $data['is_acak_soal']  = $this->input->post('acak_soal', TRUE);
+        $data['is_acak_jawaban']  = $this->input->post('acak_jawaban', TRUE);
+        $data['file']  = $this->input->post('soal_audio', TRUE);
+        $old_name_audio = $this->input->post('old_name_audio');
+            if($old_name_audio == NULL || $old_name_audio == ''){
+                $old_name_audio_x = NULL;
+            } else {
+                $old_name_audio_x = $old_name_audio;
+            }
+        $old_type_audio = $this->input->post('old_type_audio');
+            if($old_type_audio == NULL || $old_type_audio == ''){
+                $old_type_audio_x = NULL;
+            } else {
+                $old_type_audio_x = $old_type_audio;
+            }
+        $data['updated_datetime']  = date('Y-m-d H:i:s');
 
+        $allowed_type 	= [
+            "audio/mpeg", "audio/mpg", "audio/mpeg3", "audio/mp3", "audio/x-wav", "audio/wave", "audio/wav"
+        ];
+        $_id_paket_soal = $data['paket_soal_id'];
+        $config['upload_path']      = FCPATH.'storage/website/lembaga/grandsbmptn/paket_soal/soal_'.$_id_paket_soal.'/';
+        $config['allowed_types']    = 'mpeg|mpg|mpeg3|mp3|wav|wave';
+        $config['encrypt_name']     = TRUE;
+        $_upload_path = $config['upload_path'];
+
+        if(!file_exists($_upload_path)){
+            mkdir($_upload_path,0777);
+        }
+        
+        $this->load->library('upload', $config);
+
+        if(!empty($_FILES['soal_audio']['name'])){
+            if (!$this->upload->do_upload('soal_audio')){
+                $error = $this->upload->display_errors();
+                show_error($error, 500, 'File Audio Soal Error');
+                exit();
+            }else{
+                $data['file'] = $this->upload->data('file_name');
+                $data['tipe_file'] = $this->upload->data('file_type');
+            }
+        } else {
+            $data['file'] = $old_name_audio_x;
+            $data['tipe_file'] = $old_type_audio_x;
+        }
+
+        $update_soal = $this->tes->update_soal($id_bank_soal, $data);
+
+        //SAVE JAWABAN
+        if($update_soal) {
+            if($type_exam == 1){ //Tipe pilihan ganda memerlukan jawaban
+                $jawaban = $this->input->post('jawaban');
+                $id_jawaban = $this->input->post('id_jawaban', TRUE);
+                $skor_jawaban = $this->input->post('skor_jawaban', TRUE);
+                $tandai_jawaban  = $this->input->post('tanda_jawaban', TRUE);
+                $order = 1;
+                $datas = array();
+                foreach($jawaban as $key=>$value) {
+                    $datas[]  = array(
+                            'id' => $id_jawaban[$key],
+                            'bank_soal_id' => $id_bank_soal,
+                            'order' => $order,
+                            'name' => $jawaban[$key],
+                            'score' => $skor_jawaban[$key],
+                            'is_key' => $order == $tandai_jawaban ? 1 : 0,
+                            'updated_datetime' => date('Y-m-d H:i:s')
+                        );
+                    $order++;
+                }
+
+                $update_jawaban = $this->tes->update_jawaban($datas);
+
+                $urly = 'lembaga/list-soal/'.$paket_soal_id;
+                $urlx = 'lembaga/edit-soal/'.$paket_soal_id.'/'.$bank_soal_id.'/'.$nomor_soal;
+                $this->update_end($update_jawaban, $urly, $urlx);
+            } else { //tipe essay tidak perlu jawaban
+                $this->session->set_flashdata('success', 'Soal no '.$nomor_soal.' berhasil diubah');
+		        redirect('lembaga/list-soal/'.$paket_soal_id);
+            }
+        } else {
+            $this->session->set_flashdata('error', 'Soal no '.$nomor_soal.' gagal diubah! Ulangi kembali');
+		    redirect('lembaga/edit-soal/'.$paket_soal_id.'/'.$bank_soal_id.'/'.$nomor_soal);
+        }
     }
 
-    public function sesi_pelaksana(){
+    public function disable_soal($id_paket_soal, $id_bank_soal, $nomor_soal){
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+        $bank_soal_id = base64_decode(urldecode($id_bank_soal));
+
+        $disable_soal = $this->tes->disable_soal($paket_soal_id, $bank_soal_id);
+
+        if(!empty($disable_soal)){
+            $exam_order = $this->general->exam_order($paket_soal_id); //Urutin no soal lagi
+
+            $this->session->set_flashdata('success', 'Soal no '.$nomor_soal.' berhasil dihapus');
+		    redirect('lembaga/list-soal/'.$id_paket_soal);
+        } else {
+            $this->session->set_flashdata('error', 'Soal no '.$nomor_soal.' gagal dihapus!');
+		    redirect('lembaga/list-soal/'.$id_paket_soal);
+        }        
+    }
+
+    public function disable_all_soal($id_paket_soal){
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+
+        $get_all_soal_id = $this->tes->get_all_soal_by_paketid($paket_soal_id);//Ambil semua id soal, untuk penghapusan jawaban
+        $disable_all_soal = $this->tes->disable_all_soal($paket_soal_id, $get_all_soal_id);//disable semua soal dan jawabannya
+
+        if(!empty($disable_all_soal)){
+            $this->session->set_flashdata('success', 'Paket soal berhasil dikosongkan');
+		    redirect('lembaga/list-soal/'.$id_paket_soal);
+        } else {
+            $this->session->set_flashdata('error', 'Paket soal gagal dikosongkan!');
+		    redirect('lembaga/list-soal/'.$id_paket_soal);
+        }    
+    }
+
+    public function sesi_pelaksana($paket_soal_id){
 
     }
 

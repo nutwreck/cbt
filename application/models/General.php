@@ -57,5 +57,38 @@ class General extends CI_Model{
 			return $query;
 		}
     }
+    public function exam_order($paket_soal_id){
+        $this->db->trans_start();
+        $this->db->query("SET @r=0;");
+        $query = $this->db->query("UPDATE (SELECT id FROM bank_soal ORDER BY id ASC) A
+                                    LEFT JOIN bank_soal B USING (id) 
+                                        SET B.id = B.id,B.no_soal = @r:= (@r+1)
+                                    WHERE B.paket_soal_id = ".$paket_soal_id."
+                                        AND B.is_enable = 1;");
+        if ($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return null;
+		} else{
+			$this->db->trans_commit();
+			return $query;
+		}
+    }
+    public function answer_order($bank_soal_id){
+        $this->db->trans_start();
+        $this->db->query("SET @r=0;");
+        $query = $this->db->query("UPDATE (SELECT id FROM jawaban ORDER BY id ASC) A
+                                            LEFT JOIN jawaban B USING (id)
+                                            SET B.id = B.id,B.order = @r:= (@r+1)
+                                            WHERE B.bank_soal_id = ".$bank_soal_id."
+                                            AND B.is_enable = 1
+                                        ;");
+        if ($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return null;
+		} else{
+			$this->db->trans_commit();
+			return $query;
+		}
+    }
 
 }

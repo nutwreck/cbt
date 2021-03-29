@@ -38,7 +38,6 @@
                                                     <option data-tokens="<?=$val_jenis_soal->name?>" value="<?=$val_jenis_soal->id?>"><?=$val_jenis_soal->name?></option>
                                                 <?php } ?>
                                             </select>
-                                            <small for="jenis_soal" id="jenis_soal_er" class="bg-danger text-white"></small>
                                         </div>
                                     </div>
                                 </div>
@@ -50,6 +49,7 @@
                                         <div class="form-group">
                                             <textarea class="summernote note-math-dialog" id="summernote" name="soal" rows='10'><?=$soal_detail->bank_soal_name?></textarea>
                                         </div>
+                                        <small id="soal_er" class="bg-danger text-white"></small>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -85,7 +85,9 @@
                                     <div class="col-sm-12 col-lg-9">
                                         <div class="form-group">
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="soal_audio" name="soal_audio" value="<?=$soal_detail->file?>">
+                                                <input type="hidden" id="old_name_audio" name="old_name_audio" value="<?=$soal_detail->file?>" style="display: none">
+                                                <input type="hidden" id="old_type_audio" name="old_type_audio" value="<?=$soal_detail->tipe_file?>" style="display: none">
+                                                <input type="file" class="custom-file-input" id="soal_audio" name="soal_audio">
                                                 <label id="file-name" class="custom-file-label" for="soal_audio">Pilih Audio</label>
                                             </div>
                                         </div>
@@ -126,8 +128,8 @@
                                     <div class="col-sm-12">
                                     <table class="table table-bordered table-responsive">
                                         <thead class="table-primary text-center">
-                                            <th>Opsi</th>
-                                            <th>Pilih Jawaban</th>
+                                            <th width="7%">Opsi</th>
+                                            <th width="7%">Pilih Jawaban</th>
                                             <th>Jawaban</th>
                                             <th width="7%">Skor</th>
                                         </thead>

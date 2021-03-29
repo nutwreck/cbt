@@ -22,7 +22,7 @@
 <!-- Amnil id soal pertama yang muncul berdasarkan sistem -->
 <script>
     $( document ).ready(function() {
-        if(document.getElementById("bank_soal_first_id") != null){
+        if(document.getElementById("bank_soal_first_id").innerHTML != ""){
             var id_soal = document.getElementById('bank_soal_first_id').innerHTML;
             get_soal(id_soal, 1);
         }
@@ -155,7 +155,9 @@
     // @param {String} color
     $('.summernote').summernote('backColor', 'transparent');
     $('.summernote').summernote('foreColor', 'black');
-    $('.summernote').summernote('code');
+    if(document.getElementById("id_bank_soal") != null){
+        $('.summernote').summernote('code');
+    }
 </script>
 
 <script>
@@ -205,6 +207,18 @@
         if( document.formadd.tipe_kesulitan.value == "-1" ) {
             document.getElementById('tipe_kesulitan_er').innerHTML = 'Tipe kesulitan wajib dipilih!';
             document.formadd.tipe_kesulitan.focus();
+            return false;
+        }
+        return( true );
+    }
+</script>
+
+<!-- Validasi Form Add -->
+<script type = "text/javascript">
+    function validate_editform(){
+        if( document.formedit.no_soal.value == "" ) {
+            document.getElementById('no_soal_er').innerHTML = 'No Soal Tidak Terisi, Refresh Halaman Ini!';
+            document.formedit.no_soal.focus();
             return false;
         }
         return( true );
