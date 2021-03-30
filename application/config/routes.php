@@ -94,6 +94,14 @@ $route['lembaga/edit-soal/(:any)/(:any)/(:num)'] = 'website/lembaga/Tes_online/e
 $route['lembaga/disable-soal/(:any)/(:any)/(:num)'] = 'website/lembaga/Tes_online/disable_soal/$1/$2/$3';
 $route['lembaga/drop-all/(:any)'] = 'website/lembaga/Tes_online/disable_all_soal/$1';
 $route['lembaga/sesi-pelaksana'] = 'website/lembaga/Tes_online/sesi_pelaksana';
+$route['lembaga/user-lembaga'] = 'website/lembaga/User/user_lembaga';
+$route['lembaga/add-user-lembaga'] = 'website/lembaga/User/add_user_lembaga';
+$route['lembaga/disable-user-lembaga/(:any)/(:any)'] = 'website/lembaga/user/disable_user_lembaga/$1/$2';
+$route['lembaga/group-participants'] = 'website/lembaga/User/group_participants';
+$route['lembaga/add-group-participants'] = 'website/lembaga/user/add_group_participants';
+$route['lembaga/edit-group-participants/(:any)'] = 'website/lembaga/user/edit_group_participants/$1';
+$route['lembaga/disable-group-participants/(:any)'] = 'website/lembaga/user/disable_group_participants/$1';
+$route['lembaga/participants'] = 'website/lembaga/User/participants';
 $route['lembaga/logout'] = 'website/lembaga/Dashboard/logout';
 /*
 |
