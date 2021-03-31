@@ -13,8 +13,8 @@
                     </div>
                     <form id="formadd" name="formadd" action="<?php echo base_url(); ?>website/lembaga/User/submit_add_user_lembaga" class="form-user-lembaga" method="POST" enctype="multipart/form-data" onsubmit="return(validate_addform());">
                     <input type="hidden" id="csrf-hash-form" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" style="display: none">
-                    <input type="hidden" id="lembaga_id" name="lembaga_id" value="<?=$lembaga_id?>" style="display: none">
-                    <input type="hidden" id="role_user_id" name="role_user_id" value="<?=$role_user_id?>" style="display: none">
+                    <input type="hidden" id="lembaga_id" name="lembaga_id" value="<?=$lembaga_id?>" style="display: none" required>
+                    <input type="hidden" id="role_user_id" name="role_user_id" value="<?=$role_user_id?>" style="display: none" required>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-12 col-lg-3" style="margin-top:1%">

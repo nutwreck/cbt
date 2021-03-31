@@ -13,8 +13,8 @@
                     </div>
                         <form id="formedit" name="formedit" action="<?php echo base_url(); ?>website/lembaga/Tes_online/submit_edit_soal" class="form-soal" method="POST" enctype="multipart/form-data" onsubmit="return(validate_editform());">
                         <input type="hidden" id="csrf-hash-form" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" style="display: none">
-                        <input type="hidden" id="id_paket_soal" name="id_paket_soal" value="<?=$id_paket_soal?>" style="display: none">
-                        <input type="hidden" id="id_bank_soal" name="id_bank_soal" value="<?=$id_bank_soal?>" style="display: none">
+                        <input type="hidden" id="id_paket_soal" name="id_paket_soal" value="<?=$id_paket_soal?>" style="display: none" required>
+                        <input type="hidden" id="id_bank_soal" name="id_bank_soal" value="<?=$id_bank_soal?>" style="display: none" required>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-sm-12 col-lg-3" style="margin-top:1%">

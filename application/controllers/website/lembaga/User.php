@@ -10,6 +10,7 @@ class User extends CI_Controller {
 	 */
 
     private $tbl_group_peserta = 'group_peserta';
+    private $length_pass = 6;
 
     public function __construct(){
         parent::__construct();
@@ -98,6 +99,43 @@ class User extends CI_Controller {
         } else {
             $this->session->set_flashdata('error', 'Data gagal diaktifkan!');
 		    redirect($urlx);
+        }
+    }
+ 
+    private function generate_string($input, $strength = 16) {
+        $input_length = strlen($input);
+        $random_string = '';
+        for($i = 0; $i < $strength; $i++) {
+            $random_character = $input[mt_rand(0, $input_length - 1)];
+            $random_string .= $random_character;
+        }
+    
+        return $random_string;
+    }
+
+    private function secure_random_string($length) {
+        $random_string = '';
+        for($i = 0; $i < $length; $i++) {
+            $number = random_int(0, 36);
+            $character = base_convert($number, 10, 36);
+            $random_string .= $character;
+        }
+     
+        return $random_string;
+    }
+
+    private function generate_username(){
+        $permitted_chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $generate_string = $this->generate_string($permitted_chars, 5);
+        $get_time = strtotime("now");
+        $username = $generate_string.'@'.$get_time;
+
+        $username_check = $this->user->get_checking_username($username);
+
+        if($username_check){
+            $this->generate_username();
+        } else {
+            return $username;
         }
     }
 
@@ -315,4 +353,128 @@ class User extends CI_Controller {
         $urlx = 'lembaga/group-participants';
         $this->delete_end($disable, $urly, $urlx);
     }
+
+    public function participants(){
+        $lembaga_id = 2; //Next diganti dari session login
+        //for passing data to view
+        $data['content']['participants'] = $this->user->get_peserta_by_lembaga($lembaga_id);
+        $data['title_header'] = ['title' => 'Peserta List'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/user/peserta/css';
+        $view['content'] = 'website/lembaga/user/peserta/content';
+        $view['js_additional'] = 'website/lembaga/user/peserta/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function add_participants(){
+        //for passing data to view
+        $lembaga_id = 2; //Next diganti dari session login
+        $role_user_id = 2; //Role Id untuk user
+        $lembaga_id_crypt = urlencode(base64_encode($lembaga_id));
+        $role_user_id_crypt = urlencode(base64_encode($role_user_id));
+        $cek_verify_lembaga = $this->user->get_lembaga_by_id($lembaga_id); //Cek verifikasi akun lembaga
+
+        $data['content']['role_user_id'] = $role_user_id_crypt; //Role user id untuk peserta
+        $data['content']['lembaga_id'] = $lembaga_id_crypt; //Lembaga id untuk peserta
+        $data['content']['group_peserta'] = $this->user->get_group_peserta_enable($lembaga_id);
+        $data['title_header'] = ['title' => 'Add Peserta'];
+
+        if($cek_verify_lembaga->is_verify == 1){
+            //for load view
+            $view['css_additional'] = 'website/lembaga/user/peserta/css';
+            $view['content'] = 'website/lembaga/user/peserta/add';
+            $view['js_additional'] = 'website/lembaga/user/peserta/js';
+
+            //get function view website
+            $this->_generate_view($view, $data);
+        } else {
+            $this->session->set_flashdata('warning', 'Lakukkan verifikasi akun sebelum menambah admin lembaga!');
+            redirect('lembaga/user-lembaga');
+        }
+    }
+
+    public function submit_add_peserta(){
+        $data_user = [];
+        $data_peserta = [];
+        $role_user_id = $this->input->post('role_user_id');
+        $lembaga_id = $this->input->post('lembaga_id');
+
+        $username = $this->input->post('email_peserta', TRUE);
+        $password = $this->input->post('password', TRUE);
+
+        if($username == '' || $username == NULL || empty($username)){ //Jika email dikosongkan
+            $username_input = $this->generate_username();
+        } else {
+            $username_input = $username;
+        }
+
+        if($password == '' || $password == NULL || empty($password)){
+            $pass_input = $this->secure_random_string($this->length_pass);
+        } else {
+            $pass_input = $password;
+        }
+
+        //Data User
+        $data_user['role_user_id'] = base64_decode(urldecode($role_user_id));
+        $data_user['username'] = $username_input;
+        $data_user['password'] = $this->encryption->encrypt($pass_input);
+        $data_user['created_datetime'] = date('Y-m-d H:i:s');
+
+        //Data Peserta
+        $data_peserta['lembaga_id'] = base64_decode(urldecode($lembaga_id));
+        $data_peserta['no_peserta'] = $this->input->post('no_peserta', TRUE);
+        $data_peserta['group_peserta_id'] = $this->input->post('group_peserta', TRUE);
+        $data_peserta['name'] = ucwords($this->input->post('nama_peserta', TRUE));
+        $data_peserta['created_datetime'] = date('Y-m-d H:i:s');
+
+        $input = $this->user->input_peserta_tes($data_user, $data_peserta);
+
+        $urly = 'lembaga/participants';
+        $urlx = 'lembaga/add-participants';
+        $this->input_end($input, $urly, $urlx);
+    }
+
+    public function edit_participants($id_peserta, $id_user){
+        //for passing data to view
+        $peserta_id = base64_decode(urldecode($id_peserta));
+        $user_id = base64_decode(urldecode($id_user));
+        $detail_partisipan = $this->user->get_peserta_by_id($peserta_id, $user_id);
+        $lembaga_id = $detail_partisipan->lembaga_id;
+
+        $cek_verify_lembaga = $this->user->get_lembaga_by_id($lembaga_id); //Cek verifikasi akun lembaga
+
+        $data['content']['id_peserta'] = $id_peserta;
+        $data['content']['id_user'] = $id_user;
+        $data['content']['id_lembaga'] = urlencode(base64_encode($lembaga_id));
+        $data['content']['group_peserta'] = $this->user->get_group_peserta_selected($detail_partisipan->group_peserta_id);
+        $data['title_header'] = ['title' => 'Edit Peserta'];
+
+        var_dump($data);die();
+
+        if($cek_verify_lembaga->is_verify == 1){
+            //for load view
+            $view['css_additional'] = 'website/lembaga/user/peserta/css';
+            $view['content'] = 'website/lembaga/user/peserta/edit';
+            $view['js_additional'] = 'website/lembaga/user/peserta/js';
+
+            //get function view website
+            $this->_generate_view($view, $data);
+        } else {
+            $this->session->set_flashdata('warning', 'Lakukkan verifikasi akun sebelum menambah admin lembaga!');
+            redirect('lembaga/user-lembaga');
+        }
+    }
+
+    public function submit_edit_peserta(){
+
+    }
+
+    public function disable_participants($id_peserta, $id_user){
+
+    }
+
+
 }

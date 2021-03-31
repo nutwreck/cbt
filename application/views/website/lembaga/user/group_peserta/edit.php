@@ -13,8 +13,8 @@
                     </div>
                     <form action="<?php echo base_url(); ?>website/lembaga/User/submit_edit_group_peserta" class="form-group-peserta" method="POST" enctype="multipart/form-data">
                     <input type="hidden" id="csrf-hash-form" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" style="display: none">
-                    <input type="hidden" id="lembaga_id" name="lembaga_id" value="<?=urlencode(base64_encode($group_peserta->lembaga_id))?>" style="display: none">
-                    <input type="hidden" id="id" name="id" value="<?=urlencode(base64_encode($group_peserta->id))?>" style="display: none">
+                    <input type="hidden" id="lembaga_id" name="lembaga_id" value="<?=urlencode(base64_encode($group_peserta->lembaga_id))?>" style="display: none" required>
+                    <input type="hidden" id="id" name="id" value="<?=urlencode(base64_encode($group_peserta->id))?>" style="display: none" required>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-12 col-lg-3" style="margin-top:1%">

@@ -30,7 +30,7 @@
                                     <div class="card-body">
                                         <form id="formedit" name="formedit" action="<?php echo base_url(); ?>website/lembaga/Tes_online/submit_edit_materi" method="post" onsubmit = "return(validate_editform());">
                                         <input type="hidden" id="csrf-hash-form" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" style="display: none">
-                                        <input type="hidden" id="id" name="id" value="<?=$id?>" style="display: none">
+                                        <input type="hidden" id="id" name="id" value="<?=$id?>" style="display: none" required>
                                             <div class="form-group">
                                                 <label for="nama" class="control-label mb-1">Nama Materi</label>
                                                 <small for="nama" id="materi_er" class="bg-danger text-white"></small>
