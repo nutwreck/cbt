@@ -103,6 +103,7 @@ $route['lembaga/edit-group-participants/(:any)'] = 'website/lembaga/user/edit_gr
 $route['lembaga/disable-group-participants/(:any)'] = 'website/lembaga/user/disable_group_participants/$1';
 $route['lembaga/participants'] = 'website/lembaga/User/participants';
 $route['lembaga/add-participants'] = 'website/lembaga/User/add_participants';
+$route['lembaga/add-import-participants'] = 'website/lembaga/User/add_import_excel_participants';
 $route['lembaga/edit-participants/(:any)/(:any)'] = 'website/lembaga/user/edit_participants/$1/$2';
 $route['lembaga/disable-participants/(:any)/(:any)'] = 'website/lembaga/user/disable_participants/$1/$2';
 $route['lembaga/logout'] = 'website/lembaga/Dashboard/logout';

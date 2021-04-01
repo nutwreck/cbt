@@ -40,7 +40,7 @@
 
 <!-- Untuk menampilkan nama file saat upload soal audio -->
 <script>
-    if (document.getElementById('#soal_audio') != null) 
+    if (document.getElementById('soal_audio') != null) 
         document.querySelector("#soal_audio").onchange = function(){
             document.querySelector("#file-name").textContent = this.files[0].name;
         }

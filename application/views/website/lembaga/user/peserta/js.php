@@ -12,4 +12,17 @@
     function add_data() {
         window.location.href = "<?php echo base_url(); ?>lembaga/add-participants";
     }
+
+    function import_excel() {
+        window.location.href = "<?php echo base_url(); ?>lembaga/add-import-participants";
+    }
+</script>
+
+<!-- Nama file muncul saat upload -->
+<script>
+    if (document.getElementById('data_peserta') != null) {
+        document.querySelector("#data_peserta").onchange = function(){
+            document.querySelector("#file-name").textContent = this.files[0].name;
+        }
+    }
 </script>

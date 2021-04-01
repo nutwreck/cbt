@@ -14,7 +14,7 @@ class User extends CI_Controller {
 
     public function __construct(){
         parent::__construct();
-        $this->load->library('encryption');
+        $this->load->library('encryption', 'Excel');
         $this->load->model('General','general');
         $this->load->model('User_model','user');
     }
@@ -246,7 +246,8 @@ class User extends CI_Controller {
         $user_id = base64_decode(urldecode($id_user));
 
         $data = array(
-            'is_enable' => 0
+            'is_enable' => 0,
+            'updated_datetime' => date('Y-m-d H:i:s')
         );
 
         $disable = $this->user->disable_lembaga_user($lembaga_user_id, $user_id, $data);
@@ -290,7 +291,7 @@ class User extends CI_Controller {
             $this->_generate_view($view, $data);
         } else {
             $this->session->set_flashdata('warning', 'Lakukkan verifikasi akun sebelum menambah group peserta!');
-		    redirect('lembaga/user-lembaga');
+		    redirect('lembaga/group-participants');
         }
     }
 
@@ -392,7 +393,7 @@ class User extends CI_Controller {
             $this->_generate_view($view, $data);
         } else {
             $this->session->set_flashdata('warning', 'Lakukkan verifikasi akun sebelum menambah admin lembaga!');
-            redirect('lembaga/user-lembaga');
+            redirect('lembaga/participants');
         }
     }
 
@@ -437,6 +438,106 @@ class User extends CI_Controller {
         $this->input_end($input, $urly, $urlx);
     }
 
+    public function add_import_excel_participants(){
+         //for passing data to view
+         $lembaga_id = 2; //Next diganti dari session login
+         $role_user_id = 2; //Role Id untuk user
+
+         $name_config = 'TEMPLATE UPLOAD';
+         $detail_config = 'UPLOAD DATA PESERTA';
+
+         $lembaga_id_crypt = urlencode(base64_encode($lembaga_id));
+         $role_user_id_crypt = urlencode(base64_encode($role_user_id));
+
+         $cek_verify_lembaga = $this->user->get_lembaga_by_id($lembaga_id); //Cek verifikasi akun lembaga
+ 
+         $data['content']['role_user_id'] = $role_user_id_crypt; //Role user id untuk peserta
+         $data['content']['lembaga_id'] = $lembaga_id_crypt; //Lembaga id untuk peserta
+         $data['content']['file_template'] = $this->user->get_pengaturan_universal_id($name_config, $detail_config);
+         $data['title_header'] = ['title' => 'Upload Data Peserta'];
+ 
+         if($cek_verify_lembaga->is_verify == 1){
+             //for load view
+             $view['css_additional'] = 'website/lembaga/user/peserta/css';
+             $view['content'] = 'website/lembaga/user/peserta/upload_excel';
+             $view['js_additional'] = 'website/lembaga/user/peserta/js';
+ 
+             //get function view website
+             $this->_generate_view($view, $data);
+         } else {
+             $this->session->set_flashdata('warning', 'Lakukkan verifikasi akun sebelum menambah admin lembaga!');
+             redirect('lembaga/participants');
+         }
+    }
+
+    public function submit_upload_add_peserta(){
+        $id_lembaga = $this->input->post('lembaga_id');
+        $lembaga_id = base64_decode(urldecode($id_lembaga));
+
+        $dname = explode(".", $_FILES['data_peserta']['name']);
+        $ext = end($dname);
+
+        /* if($ext != 'xls' || $ext != 'xlsx'){
+            $this->session->set_flashdata('warning', 'File upload yang diijinkan type excel (xls & xlsx)!');
+            redirect('lembaga/add-import-participants');
+        }
+ */
+        $new_name = 'cbt_'.time().'_'.date('Ymd').'_'.$lembaga_id.'.'.$ext;
+        $config['file_name'] = $new_name;
+        $config['upload_path'] = FCPATH.'storage/website/lembaga/grandsbmptn/upload_data/';
+        $config['overwrite'] = FALSE;
+        $config['allowed_types'] = 'xls|xlsx';
+        $_upload_path = $config['upload_path'];
+
+        if(!file_exists($_upload_path)){
+            mkdir($_upload_path,0777);
+        }
+ 
+        $this->load->library('upload'); //meload librari upload
+        $this->upload->initialize($config);
+        
+        if(!empty($_FILES['data_peserta']['name'])){
+            if(! $this->upload->do_upload('data_peserta') ){
+                $error = $this->upload->display_errors();
+                show_error($error, 500, 'File Upload Peserta Error');
+                exit();
+            }
+              
+            $inputFileName = $_upload_path;
+            $data = [];
+    
+            try {
+                $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
+                $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+                $objPHPExcel = $objReader->load($inputFileName);
+            } catch(Exception $e) {
+                die('Error loading file "'.pathinfo($inputFileName,PATHINFO_BASENAME).'": '.$e->getMessage());
+            }
+                $sheet = $objPHPExcel->getSheet(0);
+                $highestRow = $sheet->getHighestRow();
+                $highestColumn = $sheet->getHighestColumn();
+    
+                for ($row = 2; $row <= $highestRow; $row++){                  //  Read a row of data into an array                 
+                    $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
+                                                    NULL,
+                                                    TRUE,
+                                                    FALSE);   
+                                                                        
+                    $data = array(
+                        "group_peserta_name"=> $rowData[0][0],
+                        "nomor_peserta"=> $rowData[0][1],
+                        "nama_peserta"=> $rowData[0][2],
+                        "email_peserta"=> $rowData[0][3],
+                        "passowrd_peserta"=> $rowData[0][4]
+                    );
+    
+                    /* $insert = $this->db->insert("tb_siswa",$data); */
+                }
+        }
+
+        var_dump($data);die();
+    }
+
     public function edit_participants($id_peserta, $id_user){
         //for passing data to view
         $peserta_id = base64_decode(urldecode($id_peserta));
@@ -450,9 +551,9 @@ class User extends CI_Controller {
         $data['content']['id_user'] = $id_user;
         $data['content']['id_lembaga'] = urlencode(base64_encode($lembaga_id));
         $data['content']['group_peserta'] = $this->user->get_group_peserta_selected($detail_partisipan->group_peserta_id);
+        $data['content']['participants'] = $detail_partisipan;
+        $data['content']['password'] = $this->encryption->decrypt($detail_partisipan->password);
         $data['title_header'] = ['title' => 'Edit Peserta'];
-
-        var_dump($data);die();
 
         if($cek_verify_lembaga->is_verify == 1){
             //for load view
@@ -469,11 +570,61 @@ class User extends CI_Controller {
     }
 
     public function submit_edit_peserta(){
+        $data_user = [];
+        $data_peserta = [];
+        $peserta_id = $this->input->post('peserta_id');
+        $user_id = $this->input->post('user_id');
 
+        $username = $this->input->post('email_peserta', TRUE);
+        $password = $this->input->post('password', TRUE);
+
+        if($username == '' || $username == NULL || empty($username)){ //Jika email dikosongkan
+            $username_input = $this->generate_username();
+        } else {
+            $username_input = $username;
+        }
+
+        if($password == '' || $password == NULL || empty($password)){
+            $pass_input = $this->secure_random_string($this->length_pass);
+        } else {
+            $pass_input = $password;
+        }
+
+        //Data User
+        $id_user = base64_decode(urldecode($user_id));
+        $data_user['username'] = $username_input;
+        $data_user['password'] = $this->encryption->encrypt($pass_input);
+        $data_user['updated_datetime'] = date('Y-m-d H:i:s');
+
+        //Data Peserta
+        $id_peserta = base64_decode(urldecode($peserta_id));
+        $data_peserta['no_peserta'] = $this->input->post('no_peserta', TRUE);
+        $data_peserta['group_peserta_id'] = $this->input->post('group_peserta', TRUE);
+        $data_peserta['name'] = ucwords($this->input->post('nama_peserta', TRUE));
+        $data_peserta['updated_datetime'] = date('Y-m-d H:i:s');
+
+        $update = $this->user->update_peserta_tes($data_user, $id_user, $data_peserta, $id_peserta);
+
+        $urly = 'lembaga/participants';
+        $urlx = 'lembaga/edit-participants/'.$peserta_id.'/'.$user_id;
+        $this->update_end($update, $urly, $urlx);
     }
 
     public function disable_participants($id_peserta, $id_user){
+        $data = [];
+        $peserta_id = base64_decode(urldecode($id_peserta));
+        $user_id = base64_decode(urldecode($id_user));
 
+        $data = array(
+            'is_enable' => 0,
+            'updated_datetime' => date('Y-m-d H:i:s')
+        );
+
+        $disable = $this->user->disable_peserta_user($peserta_id, $user_id, $data);
+
+        $urly = 'lembaga/participants';
+        $urlx = 'lembaga/participants';
+        $this->delete_end($disable, $urly, $urlx);
     }
 
 

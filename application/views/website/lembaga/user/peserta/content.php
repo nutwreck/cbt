@@ -14,8 +14,11 @@
                         <!-- DATA TABLE -->
                         <div class="table-data__tool">
                             <div class="table-data__tool-right">
-                                <button class="au-btn au-btn-icon au-btn--green au-btn--small" onclick="add_data()">
+                                <button class="au-btn au-btn-icon au-btn--blue au-btn--small" onclick="add_data()">
                                     <i class="zmdi zmdi-plus"></i>Tambah
+                                </button>
+                                <button class="au-btn au-btn-icon au-btn--green au-btn--small" onclick="import_excel()">
+                                    <i class="fa fa-upload"></i>Import Excel
                                 </button>
                             </div>
                         </div>

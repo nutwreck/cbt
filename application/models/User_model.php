@@ -25,7 +25,7 @@ class User_model extends CI_Model{
 
     public function get_group_peserta_selected($participants_group_id){
         return $this->db->select('id, lembaga_id, name')
-                    ->get_where('group_peserta', array('id !=' => $participants_group_id, 'is_enable' => 1))->row();
+                    ->get_where('group_peserta', array('id !=' => $participants_group_id, 'is_enable' => 1))->result();
     }
 
     public function get_user_by_email($email){
@@ -44,6 +44,11 @@ class User_model extends CI_Model{
     public function get_peserta_by_id($peserta_id, $user_id){
         return $this->db->order_by('user_id DESC')
                     ->get_where('v_peserta', array('peserta_id' => $peserta_id, 'user_id' => $user_id))->row();
+    }
+
+    public function get_pengaturan_universal_id($name, $detail){
+        return $this->db->order_by('id, name, detail, param')
+                    ->get_where('pengaturan_universal', array('name' => $name, 'detail' => $detail, 'is_enable' => 1))->row();
     }
 
     public function input_lembaga_user($data_user_lembaga, $data_user){
@@ -73,7 +78,6 @@ class User_model extends CI_Model{
     }
 
     public function disable_lembaga_user($lembaga_user_id, $user_id, $data){
-        $data_user_id = [];
         $this->db->trans_start();
         $user = $this->db->where('id', $user_id)->update('user', $data);
         if ($this->db->trans_status() === FALSE){
@@ -107,6 +111,44 @@ class User_model extends CI_Model{
 
             $peserta = $this->db->insert('peserta', $data_merge);
 
+            if ($this->db->trans_status() === FALSE){
+                $this->db->trans_rollback();
+                return null;
+            } else {
+                $this->db->trans_commit();
+			    return $peserta;
+            }
+		}
+    }
+
+    public function update_peserta_tes($data_user, $id_user, $data_peserta, $id_peserta){
+        $data_user_id = [];
+        $this->db->trans_start();
+        $user = $this->db->where('id', $id_user)->update('user', $data_user);
+        if ($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return null;
+		} else {
+            $peserta = $this->db->where('id', $id_peserta)->update('peserta', $data_peserta);
+
+            if ($this->db->trans_status() === FALSE){
+                $this->db->trans_rollback();
+                return null;
+            } else {
+                $this->db->trans_commit();
+			    return $peserta;
+            }
+		}
+    }
+
+    public function disable_peserta_user($peserta_id, $user_id, $data){
+        $this->db->trans_start();
+        $user = $this->db->where('id', $user_id)->update('user', $data);
+        if ($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return null;
+		} else {
+            $peserta = $this->db->where('id', $peserta_id)->update('peserta', $data);
             if ($this->db->trans_status() === FALSE){
                 $this->db->trans_rollback();
                 return null;

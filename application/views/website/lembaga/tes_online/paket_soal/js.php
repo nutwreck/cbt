@@ -27,7 +27,7 @@
 
 <!-- Nama file muncul saat upload -->
 <script>
-    if (document.getElementById('#petunjuk_audio') != null) 
+    if (document.getElementById('petunjuk_audio') != null) 
         document.querySelector("#petunjuk_audio").onchange = function(){
             document.querySelector("#file-name").textContent = this.files[0].name;
         }
