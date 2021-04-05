@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class User extends CI_Controller {
     /**
 	 * Author : Candra Aji Pamungkas
@@ -14,7 +17,7 @@ class User extends CI_Controller {
 
     public function __construct(){
         parent::__construct();
-        $this->load->library('encryption', 'Excel');
+        $this->load->library('encryption');
         $this->load->model('General','general');
         $this->load->model('User_model','user');
     }
@@ -474,68 +477,88 @@ class User extends CI_Controller {
         $id_lembaga = $this->input->post('lembaga_id');
         $lembaga_id = base64_decode(urldecode($id_lembaga));
 
-        $dname = explode(".", $_FILES['data_peserta']['name']);
-        $ext = end($dname);
+        //Define penampung data
+        $data_kelompok = [];
+        $kelompok = '';
+        $data_user = [];
+        $user = '';
+        $data_peserta = [];
+        $peserta = '';
+        $data = [];
 
-        /* if($ext != 'xls' || $ext != 'xlsx'){
-            $this->session->set_flashdata('warning', 'File upload yang diijinkan type excel (xls & xlsx)!');
-            redirect('lembaga/add-import-participants');
-        }
- */
-        $new_name = 'cbt_'.time().'_'.date('Ymd').'_'.$lembaga_id.'.'.$ext;
-        $config['file_name'] = $new_name;
-        $config['upload_path'] = FCPATH.'storage/website/lembaga/grandsbmptn/upload_data/';
-        $config['overwrite'] = FALSE;
-        $config['allowed_types'] = 'xls|xlsx';
-        $_upload_path = $config['upload_path'];
+        if($_FILES["data_peserta"]["name"] != '') {
+            $allowed_extension = array('xls', 'xlsx');
+            $file_array = explode(".", $_FILES["data_peserta"]["name"]);
+            $file_extension = end($file_array);
 
-        if(!file_exists($_upload_path)){
-            mkdir($_upload_path,0777);
-        }
- 
-        $this->load->library('upload'); //meload librari upload
-        $this->upload->initialize($config);
-        
-        if(!empty($_FILES['data_peserta']['name'])){
-            if(! $this->upload->do_upload('data_peserta') ){
-                $error = $this->upload->display_errors();
-                show_error($error, 500, 'File Upload Peserta Error');
-                exit();
-            }
-              
-            $inputFileName = $_upload_path;
-            $data = [];
-    
-            try {
-                $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
-                $objReader = PHPExcel_IOFactory::createReader($inputFileType);
-                $objPHPExcel = $objReader->load($inputFileName);
-            } catch(Exception $e) {
-                die('Error loading file "'.pathinfo($inputFileName,PATHINFO_BASENAME).'": '.$e->getMessage());
-            }
-                $sheet = $objPHPExcel->getSheet(0);
-                $highestRow = $sheet->getHighestRow();
-                $highestColumn = $sheet->getHighestColumn();
-    
-                for ($row = 2; $row <= $highestRow; $row++){                  //  Read a row of data into an array                 
-                    $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
-                                                    NULL,
-                                                    TRUE,
-                                                    FALSE);   
-                                                                        
-                    $data = array(
-                        "group_peserta_name"=> $rowData[0][0],
-                        "nomor_peserta"=> $rowData[0][1],
-                        "nama_peserta"=> $rowData[0][2],
-                        "email_peserta"=> $rowData[0][3],
-                        "passowrd_peserta"=> $rowData[0][4]
-                    );
-    
-                    /* $insert = $this->db->insert("tb_siswa",$data); */
+            if(in_array($file_extension, $allowed_extension)) {
+                $file_name = time() . '.' . $file_extension;
+                move_uploaded_file($_FILES['data_peserta']['tmp_name'], $file_name);
+                $file_type = \PhpOffice\PhpSpreadsheet\IOFactory::identify($file_name);
+                $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($file_type);
+
+                $spreadsheet = $reader->load($file_name);
+
+                unlink($file_name);
+
+                $data = $spreadsheet->getActiveSheet()->toArray();
+
+                //Detail data untuk peserta dan user
+                foreach($data as $key => $row) {
+                    if($key > 0){ //Header tidak diikutkan di save
+                        //Insert data kelompok peserta
+                        $kelompok = $this->insert_data_group_peserta($lembaga_id, ucwords($row['0']));
+                        $datas[] = $kelompok;
+                        /* //Insert Data Peserta
+                        $data_peserta = array(
+                            'user_id' => 1,
+                            'lembaga_id' => $lembaga_id,
+                            'group_peserta_id'  => 1,
+                            'no_peserta'  => $row[1],
+                            'name'  => $row[2],
+                        ); */
+                    }
                 }
+                $message = '<div class="alert alert-success">Upload data sukses</div>';
+            } else {
+                $message = '<div class="alert alert-danger">Hanya tipe excel .xls dan .xlsx yang diijinkan</div>';
+            }
+        } else {
+            $message = '<div class="alert alert-danger">Tidak ada file yang diupload</div>';
         }
 
-        var_dump($data);die();
+        echo $message;
+        var_dump($datas);die();
+    }
+
+    public function insert_data_group_peserta($lembaga_id, $row){
+        //Cek Database
+        $cek_group = $this->user->checking_group_peserta($lembaga_id, $row);
+
+        if(empty($cek_group)){
+            $tbl = $this->tbl_group_peserta;
+            $data_kelompok = array(
+                'lembaga_id' => $lembaga_id,
+                'name' => $row,
+                'created_datetime' => date('Y-m-d')
+            );
+
+            $insert_group = $this->general->input_data($tbl, $data_kelompok);
+
+            if(!empty($insert_group)){
+                return $insert_group;
+            } else { //Jika insert gagal cek data jika sebelumnnya udah ada yang kesimpan
+                $cek_group = $this->user->checking_group_peserta($lembaga_id, $row);
+                if(!empty($cek_group)){
+                    return $cek_group;
+                } else { //Jika masih belum ada langsung gagal aja
+                    $this->session->set_flashdata('error', 'Data gagal disimpan! Kesalahan saat menyimpan nama kelompok. Ulangi kembali');
+                    redirect('lembaga/add-import-participants');
+                }
+            }
+        } else {
+            return $cek_group;
+        }
     }
 
     public function edit_participants($id_peserta, $id_user){
@@ -626,6 +649,5 @@ class User extends CI_Controller {
         $urlx = 'lembaga/participants';
         $this->delete_end($disable, $urly, $urlx);
     }
-
 
 }

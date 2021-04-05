@@ -51,6 +51,17 @@ class User_model extends CI_Model{
                     ->get_where('pengaturan_universal', array('name' => $name, 'detail' => $detail, 'is_enable' => 1))->row();
     }
 
+    public function checking_group_peserta($lembaga_id, $row){
+        $query = $this->db->select('id')
+                        ->get_where('group_peserta', array('lembaga_id' => $lembaga_id, 'name' => $row, 'is_enable' => 1))->row();
+        
+        if($query){
+            return $query;
+        } else {
+            return null;
+        }
+    }
+
     public function input_lembaga_user($data_user_lembaga, $data_user){
         $data_user_id = [];
         $this->db->trans_start();

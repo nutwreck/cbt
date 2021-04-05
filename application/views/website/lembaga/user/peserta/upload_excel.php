@@ -30,7 +30,7 @@
                                     </div>
                                     <div class="alert alert-info">
                                         <p>
-                                            Untuk upload data peserta menggunakan excel silahkan download <a href="<?=config_item('_assets_website')?><?=$file_template->param?>" class="btn btn-sm btn-success">Template Excel</a> terlebih dahulu dan input sesuai ketentuan.
+                                            Untuk upload data peserta menggunakan excel silahkan download <a href="<?=config_item('_assets_website')?><?=$file_template->param?>" class="btn btn-sm btn-success">Template Excel</a> terlebih dahulu dan input sesuai ketentuan. Pastikan tidak ada data duplikat.
                                         </p>
                                     </div>
                                 </div>
