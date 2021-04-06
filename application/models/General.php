@@ -20,6 +20,18 @@ class General extends CI_Model{
 			return $query;
 		}
     }
+    public function input_data_id($tbl, $datas){
+        $this->db->trans_start();
+        $query = $this->db->insert($tbl, $datas);
+        $id = $this->db->insert_id();
+        if ($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return null;
+		} else{
+			$this->db->trans_commit();
+			return $id;
+		}
+    }
     public function update_data($tbl, $data, $id){
         $this->db->where('id', $id);
         $query = $this->db->update($tbl, $data);

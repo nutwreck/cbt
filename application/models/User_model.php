@@ -62,6 +62,28 @@ class User_model extends CI_Model{
         }
     }
 
+    public function checking_user_peserta($role_user_id, $username){
+        $query = $this->db->select('id')
+                        ->get_where('user', array('role_user_id' => $role_user_id, 'username' => $username, 'is_enable' => 1))->row();
+        
+        if($query){
+            return $query;
+        } else {
+            return null;
+        }
+    }
+
+    public function checking_peserta($lembaga_id, $no_peserta){
+        $query = $this->db->select('id')
+                        ->get_where('peserta', array('lembaga_id' => $lembaga_id, 'no_peserta' => $no_peserta, 'is_enable' => 1))->row();
+        
+        if($query){
+            return $query;
+        } else {
+            return null;
+        }
+    }
+
     public function input_lembaga_user($data_user_lembaga, $data_user){
         $data_user_id = [];
         $this->db->trans_start();

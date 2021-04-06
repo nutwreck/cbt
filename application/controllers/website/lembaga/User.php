@@ -13,6 +13,8 @@ class User extends CI_Controller {
 	 */
 
     private $tbl_group_peserta = 'group_peserta';
+    private $tbl_user = 'user';
+    private $tbl_peserta = 'peserta';
     private $length_pass = 6;
 
     public function __construct(){
@@ -441,48 +443,58 @@ class User extends CI_Controller {
         $this->input_end($input, $urly, $urlx);
     }
 
-    public function add_import_excel_participants(){
-         //for passing data to view
-         $lembaga_id = 2; //Next diganti dari session login
-         $role_user_id = 2; //Role Id untuk user
+    public function add_import_excel_participants($datas = NULL){
+        //for passing data to view
+        $lembaga_id = 2; //Next diganti dari session login
+        $role_user_id = 2; //Role Id untuk user
 
-         $name_config = 'TEMPLATE UPLOAD';
-         $detail_config = 'UPLOAD DATA PESERTA';
+        $name_config = 'TEMPLATE UPLOAD';
+        $detail_config = 'UPLOAD DATA PESERTA';
 
-         $lembaga_id_crypt = urlencode(base64_encode($lembaga_id));
-         $role_user_id_crypt = urlencode(base64_encode($role_user_id));
+        $lembaga_id_crypt = urlencode(base64_encode($lembaga_id));
+        $role_user_id_crypt = urlencode(base64_encode($role_user_id));
 
-         $cek_verify_lembaga = $this->user->get_lembaga_by_id($lembaga_id); //Cek verifikasi akun lembaga
- 
-         $data['content']['role_user_id'] = $role_user_id_crypt; //Role user id untuk peserta
-         $data['content']['lembaga_id'] = $lembaga_id_crypt; //Lembaga id untuk peserta
-         $data['content']['file_template'] = $this->user->get_pengaturan_universal_id($name_config, $detail_config);
-         $data['title_header'] = ['title' => 'Upload Data Peserta'];
- 
-         if($cek_verify_lembaga->is_verify == 1){
-             //for load view
-             $view['css_additional'] = 'website/lembaga/user/peserta/css';
-             $view['content'] = 'website/lembaga/user/peserta/upload_excel';
-             $view['js_additional'] = 'website/lembaga/user/peserta/js';
- 
-             //get function view website
-             $this->_generate_view($view, $data);
-         } else {
-             $this->session->set_flashdata('warning', 'Lakukkan verifikasi akun sebelum menambah admin lembaga!');
-             redirect('lembaga/participants');
-         }
+        $cek_verify_lembaga = $this->user->get_lembaga_by_id($lembaga_id); //Cek verifikasi akun lembaga
+    
+        if(!empty($datas)){
+            $data['content']['message'] = $datas;
+        } else {
+            $data['content']['message'] = ''; 
+        }
+        $data['content']['role_user_id'] = $role_user_id_crypt; //Role user id untuk peserta
+        $data['content']['lembaga_id'] = $lembaga_id_crypt; //Lembaga id untuk peserta
+        $data['content']['file_template'] = $this->user->get_pengaturan_universal_id($name_config, $detail_config);
+        $data['title_header'] = ['title' => 'Upload Data Peserta'];
+
+        if($cek_verify_lembaga->is_verify == 1){
+            //for load view
+            $view['css_additional'] = 'website/lembaga/user/peserta/css';
+            $view['content'] = 'website/lembaga/user/peserta/upload_excel';
+            $view['js_additional'] = 'website/lembaga/user/peserta/js';
+
+            //get function view website
+            $this->_generate_view($view, $data);
+        } else {
+            $this->session->set_flashdata('warning', 'Lakukkan verifikasi akun sebelum menambah admin lembaga!');
+            redirect('lembaga/participants');
+        }
     }
 
     public function submit_upload_add_peserta(){
         $id_lembaga = $this->input->post('lembaga_id');
         $lembaga_id = base64_decode(urldecode($id_lembaga));
 
+        $id_role_user = $this->input->post('role_user_id');
+        $role_user_id = base64_decode(urldecode($id_role_user));
+
         //Define penampung data
-        $data_kelompok = [];
+        $group_peserta = '';
         $kelompok = '';
-        $data_user = [];
+        $nomor_peserta = '';
+        $nama_peserta = '';
+        $email = '';
+        $password = '';
         $user = '';
-        $data_peserta = [];
         $peserta = '';
         $data = [];
 
@@ -503,35 +515,60 @@ class User extends CI_Controller {
 
                 $data = $spreadsheet->getActiveSheet()->toArray();
 
+                $no_null = 0;
+                $no_upload = 0;
                 //Detail data untuk peserta dan user
                 foreach($data as $key => $row) {
-                    if($key > 0){ //Header tidak diikutkan di save
+                    if($key > 0 && ((!empty($row[1]) || $row[1] != '' || $row[1] != NULL) && (!empty($row[2]) || $row[2] != '' || $row[2] != NULL))){ //Header tidak diikutkan di save
+                        //Cleaning whitespace
+                        $group_peserta = trim($row[0]);
+                        $nomor_peserta = trim($row[1]);
+                        $nama_peserta = trim($row[2]);
+                        $email = trim($row[3]);
+                        $password = trim($row[4]);
+
                         //Insert data kelompok peserta
-                        $kelompok = $this->insert_data_group_peserta($lembaga_id, ucwords($row['0']));
-                        $datas[] = $kelompok;
-                        /* //Insert Data Peserta
-                        $data_peserta = array(
-                            'user_id' => 1,
-                            'lembaga_id' => $lembaga_id,
-                            'group_peserta_id'  => 1,
-                            'no_peserta'  => $row[1],
-                            'name'  => $row[2],
-                        ); */
+                        $kelompok = $this->insert_data_group_peserta($lembaga_id, ucwords($name_group));
+
+                        //Insert data user
+                        $user = $this->insert_data_user_peserta($role_user_id, $row[3], $row[4]);
+
+                        //Insert data peserta
+                        $peserta = $this->insert_data_peserta($lembaga_id, $kelompok, $user, $row[1], ucwords($row[2]));
+
+                        $no_upload++;
+                    } elseif($key > 0 && ($row[0] == '' && $row[1] == '' && $row[2] == '' && $row[3] == '' && $row[4] == '')){
+                        
+                    } elseif($key > 0 && ((empty($row[1]) || $row[1] == '' || $row[1] == NULL) && (empty($row[2]) || $row[2] == '' || $row[2] == NULL))) {
+                        $no_null++;
                     }
                 }
-                $message = '<div class="alert alert-success">Upload data sukses</div>';
+
+                if($no_null){
+                    $text = '<div class="alert alert-info">'.$no_upload.' Data berhasil disimpan, Tetapi Terdapat '.$no_null.' data upload yang gagal, periksa kembali jika ada nomor peserta atau nama peserta yang masih kosong</div>';
+                    $this->add_import_excel_participants($text);
+                } else {
+                    $text = '<div class="alert alert-success">'.$no_upload.' Data berhasil disimpan</div>';
+                    $this->add_import_excel_participants($text);
+                }
             } else {
-                $message = '<div class="alert alert-danger">Hanya tipe excel .xls dan .xlsx yang diijinkan</div>';
+                $text = '<div class="alert alert-danger">Hanya tipe excel .xls dan .xlsx yang diijinkan</div>';
+                $this->add_import_excel_participants($text);
             }
         } else {
-            $message = '<div class="alert alert-danger">Tidak ada file yang diupload</div>';
+            $text = '<div class="alert alert-danger">Tidak ada file yang diupload</div>';
+            $this->add_import_excel_participants($text);
         }
-
-        echo $message;
-        var_dump($datas);die();
     }
 
-    public function insert_data_group_peserta($lembaga_id, $row){
+    private function insert_data_group_peserta($lembaga_id, $row){
+        $data_kelompok = [];
+
+        if(empty($row) || $row == '' || $row == NULL){
+            $id = 0;
+            return $id;
+        }
+
         //Cek Database
         $cek_group = $this->user->checking_group_peserta($lembaga_id, $row);
 
@@ -540,24 +577,102 @@ class User extends CI_Controller {
             $data_kelompok = array(
                 'lembaga_id' => $lembaga_id,
                 'name' => $row,
-                'created_datetime' => date('Y-m-d')
+                'created_datetime' => date('Y-m-d H:i:s')
             );
 
-            $insert_group = $this->general->input_data($tbl, $data_kelompok);
+            $insert_group = $this->general->input_data_id($tbl, $data_kelompok);
 
             if(!empty($insert_group)){
                 return $insert_group;
             } else { //Jika insert gagal cek data jika sebelumnnya udah ada yang kesimpan
                 $cek_group = $this->user->checking_group_peserta($lembaga_id, $row);
-                if(!empty($cek_group)){
-                    return $cek_group;
+                if(!empty($cek_group)){ //Jika ada lempar data id
+                    return $cek_group->id;
                 } else { //Jika masih belum ada langsung gagal aja
                     $this->session->set_flashdata('error', 'Data gagal disimpan! Kesalahan saat menyimpan nama kelompok. Ulangi kembali');
                     redirect('lembaga/add-import-participants');
                 }
             }
         } else {
-            return $cek_group;
+            return $cek_group->id;
+        }
+    }
+
+    private function insert_data_user_peserta($role_user_id, $username, $password){
+        $data_user = [];
+
+        //Cek user didatabase
+        $cek_user = $this->user->checking_user_peserta($role_user_id, $username);
+
+        if(empty($cek_user)){ //Jika data email tersebut belum terdaftar
+            if(empty($username) || $username == '' || $username == NULL){ //Jika email kosong / tidak diisi
+                $username_input = $this->generate_username();
+            } else {
+                $username_input = $username;
+            }
+    
+            if($password == '' || $password == NULL || empty($password)){ //Jika password kosong /tidak diisi
+                $pass_input = $this->encryption->encrypt($this->secure_random_string($this->length_pass));
+            } else {
+                $pass_input = $this->encryption->encrypt($password);
+            }
+        } else { //Jika data email tersebut sudah terdaftar, dibuatkan username dan password baru
+            $username_input = $this->generate_username();
+            $pass_input = $this->encryption->encrypt($this->secure_random_string($this->length_pass));
+        }
+
+        $tbl = $this->tbl_user;
+
+        $data_user = array(
+            'role_user_id' => $role_user_id,
+            'username' => $username_input,
+            'password' => $pass_input,
+            'created_datetime' => date('Y-m-d H:i:s')
+        );
+
+        $insert_user = $this->general->input_data_id($tbl, $data_user);
+
+        if(!empty($insert_user)){
+            return $insert_user;
+        } else { //Jika insert gagal cek data jika sebelumnnya udah ada yang kesimpan
+            $cek_user = $this->user->checking_user_peserta($role_user_id, $username_input);
+            if(!empty($cek_user)){ //Jika ada lempar data id
+                return $cek_user->id;
+            } else { //Jika masih belum ada langsung gagal aja
+                $this->session->set_flashdata('error', 'Data gagal disimpan! Kesalahan saat menyimpan username dan password. Ulangi kembali');
+                redirect('lembaga/add-import-participants');
+            }
+        }
+    }
+
+    private function insert_data_peserta($lembaga_id, $kelompok, $user, $no_peserta, $nama_peserta){
+        $data_peserta = [];
+
+        $cek_peserta = $this->user->checking_peserta($lembaga_id, $no_peserta);
+
+        if($cek_peserta){
+            $this->session->set_flashdata('error', 'Data gagal disimpan! Kesalahan saat menyimpan data peserta. Ulangi kembali');
+            redirect('lembaga/add-import-participants');
+        }
+
+        $data_peserta = array(
+            'user_id' => $user,
+            'lembaga_id' => $lembaga_id,
+            'group_peserta_id'  => $kelompok,
+            'no_peserta'  => $no_peserta,
+            'name'  => $nama_peserta,
+            'created_datetime' => date('Y-m-d H:i:s')
+        );
+
+        $tbl = $this->tbl_peserta;
+
+        $input_peserta = $this->general->input_data_id($tbl, $data_peserta);
+
+        if(!empty($input_peserta)){
+            return $input_peserta;
+        } else { //Jika insert gagal cek data jika sebelumnnya udah ada yang kesimpan
+            $this->session->set_flashdata('error', 'Data gagal disimpan! Kesalahan saat menyimpan data peserta. Ulangi kembali');
+            redirect('lembaga/add-import-participants');
         }
     }
 
