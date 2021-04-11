@@ -8,6 +8,11 @@ class User_model extends CI_Model{
                     ->get('v_lembaga_user')->result();
     }
 
+    public function get_user_lembaga_by_id($lembaga_user_id, $user_id){
+        return $this->db->select('lembaga_id, lembaga_name, is_verify')
+                    ->get_where('v_lembaga_user', array('lembaga_user_id' => $lembaga_user_id, 'user_id' => $user_id))->row();
+    }
+
     public function get_lembaga_by_id($lembaga_id){
         return $this->db->select('lembaga_id, lembaga_name, is_verify')
                     ->get_where('v_lembaga', array('lembaga_id' => $lembaga_id))->row();

@@ -10,11 +10,11 @@
     } );
 
     function add_data() {
-        window.location.href = "<?php echo base_url(); ?>lembaga/add-participants";
+        window.location.href = "<?php echo base_url(); ?>admin/add-participants";
     }
 
     function import_excel() {
-        window.location.href = "<?php echo base_url(); ?>lembaga/add-import-participants";
+        window.location.href = "<?php echo base_url(); ?>admin/add-import-participants";
     }
 </script>
 

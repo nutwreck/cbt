@@ -9,6 +9,6 @@
     } );
 
     function add_data() {
-        window.location.href = "<?php echo base_url(); ?>lembaga/add-group-participants";
+        window.location.href = "<?php echo base_url(); ?>admin/add-group-participants";
     }
 </script>

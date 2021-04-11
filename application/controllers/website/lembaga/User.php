@@ -19,6 +19,9 @@ class User extends CI_Controller {
 
     public function __construct(){
         parent::__construct();
+        if (!$this->session->has_userdata('has_login')){
+            redirect('admin/login');
+        }
         $this->load->library('encryption');
         $this->load->model('General','general');
         $this->load->model('User_model','user');
@@ -166,8 +169,8 @@ class User extends CI_Controller {
 
     public function add_user_lembaga(){
         //for passing data to view
-        $lembaga_id = 2; //Next diganti dari session login
-        $role_user_id = 3; //Next diganti dari session login
+        $lembaga_id = $this->session->userdata('lembaga_id');
+        $role_user_id = 3;
         $lembaga_id_crypt = urlencode(base64_encode($lembaga_id));
         $role_user_id_crypt = urlencode(base64_encode($role_user_id));
         $cek_verify_lembaga = $this->user->get_lembaga_by_id($lembaga_id); //Cek verifikasi akun lembaga
@@ -186,7 +189,7 @@ class User extends CI_Controller {
             $this->_generate_view($view, $data);
         } else {
             $this->session->set_flashdata('warning', 'Lakukkan verifikasi akun sebelum menambah admin lembaga!');
-		    redirect('lembaga/user-lembaga');
+		    redirect('admin/user-lembaga');
         }
     }
 
@@ -199,7 +202,7 @@ class User extends CI_Controller {
 
         if($cek_email){ //Jika email sudah dipakai dan masih aktif
             $this->session->set_flashdata('warning', 'Email sudah terdaftar!');
-		    redirect('lembaga/add-user-lembaga');
+		    redirect('admin/add-user-lembaga');
         } else {
             //lembaga_user
             $data_user_lembaga['lembaga_id'] = base64_decode(urldecode($lembaga_id));
@@ -239,10 +242,44 @@ class User extends CI_Controller {
 
             $input = $this->user->input_lembaga_user($data_user_lembaga, $data_user);
 
-            $urly = 'lembaga/user-lembaga';
-            $urlx = 'lembaga/add-user-lembaga';
+            $urly = 'admin/user-lembaga';
+            $urlx = 'admin/add-user-lembaga';
             $this->input_end($input, $urly, $urlx);
         }
+    }
+
+    public function edit_user_lembaga($id_user_lembaga, $id_user){
+        $lembaga_user_id = base64_decode(urldecode($id_user_lembaga));
+        $user_id = base64_decode(urldecode($id_user));
+
+        //for passing data to view
+        $data['content']['user_lembaga'] = $this->user->get_user_lembaga_by_id($lembaga_user_id, $user_id);
+        $data['title_header'] = ['title' => 'Edit Group Peserta'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/user/group_peserta/css';
+        $view['content'] = 'website/lembaga/user/group_peserta/edit';
+        $view['js_additional'] = 'website/lembaga/user/group_peserta/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_edit_lembaga(){
+        $id_group_participants = $this->input->post('id'); //No Decode
+        $participants_group_id = base64_decode(urldecode($id_group_participants));
+        $lembaga_id = $this->input->post('lembaga_id'); //No Decode
+
+        $data['lembaga_id'] = base64_decode(urldecode($lembaga_id));
+        $data['name'] = ucwords($this->input->post('name', TRUE));
+        $data['updated_datetime'] = date('Y-m-d H:i:s');
+
+        $tbl = $this->tbl_group_peserta;
+        $update = $this->general->update_data($tbl, $data, $participants_group_id);
+
+        $urly = 'admin/group-participants';
+        $urlx = 'admin/edit-group-participants/'.$id_group_participants;
+        $this->update_end($update, $urly, $urlx);
     }
 
     public function disable_user_lembaga($id_user_lembaga, $id_user){
@@ -257,13 +294,13 @@ class User extends CI_Controller {
 
         $disable = $this->user->disable_lembaga_user($lembaga_user_id, $user_id, $data);
 
-        $urly = 'lembaga/user-lembaga';
-        $urlx = 'lembaga/user-lembaga';
+        $urly = 'admin/user-lembaga';
+        $urlx = 'admin/user-lembaga';
         $this->delete_end($disable, $urly, $urlx);
     }
 
     public function group_participants(){
-        $lembaga_id = 2; //Next diganti dari session login
+        $lembaga_id = $this->session->userdata('lembaga_id');
         //for passing data to view
         $data['content']['group_peserta'] = $this->user->get_group_peserta_enable($lembaga_id);
         $data['title_header'] = ['title' => 'Group Peserta'];
@@ -279,7 +316,7 @@ class User extends CI_Controller {
 
     public function add_group_participants(){
         //for passing data to view
-        $lembaga_id = 2; //Next diganti dari session login
+        $lembaga_id = $this->session->userdata('lembaga_id');
         $lembaga_id_crypt = urlencode(base64_encode($lembaga_id));
         $cek_verify_lembaga = $this->user->get_lembaga_by_id($lembaga_id); //Cek verifikasi akun lembaga
 
@@ -296,7 +333,7 @@ class User extends CI_Controller {
             $this->_generate_view($view, $data);
         } else {
             $this->session->set_flashdata('warning', 'Lakukkan verifikasi akun sebelum menambah group peserta!');
-		    redirect('lembaga/group-participants');
+		    redirect('admin/group-participants');
         }
     }
 
@@ -310,8 +347,8 @@ class User extends CI_Controller {
         $tbl = $this->tbl_group_peserta;
         $input = $this->general->input_data($tbl, $data);
 
-        $urly = 'lembaga/group-participants';
-        $urlx = 'lembaga/add-group-participants';
+        $urly = 'admin/group-participants';
+        $urlx = 'admin/add-group-participants';
         $this->input_end($input, $urly, $urlx);
     }
 
@@ -343,8 +380,8 @@ class User extends CI_Controller {
         $tbl = $this->tbl_group_peserta;
         $update = $this->general->update_data($tbl, $data, $participants_group_id);
 
-        $urly = 'lembaga/group-participants';
-        $urlx = 'lembaga/edit-group-participants/'.$id_group_participants;
+        $urly = 'admin/group-participants';
+        $urlx = 'admin/edit-group-participants/'.$id_group_participants;
         $this->update_end($update, $urly, $urlx);
     }
 
@@ -355,13 +392,13 @@ class User extends CI_Controller {
         $tbl = $this->tbl_group_peserta;
         $disable = $this->general->delete_data($tbl, $participants_group_id);
 
-        $urly = 'lembaga/group-participants';
-        $urlx = 'lembaga/group-participants';
+        $urly = 'admin/group-participants';
+        $urlx = 'admin/group-participants';
         $this->delete_end($disable, $urly, $urlx);
     }
 
     public function participants(){
-        $lembaga_id = 2; //Next diganti dari session login
+        $lembaga_id = $this->session->userdata('lembaga_id');
         //for passing data to view
         $data['content']['participants'] = $this->user->get_peserta_by_lembaga($lembaga_id);
         $data['title_header'] = ['title' => 'Peserta List'];
@@ -377,7 +414,7 @@ class User extends CI_Controller {
 
     public function add_participants(){
         //for passing data to view
-        $lembaga_id = 2; //Next diganti dari session login
+        $lembaga_id = $this->session->userdata('lembaga_id');
         $role_user_id = 2; //Role Id untuk user
         $lembaga_id_crypt = urlencode(base64_encode($lembaga_id));
         $role_user_id_crypt = urlencode(base64_encode($role_user_id));
@@ -398,7 +435,7 @@ class User extends CI_Controller {
             $this->_generate_view($view, $data);
         } else {
             $this->session->set_flashdata('warning', 'Lakukkan verifikasi akun sebelum menambah admin lembaga!');
-            redirect('lembaga/participants');
+            redirect('admin/participants');
         }
     }
 
@@ -438,14 +475,14 @@ class User extends CI_Controller {
 
         $input = $this->user->input_peserta_tes($data_user, $data_peserta);
 
-        $urly = 'lembaga/participants';
-        $urlx = 'lembaga/add-participants';
+        $urly = 'admin/participants';
+        $urlx = 'admin/add-participants';
         $this->input_end($input, $urly, $urlx);
     }
 
     public function add_import_excel_participants($datas = NULL){
         //for passing data to view
-        $lembaga_id = 2; //Next diganti dari session login
+        $lembaga_id = $this->session->userdata('lembaga_id');
         $role_user_id = 2; //Role Id untuk user
 
         $name_config = 'TEMPLATE UPLOAD';
@@ -476,7 +513,7 @@ class User extends CI_Controller {
             $this->_generate_view($view, $data);
         } else {
             $this->session->set_flashdata('warning', 'Lakukkan verifikasi akun sebelum menambah admin lembaga!');
-            redirect('lembaga/participants');
+            redirect('admin/participants');
         }
     }
 
@@ -528,13 +565,13 @@ class User extends CI_Controller {
                         $password = trim($row[4]);
 
                         //Insert data kelompok peserta
-                        $kelompok = $this->insert_data_group_peserta($lembaga_id, ucwords($name_group));
+                        $kelompok = $this->insert_data_group_peserta($lembaga_id, ucwords($group_peserta));
 
                         //Insert data user
-                        $user = $this->insert_data_user_peserta($role_user_id, $row[3], $row[4]);
+                        $user = $this->insert_data_user_peserta($role_user_id, $email, $password);
 
                         //Insert data peserta
-                        $peserta = $this->insert_data_peserta($lembaga_id, $kelompok, $user, $row[1], ucwords($row[2]));
+                        $peserta = $this->insert_data_peserta($lembaga_id, $kelompok, $user, $nomor_peserta, $nama_peserta);
 
                         $no_upload++;
                     } elseif($key > 0 && ($row[0] == '' && $row[1] == '' && $row[2] == '' && $row[3] == '' && $row[4] == '')){
@@ -590,7 +627,7 @@ class User extends CI_Controller {
                     return $cek_group->id;
                 } else { //Jika masih belum ada langsung gagal aja
                     $this->session->set_flashdata('error', 'Data gagal disimpan! Kesalahan saat menyimpan nama kelompok. Ulangi kembali');
-                    redirect('lembaga/add-import-participants');
+                    redirect('admin/add-import-participants');
                 }
             }
         } else {
@@ -616,9 +653,8 @@ class User extends CI_Controller {
             } else {
                 $pass_input = $this->encryption->encrypt($password);
             }
-        } else { //Jika data email tersebut sudah terdaftar, dibuatkan username dan password baru
-            $username_input = $this->generate_username();
-            $pass_input = $this->encryption->encrypt($this->secure_random_string($this->length_pass));
+        } else { //Jika data email tersebut sudah terdaftar, pakai data lama
+            return $cek_user->id;
         }
 
         $tbl = $this->tbl_user;
@@ -640,7 +676,7 @@ class User extends CI_Controller {
                 return $cek_user->id;
             } else { //Jika masih belum ada langsung gagal aja
                 $this->session->set_flashdata('error', 'Data gagal disimpan! Kesalahan saat menyimpan username dan password. Ulangi kembali');
-                redirect('lembaga/add-import-participants');
+                redirect('admin/add-import-participants');
             }
         }
     }
@@ -651,8 +687,7 @@ class User extends CI_Controller {
         $cek_peserta = $this->user->checking_peserta($lembaga_id, $no_peserta);
 
         if($cek_peserta){
-            $this->session->set_flashdata('error', 'Data gagal disimpan! Kesalahan saat menyimpan data peserta. Ulangi kembali');
-            redirect('lembaga/add-import-participants');
+            return $cek_peserta->id;
         }
 
         $data_peserta = array(
@@ -670,9 +705,9 @@ class User extends CI_Controller {
 
         if(!empty($input_peserta)){
             return $input_peserta;
-        } else { //Jika insert gagal cek data jika sebelumnnya udah ada yang kesimpan
+        } else { //Jika insert gagal hentikan proses upload
             $this->session->set_flashdata('error', 'Data gagal disimpan! Kesalahan saat menyimpan data peserta. Ulangi kembali');
-            redirect('lembaga/add-import-participants');
+            redirect('admin/add-import-participants');
         }
     }
 
@@ -703,7 +738,7 @@ class User extends CI_Controller {
             $this->_generate_view($view, $data);
         } else {
             $this->session->set_flashdata('warning', 'Lakukkan verifikasi akun sebelum menambah admin lembaga!');
-            redirect('lembaga/user-lembaga');
+            redirect('admin/user-lembaga');
         }
     }
 
@@ -743,8 +778,8 @@ class User extends CI_Controller {
 
         $update = $this->user->update_peserta_tes($data_user, $id_user, $data_peserta, $id_peserta);
 
-        $urly = 'lembaga/participants';
-        $urlx = 'lembaga/edit-participants/'.$peserta_id.'/'.$user_id;
+        $urly = 'admin/participants';
+        $urlx = 'admin/edit-participants/'.$peserta_id.'/'.$user_id;
         $this->update_end($update, $urly, $urlx);
     }
 
@@ -760,8 +795,8 @@ class User extends CI_Controller {
 
         $disable = $this->user->disable_peserta_user($peserta_id, $user_id, $data);
 
-        $urly = 'lembaga/participants';
-        $urlx = 'lembaga/participants';
+        $urly = 'admin/participants';
+        $urlx = 'admin/participants';
         $this->delete_end($disable, $urly, $urlx);
     }
 

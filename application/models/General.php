@@ -103,4 +103,28 @@ class General extends CI_Model{
 		}
     }
 
+    function login_admin($data){
+		$query = $this->db->query("
+            SELECT  user_id,
+                username,
+                password,
+                is_login,
+                lembaga_user_id,
+                lembaga_id,
+                lembaga_name,
+                lembaga_type_name,
+                lembaga_user_name,
+                lembaga_user_email
+					FROM v_lembaga_user
+					WHERE username = '".$data['username']."'
+				");
+		$num = $query->num_rows();
+		if($num>0){
+            return $query->result_array();
+        }
+        else{
+            return false;
+        }
+	}
+
 }

@@ -69,3 +69,18 @@ hr.message-inner-separator
 .swal-footer {
   text-align: center;
 }
+
+.dropdown-toggle,
+.dropdown-menu {
+    border-radius: 0px !important;
+}
+.dropdown-item:hover {
+    color: white;
+    background-color: cornflowerblue;
+}
+.btn-danger {
+    width: 55%;
+}
+.dropdown:hover>.dropdown-menu {
+  display: block;
+}

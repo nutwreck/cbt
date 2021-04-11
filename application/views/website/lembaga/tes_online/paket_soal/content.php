@@ -40,7 +40,7 @@
                                         <td><?=$no++?></td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="<?=base_url()?>lembaga/list-soal/<?=urlencode(base64_encode($value->paket_soal_id))?>" class="btn btn-primary"><i class="fa fa-book" aria-hidden="true" title="List Soal"></i></a>
+                                                <a href="<?=base_url()?>admin/list-soal/<?=urlencode(base64_encode($value->paket_soal_id))?>" class="btn btn-primary"><i class="fa fa-book" aria-hidden="true" title="List Soal"></i></a>
                                                 <button type="button" class="btn btn-warning dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
@@ -48,17 +48,17 @@
                                                     <a class="dropdown-item" href="#">Bacaan Soal(<small class="text-danger">Coming Soon</small>)</a>
                                                     <a class="dropdown-item" href="#">Group Soal(<small class="text-danger">Coming Soon</small>)</a>
                                                     <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="<?=base_url()?>lembaga/detail-paket-soal/<?=urlencode(base64_encode($value->paket_soal_id))?>">Detail Paket Soal</a>
-                                                    <a class="dropdown-item" href="<?=base_url()?>lembaga/edit-paket-soal/<?=urlencode(base64_encode($value->paket_soal_id))?>">Edit Paket Soal</a>
-                                                    <a class="dropdown-item" href="<?=base_url()?>lembaga/disable-paket-soal/<?=urlencode(base64_encode($value->paket_soal_id))?>">Hapus Paket Soal</a>
+                                                    <a class="dropdown-item" href="<?=base_url()?>admin/detail-paket-soal/<?=urlencode(base64_encode($value->paket_soal_id))?>">Detail Paket Soal</a>
+                                                    <a class="dropdown-item" href="<?=base_url()?>admin/edit-paket-soal/<?=urlencode(base64_encode($value->paket_soal_id))?>">Edit Paket Soal</a>
+                                                    <a class="dropdown-item" href="<?=base_url()?>admin/disable-paket-soal/<?=urlencode(base64_encode($value->paket_soal_id))?>">Hapus Paket Soal</a>
                                                 </div>
                                             </div>
                                         </td>
                                         <td><h5><?=$value->nama_paket_soal?><br /><small><?=$value->materi_name?> <?=$value->kelas_name?></small></h5></td>
-                                        <td><h6>Admin<br /><small><?=$value->created_datetime?></small></h6></td>
-                                        <td><h6 class="text-danger"><small><?=$value->updated_datetime?></small></h6></td>
+                                        <td><h6><?=$value->user_created_name?><br /><small><?=$value->created_datetime?></small></h6></td>
+                                        <td><h6 class="text-danger"><?=$value->user_edited_name?><br /><small><?=$value->updated_datetime?></small></h6></td>
                                         <td>
-                                            <?=$value->is_enable == 0 ? '<small>'.$value->status_paket_soal.'</small>'.'<br />'.'<a href="'.base_url().'lembaga/active-paket-soal/'.urlencode(base64_encode($value->paket_soal_id)).'" data-toggle="tooltip" data-placement="top" title="Aktifkan Paket Soal"> Aktifkan Kembali
+                                            <?=$value->is_enable == 0 ? '<small>'.$value->status_paket_soal.'</small>'.'<br />'.'<a href="'.base_url().'admin/active-paket-soal/'.urlencode(base64_encode($value->paket_soal_id)).'" data-toggle="tooltip" data-placement="top" title="Aktifkan Paket Soal"> Aktifkan Kembali
                                             </a>' : $value->status_paket_soal?>
                                         </td>
                                     </tr>

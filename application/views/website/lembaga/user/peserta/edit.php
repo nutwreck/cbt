@@ -32,7 +32,7 @@
                                     </div>
                                     <div class="alert alert-info">
                                         <p>
-                                            Kelompok peserta boleh tidak dipilih jika anda tidak memerlukan pengelompokan peserta, Jika ingin menambah Kelompok Peserta klik <a href="<?=base_url()?>lembaga/add-group-participants" class="btn btn-sm btn-primary">Disini</a>
+                                            Kelompok peserta boleh tidak dipilih jika anda tidak memerlukan pengelompokan peserta, Jika ingin menambah Kelompok Peserta klik <a href="<?=base_url()?>admin/add-group-participants" class="btn btn-sm btn-primary">Disini</a>
                                         </p>
                                     </div>
                                 </div>

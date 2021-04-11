@@ -57,7 +57,7 @@
                                         </div>
                                         <div class="alert alert-info">
                                             <p>
-                                                Jika ingin menambah <b>materi</b> <a href="<?php echo base_url(); ?>lembaga/add-materi" target="_blank">Klik Disini</a>.
+                                                Jika ingin menambah <b>materi</b> <a href="<?php echo base_url(); ?>admin/add-materi" target="_blank">Klik Disini</a>.
                                             </p>
                                         </div>
                                     </div>

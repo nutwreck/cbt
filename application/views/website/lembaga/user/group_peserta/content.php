@@ -37,8 +37,8 @@
                                         <td><?=$no++?></td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="<?=base_url()?>lembaga/edit-group-participants/<?=urlencode(base64_encode($value->id))?>" class="btn btn-sm btn-primary mr-1"><i class="fa fa-pencil"></i></a>
-                                                <a href="<?=base_url()?>lembaga/disable-group-participants/<?=urlencode(base64_encode($value->id))?>" class="btn btn-sm btn-danger" onclick="return confirm('Apakah anda yakin menghapus group ini?')"><i class="fa fa-trash"></i></a>
+                                                <a href="<?=base_url()?>admin/edit-group-participants/<?=urlencode(base64_encode($value->id))?>" class="btn btn-sm btn-primary mr-1"><i class="fa fa-pencil"></i></a>
+                                                <a href="<?=base_url()?>admin/disable-group-participants/<?=urlencode(base64_encode($value->id))?>" class="btn btn-sm btn-danger" onclick="return confirm('Apakah anda yakin menghapus group ini?')"><i class="fa fa-trash"></i></a>
                                             </div>
                                         </td>
                                         <td><?=$value->name?></td>

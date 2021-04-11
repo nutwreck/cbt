@@ -9,7 +9,7 @@
     } );
 
     function add_data() {
-        window.location.href = "<?php echo base_url(); ?>lembaga/add-user-lembaga";
+        window.location.href = "<?php echo base_url(); ?>admin/add-user-lembaga";
     }
 </script>
 

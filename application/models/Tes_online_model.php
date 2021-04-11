@@ -8,6 +8,14 @@ class Tes_online_model extends CI_Model{
                     ->get('materi')->result();
     }
 
+    public function get_materi_user(){
+        return $this->db->select('T1.*, T2.name AS user_created_name, T3.name AS user_edited_name', FALSE)
+                    ->join('lembaga_user AS T2', 'T2.user_id = T1.created_by')
+                    ->join('lembaga_user AS T3', 'T1.updated_by = T3.user_id', 'left')
+                    ->order_by('T1.is_enable DESC', 'T1.id DESC')
+                    ->get('materi AS T1')->result();
+    }
+
     public function get_materi_enable(){
         return $this->db->select('id, name')
                     ->order_by('id DESC')
@@ -73,9 +81,11 @@ class Tes_online_model extends CI_Model{
     }
 
     public function get_paket_soal(){
-        return $this->db->select('paket_soal_id, nama_paket_soal, materi_name, kelas_id, kelas_name, created_datetime, updated_datetime, status_paket_soal, petunjuk, is_enable')
-                    ->order_by('is_enable DESC', 'id DESC')
-                    ->get('v_paket_soal')->result();
+        return $this->db->select('T1.paket_soal_id, T1.nama_paket_soal, T1.materi_name, T1.kelas_id, kelas_name, T1.created_datetime, T1.updated_datetime, T1.status_paket_soal, T1.petunjuk, T1.is_enable, T2.name AS user_created_name, T3.name AS user_edited_name', FALSE)
+                    ->join('lembaga_user AS T2', 'T2.user_id = T1.created_by')
+                    ->join('lembaga_user AS T3', 'T1.updated_by = T3.user_id', 'left')
+                    ->order_by('T1.is_enable DESC', 'T1.id DESC')
+                    ->get('v_paket_soal AS T1')->result();
     }
 
     public function get_paket_soal_by_id($paket_data_id){

@@ -39,8 +39,8 @@
                                         <td><?=$no++?></td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="" class="btn btn-sm btn-primary mr-1"><i class="fa fa-pencil"></i></a>
-                                                <a href="<?=base_url()?>lembaga/disable-user-lembaga/<?=urlencode(base64_encode($value->lembaga_user_id))?>/<?=urlencode(base64_encode($value->user_id))?>" class="btn btn-sm btn-danger" onclick="return confirm('Apakah anda yakin menghapus admin?')"><i class="fa fa-trash"></i></a>
+                                                <a href="<?=base_url()?>admin/edit-user-lembaga/<?=urlencode(base64_encode($value->lembaga_user_id))?>/<?=urlencode(base64_encode($value->user_id))?>" class="btn btn-sm btn-primary mr-1"><i class="fa fa-pencil"></i></a>
+                                                <a href="<?=base_url()?>admin/disable-user-lembaga/<?=urlencode(base64_encode($value->lembaga_user_id))?>/<?=urlencode(base64_encode($value->user_id))?>" class="btn btn-sm btn-danger" onclick="return confirm('Apakah anda yakin menghapus admin?')"><i class="fa fa-trash"></i></a>
                                             </div>
                                         </td>
                                         <td><?=$value->lembaga_user_name?></td>

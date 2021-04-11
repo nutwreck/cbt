@@ -22,19 +22,19 @@
                 <div class="container-fluid">
                     <ul class="navbar-mobile__list list-unstyled">
                         <li class="active">
-                            <a href="<?php echo base_url(); ?>lembaga/dashboard"><i class="fa fa-tachometer"></i>Dashboard<small class="text-danger">(Coming Soon)</small></a>
+                            <a href="<?php echo base_url(); ?>admin/dashboard"><i class="fa fa-tachometer"></i>Dashboard<small class="text-danger">(Coming Soon)</small></a>
                         </li>
                         <li class="has-sub">
                             <a class="js-arrow" href="#"><i class="fa fa-book"></i>Tes Online</a>
                             <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
                                 <li>
-                                    <a href="<?php echo base_url(); ?>lembaga/materi">Materi</a>
+                                    <a href="<?php echo base_url(); ?>admin/materi">Materi</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo base_url(); ?>lembaga/paket-soal">Paket Soal</a>
+                                    <a href="<?php echo base_url(); ?>admin/paket-soal">Paket Soal</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo base_url(); ?>lembaga/sesi-pelaksana">Sesi Pelaksana</a>
+                                    <a href="<?php echo base_url(); ?>admin/sesi-pelaksana">Sesi Pelaksana</a>
                                 </li>
                             </ul>
                         </li>
@@ -42,13 +42,13 @@
                             <a class="js-arrow" href="#"><i class="fa fa-users"></i>User Management</a>
                             <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
                                 <li>
-                                    <a href="<?php echo base_url(); ?>lembaga/user-lembaga">User Admin</a>
+                                    <a href="<?php echo base_url(); ?>admin/user-lembaga">User Admin</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo base_url(); ?>lembaga/group-participants">Group Peserta</a>
+                                    <a href="<?php echo base_url(); ?>admin/group-participants">Group Peserta</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo base_url(); ?>lembaga/participants">Peserta</a>
+                                    <a href="<?php echo base_url(); ?>admin/participants">Peserta</a>
                                 </li>
                             </ul>
                         </li>
@@ -56,7 +56,7 @@
                             <a href="#"><i class="fa fa-home"></i>Lembaga<small class="text-danger">(Coming Soon)</small></a>
                         </li>
                         <li>
-                            <a href="<?php echo base_url(); ?>lembaga/logout"><i class="zmdi zmdi-power"></i>Logout</a>
+                            <a href="<?php echo base_url(); ?>admin/logout"><i class="zmdi zmdi-power"></i>Logout</a>
                         </li>
                     </ul>
                 </div>

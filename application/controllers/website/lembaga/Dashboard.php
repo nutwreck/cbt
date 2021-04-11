@@ -4,7 +4,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Dashboard extends CI_Controller {
 
     public function __construct(){
-          parent::__construct();
+        parent::__construct();
+        if (!$this->session->has_userdata('has_login')){
+            redirect('admin/login');
+        }
+        $this->load->model('General','general');
     }
 
     /*
@@ -60,6 +64,21 @@ class Dashboard extends CI_Controller {
 
         //get function view website
         $this->_generate_view($view, $data);
+    }
+
+    public function logout(){
+        //update is login
+        $tbl = 'user';
+
+        $datas = array(
+            'is_login' => 0
+        );
+
+        $id =  $this->session->userdata('user_id');
+        $this->general->update_data($tbl, $datas, $id);
+
+        $this->session->sess_destroy();
+        redirect("admin/login");
     }
 
 }

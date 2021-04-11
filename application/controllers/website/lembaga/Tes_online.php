@@ -14,10 +14,12 @@ class Tes_online extends CI_Controller {
     private $tbl_paket_soal = 'paket_soal'; //SET TABEL PAKET SOAL
 
     public function __construct(){
-          parent::__construct();
-
-          $this->load->model('General','general');
-          $this->load->model('Tes_online_model','tes');
+        parent::__construct();
+        if (!$this->session->has_userdata('has_login')){
+            redirect('admin/login');
+        }
+        $this->load->model('General','general');
+        $this->load->model('Tes_online_model','tes');
     }
 
     /*
@@ -111,7 +113,7 @@ class Tes_online extends CI_Controller {
 
     public function materi(){
         //for passing data to view
-        $data['content']['materi_data'] = $this->tes->get_materi();
+        $data['content']['materi_data'] = $this->tes->get_materi_user();
         $data['title_header'] = ['title' => 'Materi'];
 
         //for load view
@@ -143,8 +145,8 @@ class Tes_online extends CI_Controller {
         $tbl = $this->tbl_materi;
         $input = $this->general->input_data($tbl, $data);
 
-        $urly = 'lembaga/materi';
-        $urlx = 'lembaga/add-materi';
+        $urly = 'admin/materi';
+        $urlx = 'admin/add-materi';
         $this->input_end($input, $urly, $urlx);
     }
 
@@ -166,11 +168,12 @@ class Tes_online extends CI_Controller {
         $id = $this->input->post('id', TRUE);
         $data['name'] = strtoupper($this->input->post('materi', TRUE));
         $data['updated_datetime'] = date('Y-m-d H:i:s');
+        $data['updated_by'] = $this->session->userdata('user_id');
         $tbl = $this->tbl_materi;
         $update = $this->general->update_data($tbl, $data, $id);
 
-        $urly = 'lembaga/materi';
-        $urlx = 'lembaga/edit-materi/'.$id;
+        $urly = 'admin/materi';
+        $urlx = 'admin/edit-materi/'.$id;
         $this->update_end($update, $urly, $urlx);
     }
 
@@ -179,8 +182,8 @@ class Tes_online extends CI_Controller {
         $tbl = $this->tbl_materi;
         $delete = $this->general->delete_data($tbl, $id);
 
-        $urly = 'lembaga/materi';
-        $urlx = 'lembaga/materi';
+        $urly = 'admin/materi';
+        $urlx = 'admin/materi';
         $this->delete_end($delete, $urly, $urlx);
     }
 
@@ -189,8 +192,8 @@ class Tes_online extends CI_Controller {
         $tbl = $this->tbl_materi;
         $active = $this->general->active_data($tbl, $id);
 
-        $urly = 'lembaga/materi';
-        $urlx = 'lembaga/materi';
+        $urly = 'admin/materi';
+        $urlx = 'admin/materi';
         $this->active_end($active, $urly, $urlx);
     }
 
@@ -291,8 +294,8 @@ class Tes_online extends CI_Controller {
         $tbl = $this->tbl_paket_soal;
         $input = $this->general->input_data($tbl, $data);
 
-        $urly = 'lembaga/paket-soal';
-        $urlx = 'lembaga/add-paket-soal';
+        $urly = 'admin/paket-soal';
+        $urlx = 'admin/add-paket-soal';
         $this->input_end($input, $urly, $urlx);
     }
 
@@ -353,6 +356,7 @@ class Tes_online extends CI_Controller {
                 $old_type_audio_x = $old_type_audio;
             }
         $data['updated_datetime'] = date('Y-m-d H:i:s');
+        $data['updated_by'] = $this->session->userdata('user_id');
 
         $allowed_type 	= [
             "audio/mpeg", "audio/mpg", "audio/mpeg3", "audio/mp3", "audio/x-wav", "audio/wave", "audio/wav"
@@ -385,8 +389,8 @@ class Tes_online extends CI_Controller {
         $tbl = $this->tbl_paket_soal;
         $input = $this->general->update_data($tbl, $data, $paket_soal_id);
 
-        $urly = 'lembaga/paket-soal';
-        $urlx = 'lembaga/edit-paket-soal/'.$id_paket_soal;
+        $urly = 'admin/paket-soal';
+        $urlx = 'admin/edit-paket-soal/'.$id_paket_soal;
         $this->update_end($input, $urly, $urlx);
     }
 
@@ -396,8 +400,8 @@ class Tes_online extends CI_Controller {
         $tbl = $this->tbl_paket_soal;
         $delete = $this->general->delete_data($tbl, $paket_soal_id);
 
-        $urly = 'lembaga/paket-soal';
-        $urlx = 'lembaga/paket-soal';
+        $urly = 'admin/paket-soal';
+        $urlx = 'admin/paket-soal';
         $this->delete_end($delete, $urly, $urlx);
     }
 
@@ -407,8 +411,8 @@ class Tes_online extends CI_Controller {
         $tbl = $this->tbl_paket_soal;
         $active = $this->general->active_data($tbl, $paket_soal_id);
 
-        $urly = 'lembaga/paket-soal';
-        $urlx = 'lembaga/paket-soal';
+        $urly = 'admin/paket-soal';
+        $urlx = 'admin/paket-soal';
         $this->active_end($active, $urly, $urlx);
     }
 
@@ -421,7 +425,7 @@ class Tes_online extends CI_Controller {
 
         if($validation != $_token || empty($_token)){
             $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
-            redirect('lembaga/add-paket-soal');
+            redirect('admin/add-paket-soal');
         } else {
             if(!file_exists($target_dir)){
                 mkdir($target_dir,0777);
@@ -463,7 +467,7 @@ class Tes_online extends CI_Controller {
 
         if($validation != $_token || empty($_token)){
             $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
-            redirect('lembaga/add-paket-soal');
+            redirect('admin/add-paket-soal');
         } else {
             if(unlink($file_name)){
                 $datas = array(
@@ -518,7 +522,7 @@ class Tes_online extends CI_Controller {
 
         if($validation != $_token || empty($_token)){
             $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
-            redirect('lembaga/list-soal/'.$paket_soal_id);
+            redirect('admin/list-soal/'.$paket_soal_id);
         } else {
             $soal = $this->tes->get_soal_by_id($id_paket_soal, $bank_soal_id);
             $jawaban = $this->tes->get_jawaban_by_id($bank_soal_id, $id_paket_soal);
@@ -661,16 +665,16 @@ class Tes_online extends CI_Controller {
 
                 $save_jawaban = $this->tes->save_jawaban($datas);
 
-                $urly = 'lembaga/list-soal/'.$paket_soal_id;
-                $urlx = 'lembaga/add-soal/'.$paket_soal_id;
+                $urly = 'admin/list-soal/'.$paket_soal_id;
+                $urlx = 'admin/add-soal/'.$paket_soal_id;
                 $this->input_end($save_jawaban, $urly, $urlx);
             } else { //tipe essay tidak perlu jawaban
                 $this->session->set_flashdata('success', 'Data berhasil ditambahkan');
-		        redirect('lembaga/list-soal/'.$paket_soal_id);
+		        redirect('admin/list-soal/'.$paket_soal_id);
             }
         } else {
             $this->session->set_flashdata('error', 'Data gagal disimpan! Ulangi kembali');
-		    redirect('lembaga/add-soal/'.$paket_soal_id);
+		    redirect('admin/add-soal/'.$paket_soal_id);
         }
     }
 
@@ -684,7 +688,7 @@ class Tes_online extends CI_Controller {
 
         if($validation != $_token || empty($_token)){
             $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
-            redirect('lembaga/add-soal/'.$paket_soal_id);
+            redirect('admin/add-soal/'.$paket_soal_id);
         } else {
             if(!file_exists($target_dir)){
                 mkdir($target_dir,0777);
@@ -727,7 +731,7 @@ class Tes_online extends CI_Controller {
 
         if($validation != $_token || empty($_token)){
             $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
-            redirect('lembaga/add-soal/'.$paket_soal_id);
+            redirect('admin/add-soal/'.$paket_soal_id);
         } else {
             if(unlink($file_name)){
                 $datas = array(
@@ -854,16 +858,16 @@ class Tes_online extends CI_Controller {
 
                 $update_jawaban = $this->tes->update_jawaban($datas);
 
-                $urly = 'lembaga/list-soal/'.$paket_soal_id;
-                $urlx = 'lembaga/edit-soal/'.$paket_soal_id.'/'.$bank_soal_id.'/'.$nomor_soal;
+                $urly = 'admin/list-soal/'.$paket_soal_id;
+                $urlx = 'admin/edit-soal/'.$paket_soal_id.'/'.$bank_soal_id.'/'.$nomor_soal;
                 $this->update_end($update_jawaban, $urly, $urlx);
             } else { //tipe essay tidak perlu jawaban
                 $this->session->set_flashdata('success', 'Soal no '.$nomor_soal.' berhasil diubah');
-		        redirect('lembaga/list-soal/'.$paket_soal_id);
+		        redirect('admin/list-soal/'.$paket_soal_id);
             }
         } else {
             $this->session->set_flashdata('error', 'Soal no '.$nomor_soal.' gagal diubah! Ulangi kembali');
-		    redirect('lembaga/edit-soal/'.$paket_soal_id.'/'.$bank_soal_id.'/'.$nomor_soal);
+		    redirect('admin/edit-soal/'.$paket_soal_id.'/'.$bank_soal_id.'/'.$nomor_soal);
         }
     }
 
@@ -877,10 +881,10 @@ class Tes_online extends CI_Controller {
             $exam_order = $this->general->exam_order($paket_soal_id); //Urutin no soal lagi
 
             $this->session->set_flashdata('success', 'Soal no '.$nomor_soal.' berhasil dihapus');
-		    redirect('lembaga/list-soal/'.$id_paket_soal);
+		    redirect('admin/list-soal/'.$id_paket_soal);
         } else {
             $this->session->set_flashdata('error', 'Soal no '.$nomor_soal.' gagal dihapus!');
-		    redirect('lembaga/list-soal/'.$id_paket_soal);
+		    redirect('admin/list-soal/'.$id_paket_soal);
         }        
     }
 
@@ -892,10 +896,10 @@ class Tes_online extends CI_Controller {
 
         if(!empty($disable_all_soal)){
             $this->session->set_flashdata('success', 'Paket soal berhasil dikosongkan');
-		    redirect('lembaga/list-soal/'.$id_paket_soal);
+		    redirect('admin/list-soal/'.$id_paket_soal);
         } else {
             $this->session->set_flashdata('error', 'Paket soal gagal dikosongkan!');
-		    redirect('lembaga/list-soal/'.$id_paket_soal);
+		    redirect('admin/list-soal/'.$id_paket_soal);
         }    
     }
 

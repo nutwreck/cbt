@@ -44,8 +44,8 @@
                                         <td><?=$no++?></td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="<?=base_url()?>lembaga/edit-participants/<?=urlencode(base64_encode($value->peserta_id))?>/<?=urlencode(base64_encode($value->user_id))?>" class="btn btn-sm btn-primary mr-1"><i class="fa fa-pencil"></i></a>
-                                                <a href="<?=base_url()?>lembaga/disable-participants/<?=urlencode(base64_encode($value->peserta_id))?>/<?=urlencode(base64_encode($value->user_id))?>" class="btn btn-sm btn-danger" onclick="return confirm('Apakah anda yakin menghapus peserta ini?')"><i class="fa fa-trash"></i></a>
+                                                <a href="<?=base_url()?>admin/edit-participants/<?=urlencode(base64_encode($value->peserta_id))?>/<?=urlencode(base64_encode($value->user_id))?>" class="btn btn-sm btn-primary mr-1"><i class="fa fa-pencil"></i></a>
+                                                <a href="<?=base_url()?>admin/disable-participants/<?=urlencode(base64_encode($value->peserta_id))?>/<?=urlencode(base64_encode($value->user_id))?>" class="btn btn-sm btn-danger" onclick="return confirm('Apakah anda yakin menghapus peserta ini?')"><i class="fa fa-trash"></i></a>
                                             </div>
                                         </td>
                                         <td><?=$value->no_peserta?></td>

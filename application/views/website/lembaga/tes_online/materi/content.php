@@ -39,22 +39,22 @@
                                     <tr>
                                         <td><?=$no++?></td>
                                         <td><?=$value->name?></td>
-                                        <td><h6>Admin<br /><small><?=$value->created_datetime?></small></h6></td>
-                                        <td><h6 class="text-danger"><small><?=$value->updated_datetime?></small></h6></td>
+                                        <td><h6><?=$value->user_created_name?><br /><small><?=$value->created_datetime?></small></h6></td>
+                                        <td><h6 class="text-danger"><?=$value->user_edited_name?><br /><small><?=$value->updated_datetime?></small></h6></td>
                                         <td><?php if($value->is_enable == 1){ echo 'Aktif'; } else { echo 'Tidak Aktif'; }; ?></td>
                                         <td>
                                             <?php if($value->is_enable == 1) { ?>
                                             <div class="table-data-feature">
-                                                <a href="<?php echo base_url(); ?>lembaga/edit-materi/<?php echo $value->id; ?>" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                <a href="<?php echo base_url(); ?>admin/edit-materi/<?php echo $value->id; ?>" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
                                                     <i class="zmdi zmdi-edit"></i>
                                                 </a>
-                                                <a href="<?php echo base_url(); ?>lembaga/delete-materi/<?php echo $value->id; ?>" class="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                <a href="<?php echo base_url(); ?>admin/delete-materi/<?php echo $value->id; ?>" class="item" data-toggle="tooltip" data-placement="top" title="Delete">
                                                     <i class="zmdi zmdi-delete"></i>
                                                 </a>
                                             </div>
                                             <?php } else { ?>
                                                 <div class="table-data-feature">
-                                                    <a href="<?php echo base_url(); ?>lembaga/active-materi/<?php echo $value->id; ?>" class="item" data-toggle="tooltip" data-placement="top" title="Active">
+                                                    <a href="<?php echo base_url(); ?>admin/active-materi/<?php echo $value->id; ?>" class="item" data-toggle="tooltip" data-placement="top" title="Active">
                                                         <i class="zmdi zmdi-check"></i>
                                                     </a>
                                                 </div>
