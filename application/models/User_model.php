@@ -9,8 +9,7 @@ class User_model extends CI_Model{
     }
 
     public function get_user_lembaga_by_id($lembaga_user_id, $user_id){
-        return $this->db->select('lembaga_id, lembaga_name, is_verify')
-                    ->get_where('v_lembaga_user', array('lembaga_user_id' => $lembaga_user_id, 'user_id' => $user_id))->row();
+        return $this->db->get_where('v_lembaga_user', array('lembaga_user_id' => $lembaga_user_id, 'user_id' => $user_id))->row();
     }
 
     public function get_lembaga_by_id($lembaga_id){
@@ -104,6 +103,26 @@ class User_model extends CI_Model{
             $data_merge = array_merge($data_user_lembaga, $data_user_id); //merge dengan data user id dari proses insert user
 
             $lembaga_user = $this->db->insert('lembaga_user', $data_merge);
+
+            if ($this->db->trans_status() === FALSE){
+                $this->db->trans_rollback();
+                return null;
+            } else {
+                $this->db->trans_commit();
+			    return $lembaga_user;
+            }
+		}
+    }
+
+    public function update_lembaga_user($id_user_lembaga, $data_user_lembaga, $id_user, $data_user){
+        $data_user_id = [];
+        $this->db->trans_start();
+        $user = $this->db->where('id', $id_user)->update('user', $data_user);
+        if ($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return null;
+		} else {
+            $lembaga_user = $this->db->where('id', $id_user_lembaga)->update('lembaga_user', $data_user_lembaga);
 
             if ($this->db->trans_status() === FALSE){
                 $this->db->trans_rollback();

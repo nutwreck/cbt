@@ -209,6 +209,7 @@ class User extends CI_Controller {
             $data_user_lembaga['name'] = ucwords($this->input->post('name', TRUE));
             $data_user_lembaga['email'] = $email;
             $data_user_lembaga['created_datetime'] = date('Y-m-d H:i:s');
+            $data_user_lembaga['file'] = NULL;
             
             //user access
             $data_user['role_user_id'] = base64_decode(urldecode($role_user_id));
@@ -216,7 +217,7 @@ class User extends CI_Controller {
             $data_user['password'] = $this->encryption->encrypt($this->input->post('password', TRUE));
             $data_user['created_datetime'] = date('Y-m-d H:i:s');
 
-            $allowed_type 	= [
+           /*  $allowed_type 	= [
                 "jpeg", "jpg", "png"
             ];
             $config['upload_path']      = FCPATH.'storage/website/lembaga/grandsbmptn/user_admin/';
@@ -230,15 +231,15 @@ class User extends CI_Controller {
             
             $this->load->library('upload', $config);
 
-            if(!empty($_FILES['soal_audio']['name'])){
-                if (!$this->upload->do_upload('soal_audio')){
+            if(!empty($_FILES['file_photo']['name'])){
+                if (!$this->upload->do_upload('file_photo')){
                     $error = $this->upload->display_errors();
                     show_error($error, 500, 'File Audio Soal Error');
                     exit();
                 }else{
                     $data_user_lembaga['file'] = $this->upload->data('file_name');
                 }
-            }
+            } */
 
             $input = $this->user->input_lembaga_user($data_user_lembaga, $data_user);
 
@@ -253,32 +254,45 @@ class User extends CI_Controller {
         $user_id = base64_decode(urldecode($id_user));
 
         //for passing data to view
-        $data['content']['user_lembaga'] = $this->user->get_user_lembaga_by_id($lembaga_user_id, $user_id);
-        $data['title_header'] = ['title' => 'Edit Group Peserta'];
+        $get_data = $this->user->get_user_lembaga_by_id($lembaga_user_id, $user_id);
+        $data['content']['user_lembaga'] = $get_data;
+        $data['content']['password'] = $this->encryption->decrypt($get_data->password);
+        $data['title_header'] = ['title' => 'Edit User Lembaga'];
 
         //for load view
-        $view['css_additional'] = 'website/lembaga/user/group_peserta/css';
-        $view['content'] = 'website/lembaga/user/group_peserta/edit';
-        $view['js_additional'] = 'website/lembaga/user/group_peserta/js';
+        $view['css_additional'] = 'website/lembaga/user/admin_lembaga/css';
+        $view['content'] = 'website/lembaga/user/admin_lembaga/edit';
+        $view['js_additional'] = 'website/lembaga/user/admin_lembaga/js';
 
         //get function view website
         $this->_generate_view($view, $data);
     }
 
     public function submit_edit_lembaga(){
-        $id_group_participants = $this->input->post('id'); //No Decode
-        $participants_group_id = base64_decode(urldecode($id_group_participants));
         $lembaga_id = $this->input->post('lembaga_id'); //No Decode
+        $role_user_id = $this->input->post('role_user_id'); //No Decode
+        $email = $this->input->post('email', TRUE);
+        $id_user = $this->input->post('user_id');
+        $id_user_lembaga = $this->input->post('lembaga_user_id');
 
-        $data['lembaga_id'] = base64_decode(urldecode($lembaga_id));
-        $data['name'] = ucwords($this->input->post('name', TRUE));
-        $data['updated_datetime'] = date('Y-m-d H:i:s');
+        //lembaga_user
+        $data_user_lembaga['lembaga_id'] = $lembaga_id;
+        $data_user_lembaga['name'] = ucwords($this->input->post('name', TRUE));
+        $data_user_lembaga['email'] = $email;
+        $data_user_lembaga['updated_datetime'] = date('Y-m-d H:i:s');
+        $data_user_lembaga['user_id'] = $id_user;
+        $data_user_lembaga['file'] = NULL;
+        
+        //user access
+        $data_user['role_user_id'] = $role_user_id;
+        $data_user['username'] = $email;
+        $data_user['password'] = $this->encryption->encrypt($this->input->post('password', TRUE));
+        $data_user['updated_datetime'] = date('Y-m-d H:i:s');
 
-        $tbl = $this->tbl_group_peserta;
-        $update = $this->general->update_data($tbl, $data, $participants_group_id);
+        $update = $this->user->update_lembaga_user($id_user_lembaga, $data_user_lembaga, $id_user, $data_user);
 
-        $urly = 'admin/group-participants';
-        $urlx = 'admin/edit-group-participants/'.$id_group_participants;
+        $urly = 'admin/user-lembaga';
+        $urlx = 'admin/add-user-lembaga';
         $this->update_end($update, $urly, $urlx);
     }
 
