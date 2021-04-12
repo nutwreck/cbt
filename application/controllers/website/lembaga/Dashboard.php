@@ -68,14 +68,14 @@ class Dashboard extends CI_Controller {
 
     public function logout(){
         //update is login
-        $tbl = 'user';
+        /* $tbl = 'user';
 
         $datas = array(
             'is_login' => 0
         );
 
         $id =  $this->session->userdata('user_id');
-        $this->general->update_data($tbl, $datas, $id);
+        $this->general->update_data($tbl, $datas, $id); */
 
         $this->session->sess_destroy();
         redirect("admin/login");

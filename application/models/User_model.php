@@ -77,9 +77,9 @@ class User_model extends CI_Model{
         }
     }
 
-    public function checking_peserta($lembaga_id, $no_peserta){
+    public function checking_peserta($lembaga_id, $user_id){
         $query = $this->db->select('id')
-                        ->get_where('peserta', array('lembaga_id' => $lembaga_id, 'no_peserta' => $no_peserta, 'is_enable' => 1))->row();
+                        ->get_where('peserta', array('lembaga_id' => $lembaga_id, 'user_id' => $user_id, 'is_enable' => 1))->row();
         
         if($query){
             return $query;

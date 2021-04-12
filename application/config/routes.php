@@ -110,6 +110,13 @@ $route['admin/disable-participants/(:any)/(:any)'] = 'website/lembaga/user/disab
 $route['admin/login'] = 'website/lembaga/Login';
 $route['admin/submit-login'] = 'website/lembaga/Login/submit_login';
 $route['admin/logout'] = 'website/lembaga/Dashboard/logout';
+$route['admin/data-lembaga'] = 'website/lembaga/Management/data_lembaga';
+$route['admin/bacaan-soal/(:any)'] = 'website/lembaga/Tes_online/bacaan_soal/$1';
+$route['admin/add-bacaan-soal/(:any)'] = 'website/lembaga/Tes_online/add_bacaan_soal/$1';
+$route['admin/detail-bacaan-soal/(:any)'] = 'website/lembaga/Tes_online/detail_bacaan_soal/$1';
+$route['admin/edit-bacaan-soal/(:any)/(:any)'] = 'website/lembaga/Tes_online/edit_bacaan_soal/$1/$2';
+$route['admin/disable-bacaan-soal/(:any)/(:any)'] = 'website/lembaga/Tes_online/disable_bacaan_soal/$1/$2';
+$route['admin/group-soal/(:any)'] = 'website/lembaga/Tes_online/group_soal/$1';
 /*
 |
 | START WEBSITE URL FOR LEMBAGA ONLY

@@ -24,6 +24,18 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-12 col-lg-3" style="margin-top:1%">
+                                    <h5 class="label-text">Buku</h5>
+                                </div>
+                                <div class="col-sm-12 col-lg-9">
+                                    <div class="form-group">
+                                        <select class="form-control selectpicker" data-live-search="true" readonly data-width="auto" name="buku" required>
+                                            <option value="-1" selected><?=$paket_soal->buku_name?></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-lg-3" style="margin-top:1%">
                                     <h5 class="label-text">Kelas</h5>
                                 </div>
                                 <div class="col-sm-12 col-lg-9">

@@ -1,51 +1,41 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+<script src="<?=config_item('_assets_general')?>summernote-0.8.18-dist/summernote-bs4.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js" integrity="sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js" integrity="sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
 <script src="<?=config_item('_assets_general')?>js/math-katex.js"></script>
 
 <script>
     $(document).ready(function() {
-        $('#table_paket').DataTable( {
+        $('#table_bacaan').DataTable( {
             
         } );
     } );
 
     function add_data() {
-        window.location.href = "<?php echo base_url(); ?>admin/add-paket-soal";
+        window.location.href = "<?php echo base_url(); ?>admin/add-bacaan-soal/<?php echo $id_paket_soal; ?>";
+    }
+
+    function paket_soal_page(){
+        window.location.href = "<?php echo base_url(); ?>admin/paket-soal";
     }
 </script>
 
-<!-- Fokus pada inputan pertama ketika halaman form add di load -->
+<!-- SUMMERNOTE -->
 <script>
-    $(function(){
-        $('.form-paket-soal').find('input[type=text],textarea').filter(':visible:first').focus();
-    });
-</script>
-
-<!-- Nama file muncul saat upload -->
-<script>
-    if (document.getElementById('petunjuk_audio') != null) 
-        document.querySelector("#petunjuk_audio").onchange = function(){
-            document.querySelector("#file-name").textContent = this.files[0].name;
-        }
-</script>
-
-<!-- Fungsi summernote -->
-<script>
-    var IMAGE_FOLDER = 'storage/website/lembaga/grandsbmptn/paket_soal/';
+    var id_paket_data = <?php echo base64_decode(urldecode($id_paket_soal)); ?>;
+    var IMAGE_FOLDER = 'storage/website/lembaga/grandsbmptn/bacaan_soal/bacaan_'+id_paket_data+'/';
     function uploadFileEditor($summernote,file)
 	{
         var csrfhash = document.getElementById('csrf-hash-form').value;
 		var formData = new FormData();
 		formData.append("file", file);
 		formData.append("folder", IMAGE_FOLDER);
-		formData.append('_token', '388f8e8621faaf2a89834c8646271bd7');
+		formData.append('_token', '4cdf658a25ff361d2618b233e0b66f3f');
         formData.append(csrfname, csrfhash);
+        formData.append('id_paket_soal', id_paket_data);
 		$.ajax({
-			url: base_url+'website/lembaga/Tes_online/editor_paket_soal',
+			url: base_url+'website/lembaga/Tes_online/editor_bacaan_soal',
 			data: formData,
 			cache: false,
 			contentType: false,
@@ -64,24 +54,24 @@
         var csrfhash = document.getElementById('csrf-hash-form').value;
         var formData = new FormData();
 		formData.append("src", src);
-        formData.append('_token', '388f8e8621faaf2a89834c8646271bd7');
+        formData.append('_token', '4cdf658a25ff361d2618b233e0b66f3f');
         formData.append(csrfname, csrfhash);
+        formData.append('id_paket_soal', id_paket_data);
         $.ajax({
             data: formData,
             type: "POST",
-            url: base_url+'website/lembaga/Tes_online/editor_paket_soal_delete', // replace with your url
+            url: base_url+'website/lembaga/Tes_online/editor_bacaan_soal_delete',
             cache: false,
             contentType: false,
 			processData: false,
             success: function(response) {
                 obj = JSON.parse(response);
                 document.getElementById('csrf-hash-form').value = obj.csrf;
-                console.log(obj.text);
+                /* console.log(obj.text); */
             }
         });
     }
-    $('#summernote').summernote({
-        placeholder: 'Masukkan petunjuk pengerjaan soal (jika ada)',
+    $('.summernote').summernote({
         dialogsInBody: true,
         dialogsFade: true,
         tabsize: 2,
@@ -110,38 +100,9 @@
         }
     });
     // @param {String} color
-    $('#summernote').summernote('backColor', 'transparent');
-    $('#summernote').summernote('foreColor', 'black');
-</script>
-
-<!-- Validasi Form Add -->
-<script type = "text/javascript">
-    function validate_addform(){
-        if( document.formadd.kelas.value == "-1" ) {
-            document.getElementById('kelas_er').innerHTML = 'Kelas wajib dipilih!';
-            document.formadd.kelas.focus();
-            return false;
-        }
-        if( document.formadd.materi.value == "-1" ) {
-            document.getElementById('materi_er').innerHTML = 'Materi wajib dipilih!';
-            document.formadd.materi.focus();
-            return false;
-        }
-        if( document.formadd.mode_jawaban.value == "-1" ) {
-            document.getElementById('mode_jawaban_er').innerHTML = 'Mode jawaban wajib dipilih!';
-            document.formadd.mode_jawaban.focus();
-            return false;
-        }
-        if( document.formadd.skala_nilai.value == "-1" ) {
-            document.getElementById('skala_nilai_er').innerHTML = 'Skala nilai wajib dipilih!';
-            document.formadd.skala_nilai.focus();
-            return false;
-        }
-        if( document.formadd.buku.value == "-1" ) {
-            document.getElementById('buku_er').innerHTML = 'Buku wajib dipilih!';
-            document.formadd.buku.focus();
-            return false;
-        }
-        return( true );
+    $('.summernote').summernote('backColor', 'transparent');
+    $('.summernote').summernote('foreColor', 'black');
+    if(document.getElementById("id_bacaan_soal") != null){
+        $('.summernote').summernote('code');
     }
 </script>

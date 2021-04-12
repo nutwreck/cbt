@@ -12,6 +12,7 @@ class Tes_online extends CI_Controller {
 
     private $tbl_materi = 'materi'; //SET TABEL MATERI
     private $tbl_paket_soal = 'paket_soal'; //SET TABEL PAKET SOAL
+    private $tbl_bacaan_soal = 'bacaan_soal'; //SET TABEL BACAAN SOAL
 
     public function __construct(){
         parent::__construct();
@@ -233,6 +234,7 @@ class Tes_online extends CI_Controller {
          $data['content']['get_kelas'] = $this->tes->get_kelas_enable();
          $data['content']['get_mode_jawaban'] = $this->tes->get_mode_jawaban_enable();
          $data['content']['get_skala_nilai'] = $this->tes->get_skala_nilai_enable();
+         $data['content']['get_buku'] = $this->tes->get_buku_enable();
          $data['title_header'] = ['title' => 'Tambah Paket Soal'];
  
          //for load view
@@ -246,6 +248,10 @@ class Tes_online extends CI_Controller {
 
     public function submit_add_paket_soal(){
         $data['name'] = ucwords($this->input->post('name', TRUE));
+        $buku  = $this->input->post('buku', TRUE);
+        $exp_buku = explode("|", $buku);
+        $data['buku_id'] = $exp_buku[0];
+        $data['buku_name'] = $exp_buku[1];
         $kelas  = $this->input->post('kelas', TRUE);
         $exp_kelas = explode("|", $kelas);
         $data['kelas_id'] = $exp_kelas[0];
@@ -310,6 +316,7 @@ class Tes_online extends CI_Controller {
         $data['content']['get_kelas'] = $this->tes->get_kelas_selected($paket_soal->kelas_id);
         $data['content']['get_mode_jawaban'] = $this->tes->get_mode_jawaban_selected($paket_soal->detail_mode_jwb_id);
         $data['content']['get_skala_nilai'] = $this->tes->get_skala_nilai_selected($paket_soal->pengaturan_universal_id);
+        $data['content']['get_buku'] = $this->tes->get_buku_selected($paket_soal->buku_id);
         $data['title_header'] = ['title' => 'Edit Paket Soal'];
 
         //for load view
@@ -324,6 +331,10 @@ class Tes_online extends CI_Controller {
     public function submit_edit_paket_soal(){
         $id_paket_soal = $this->input->post('id_paket_soal');
         $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+        $buku  = $this->input->post('buku', TRUE);
+        $exp_buku = explode("|", $buku);
+        $data['buku_id'] = $exp_buku[0];
+        $data['buku_name'] = $exp_buku[1];
         $data['name'] = ucwords($this->input->post('name', TRUE));
         $kelas  = $this->input->post('kelas', TRUE);
         $exp_kelas = explode("|", $kelas);
@@ -900,7 +911,189 @@ class Tes_online extends CI_Controller {
         } else {
             $this->session->set_flashdata('error', 'Paket soal gagal dikosongkan!');
 		    redirect('admin/list-soal/'.$id_paket_soal);
-        }    
+        }
+    }
+
+    public function bacaan_soal($id_paket_soal){
+        $paket_soal_id =  base64_decode(urldecode($id_paket_soal));
+        //for passing data to view
+        $data['content']['bacaan_soal'] = $this->tes->get_bacaan_soal($paket_soal_id);
+        $data['content']['id_paket_soal'] = $id_paket_soal;
+        $data['title_header'] = ['title' => 'Bacaan Soal'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/bacaan_soal/css';
+        $view['content'] = 'website/lembaga/tes_online/bacaan_soal/content';
+        $view['js_additional'] = 'website/lembaga/tes_online/bacaan_soal/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function add_bacaan_soal($id_paket_soal){
+        //for passing data to view
+        $data['content']['id_paket_soal'] = $id_paket_soal;
+        $data['title_header'] = ['title' => 'Add Bacaan Soal'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/bacaan_soal/css';
+        $view['content'] = 'website/lembaga/tes_online/bacaan_soal/add';
+        $view['js_additional'] = 'website/lembaga/tes_online/bacaan_soal/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_add_bacaan_soal(){
+        $id_paket_soal = $this->input->post('id_paket_soal');
+        $data['paket_soal_id'] = base64_decode(urldecode($id_paket_soal));
+        $data['name'] = $this->input->post('name', TRUE);
+        $data['kode_bacaan'] = $this->input->post('kode_bacaan', TRUE);
+        $data['bacaan'] = $this->input->post('bacaan');
+        $data['created_datetime'] = date('Y-m-d H:i:s');
+
+        $tbl = $this->tbl_bacaan_soal;
+        $input = $this->general->input_data($tbl, $data);
+
+        $urly = 'admin/bacaan-soal/'.$id_paket_soal;
+        $urlx = 'admin/add-bacaan-soal/'.$id_paket_soal;
+        $this->input_end($input, $urly, $urlx);
+    }
+
+    public function editor_bacaan_soal(){ //upload image di bacaan soal
+        $data = [];
+        $datas = [];
+        $_token = $this->input->post('_token', TRUE);
+        $validation = config_item('_token_bacaan_soal');
+        $target_dir = $this->input->post('folder', TRUE);
+        $paket_soal_id = urlencode(base64_encode($this->input->post('id_paket_soal')));
+
+        if($validation != $_token || empty($_token)){
+            $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
+            redirect('admin/add-bacaan-soal/'.$paket_soal_id);
+        } else {
+            if(!file_exists($target_dir)){
+                mkdir($target_dir,0777);
+            }
+
+            $config['upload_path']   = $target_dir;
+            $config['allowed_types'] = 'jpg|png|jpeg';
+            $config['max_size']      = 500;
+            $config['remove_spaces'] = TRUE;        
+            $config['encrypt_name']  = TRUE;
+
+            $this->load->library('upload', $config);
+
+            if ( ! $this->upload->do_upload('file')) {
+                $datas = array(
+                    'link' => '',
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+            }
+            else {
+                $data = array('upload_data' => $this->upload->data());
+                $datas = array(
+                    'link' => base_url().$target_dir.$data['upload_data']['file_name'],
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+            }
+            echo json_encode($datas);
+        }
+    }
+
+    public function editor_bacaan_soal_delete(){ //hapus upload image dipaket soal bacaan
+        $datas = [];
+        $_token = $this->input->post('_token', TRUE);
+        $validation = config_item('_token_bacaan_soal');
+        $src = $this->input->post('src', TRUE); 
+        $file_name = str_replace(base_url(), '', $src);
+        $paket_soal_id = urlencode(base64_encode($this->input->post('id_paket_soal')));
+
+        if($validation != $_token || empty($_token)){
+            $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
+            redirect('admin/add-bacaan-soal/'.$paket_soal_id);
+        } else {
+            if(unlink($file_name)){
+                $datas = array(
+                    'text' => 'Success Delete Data Image',
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+            } else {
+                $datas = array(
+                    'text' => 'Failed Delete Data Image',
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+            }
+
+            echo json_encode($datas);
+        }
+    }
+
+    public function detail_bacaan_soal($id_bacaan_soal){
+        $bacaan_soal_id = base64_decode(urldecode($id_bacaan_soal));
+
+        //for passing data to view
+        $data['content']['bacaan_soal'] = $this->tes->get_bacaan_soal_by_id($bacaan_soal_id);
+        $data['title_header'] = ['title' => 'Detail Bacaan Soal'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/bacaan_soal/css';
+        $view['content'] = 'website/lembaga/tes_online/bacaan_soal/detail';
+        $view['js_additional'] = 'website/lembaga/tes_online/bacaan_soal/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function edit_bacaan_soal($id_bacaan_soal, $id_paket_soal){
+        $bacaan_soal_id = base64_decode(urldecode($id_bacaan_soal));
+
+        //for passing data to view
+        $data['content']['bacaan_soal'] = $this->tes->get_bacaan_soal_by_id($bacaan_soal_id);
+        $data['content']['id_bacaan_soal'] = $id_bacaan_soal;
+        $data['content']['id_paket_soal'] = $id_paket_soal;
+        $data['title_header'] = ['title' => 'Edit Bacaan Soal'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/bacaan_soal/css';
+        $view['content'] = 'website/lembaga/tes_online/bacaan_soal/edit';
+        $view['js_additional'] = 'website/lembaga/tes_online/bacaan_soal/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_edit_bacaan_soal(){
+        $bacaan_soal_id_crypt = $this->input->post('id_bacaan_soal');
+        $bacaan_soal_id = base64_decode(urldecode($bacaan_soal_id_crypt));
+        $paket_soal_id_crypt = $this->input->post('id_paket_soal');
+        $paket_soal_id = base64_decode(urldecode($paket_soal_id_crypt));
+
+        $data['name'] = $this->input->post('name', TRUE);
+        $data['kode_bacaan'] = $this->input->post('kode_bacaan', TRUE);
+        $data['bacaan'] = $this->input->post('bacaan');
+        $data['updated_datetime'] = date('Y-m-d H:i:s');
+
+        $update = $this->tes->update_bacaan_soal($data, $bacaan_soal_id, $paket_soal_id);
+
+        $urly = 'admin/bacaan-soal/'.$paket_soal_id_crypt;
+        $urlx = 'admin/edit-bacaan-soal/'.$bacaan_soal_id_crypt;
+        $this->update_end($update, $urly, $urlx);
+    }
+
+    public function disable_bacaan_soal($id_bacaan_soal, $id_paket_soal){
+        $bacaan_soal_id = base64_decode(urldecode($id_bacaan_soal));
+
+        $tbl = $this->tbl_bacaan_soal;
+        $delete = $this->general->delete_data($tbl, $bacaan_soal_id);
+
+        $urly = 'admin/bacaan-soal/'.$id_paket_soal;
+        $urlx = 'admin/paket-soal/'.$id_paket_soal;
+        $this->delete_end($delete, $urly, $urlx);
+    }
+
+    public function group_soal(){
+
     }
 
     public function sesi_pelaksana($paket_soal_id){

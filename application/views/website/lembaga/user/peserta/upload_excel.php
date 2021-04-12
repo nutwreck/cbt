@@ -40,8 +40,9 @@
                                     <button type="submit" class="btn btn-md btn-info btn-block">
                                         <i class="fa fa-check fa-md"></i>&nbsp;
                                         <span>Submit</span>
-                                        <span><?=$message?></span>
                                     </button>
+                                    <br />
+                                    <span><?=$message?></span>
                                 </div>
                             </div>
                         </div>

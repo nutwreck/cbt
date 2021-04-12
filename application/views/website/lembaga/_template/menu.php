@@ -52,8 +52,25 @@
                                 </li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="#"><i class="fa fa-home"></i>Lembaga<small class="text-danger">(Coming Soon)</small></a>
+                        <li class="has-sub">
+                            <a class="js-arrow" href="#"><i class="fa fa-folder-open"></i>Lembaga Management</a>
+                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                                <li>
+                                    <a href="<?php echo base_url(); ?>admin/data-lembaga">Data Lembaga</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>admin/invoice">All Invoice</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>admin/confirm-payment">Konfirmasi Pembayaran Manual</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>admin/invoice-expired">Invoice Expired</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>admin/success-payment">Pembayaran Sukses</a>
+                                </li>
+                            </ul>
                         </li>
                         <li>
                             <a href="<?php echo base_url(); ?>admin/logout"><i class="zmdi zmdi-power"></i>Logout</a>

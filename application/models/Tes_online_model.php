@@ -80,8 +80,20 @@ class Tes_online_model extends CI_Model{
                     ->get_where('pengaturan_universal', array('id !=' => $universal_id, 'name' => 'SKALA NILAI', 'is_enable' => 1))->result();
     }
 
+    public function get_buku_enable(){
+        return $this->db->select('id, name')
+                    ->order_by('id ASC')
+                    ->get_where('buku', array('is_enable' => 1))->result();
+    }
+
+    public function get_buku_selected($buku_id){
+        return $this->db->select('id, name')
+                    ->order_by('id ASC')
+                    ->get_where('buku', array('id !=' => $buku_id, 'is_enable' => 1))->result();
+    }
+
     public function get_paket_soal(){
-        return $this->db->select('T1.paket_soal_id, T1.nama_paket_soal, T1.materi_name, T1.kelas_id, kelas_name, T1.created_datetime, T1.updated_datetime, T1.status_paket_soal, T1.petunjuk, T1.is_enable, T2.name AS user_created_name, T3.name AS user_edited_name', FALSE)
+        return $this->db->select('T1.paket_soal_id, T1.nama_paket_soal, T1.materi_name, T1.kelas_id, kelas_name, T1.created_datetime, T1.updated_datetime, T1.status_paket_soal, T1.petunjuk, T1.is_enable, T2.name AS user_created_name, T3.name AS user_edited_name, T1.total_soal', FALSE)
                     ->join('lembaga_user AS T2', 'T2.user_id = T1.created_by')
                     ->join('lembaga_user AS T3', 'T1.updated_by = T3.user_id', 'left')
                     ->order_by('T1.is_enable DESC', 'T1.id DESC')
@@ -144,6 +156,16 @@ class Tes_online_model extends CI_Model{
         return $this->db->select('id, name')
                     ->order_by('id ASC')
                     ->get_where('tipe_kesulitan', array('id !=' => $tipe_kesulitan_id, 'is_enable' => 1))->result();
+    }
+
+    public function get_bacaan_soal($paket_soal_id){
+        return $this->db->select('*')
+                    ->order_by('id DESC')
+                    ->get_where('bacaan_soal', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->result();
+    }
+
+    public function get_bacaan_soal_by_id($bacaan_soal_id){
+        return $this->db->get_where('bacaan_soal', array('id' => $bacaan_soal_id, 'is_enable' => 1))->row();
     }
 
     public function save_soal($data){
@@ -257,6 +279,19 @@ class Tes_online_model extends CI_Model{
 			    return null;
             }
         }
+    }
+
+    public function update_bacaan_soal($data, $bacaan_soal_id, $paket_soal_id){
+        $this->db->where('id', $bacaan_soal_id);
+        $this->db->where('paket_soal_id', $paket_soal_id);
+        $query = $this->db->update('bacaan_soal', $data);
+        if ($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return null;
+		} else{
+			$this->db->trans_commit();
+			return $query;
+		}
     }
 
 }

@@ -27,6 +27,22 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12 col-lg-3" style="margin-top:1%">
+                                        <h5 class="label-text">Buku</h5>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-9">
+                                        <div class="form-group">
+                                            <select id="buku" class="form-control selectpicker" data-live-search="true" data-width="auto" name="buku" required>
+                                            <option data-tokens="<?=$paket_soal->buku_name?>" value="<?=$paket_soal->buku_id?>|<?=$paket_soal->buku_name?>" selected><?=$paket_soal->buku_name?></option>
+                                                <?php foreach($get_buku as $val_buku){ ?>
+                                                    <option data-tokens="<?=$val_buku->name?>" value="<?=$val_buku->id?>|<?=$val_buku->name?>"><?=$val_buku->name?></option>
+                                                <?php } ?>
+                                            </select>
+                                            <small for="buku" id="buku_er" class="bg-danger text-white"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-3" style="margin-top:1%">
                                         <h5 class="label-text">Kelas</h5>
                                     </div>
                                     <div class="col-sm-12 col-lg-9">

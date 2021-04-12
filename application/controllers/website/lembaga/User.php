@@ -697,12 +697,18 @@ class User extends CI_Controller {
 
     private function insert_data_peserta($lembaga_id, $kelompok, $user, $no_peserta, $nama_peserta){
         $data_peserta = [];
+        $datas = [];
 
-        $cek_peserta = $this->user->checking_peserta($lembaga_id, $no_peserta);
+        $cek_peserta = $this->user->checking_peserta($lembaga_id, $user);
 
-        if($cek_peserta){
-            return $cek_peserta->id;
-        }
+        if(!empty($cek_peserta)){
+            $tbl = $this->tbl_peserta;
+            $id_peserta = $cek_peserta->id;
+            $datas = array(
+                'is_lock' => 1
+            );
+            $this->general->update_data($tbl, $datas, $id_peserta);
+        } 
 
         $data_peserta = array(
             'user_id' => $user,
