@@ -13,6 +13,7 @@ class Tes_online extends CI_Controller {
     private $tbl_materi = 'materi'; //SET TABEL MATERI
     private $tbl_paket_soal = 'paket_soal'; //SET TABEL PAKET SOAL
     private $tbl_bacaan_soal = 'bacaan_soal'; //SET TABEL BACAAN SOAL
+    private $tbl_group_soal = 'group_soal'; //SET TABEL GROUP SOAL
 
     public function __construct(){
         parent::__construct();
@@ -970,7 +971,7 @@ class Tes_online extends CI_Controller {
 
         if($validation != $_token || empty($_token)){
             $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
-            redirect('admin/add-bacaan-soal/'.$paket_soal_id);
+            redirect('admin/bacaan-soal/'.$paket_soal_id);
         } else {
             if(!file_exists($target_dir)){
                 mkdir($target_dir,0777);
@@ -1011,7 +1012,7 @@ class Tes_online extends CI_Controller {
 
         if($validation != $_token || empty($_token)){
             $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
-            redirect('admin/add-bacaan-soal/'.$paket_soal_id);
+            redirect('admin/bacaan-soal/'.$paket_soal_id);
         } else {
             if(unlink($file_name)){
                 $datas = array(
@@ -1092,8 +1093,272 @@ class Tes_online extends CI_Controller {
         $this->delete_end($delete, $urly, $urlx);
     }
 
-    public function group_soal(){
+    public function group_soal($id_paket_soal){
+        $paket_soal_id =  base64_decode(urldecode($id_paket_soal));
+        //for passing data to view
+        $data['content']['group_soal'] = $this->tes->get_group_soal($paket_soal_id);
+        $data['content']['id_paket_soal'] = $id_paket_soal;
+        $data['title_header'] = ['title' => 'Group Soal'];
 
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/group_soal/css';
+        $view['content'] = 'website/lembaga/tes_online/group_soal/content';
+        $view['js_additional'] = 'website/lembaga/tes_online/group_soal/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function editor_group_soal(){ //upload image di bacaan soal
+        $data = [];
+        $datas = [];
+        $_token = $this->input->post('_token', TRUE);
+        $validation = config_item('_token_group_soal');
+        $target_dir = $this->input->post('folder', TRUE);
+        $paket_soal_id = urlencode(base64_encode($this->input->post('id_paket_soal')));
+
+        if($validation != $_token || empty($_token)){
+            $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
+            redirect('admin/group-soal/'.$paket_soal_id);
+        } else {
+            if(!file_exists($target_dir)){
+                mkdir($target_dir,0777);
+            }
+
+            $config['upload_path']   = $target_dir;
+            $config['allowed_types'] = 'jpg|png|jpeg';
+            $config['max_size']      = 500;
+            $config['remove_spaces'] = TRUE;        
+            $config['encrypt_name']  = TRUE;
+
+            $this->load->library('upload', $config);
+
+            if ( ! $this->upload->do_upload('file')) {
+                $datas = array(
+                    'link' => '',
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+            }
+            else {
+                $data = array('upload_data' => $this->upload->data());
+                $datas = array(
+                    'link' => base_url().$target_dir.$data['upload_data']['file_name'],
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+            }
+            echo json_encode($datas);
+        }
+    }
+
+    public function editor_group_soal_delete(){ //hapus upload image dipaket soal bacaan
+        $datas = [];
+        $_token = $this->input->post('_token', TRUE);
+        $validation = config_item('_token_group_soal');
+        $src = $this->input->post('src', TRUE); 
+        $file_name = str_replace(base_url(), '', $src);
+        $paket_soal_id = urlencode(base64_encode($this->input->post('id_paket_soal')));
+
+        if($validation != $_token || empty($_token)){
+            $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
+            redirect('admin/group-soal/'.$paket_soal_id);
+        } else {
+            if(unlink($file_name)){
+                $datas = array(
+                    'text' => 'Success Delete Data Image',
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+            } else {
+                $datas = array(
+                    'text' => 'Failed Delete Data Image',
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+            }
+
+            echo json_encode($datas);
+        }
+    }
+
+    public function add_group_soal($id_paket_soal){
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+
+        //for passing data to view
+        $data['content']['id_paket_soal'] = $id_paket_soal;
+        $data['content']['konversi_skor'] = $this->tes->get_konversi_skor_enable();
+        $data['content']['parent_group'] = $this->tes->get_parent_group($paket_soal_id);
+        $data['title_header'] = ['title' => 'Add Group Soal'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/group_soal/css';
+        $view['content'] = 'website/lembaga/tes_online/group_soal/add';
+        $view['js_additional'] = 'website/lembaga/tes_online/group_soal/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_add_group_soal(){
+        $paket_soal_id = $this->input->post('id_paket_soal'); //EncryptIdPaketSoal
+
+        $data['paket_soal_id']  = base64_decode(urldecode($paket_soal_id));
+        $data['name']  = $this->input->post('name', TRUE);
+        $data['kode_group']  = $this->input->post('kode_group', TRUE);
+        $data['petunjuk']  = $this->input->post('petunjuk');
+        $data['konversi_skor_id']  = $this->input->post('konversi_skor_id', TRUE);
+        $data['parent_id']  = $this->input->post('parent_id', TRUE);
+        $data['is_continuous']  = $this->input->post('is_continuous', TRUE);
+        $data['created_datetime']  = date('Y-m-d H:i:s');
+
+        $allowed_type 	= [
+            "audio/mpeg", "audio/mpg", "audio/mpeg3", "audio/mp3", "audio/x-wav", "audio/wave", "audio/wav"
+        ];
+        $_id_paket_soal = $data['paket_soal_id'];
+        $config['upload_path']      = FCPATH.'storage/website/lembaga/grandsbmptn/group_soal/group_'.$_id_paket_soal.'/';
+        $config['allowed_types']    = 'mpeg|mpg|mpeg3|mp3|wav|wave';
+        $config['encrypt_name']     = TRUE;
+        $_upload_path = $config['upload_path'];
+
+        if(!file_exists($_upload_path)){
+            mkdir($_upload_path,0777);
+        }
+        
+        $this->load->library('upload', $config);
+
+        if(!empty($_FILES['audio_group']['name'])){
+            if (!$this->upload->do_upload('audio_group')){
+                $error = $this->upload->display_errors();
+                show_error($error, 500, 'File Audio Soal Error');
+                exit();
+            }else{
+                $data['file'] = $this->upload->data('file_name');
+                $data['tipe_file'] = $this->upload->data('file_type');
+            }
+        }
+
+        $tbl = $this->tbl_group_soal;
+        $input = $this->general->input_data($tbl, $data);
+
+        $urly = 'admin/group-soal/'.$paket_soal_id;
+        $urlx = 'admin/add-group-soal/'.$paket_soal_id;
+        $this->input_end($input, $urly, $urlx);
+    }
+
+    public function edit_group_soal($id_group_soal, $id_paket_soal){
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+        $group_soal_id = base64_decode(urldecode($id_group_soal));
+
+        //for passing data to view
+        $group_data = $this->tes->get_group_soal_by_id($group_soal_id);
+        $data['content']['id_paket_soal'] = $id_paket_soal;
+        $data['content']['id_group_soal'] = $id_group_soal;
+        $data['content']['konversi_skor'] = $this->tes->get_konversi_skor_selected($group_data->konversi_skor_id);
+        $data['content']['parent_group'] = $this->tes->get_parent_group_selected($paket_soal_id, $group_data->parent_id);
+        $data['content']['group_soal'] = $group_data;
+        $data['title_header'] = ['title' => 'Edit Group Soal'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/group_soal/css';
+        $view['content'] = 'website/lembaga/tes_online/group_soal/edit';
+        $view['js_additional'] = 'website/lembaga/tes_online/group_soal/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_edit_group_soal(){
+        $paket_soal_id_crypt = $this->input->post('id_paket_soal'); //EncryptIdPaketSoal
+        $group_soal_id_crypt = $this->input->post('id_group_soal'); //EncryptIdGroupSoal
+
+        $group_soal_id = base64_decode(urldecode($group_soal_id_crypt));
+        $paket_soal_id  = base64_decode(urldecode($paket_soal_id_crypt));
+
+        $data['name']  = $this->input->post('name', TRUE);
+        $data['kode_group']  = $this->input->post('kode_group', TRUE);
+        $data['petunjuk']  = $this->input->post('petunjuk');
+        $data['konversi_skor_id']  = $this->input->post('konversi_skor_id', TRUE);
+        $data['parent_id']  = $this->input->post('parent_id', TRUE);
+        $data['is_continuous']  = $this->input->post('is_continuous', TRUE);
+        $old_name_audio = $this->input->post('old_name_audio');
+            if($old_name_audio == NULL || $old_name_audio == ''){
+                $old_name_audio_x = NULL;
+            } else {
+                $old_name_audio_x = $old_name_audio;
+            }
+        $old_type_audio = $this->input->post('old_type_audio');
+            if($old_type_audio == NULL || $old_type_audio == ''){
+                $old_type_audio_x = NULL;
+            } else {
+                $old_type_audio_x = $old_type_audio;
+            }
+        $data['updated_datetime']  = date('Y-m-d H:i:s');
+
+        $allowed_type 	= [
+            "audio/mpeg", "audio/mpg", "audio/mpeg3", "audio/mp3", "audio/x-wav", "audio/wave", "audio/wav"
+        ];
+        $_id_paket_soal = $data['paket_soal_id'];
+        $config['upload_path']      = FCPATH.'storage/website/lembaga/grandsbmptn/group_soal/group_'.$_id_paket_soal.'/';
+        $config['allowed_types']    = 'mpeg|mpg|mpeg3|mp3|wav|wave';
+        $config['encrypt_name']     = TRUE;
+        $_upload_path = $config['upload_path'];
+
+        if(!file_exists($_upload_path)){
+            mkdir($_upload_path,0777);
+        }
+        
+        $this->load->library('upload', $config);
+
+        if(!empty($_FILES['audio_group']['name'])){
+            if (!$this->upload->do_upload('audio_group')){
+                $error = $this->upload->display_errors();
+                show_error($error, 500, 'File Audio Soal Error');
+                exit();
+            }else{
+                $data['file'] = $this->upload->data('file_name');
+                $data['tipe_file'] = $this->upload->data('file_type');
+            }
+        } else {
+            $data['file'] = $old_name_audio_x;
+            $data['tipe_file'] = $old_type_audio_x;
+        }
+
+        $tbl = $this->tbl_group_soal;
+        $update = $this->tes->update_group_soal($data, $group_soal_id, $paket_soal_id);
+
+        $urly = 'admin/group-soal/'.$paket_soal_id_crypt;
+        $urlx = 'admin/edit-group-soal/'.$group_soal_id_crypt.'/'.$paket_soal_id_crypt;
+        $this->input_end($update, $urly, $urlx);
+    }
+
+    public function detail_group_soal($id_group_soal, $id_paket_soal){
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+        $group_soal_id = base64_decode(urldecode($id_group_soal));
+
+        //for passing data to view
+        $group_data = $this->tes->get_group_soal_by_id($group_soal_id);
+        $data['content']['id_paket_soal'] = $id_paket_soal;
+        $data['content']['id_group_soal'] = $id_group_soal;
+        $data['content']['konversi_skor'] = $this->tes->get_konversi_skor_selected($group_data->konversi_skor_id);
+        $data['content']['parent_group'] = $this->tes->get_parent_group_selected($paket_soal_id, $group_data->parent_id);
+        $data['content']['group_soal'] = $group_data;
+        $data['title_header'] = ['title' => 'Detail Group Soal'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/group_soal/css';
+        $view['content'] = 'website/lembaga/tes_online/group_soal/detail';
+        $view['js_additional'] = 'website/lembaga/tes_online/group_soal/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function disable_group_soal($id_group_soal, $id_paket_soal){
+        $group_soal_id = base64_decode(urldecode($id_group_soal));
+
+        $tbl = $this->tbl_group_soal;
+        $delete = $this->general->delete_data($tbl, $group_soal_id);
+
+        $urly = 'admin/group-soal/'.$id_paket_soal;
+        $urlx = 'admin/group-soal/'.$id_paket_soal;
+        $this->delete_end($delete, $urly, $urlx);
     }
 
     public function sesi_pelaksana($paket_soal_id){

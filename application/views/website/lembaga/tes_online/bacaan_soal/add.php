@@ -11,7 +11,7 @@
                             </div>
                         </div>
                     </div>
-                        <form id="formadd" name="formadd" action="<?php echo base_url(); ?>website/lembaga/Tes_online/submit_add_bacaan_soal" class="form-soal" method="POST" enctype="multipart/form-data" onsubmit="return(validate_addform());">
+                        <form id="formadd" name="formadd" action="<?php echo base_url(); ?>website/lembaga/Tes_online/submit_add_bacaan_soal" class="form-soal" method="POST" enctype="multipart/form-data">
                         <input type="hidden" id="csrf-hash-form" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" style="display: none">
                         <input type="hidden" id="id_paket_soal" name="id_paket_soal" value="<?=$id_paket_soal?>" style="display: none" required>
                             <div class="card-body">

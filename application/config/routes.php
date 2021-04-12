@@ -117,6 +117,10 @@ $route['admin/detail-bacaan-soal/(:any)'] = 'website/lembaga/Tes_online/detail_b
 $route['admin/edit-bacaan-soal/(:any)/(:any)'] = 'website/lembaga/Tes_online/edit_bacaan_soal/$1/$2';
 $route['admin/disable-bacaan-soal/(:any)/(:any)'] = 'website/lembaga/Tes_online/disable_bacaan_soal/$1/$2';
 $route['admin/group-soal/(:any)'] = 'website/lembaga/Tes_online/group_soal/$1';
+$route['admin/add-group-soal/(:any)'] = 'website/lembaga/Tes_online/add_group_soal/$1';
+$route['admin/detail-group-soal/(:any)/(:any)'] = 'website/lembaga/Tes_online/detail_group_soal/$1/$2';
+$route['admin/edit-group-soal/(:any)/(:any)'] = 'website/lembaga/Tes_online/edit_group_soal/$1/$2';
+$route['admin/disable-group-soal/(:any)/(:any)'] = 'website/lembaga/Tes_online/disable_group_soal/$1/$2';
 /*
 |
 | START WEBSITE URL FOR LEMBAGA ONLY

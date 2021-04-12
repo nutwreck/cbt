@@ -168,6 +168,38 @@ class Tes_online_model extends CI_Model{
         return $this->db->get_where('bacaan_soal', array('id' => $bacaan_soal_id, 'is_enable' => 1))->row();
     }
 
+    public function get_group_soal($paket_soal_id){
+        return $this->db->select('*')
+                    ->order_by('id_group_soal DESC')
+                    ->get_where('v_group_soal', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->result();
+    }
+
+    public function get_group_soal_by_id($group_soal_id){
+        return $this->db->get_where('v_group_soal', array('id_group_soal' => $group_soal_id, 'is_enable' => 1))->row();
+    }
+
+    public function get_konversi_skor_enable(){
+        return $this->db->order_by('id ASC')->get_where('konversi_skor', array('is_enable' => 1))->result();
+    }
+
+    public function get_konversi_skor_selected($konversi_skor_id){
+        return $this->db->select('id, name')
+                    ->order_by('id ASC')
+                    ->get_where('konversi_skor', array('id !=' => $konversi_skor_id, 'is_enable' => 1))->result();
+    }
+
+    public function get_parent_group($paket_soal_id){
+        return $this->db->select('id, name')
+                    ->order_by('id DESC')
+                    ->get_where('group_soal', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->result();
+    }
+
+    public function get_parent_group_selected($paket_soal_id, $parent_id){
+        return $this->db->select('id, name')
+                    ->order_by('id DESC')
+                    ->get_where('group_soal', array('paket_soal_id' => $paket_soal_id, 'id !=' => $parent_id, 'is_enable' => 1))->result();
+    }
+
     public function save_soal($data){
         $this->db->trans_start();
         $query = $this->db->insert('bank_soal', $data);
@@ -285,6 +317,19 @@ class Tes_online_model extends CI_Model{
         $this->db->where('id', $bacaan_soal_id);
         $this->db->where('paket_soal_id', $paket_soal_id);
         $query = $this->db->update('bacaan_soal', $data);
+        if ($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return null;
+		} else{
+			$this->db->trans_commit();
+			return $query;
+		}
+    }
+
+    public function update_group_soal($data, $group_soal_id, $paket_soal_id){
+        $this->db->where('id', $group_soal_id);
+        $this->db->where('paket_soal_id', $paket_soal_id);
+        $query = $this->db->update('group_soal', $data);
         if ($this->db->trans_status() === FALSE){
 			$this->db->trans_rollback();
 			return null;
