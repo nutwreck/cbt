@@ -46,6 +46,14 @@
         }
 </script>
 
+<!-- Untuk menampilkan nama file saat upload excel soal -->
+<script>
+    if (document.getElementById('data_soal') != null) 
+        document.querySelector("#data_soal").onchange = function(){
+            document.querySelector("#file-name").textContent = this.files[0].name;
+        }
+</script>
+
 <!-- PEMILIHAN PERGANTIAN VIEW TIPE SOAL -->
 <script>
     function choosen_exam(){

@@ -73,7 +73,7 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="<?php echo base_url(); ?>admin/konversi"><i class="fa fa-home"></i>Lembaga<small class="text-danger">(Coming Soon)</small></a>
+                            <a href="<?php echo base_url(); ?>admin/konversi"><i class="fa fa-book"></i>Konversi Skor<small class="text-danger">(Coming)</small></a>
                         </li>
                         <li>
                             <a href="<?php echo base_url(); ?>admin/logout"><i class="zmdi zmdi-power"></i>Logout</a>

@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Tes_online extends CI_Controller {
 
     /**
@@ -723,8 +726,275 @@ class Tes_online extends CI_Controller {
         }
     }
 
-    public function import_soal(){
+    public function import_soal($id_paket_soal, $datas = NULL){
+        $name_config = 'TEMPLATE UPLOAD';
+        $detail_config = 'UPLOAD DATA SOAL';
+        //for passing data to view
+        $data['content']['id_paket_soal'] = $id_paket_soal;
+        $data['content']['file_template'] = $this->tes->get_pengaturan_universal_id($name_config, $detail_config);
+        if(!empty($datas)){
+            $data['content']['message'] = $datas;
+        } else {
+            $data['content']['message'] = ''; 
+        }
+        $data['title_header'] = ['title' => 'Upload Excel Soal'];
 
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/soal/css';
+        $view['content'] = 'website/lembaga/tes_online/soal/upload_excel';
+        $view['js_additional'] = 'website/lembaga/tes_online/soal/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_upload_add_soal(){
+        $id_paket_soal = $this->input->post('id_paket_soal');
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+
+        $group_mode_jwb = '';
+        $soal = '';
+        $jawaban = '';
+        $kata_kunci = '';
+        $tingkat_kesulitan = '';
+        $kode_group_soal = '';
+        $kode_group_bacaan = '';
+        $acak_soal = '';
+        $acak_jawaban = '';
+        $A = '';
+        $B = '';
+        $C = '';
+        $D = '';
+        $E = '';
+        $url_pembahasan = '';
+        $isi_pembahasan = '';
+        $data = [];
+
+        if($_FILES["data_soal"]["name"] != '') {
+            $allowed_extension = array('xls', 'xlsx');
+            $file_array = explode(".", $_FILES["data_soal"]["name"]);
+            $file_extension = end($file_array);
+
+            if(in_array($file_extension, $allowed_extension)) {
+                $file_name = time() . '.' . $file_extension;
+                move_uploaded_file($_FILES['data_soal']['tmp_name'], $file_name);
+                $file_type = \PhpOffice\PhpSpreadsheet\IOFactory::identify($file_name);
+                $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($file_type);
+
+                $spreadsheet = $reader->load($file_name);
+
+                unlink($file_name);
+
+                $data = $spreadsheet->getActiveSheet()->toArray();
+
+                $no_null = 0;
+                $no_upload = 0;
+                //Detail data untuk peserta dan user
+                foreach($data as $key => $row) {
+                    if($key > 0 && ($row[0] != '' && $row[1] != '')){ //Header tidak diikutkan di save
+                        //Cleaning whitespace
+                        $group_mode_jwb = strtoupper(trim($row[0]));
+                        $soal = trim($row[1]);
+                        $jawaban = strtoupper(trim($row[2]));
+                        $kata_kunci = trim($row[3]);
+                        $tingkat_kesulitan = trim($row[4]);
+                        $kode_group_soal = strtoupper(trim($row[5]));
+                        $kode_group_bacaan = strtoupper(trim($row[6]));
+                        $acak_soal = trim($row[7]);
+                        $acak_jawaban = trim($row[8]);
+                        $A = trim($row[9]);
+                        $B = trim($row[10]);
+                        $C = trim($row[11]);
+                        $D = trim($row[12]);
+                        $E = trim($row[13]);
+                        $url_pembahasan = trim($row[14]);
+                        $isi_pembahasan = trim($row[15]);
+
+                        //Insert data soal
+                        $soal = $this->insert_data_soal($paket_soal_id, $group_mode_jwb, $soal, $kata_kunci, $tingkat_kesulitan, $kode_group_soal, $kode_group_bacaan, $acak_soal, $acak_jawaban);
+
+                        //Insert data jawaban
+                        $jawaban = $this->insert_data_jawaban($soal, $group_mode_jwb, $A, $B, $C, $D, $E, $jawaban);
+
+                        //Insert data pembahasan
+                        $pembahasan = $this->insert_data_pembahasan($soal, $url_pembahasan, $isi_pembahasan);
+
+                        $no_upload++;
+                    } elseif($key > 0 && ($row[0] == '' && $row[1] == '')){
+                        $no_null++;
+                    }
+                }
+
+                if($no_null){
+                    $text = '<div class="alert alert-info">'.$no_upload.' Data berhasil disimpan, Tetapi Terdapat '.$no_null.' data upload yang gagal, periksa kembali jika ada soal yang masih kosong</div>';
+                    $this->import_soal($id_paket_soal, $text);
+                } else {
+                    $text = '<div class="alert alert-success">'.$no_upload.' Data berhasil disimpan</div>';
+                    $this->import_soal($id_paket_soal, $text);
+                }
+            } else {
+                $text = '<div class="alert alert-danger">Hanya tipe excel .xls dan .xlsx yang diijinkan</div>';
+                $this->import_soal($id_paket_soal, $text);
+            }
+        } else {
+            $text = '<div class="alert alert-danger">Tidak ada file yang diupload</div>';
+            $this->import_soal($id_paket_soal, $text);
+        }
+    }
+
+    public function insert_data_soal($paket_soal_id, $group_mode_jwb, $soal, $kata_kunci, $tingkat_kesulitan, $kode_group_soal, $kode_group_bacaan, $acak_soal, $acak_jawaban){
+        $data = [];
+
+        $data['paket_soal_id'] = $paket_soal_id;
+        
+        if($group_mode_jwb == 'PG'){
+            $data['group_mode_jwb_id'] = 1; //1 Pilihan Ganda //2 Essay
+        } else {
+            $data['group_mode_jwb_id'] = 2;
+        }
+
+        $get_total_soal = $this->tes->get_paket_soal_by_id($paket_soal_id);
+        $total_soal = $get_total_soal->total_soal;
+        $data['no_soal'] = $total_soal+1;
+
+        $data['name'] = $soal;
+        $data['kata_kunci'] = $kata_kunci;
+
+        if($tingkat_kesulitan == 0 || $tingkat_kesulitan == '' || $tingkat_kesulitan === NULL){
+            $data['tipe_kesulitan_id'] = 1;
+        } else {
+            $data['tipe_kesulitan_id'] = $tingkat_kesulitan;
+        }
+
+        if($kode_group_soal != 0 || $kode_group_soal != '' || $kode_group_soal !== NULL){
+            $check_kode_group = $this->tes->get_group_soal_by_kode($kode_group_soal, $paket_soal_id);
+            $data['group_soal_id'] = $check_kode_group->id_group_soal;
+        } else {
+            $data['group_soal_id'] = NULL;
+        }
+
+        if($kode_group_bacaan != 0 || $kode_group_bacaan != '' || $kode_group_bacaan !== NULL){
+            $check_kode_bacaan = $this->tes->get_bacaan_soal_by_kode($kode_group_bacaan, $paket_soal_id);
+            $data['bacaan_soal_id'] = $check_kode_bacaan->id;
+        } else {
+            $data['bacaan_soal_id'] = NULL;
+        }
+
+        $data['is_acak_soal'] = $acak_soal == '' ? 0 : $acak_soal;
+        $data['is_acak_jawaban'] = $acak_jawaban == '' ? 0 : $acak_jawaban;
+        $data['created_datetime'] = date('Y-m-d H:i:s');
+
+        $input = $this->tes->save_soal($data);
+
+        if($input){
+            return $input;
+        } else {
+            $this->session->set_flashdata('error', 'Data gagal disimpan! Kesalahan saat menyimpan soal. Ulangi kembali');
+            redirect('admin/import-soal/'.urlencode(base64_encode($paket_soal_id)));
+        }
+    }
+
+    public function insert_data_jawaban($soal, $group_mode_jwb, $A, $B, $C, $D, $E, $jawaban){
+        if($group_mode_jwb == 'PG'){
+            if($jawaban == 'A'){
+                $key = 1;
+            } elseif($jawaban == 'B'){
+                $key = 2;
+            } elseif($jawaban == 'C'){
+                $key = 3;
+            } elseif($jawaban == 'D'){
+                $key = 4;
+            } elseif($jawaban == 'E'){
+                $key = 5;
+            }
+
+            if($A != ''){
+                $data = [];
+                $order_a = 1;
+                $data = array(
+                    'bank_soal_id' => $soal,
+                    'order' => $order_a,
+                    'name' => $A,
+                    'score' => $order_a == $key ? 1 : 0,
+                    'is_key' => $order_a == $key ? 1 : 0,
+                    'created_datetime' => date('Y-m-d H:i:s')
+                );
+                $input = $this->tes->save_jawaban_single($data);
+            }
+            if($B != ''){
+                $data = [];
+                $order_b = 2;
+                $data = array(
+                    'bank_soal_id' => $soal,
+                    'order' => $order_b,
+                    'name' => $B,
+                    'score' => $order_b == $key ? 1 : 0,
+                    'is_key' => $order_b == $key ? 1 : 0,
+                    'created_datetime' => date('Y-m-d H:i:s')
+                );
+                $input = $this->tes->save_jawaban_single($data);
+            }
+            if($C != ''){
+                $data = [];
+                $order_c = 3;
+                $data = array(
+                    'bank_soal_id' => $soal,
+                    'order' => $order_c,
+                    'name' => $C,
+                    'score' => $order_c == $key ? 1 : 0,
+                    'is_key' => $order_c == $key ? 1 : 0,
+                    'created_datetime' => date('Y-m-d H:i:s')
+                );
+                $input = $this->tes->save_jawaban_single($data);
+            }
+            if($D != ''){
+                $data = [];
+                $order_d = 4;
+                $data = array(
+                    'bank_soal_id' => $soal,
+                    'order' => $order_d,
+                    'name' => $D,
+                    'score' => $order_d == $key ? 1 : 0,
+                    'is_key' => $order_d == $key ? 1 : 0,
+                    'created_datetime' => date('Y-m-d H:i:s')
+                );
+                $input = $this->tes->save_jawaban_single($data);
+            }
+            if($E != ''){
+                $data = [];
+                $order_e = 5;
+                $data = array(
+                    'bank_soal_id' => $soal,
+                    'order' => $order_e,
+                    'name' => $E,
+                    'score' => $order_e == $key ? 1 : 0,
+                    'is_key' => $order_e == $key ? 1 : 0,
+                    'created_datetime' => date('Y-m-d H:i:s')
+                );
+                $input = $this->tes->save_jawaban_single($data);
+            }
+
+            return true;
+        } else {
+            return true;
+        }
+    }
+
+    public function insert_data_pembahasan($soal, $url_pembahasan, $isi_pembahasan){
+        $data = [];
+
+        if($url_pembahasan != '' || $isi_pembahasan != '') {
+            $data['bank_soal_id'] = $soal;
+            $data['url'] = $url_pembahasan;
+            $data['pembahasan'] = $isi_pembahasan;
+            $data['created_datetime'] = date('Y-m-d H:i:s');
+
+            $save_pembahasan = $this->tes->save_pembahasan($data);
+
+            return true;
+        } else {
+            return true;
+        }
     }
 
     public function editor_soal(){ //upload image disoal
@@ -991,7 +1261,7 @@ class Tes_online extends CI_Controller {
         $id_paket_soal = $this->input->post('id_paket_soal');
         $data['paket_soal_id'] = base64_decode(urldecode($id_paket_soal));
         $data['name'] = $this->input->post('name', TRUE);
-        $data['kode_bacaan'] = $this->input->post('kode_bacaan', TRUE);
+        $data['kode_bacaan'] = strtoupper($this->input->post('kode_bacaan', TRUE));
         $data['bacaan'] = $this->input->post('bacaan');
         $data['created_datetime'] = date('Y-m-d H:i:s');
 
@@ -1113,7 +1383,7 @@ class Tes_online extends CI_Controller {
         $paket_soal_id = base64_decode(urldecode($paket_soal_id_crypt));
 
         $data['name'] = $this->input->post('name', TRUE);
-        $data['kode_bacaan'] = $this->input->post('kode_bacaan', TRUE);
+        $data['kode_bacaan'] = strtoupper($this->input->post('kode_bacaan', TRUE));
         $data['bacaan'] = $this->input->post('bacaan');
         $data['updated_datetime'] = date('Y-m-d H:i:s');
 
@@ -1243,7 +1513,7 @@ class Tes_online extends CI_Controller {
 
         $data['paket_soal_id']  = base64_decode(urldecode($paket_soal_id));
         $data['name']  = $this->input->post('name', TRUE);
-        $data['kode_group']  = $this->input->post('kode_group', TRUE);
+        $data['kode_group']  = strtoupper($this->input->post('kode_group', TRUE));
         $data['petunjuk']  = $this->input->post('petunjuk');
         $data['konversi_skor_id']  = $this->input->post('konversi_skor_id', TRUE);
         $data['parent_id']  = $this->input->post('parent_id', TRUE);
@@ -1314,7 +1584,7 @@ class Tes_online extends CI_Controller {
         $paket_soal_id  = base64_decode(urldecode($paket_soal_id_crypt));
 
         $data['name']  = $this->input->post('name', TRUE);
-        $data['kode_group']  = $this->input->post('kode_group', TRUE);
+        $data['kode_group']  = strtoupper($this->input->post('kode_group', TRUE));
         $data['petunjuk']  = $this->input->post('petunjuk');
         $data['konversi_skor_id']  = $this->input->post('konversi_skor_id', TRUE);
         $data['parent_id']  = $this->input->post('parent_id', TRUE);

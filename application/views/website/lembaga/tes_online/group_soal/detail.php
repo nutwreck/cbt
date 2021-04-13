@@ -48,10 +48,14 @@
                                 </div>
                                 <div class="col-sm-12 col-lg-9">
                                     <div class="form-group">
+                                    <?php if(!empty($group_soal->file)) { ?>
                                         <audio id="loop-limited" controls>
                                             <source src="<?=config_item('_dir_website')?>/lembaga/grandsbmptn/group_soal/group_<?=$group_soal->paket_soal_id?>/<?=$group_soal->file?>" type="<?=$group_soal->tipe_file?>">
                                             Browsermu tidak mendukung tag audio, upgrade donk!
                                         </audio>
+                                    <?php } else { ?>
+                                        <p>Tidak ada file audio</p>
+                                    <?php } ?>
                                     </div>
                                 </div>
                             </div>

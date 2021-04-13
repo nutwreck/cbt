@@ -28,7 +28,7 @@
                                     <tr>
                                         <th width="15px">No</th>
                                         <th>Judul</th>
-                                        <th>Kode Jawaban</th>
+                                        <th>Kode Bacaan</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>

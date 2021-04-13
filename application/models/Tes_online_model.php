@@ -115,6 +115,19 @@ class Tes_online_model extends CI_Model{
                     ->get_where('v_paket_soal', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->row();
     }
 
+    public function get_pengaturan_universal_id($name, $detail){
+        return $this->db->order_by('id, name, detail, param')
+                    ->get_where('pengaturan_universal', array('name' => $name, 'detail' => $detail, 'is_enable' => 1))->row();
+    }
+
+    public function get_group_soal_by_kode($kode_group, $paket_soal_id){
+        return $this->db->get_where('v_group_soal', array('kode_group' => $kode_group, 'paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->row();
+    }
+
+    public function get_bacaan_soal_by_kode($kode_bacaan, $paket_soal_id){
+        return $this->db->get_where('bacaan_soal', array('kode_bacaan' => $kode_bacaan, 'paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->row();
+    }
+
     public function get_all_soal_by_paketid($paket_soal_id){
        /*  $config_acakan_soal = $this->get_paket_soal_by_id($paket_soal_id);
         $order = $config_acakan_soal->is_acak_soal == 1 ? "CASE WHEN is_acak_soal = 1 THEN 1 ELSE 0 END, CASE WHEN is_acak_soal = 0 THEN id END, RAND()" : 'id ASC'; */
@@ -235,6 +248,18 @@ class Tes_online_model extends CI_Model{
     public function save_jawaban($datas){
         $this->db->trans_start();
         $query = $this->db->insert_batch('jawaban',$datas);
+        if ($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return null;
+		} else{
+			$this->db->trans_commit();
+			return $query;
+		}
+    }
+
+    public function save_jawaban_single($datas){
+        $this->db->trans_start();
+        $query = $this->db->insert('jawaban',$datas);
         if ($this->db->trans_status() === FALSE){
 			$this->db->trans_rollback();
 			return null;
