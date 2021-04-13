@@ -122,6 +122,11 @@ $route['admin/add-group-soal/(:any)'] = 'website/lembaga/Tes_online/add_group_so
 $route['admin/detail-group-soal/(:any)/(:any)'] = 'website/lembaga/Tes_online/detail_group_soal/$1/$2';
 $route['admin/edit-group-soal/(:any)/(:any)'] = 'website/lembaga/Tes_online/edit_group_soal/$1/$2';
 $route['admin/disable-group-soal/(:any)/(:any)'] = 'website/lembaga/Tes_online/disable_group_soal/$1/$2';
+$route['admin/konversi'] = 'website/lembaga/Konversi_skor/konversi';
+$route['admin/add-konversi'] = 'website/lembaga/Konversi_skor/add_konversi';
+$route['admin/disable-konversi-skor/(:any)'] = 'website/lembaga/Konversi_skor/disable_konversi_skor/$1';
+$route['admin/edit-konversi/(:any)'] = 'website/lembaga/Konversi_skor/edit_konversi/$1';
+$route['admin/detail-konversi/(:any)'] = 'website/lembaga/Konversi_skor/detail_konversi/$1';
 /*
 |
 | START WEBSITE URL FOR LEMBAGA ONLY
