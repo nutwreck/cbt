@@ -10,7 +10,7 @@
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
                         <li class="active">
-                            <a href="<?php echo base_url(); ?>admin/dashboard"><i class="fa fa-tachometer"></i>Dashboard<small class="text-danger">(Coming Soon)</small></a>
+                            <a href="<?php echo base_url(); ?>admin/dashboard"><i class="fa fa-tachometer"></i>Dashboard</a>
                         </li>
                         <li class="has-sub">
                             <a class="js-arrow" href="#"><i class="fa fa-book"></i>Tes Online</a>

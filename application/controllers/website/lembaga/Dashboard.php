@@ -9,6 +9,7 @@ class Dashboard extends CI_Controller {
             redirect('admin/login');
         }
         $this->load->model('General','general');
+        $this->load->model('Tes_online_model','tes');
     }
 
     /*
@@ -54,7 +55,8 @@ class Dashboard extends CI_Controller {
 
     public function index(){
         //for passing data to view
-        $data['content'] = [];
+        $data['content']['total_paket_soal'] = $this->tes->get_total_paket_soal();
+        $data['content']['total_peserta'] = $this->tes->get_total_peserta();
         $data['title_header'] = ['title' => 'Portal Lembaga'];
 
         //for load view

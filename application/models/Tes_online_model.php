@@ -232,6 +232,16 @@ class Tes_online_model extends CI_Model{
                     ->get_where('pembahasan', array('bank_soal_id' => $bank_soal_id, 'is_enable' => 1))->row();
     }
 
+    public function get_total_paket_soal(){
+        return $this->db->select('COUNT(paket_soal_id) AS total_paket_soal', FALSE)
+                        ->get('v_paket_soal', array('is_enable' => 1))->row();
+    }
+
+    public function get_total_peserta(){
+        return $this->db->select('COUNT(peserta_id) AS total_peserta', FALSE)
+                        ->get('v_peserta', array('is_enable' => 1))->row();
+    }
+
     public function save_soal($data){
         $this->db->trans_start();
         $query = $this->db->insert('bank_soal', $data);

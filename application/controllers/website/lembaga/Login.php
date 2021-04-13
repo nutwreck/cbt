@@ -28,8 +28,6 @@ class Login extends CI_Controller {
         $decode = $this->encryption->decrypt($data['login_admin'][0]['password']);
 
         if($data['login_admin'] && $decode == $data['password']){
-            $this->session->set_flashdata('success', 'Selamat Datang Administrator');
-            
             $newdata = array(
                     'user_id' => $data['login_admin'][0]['user_id'],
                     'is_login' => $data['login_admin'][0]['is_login'],
@@ -45,6 +43,8 @@ class Login extends CI_Controller {
 
             $this->session->set_userdata($newdata);
             session_start();
+
+            $this->session->set_flashdata('success', 'Selamat Datang '.$data['login_admin'][0]['lembaga_user_name']);
             
             /* //update is login
             $tbl = 'user';
