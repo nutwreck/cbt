@@ -580,7 +580,7 @@ class Tes_online extends CI_Controller {
 
             $opsi = config_item('_def_opsi_jawaban');
             foreach($jawaban as $key_jawaban => $val_jawaban) {
-                $is_key = $val_jawaban->is_key == 1 ? 'checked' : '';
+                $is_key = $val_jawaban->is_key == 1 ? 'checked' : 'disabled';
                 $jawaban_soal[] = '<div class="funkyradio-success">
                         <input type="radio" id="opsi_'.$opsi.'" name="opsi" value="'.$val_jawaban->order.'" '.$is_key.'> 
                         <label for="opsi_'.$opsi.'">
