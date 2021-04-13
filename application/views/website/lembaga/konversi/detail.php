@@ -14,7 +14,7 @@
                         <!-- DATA TABLE -->
                         <div class="table-data__tool">
                             <div class="table-data__tool-right">
-                                <button class="au-btn au-btn-icon au-btn--green au-btn--small" onclick="add_data()">
+                                <button class="au-btn au-btn-icon au-btn--green au-btn--small" onclick="add_data_detail()">
                                     <i class="zmdi zmdi-plus"></i>Tambah
                                 </button>
                             </div>
@@ -24,7 +24,8 @@
                                 <thead>
                                     <tr>
                                         <th width="15px">No.</th>
-                                        <th>Judul Konversi</th>                                   
+                                        <th>Skor Asal</th>    
+                                        <th>Skor Hasil Konversi</th>                               
                                         <th>Aksi</th>
                                         
                                     </tr>
@@ -36,7 +37,8 @@
                                 ?>
                                     <tr>
                                         <td><?=$no++?></td>
-                                        <td><?=$value->name?></td>
+                                        <td><?=$value->skor_asal?></td>
+                                        <td><?=$value->skor_konversi?></td>
                                         <td>
                                             <div class="btn-group">
                                                 <a href="<?=base_url()?>admin/edit-konversi/<?=urlencode(base64_encode($value->id))?>" class="btn btn-sm btn-primary mr-1 "><i class="fa fa-pencil"></i></a>

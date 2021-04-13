@@ -11,6 +11,7 @@ class Konversi_skor extends CI_Controller {
 	 */
 
     private $tbl_konversi = 'konversi_skor'; //SET TABEL KONVERSI
+    private $tbl_konversi_detail = 'detail_konversi_skor';
     private $tbl_user = 'user';
     public function __construct(){
         parent::__construct();
@@ -161,18 +162,41 @@ class Konversi_skor extends CI_Controller {
         $konversi_id = base64_decode(urldecode($id));
 
         //for passing data to view
-        $data['content']['konversi_data'] = $this->konversi->get_konversi_id($konversi_id);
+        $data['content']['konversi_data'] = $this->konversi->get_konversi_detail_id($konversi_id);
         $data['title_header'] = ['title' => 'Detail Konversi'];
 
         //for load view
         $view['css_additional'] = 'website/lembaga/konversi/css';
-        $view['content'] = 'website/lembaga/konversi/edit';
+        $view['content'] = 'website/lembaga/konversi/detail';
         $view['js_additional'] = 'website/lembaga/konversi/js';
 
         //get function view website
         $this->_generate_view($view, $data);
     }
+    public function add_detail_konversi(){
+        //for passing data to view
+       $data['content'] = [];
+      
+        $data['title_header'] = ['title' => 'Tambah Konversi Detail'];
+        //for load view
+        $view['css_additional'] = 'website/lembaga/konversi/css';
+        $view['content'] = 'website/lembaga/konversi/adddetail';
+        $view['js_additional'] = 'website/lembaga/konversi/js';
 
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+    public function submit_add_detail_konversi(){
+        $data['skor_asal'] = ucwords($this->input->post('materi', TRUE));
+        $data['skor_konversi'] = date('Y-m-d H:i:s');
+        $tbl = $this->tbl_konversi_detail;
+        $input = $this->general->input_data($tbl, $data);
+
+        $urly = 'admin/detail-konversi';
+        $urlx = 'admin/add-detail-konversi';
+        $this->input_end($input, $urly, $urlx);
+    }
+    
     private function update_end($update, $urly, $urlx){
         if(!empty($update)){
             $this->session->set_flashdata('success', 'Data berhasil diedit');

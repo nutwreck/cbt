@@ -127,6 +127,7 @@ $route['admin/add-konversi'] = 'website/lembaga/Konversi_skor/add_konversi';
 $route['admin/disable-konversi-skor/(:any)'] = 'website/lembaga/Konversi_skor/disable_konversi_skor/$1';
 $route['admin/edit-konversi/(:any)'] = 'website/lembaga/Konversi_skor/edit_konversi/$1';
 $route['admin/detail-konversi/(:any)'] = 'website/lembaga/Konversi_skor/detail_konversi/$1';
+$route['admin/add-detail-konversi'] = 'website/lembaga/Konversi_skor/add_detail_konversi';
 /*
 |
 | START WEBSITE URL FOR LEMBAGA ONLY
