@@ -544,6 +544,13 @@ class Tes_online extends CI_Controller {
             $acak_jwb_badge = $soal->is_acak_jawaban == 1 ? 'badge-success' : 'badge-danger';
             $acak_jwb_icon = $soal->is_acak_jawaban == 1 ? 'fa-check' : 'fa-close';
             $cek_group_mode_jwb = $soal->group_mode_jwb_id == 1 ? '' : 'style="display:none;"'; //1 Pilihan ganda 2 essay
+            $bacaan_soal = $soal->isi_bacaan_soal <> 0 || !empty($soal->isi_bacaan_soal) ? $soal->isi_bacaan_soal.'<br />' : ''; // bacaan soal
+            $bacaan_soal_name = $soal->bacaan_soal_name <> 0 || !empty($soal->bacaan_soal_name) ? '<b>'.$soal->bacaan_soal_name.'</b><br />' : ''; // bacaan soal judul
+            $group_soal = $soal->group_soal_name <> 0 || !empty($soal->group_soal_name) ? '<div class="col-12 text-left"><span class="badge badge-success">Group Soal '.$soal->group_soal_name.'</span></div>' : '';
+            $group_soal_petunjuk = $soal->group_soal_petunjuk <> 0 || !empty($soal->group_soal_petunjuk) ? $soal->group_soal_petunjuk.'<br />' : '';
+            $group_soal_audio = $soal->group_soal_audio <> 0 || !empty($soal->group_soal_audio) ? '<audio id="loop-limited" controls><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/group_soal/group_'.$soal->paket_soal_id.'/'.$soal->group_soal_audio.'" type="'.$soal->group_soal_tipe_audio.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br />' : '';
+            $soal_audio = $soal->file <> 0 || !empty($soal->file) ? '<audio id="loop-limited" controls><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/paket_soal/soal_'.$soal->paket_soal_id.'/'.$soal->file.'" type="'.$soal->tipe_file.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br />' : '';
+            $pembahasan = $soal->url_pembahasan <> '' || !empty($soal->url_pembahasan) || $soal->pembahasan <> '' || !empty($soal->pembahasan) ? '' : 'style="display:none;"';
 
             $header_soal = '
             <div class="row">
@@ -557,15 +564,19 @@ class Tes_online extends CI_Controller {
                         <span '.$cek_group_mode_jwb.' class="badge '.$acak_jwb_badge.'">
                             <i class="fa '.$acak_jwb_icon.'" aria-hidden="true"></i> Acak Jawaban
                         </span>
+                        <span '.$pembahasan.' class="badge badge-success">
+                            <i class="fa fa-check" aria-hidden="true"></i> Ada Pembahasan
+                        </span>
                     </h5>
                 </div>
                 <div class="col-4 text-right">
-                        <a href="'.base_url().'lembaga/edit-soal/'.$paket_soal_id.'/'.$bank_soal_id_crypt.'/'.$nomor_soal.'" class="btn btn-sm btn-success" title="Edit Soal"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                        <a href="'.base_url().'lembaga/disable-soal/'.$paket_soal_id.'/'.$bank_soal_id_crypt.'/'.$nomor_soal.'" class="btn btn-sm btn-danger" title="Hapus Soal" onclick="return confirm('."'Apakah kamu yakin menghapus soal no $nomor_soal ? Setelah soal ini dihapus otomatis sistem akan mengurutkan urutan soal kembali'".')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                        <a href="'.base_url().'admin/edit-soal/'.$paket_soal_id.'/'.$bank_soal_id_crypt.'/'.$nomor_soal.'" class="btn btn-sm btn-success" title="Edit Soal"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                        <a href="'.base_url().'admin/disable-soal/'.$paket_soal_id.'/'.$bank_soal_id_crypt.'/'.$nomor_soal.'" class="btn btn-sm btn-danger" title="Hapus Soal" onclick="return confirm('."'Apakah kamu yakin menghapus soal no $nomor_soal ? Setelah soal ini dihapus otomatis sistem akan mengurutkan urutan soal kembali'".')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                 </div>
+                '.$group_soal.'
             </div>';
 
-            $content_soal = '<div class="card-text text-justify">'.$soal->bank_soal_name.'</div>';
+            $content_soal = '<div class="card-text text-justify">'.$group_soal_petunjuk.$group_soal_audio.$bacaan_soal_name.$bacaan_soal.$soal_audio.$soal->bank_soal_name.'</div>';
 
             $opsi = config_item('_def_opsi_jawaban');
             foreach($jawaban as $key_jawaban => $val_jawaban) {
@@ -601,6 +612,8 @@ class Tes_online extends CI_Controller {
         $data['content']['total_soal'] = intval($total_soal->total_soal);
         $data['content']['jenis_soal'] = $this->tes->get_jenis_soal_enable();
         $data['content']['tipe_kesulitan'] = $this->tes->get_tipe_kesulitan_enable();
+        $data['content']['group_soal'] = $this->tes->get_group_soal($paket_soal_id);
+        $data['content']['bacaan_soal'] = $this->tes->get_bacaan_soal($paket_soal_id);
         $data['title_header'] = ['title' => 'Tambah Soal'];
 
         //for load view
@@ -613,6 +626,10 @@ class Tes_online extends CI_Controller {
     }
 
     public function submit_add_soal(){
+        $data = [];
+        $datas = [];
+        $pembahasan = [];
+
         $paket_soal_id = $this->input->post('id_paket_soal'); //EncryptIdPaketSoal
         $type_exam = $this->input->post('jenis_soal', TRUE);
         //SAVE SOAL
@@ -624,6 +641,8 @@ class Tes_online extends CI_Controller {
         $data['tipe_kesulitan_id']  = $this->input->post('tipe_kesulitan', TRUE);
         $data['is_acak_soal']  = $this->input->post('acak_soal', TRUE);
         $data['is_acak_jawaban']  = $this->input->post('acak_jawaban', TRUE);
+        $data['group_soal_id']  = $this->input->post('group_soal_id', TRUE);
+        $data['bacaan_soal_id']  = $this->input->post('bacaan_soal_id', TRUE);
         $data['file']  = $this->input->post('soal_audio', TRUE);
         $data['created_datetime']  = date('Y-m-d H:i:s');
 
@@ -677,10 +696,24 @@ class Tes_online extends CI_Controller {
 
                 $save_jawaban = $this->tes->save_jawaban($datas);
 
+                $pembahasan['bank_soal_id'] = $save_soal;
+                $pembahasan['url'] = $this->input->post('url');
+                $pembahasan['pembahasan'] = $this->input->post('pembahasan');
+                $pembahasan['created_datetime'] = date('Y-m-d H:i:s');
+
+                $save_pembahasan = $this->tes->save_pembahasan($pembahasan);
+
                 $urly = 'admin/list-soal/'.$paket_soal_id;
                 $urlx = 'admin/add-soal/'.$paket_soal_id;
                 $this->input_end($save_jawaban, $urly, $urlx);
             } else { //tipe essay tidak perlu jawaban
+                $pembahasan['bank_soal_id'] = $save_soal;
+                $pembahasan['url'] = $this->input->post('url');
+                $pembahasan['pembahasan'] = $this->input->post('pembahasan');
+                $pembahasan['created_datetime'] = date('Y-m-d H:i:s');
+
+                $save_pembahasan = $this->tes->save_pembahasan($pembahasan);
+
                 $this->session->set_flashdata('success', 'Data berhasil ditambahkan');
 		        redirect('admin/list-soal/'.$paket_soal_id);
             }
@@ -688,6 +721,10 @@ class Tes_online extends CI_Controller {
             $this->session->set_flashdata('error', 'Data gagal disimpan! Ulangi kembali');
 		    redirect('admin/add-soal/'.$paket_soal_id);
         }
+    }
+
+    public function import_soal(){
+
     }
 
     public function editor_soal(){ //upload image disoal
@@ -774,6 +811,9 @@ class Tes_online extends CI_Controller {
         $data['content']['jawaban_detail'] = $jawaban_detail;
         $data['content']['jenis_soal'] = $this->tes->get_jenis_soal_selected($soal_detail->group_mode_jwb_id);
         $data['content']['tipe_kesulitan'] = $this->tes->get_tipe_kesulitan_selected($soal_detail->tipe_kesulitan_id);
+        $data['content']['group_soal'] = $this->tes->get_group_soal_selected($paket_soal_id, $soal_detail->group_soal_id);
+        $data['content']['bacaan_soal'] = $this->tes->get_bacaan_soal_selected($paket_soal_id, $soal_detail->bacaan_soal_id);
+        $data['content']['pembahasan'] = $this->tes->get_pembahasan($bank_soal_id);
         $data['title_header'] = ['title' => 'Edit Soal'];
 
         //for load view
@@ -800,6 +840,8 @@ class Tes_online extends CI_Controller {
         $data['tipe_kesulitan_id']  = $this->input->post('tipe_kesulitan', TRUE);
         $data['is_acak_soal']  = $this->input->post('acak_soal', TRUE);
         $data['is_acak_jawaban']  = $this->input->post('acak_jawaban', TRUE);
+        $data['group_soal_id']  = $this->input->post('group_soal_id', TRUE);
+        $data['bacaan_soal_id']  = $this->input->post('bacaan_soal_id', TRUE);
         $data['file']  = $this->input->post('soal_audio', TRUE);
         $old_name_audio = $this->input->post('old_name_audio');
             if($old_name_audio == NULL || $old_name_audio == ''){
@@ -1325,7 +1367,7 @@ class Tes_online extends CI_Controller {
 
         $urly = 'admin/group-soal/'.$paket_soal_id_crypt;
         $urlx = 'admin/edit-group-soal/'.$group_soal_id_crypt.'/'.$paket_soal_id_crypt;
-        $this->input_end($update, $urly, $urlx);
+        $this->update_end($update, $urly, $urlx);
     }
 
     public function detail_group_soal($id_group_soal, $id_paket_soal){

@@ -12,6 +12,7 @@
                         <p id="paket_soal_id" style="display:none;"><?=$id_paket_soal?></p>
                         <p id="bank_soal_first_id" style="display:none;"><?=!empty($soal_first_list) ? $soal_first_list : ''?></p>
                         <a href="<?=base_url()?>admin/add-soal/<?=$id_paket_soal?>" class="btn btn-sm btn-primary m-1">Tambah Soal</a>
+                        <a href="<?=base_url()?>admin/import-soal/<?=$id_paket_soal?>" class="btn btn-sm btn-success m-1">Import Soal</a>
                         <a href="<?=base_url()?>admin/drop-all/<?=$id_paket_soal?>" class="btn btn-sm btn-danger m-1" onclick="return confirm('Apakah anda yakin menghapus semua soal dalam paket ini?')">Kosongkan</a>
                         <button class="btn btn-sm btn-outline-secondary m-1" onclick="return toggle_soal()">Toogle Soal</button>
                     </div>

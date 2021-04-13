@@ -32,7 +32,7 @@
                                     </div>
                                     <div class="col-sm-12 col-lg-9">
                                         <div class="form-group">
-                                            <select id="pilihan_jenis_soal" class="form-control selectpicker" data-live-search="true" data-width="auto" name="jenis_soal" required>
+                                            <select id="pilihan_jenis_soal" class="form-control selectpicker" data-live-search="true" data-width="auto" name="jenis_soal" required disabled>
                                                 <option value="<?=$soal_detail->group_mode_jwb_id?>" selected><?=$soal_detail->group_mode_jwb_name?></option>
                                                 <?php foreach($jenis_soal as $val_jenis_soal){ ?>
                                                     <option data-tokens="<?=$val_jenis_soal->name?>" value="<?=$val_jenis_soal->id?>"><?=$val_jenis_soal->name?></option>
@@ -88,11 +88,45 @@
                                                 <input type="hidden" id="old_name_audio" name="old_name_audio" value="<?=$soal_detail->file?>" style="display: none">
                                                 <input type="hidden" id="old_type_audio" name="old_type_audio" value="<?=$soal_detail->tipe_file?>" style="display: none">
                                                 <input type="file" class="custom-file-input" id="soal_audio" name="soal_audio">
-                                                <label id="file-name" class="custom-file-label" for="soal_audio">Pilih Audio</label>
+                                                <label id="file-name" class="custom-file-label" for="soal_audio"><?=!empty($soal_detail->file) ? $soal_detail->file : 'Pilih Audio'?></label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <?php if(!empty($soal_detail->group_soal_id)){ ?>
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-3" style="margin-top:1%">
+                                        <h5 class="label-text">Group Soal</h5>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-9">
+                                        <div class="form-group">
+                                            <select class="form-control selectpicker" data-live-search="true" data-width="auto" name="group_soal_id">
+                                            <option value="<?=$soal_detail->group_soal_id?>" selected><?php if($soal_detail->group_soal_id == 0 || empty($soal_detail->group_soal_id)){ echo 'Pilih'; } else { echo $soal_detail->group_soal_name; }?></option>
+                                                <?php foreach($group_soal as $val_group){ ?>
+                                                    <option data-tokens="<?=$val_group->name_group_soal?>" value="<?=$val_group->id_group_soal?>"><?=$val_group->name_group_soal?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php } ?>
+                                <?php if(!empty($soal_detail->bacaan_soal_id)){ ?>
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-3" style="margin-top:1%">
+                                        <h5 class="label-text">Bacaan Soal</h5>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-9">
+                                        <div class="form-group">
+                                            <select class="form-control selectpicker" data-live-search="true" data-width="auto" name="bacaan_soal_id">
+                                                <option value="<?=$soal_detail->bacaan_soal_id?>" selected><?php if($soal_detail->bacaan_soal_id == 0 || empty($soal_detail->bacaan_soal_id)){ echo 'Pilih'; } else { echo $soal_detail->bacaan_soal_name; }?></option>
+                                                <?php foreach($bacaan_soal as $val_bacaan){ ?>
+                                                    <option data-tokens="<?=$val_bacaan->name?>" value="<?=$val_bacaan->id?>"><?=$val_bacaan->name?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php } ?>
                                 <div class="row">
                                     <div class="col-sm-12 col-lg-3" style="margin-top:0.3%">
                                         <h5 class="label-text">Acak Soal</h5>
@@ -124,7 +158,7 @@
                                     </div>
                                 </div>
                                 <hr />
-                                <div id="content_jawaban" class="row" style="display:block;">
+                                <div id="content_jawaban" class="row" style="<?=$soal_detail->group_mode_jwb_id == 2 ? 'display:none;' : 'display:block;'?>">
                                     <div class="col-sm-12">
                                     <table class="table table-bordered table-responsive">
                                         <thead class="table-primary text-center">
@@ -161,6 +195,32 @@
                                         <?php $key++; } ?>
                                         </tbody>
                                     </table>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row mb-3">
+                                    <div class="col-sm-12 text-left">
+                                        <h4>Tambahan Pembahasan</h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-3" style="margin-top:1%">
+                                        <h5 class="label-text">URL Video</h5>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-9">
+                                        <div class="form-group">
+                                            <input id="url" name="url" type="text" class="form-control" aria-required="true" aria-invalid="false" value="<?=!empty($pembahasan->url) ? $pembahasan->url : ''?>" placeholder="Ex : https://www.youtube.com/watch?v=VpCh53Fierg)">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-sm-12 col-lg-3" style="margin-top:1%">
+                                        <h5 class="label-text">Pembahasan</h5>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-9">
+                                        <div class="form-group">
+                                            <textarea class="summernote note-math-dialog" id="summernote" name="pembahasan" rows='10'><?=!empty($pembahasan->pembahasan) ? $pembahasan->pembahasan : ''?></textarea>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row mt-3">

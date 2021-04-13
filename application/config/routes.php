@@ -90,6 +90,7 @@ $route['admin/disable-paket-soal/(:any)'] = 'website/lembaga/Tes_online/disable_
 $route['admin/active-paket-soal/(:any)'] = 'website/lembaga/Tes_online/active_paket_data/$1';
 $route['admin/list-soal/(:any)'] = 'website/lembaga/Tes_online/list_soal/$1';
 $route['admin/add-soal/(:any)'] = 'website/lembaga/Tes_online/add_soal/$1';
+$route['admin/import-soal/(:any)'] = 'website/lembaga/Tes_online/import_soal/$1';
 $route['admin/edit-soal/(:any)/(:any)/(:num)'] = 'website/lembaga/Tes_online/edit_soal/$1/$2/$3';
 $route['admin/disable-soal/(:any)/(:any)/(:num)'] = 'website/lembaga/Tes_online/disable_soal/$1/$2/$3';
 $route['admin/drop-all/(:any)'] = 'website/lembaga/Tes_online/disable_all_soal/$1';

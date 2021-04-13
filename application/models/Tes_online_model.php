@@ -126,7 +126,9 @@ class Tes_online_model extends CI_Model{
     public function get_soal_by_id($paket_soal_id, $bank_soal_id){
         return $this->db->select('bank_soal_id, paket_soal_id, group_mode_jwb_id, group_mode_jwb_name, is_acak_soal, acak_soal
                                 , is_acak_jawaban, acak_jawaban, no_soal, bank_soal_name, kata_kunci, tipe_kesulitan_id
-                                , tipe_kesulitan_name, file, tipe_file')
+                                , tipe_kesulitan_name, file, tipe_file, group_soal_id, bacaan_soal_id, isi_bacaan_soal, 
+                                group_soal_name, group_soal_petunjuk, bacaan_soal_name, group_soal_audio, group_soal_tipe_audio
+                                , url_pembahasan, pembahasan')
                     ->get_where('v_bank_soal', array('paket_soal_id' => $paket_soal_id, 'bank_soal_id' => $bank_soal_id, 'is_enable' => 1))->row();
     }
 
@@ -164,6 +166,12 @@ class Tes_online_model extends CI_Model{
                     ->get_where('bacaan_soal', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->result();
     }
 
+    public function get_bacaan_soal_selected($paket_soal_id, $bacaan_soal_id){
+        return $this->db->select('*')
+                    ->order_by('id DESC')
+                    ->get_where('bacaan_soal', array('paket_soal_id' => $paket_soal_id, 'id !=' => $bacaan_soal_id, 'is_enable' => 1))->result();
+    }
+
     public function get_bacaan_soal_by_id($bacaan_soal_id){
         return $this->db->get_where('bacaan_soal', array('id' => $bacaan_soal_id, 'is_enable' => 1))->row();
     }
@@ -172,6 +180,12 @@ class Tes_online_model extends CI_Model{
         return $this->db->select('*')
                     ->order_by('id_group_soal DESC')
                     ->get_where('v_group_soal', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->result();
+    }
+
+    public function get_group_soal_selected($paket_soal_id, $group_soal_id){
+        return $this->db->select('*')
+                    ->order_by('id_group_soal DESC')
+                    ->get_where('v_group_soal', array('paket_soal_id' => $paket_soal_id, 'id_group_soal !=' => $group_soal_id, 'is_enable' => 1))->result();
     }
 
     public function get_group_soal_by_id($group_soal_id){
@@ -200,6 +214,11 @@ class Tes_online_model extends CI_Model{
                     ->get_where('group_soal', array('paket_soal_id' => $paket_soal_id, 'id !=' => $parent_id, 'is_enable' => 1))->result();
     }
 
+    public function get_pembahasan($bank_soal_id){
+        return $this->db->select('id, url, pembahasan')
+                    ->get_where('pembahasan', array('bank_soal_id' => $bank_soal_id, 'is_enable' => 1))->row();
+    }
+
     public function save_soal($data){
         $this->db->trans_start();
         $query = $this->db->insert('bank_soal', $data);
@@ -216,6 +235,18 @@ class Tes_online_model extends CI_Model{
     public function save_jawaban($datas){
         $this->db->trans_start();
         $query = $this->db->insert_batch('jawaban',$datas);
+        if ($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return null;
+		} else{
+			$this->db->trans_commit();
+			return $query;
+		}
+    }
+
+    public function save_pembahasan($pembahasan){
+        $this->db->trans_start();
+        $query = $this->db->insert('pembahasan',$pembahasan);
         if ($this->db->trans_status() === FALSE){
 			$this->db->trans_rollback();
 			return null;

@@ -32,7 +32,6 @@
                                     <div class="col-sm-12 col-lg-9">
                                         <div class="form-group">
                                             <select id="pilihan_jenis_soal" class="form-control selectpicker" data-live-search="true" data-width="auto" name="jenis_soal" required onchange="choosen_exam()">
-                                                <option value = "-1" selected>Pilih</option>
                                                 <?php foreach($jenis_soal as $val_jenis_soal){ ?>
                                                     <option data-tokens="<?=$val_jenis_soal->name?>" value="<?=$val_jenis_soal->id?>"><?=$val_jenis_soal->name?></option>
                                                 <?php } ?>
@@ -90,6 +89,40 @@
                                         </div>
                                     </div>
                                 </div>
+                                <?php if(!empty($group_soal)){ ?>
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-3" style="margin-top:1%">
+                                        <h5 class="label-text">Group Soal</h5>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-9">
+                                        <div class="form-group">
+                                            <select class="form-control selectpicker" data-live-search="true" data-width="auto" name="group_soal_id">
+                                                <option value="0" selected>Pilih</option>
+                                                <?php foreach($group_soal as $val_group){ ?>
+                                                    <option data-tokens="<?=$val_group->name_group_soal?>" value="<?=$val_group->id_group_soal?>"><?=$val_group->name_group_soal?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php } ?>
+                                <?php if(!empty($bacaan_soal)){ ?>
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-3" style="margin-top:1%">
+                                        <h5 class="label-text">Bacaan Soal</h5>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-9">
+                                        <div class="form-group">
+                                            <select class="form-control selectpicker" data-live-search="true" data-width="auto" name="bacaan_soal_id">
+                                                <option value="0" selected>Pilih</option>
+                                                <?php foreach($bacaan_soal as $val_bacaan){ ?>
+                                                    <option data-tokens="<?=$val_bacaan->name?>" value="<?=$val_bacaan->id?>"><?=$val_bacaan->name?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php } ?>
                                 <div class="row">
                                     <div class="col-sm-12 col-lg-3" style="margin-top:0.3%">
                                         <h5 class="label-text">Acak Soal</h5>
@@ -123,39 +156,65 @@
                                 <hr />
                                 <div id="content_jawaban" class="row" style="display:block;">
                                     <div class="col-sm-12">
-                                    <table class="table table-bordered table-responsive">
-                                        <thead class="table-primary text-center">
-                                            <th>Opsi</th>
-                                            <th>Pilih Jawaban</th>
-                                            <th>Jawaban</th>
-                                            <th width="7%">Skor</th>
-                                        </thead>
-                                        <tbody>
-                                        <?php
-                                            $alpha = config_item('_def_opsi_jawaban');
-                                            for ($x = 1; $x <= $count_pilihan_ganda; $x++) {
-                                        ?>
-                                            <tr>
-                                                <td class="text-center font-weight-bold"><?=$alpha++?></td>
-                                                <td class="text-center">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input position-static" type="radio" name="tanda_jawaban" value="<?=$x?>" id="blankRadio<?=$x?>">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-group">
-                                                        <textarea class="summernote note-math-dialog" id="summernote<?=$x?>" name="jawaban[]" rows='10'></textarea>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center">
-                                                    <div class="form-group">
-                                                        <input id="skor_jawaban<?=$x?>" name="skor_jawaban[]" type="text" class="form-control" aria-required="true" aria-invalid="false" value="0" required>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        <?php } ?>
-                                        </tbody>
-                                    </table>
+                                        <table class="table table-bordered table-responsive">
+                                            <thead class="table-primary text-center">
+                                                <th>Opsi</th>
+                                                <th>Pilih Jawaban</th>
+                                                <th>Jawaban</th>
+                                                <th width="7%">Skor</th>
+                                            </thead>
+                                            <tbody>
+                                            <?php
+                                                $alpha = config_item('_def_opsi_jawaban');
+                                                for ($x = 1; $x <= $count_pilihan_ganda; $x++) {
+                                            ?>
+                                                <tr>
+                                                    <td class="text-center font-weight-bold"><?=$alpha++?></td>
+                                                    <td class="text-center">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input position-static" type="radio" name="tanda_jawaban" value="<?=$x?>" id="blankRadio<?=$x?>">
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <textarea class="summernote note-math-dialog" id="summernote<?=$x?>" name="jawaban[]" rows='10'></textarea>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <div class="form-group">
+                                                            <input id="skor_jawaban<?=$x?>" name="skor_jawaban[]" type="text" class="form-control" aria-required="true" aria-invalid="false" value="0" required>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row mb-3">
+                                    <div class="col-sm-12 text-left">
+                                        <h4>Tambahan Pembahasan</h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-3" style="margin-top:1%">
+                                        <h5 class="label-text">URL Video</h5>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-9">
+                                        <div class="form-group">
+                                            <input id="url" name="url" type="text" class="form-control" aria-required="true" aria-invalid="false" placeholder="Ex : https://www.youtube.com/watch?v=VpCh53Fierg)">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-sm-12 col-lg-3" style="margin-top:1%">
+                                        <h5 class="label-text">Pembahasan</h5>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-9">
+                                        <div class="form-group">
+                                            <textarea class="summernote note-math-dialog" id="summernote" name="pembahasan" rows='10'></textarea>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row mt-3">
