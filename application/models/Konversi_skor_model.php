@@ -12,11 +12,13 @@ class Konversi_skor_model extends CI_Model{
         return $this->db->select('id,name,created_by,created_datetime,updated_by,updated_datetime')
                     ->get_where('konversi_skor', array('is_enable' => 1))->result();
     }
-    //////////
-
 
     public function get_konversi_id($id){
         return $this->db->get_where('konversi_skor', array('id' => $id, 'is_enable' => 1))->result();
+
+    }
+    public function get_konversi_detail_id($id){
+        return $this->db->get_where('detail_konversi_skor', array('konversi_skor_id' => $id, 'is_enable' => 1))->result();
 
     }
     public function get_materi_enable(){

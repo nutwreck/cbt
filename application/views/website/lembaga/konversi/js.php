@@ -11,6 +11,9 @@
     function add_data() {
         window.location.href = "<?php echo base_url(); ?>admin/add-konversi";
     }
+    function add_data_detail() {
+        window.location.href = "<?php echo base_url(); ?>admin/add-detail-konversi";
+    }
 </script>
 
 <!-- Info Close -->
