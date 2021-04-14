@@ -17,4 +17,27 @@ class Management_model extends CI_Model{
         return $this->db->order_by('id ASC')
                     ->get_where('lembaga_type', array('is_enable' => 1))->result();
     }
+
+    public function get_konversi(){
+        return $this->db->order_by('id DESC')
+                    ->get_where('konversi_skor', array('is_enable' => 1))->result();
+    }
+
+    public function get_konversi_by_id($konversi_skor){
+        return $this->db->get_where('konversi_skor', array('id' => $konversi_skor, 'is_enable' => 1))->row();
+    }
+
+    public function get_detail_konversi_by_konversi($konversi_skor){
+        return $this->db->order_by('id ASC')
+            ->get_where('detail_konversi_skor', array('konversi_skor_id' => $konversi_skor, 'is_enable' => 1))->result();
+    }
+
+    public function get_detail_konversi_by_id($detail_konversi_id){
+        return $this->db->get_where('detail_konversi_skor', array('id' => $detail_konversi_id, 'is_enable' => 1))->row();
+    }
+
+    public function get_pengaturan_universal_id($name, $detail){
+        return $this->db->order_by('id, name, detail, param')
+                    ->get_where('pengaturan_universal', array('name' => $name, 'detail' => $detail, 'is_enable' => 1))->row();
+    }
 }

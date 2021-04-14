@@ -59,6 +59,9 @@
                                     <a href="<?php echo base_url(); ?>admin/data-lembaga">Data Lembaga</a>
                                 </li>
                                 <li>
+                                    <a href="<?php echo base_url(); ?>admin/konversi-skor">Konversi Skor</a>
+                                </li>
+                                <li>
                                     <a href="<?php echo base_url(); ?>admin/invoice">All Invoice</a>
                                 </li>
                                 <li>
@@ -71,9 +74,6 @@
                                     <a href="<?php echo base_url(); ?>admin/success-payment">Pembayaran Sukses</a>
                                 </li>
                             </ul>
-                        </li>
-                        <li>
-                            <a href="<?php echo base_url(); ?>admin/konversi"><i class="fa fa-book"></i>Konversi Skor<small class="text-danger">(Coming)</small></a>
                         </li>
                         <li>
                             <a href="<?php echo base_url(); ?>admin/logout"><i class="zmdi zmdi-power"></i>Logout</a>

@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Management extends CI_Controller {
     /**
 	 * Author : Candra Aji Pamungkas
@@ -10,6 +13,8 @@ class Management extends CI_Controller {
 	 */
 
     private $tbl_lembaga = 'lembaga';
+    private $tbl_konversi_skor = 'konversi_skor';
+    private $tbl_detail_konversi_skor = 'detail_konversi_skor';
 
     public function __construct(){
         parent::__construct();
@@ -146,6 +151,274 @@ class Management extends CI_Controller {
         $urly = 'admin/data-lembaga';
         $urlx = 'admin/data-lembaga';
         $this->update_end($update, $urly, $urlx);
+    }
+
+    public function konversi(){
+        //for passing data to view
+        $data['content']['konversi'] = $this->management->get_konversi();
+        $data['title_header'] = ['title' => 'Konversi Skor'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/konversi_skor/css';
+        $view['content'] = 'website/lembaga/management/konversi_skor/content';
+        $view['js_additional'] = 'website/lembaga/management/konversi_skor/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function add_konversi(){
+        //for passing data to view
+        $data['content'] = [];
+        $data['title_header'] = ['title' => 'Add Konversi Skor'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/konversi_skor/css';
+        $view['content'] = 'website/lembaga/management/konversi_skor/add';
+        $view['js_additional'] = 'website/lembaga/management/konversi_skor/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_add_konversi(){
+        $data['name'] = $this->input->post('name');
+        $data['created_datetime'] = date('Y-m-d H:i:s');
+
+        $tbl = $this->tbl_konversi_skor;
+        $input = $this->general->input_data($tbl, $data);
+
+        $urly = 'admin/konversi-skor';
+        $urlx = 'admin/add-konversi-skor';
+        $this->input_end($input, $urly, $urlx);
+    }
+
+    public function edit_konversi($id_konversi){
+        $konversi_id = base64_decode(urldecode($id_konversi));
+        //for passing data to view
+        $data['content']['konversi'] = $this->management->get_konversi_by_id($konversi_id);
+        $data['content']['id_konversi'] = $id_konversi;
+        $data['title_header'] = ['title' => 'Edit Konversi Skor'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/konversi_skor/css';
+        $view['content'] = 'website/lembaga/management/konversi_skor/edit';
+        $view['js_additional'] = 'website/lembaga/management/konversi_skor/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_edit_konversi(){
+        $konversi_skor_id_crypt = $this->input->post('id_konversi');
+        $konversi_skor_id = $konversi_id = base64_decode(urldecode($konversi_skor_id_crypt));
+
+        $data['name'] = $this->input->post('name', TRUE);
+        $data['updated_datetime'] = date('Y-m-d H:i:s');
+
+        $tbl = $this->tbl_konversi_skor;
+        $update = $this->general->update_data($tbl, $data, $konversi_skor_id);
+
+        $urly = 'admin/konversi-skor';
+        $urlx = 'admin/edit-konversi-skor/'.$konversi_skor_id_crypt;
+        $this->update_end($update, $urly, $urlx);
+    }
+
+    public function disable_konversi($id_konversi){
+        $konversi_skor_id = $konversi_id = base64_decode(urldecode($id_konversi));
+
+        $tbl = $this->tbl_konversi_skor;
+        $delete = $this->general->delete_data($tbl, $konversi_skor_id);
+
+        $urly = 'admin/konversi-skor';
+        $urlx = 'admin/konversi-skor';
+        $this->delete_end($delete, $urly, $urlx);
+    }
+
+    public function detail_konversi($id_konversi){
+        $konversi_skor_id = $konversi_id = base64_decode(urldecode($id_konversi));
+
+        //for passing data to view
+        $data['content']['detail_konversi'] = $this->management->get_detail_konversi_by_konversi($konversi_skor_id);
+        $data['content']['id_konversi'] = $id_konversi;
+        $data['title_header'] = ['title' => 'Detail Konversi Skor'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/konversi_skor/detail_konversi/css';
+        $view['content'] = 'website/lembaga/management/konversi_skor/detail_konversi/content';
+        $view['js_additional'] = 'website/lembaga/management/konversi_skor/detail_konversi/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function add_detail_konversi($id_konversi){
+        //for passing data to view
+        $data['content']['id_konversi'] = $id_konversi;
+        $data['title_header'] = ['title' => 'Add Detail Konversi Skor'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/konversi_skor/detail_konversi/css';
+        $view['content'] = 'website/lembaga/management/konversi_skor/detail_konversi/add';
+        $view['js_additional'] = 'website/lembaga/management/konversi_skor/detail_konversi/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_add_detail_konversi(){
+        $konversi_skor_id_crypt = $this->input->post('id_konversi');
+        
+        $data['konversi_skor_id'] = $konversi_id = base64_decode(urldecode($konversi_skor_id_crypt));
+        $data['skor_asal'] = $this->input->post('skor_asal', TRUE);
+        $data['skor_konversi'] = $this->input->post('skor_konversi', TRUE);
+        $data['created_datetime'] = date('Y-m-d H:i:s');
+
+        $tbl = $this->tbl_detail_konversi_skor;
+        $input = $this->general->input_data($tbl, $data);
+
+        $urly = 'admin/detail-konversi-skor/'.$konversi_skor_id_crypt;
+        $urlx = 'admin/add-detail-konversi-skor/'.$konversi_skor_id_crypt;
+        $this->input_end($input, $urly, $urlx);
+    }
+
+    public function edit_detail_konversi($id_detail_konversi, $id_konversi){
+        $detail_konversi_id = base64_decode(urldecode($id_detail_konversi));
+        //for passing data to view
+        $data['content']['detail_konversi'] = $this->management->get_detail_konversi_by_id($detail_konversi_id);
+        $data['content']['id_detail_konversi'] = $id_detail_konversi;
+        $data['content']['id_konversi'] = $id_konversi;
+        $data['title_header'] = ['title' => 'Edit Detail Konversi Skor'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/konversi_skor/detail_konversi/css';
+        $view['content'] = 'website/lembaga/management/konversi_skor/detail_konversi/edit';
+        $view['js_additional'] = 'website/lembaga/management/konversi_skor/detail_konversi/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_edit_detail_konversi(){
+        $id_konversi = $this->input->post('id_konversi');
+        $detail_konversi_skor_id_crypt = $this->input->post('id_detail_konversi');
+        $detail_konversi_skor_id = $konversi_id = base64_decode(urldecode($detail_konversi_skor_id_crypt));
+
+        $data['skor_asal'] = $this->input->post('skor_asal', TRUE);
+        $data['skor_konversi'] = $this->input->post('skor_konversi', TRUE);
+        $data['updated_datetime'] = date('Y-m-d H:i:s');
+
+        $tbl = $this->tbl_detail_konversi_skor;
+        $update = $this->general->update_data($tbl, $data, $detail_konversi_skor_id);
+
+        $urly = 'admin/detail-konversi-skor/'.$id_konversi;
+        $urlx = 'admin/edit-detail-konversi-skor/'.$id_konversi;
+        $this->update_end($update, $urly, $urlx);
+    }
+
+    public function disable_detail_konversi($id_detail_konversi, $id_konversi){
+        $detail_konversi_skor_id = base64_decode(urldecode($id_detail_konversi));
+
+        $tbl = $this->tbl_detail_konversi_skor;
+        $delete = $this->general->delete_data($tbl, $detail_konversi_skor_id);
+
+        $urly = 'admin/detail-konversi-skor/'.$id_konversi;
+        $urlx = 'admin/detail-konversi-skor/'.$id_konversi;
+        $this->delete_end($delete, $urly, $urlx);
+    }
+
+    public function import_detail_konversi($id_konversi, $datas = NULL){
+        $name_config = 'TEMPLATE UPLOAD';
+        $detail_config = 'UPLOAD DATA KONVERSI';
+
+        if(!empty($datas)){
+            $data['content']['message'] = $datas;
+        } else {
+            $data['content']['message'] = ''; 
+        }
+
+        //for passing data to view
+        $data['content']['id_konversi'] = $id_konversi;
+        $data['content']['file_template'] = $this->management->get_pengaturan_universal_id($name_config, $detail_config);
+        $data['title_header'] = ['title' => 'Import Detail Konversi Skor'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/konversi_skor/detail_konversi/css';
+        $view['content'] = 'website/lembaga/management/konversi_skor/detail_konversi/upload_excel';
+        $view['js_additional'] = 'website/lembaga/management/konversi_skor/detail_konversi/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_import_detail_konversi(){
+        $konversi_id_crypt = $this->input->post('id_konversi');
+        $konversi_id = base64_decode(urldecode($konversi_id_crypt));
+
+        //Define penampung data
+        $skor_asal = '';
+        $skor_konversi = '';
+        $detail_konversi = '';
+
+        if($_FILES["data_konversi"]["name"] != '') {
+            $allowed_extension = array('xls', 'xlsx');
+            $file_array = explode(".", $_FILES["data_konversi"]["name"]);
+            $file_extension = end($file_array);
+
+            if(in_array($file_extension, $allowed_extension)) {
+                $file_name = time() . '.' . $file_extension;
+                move_uploaded_file($_FILES['data_konversi']['tmp_name'], $file_name);
+                $file_type = \PhpOffice\PhpSpreadsheet\IOFactory::identify($file_name);
+                $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($file_type);
+
+                $spreadsheet = $reader->load($file_name);
+
+                unlink($file_name);
+
+                $data = $spreadsheet->getActiveSheet()->toArray();
+
+                $no_null = 0;
+                $no_upload = 0;
+                //Detail data untuk peserta dan user
+                foreach($data as $key => $row) {
+                    if($key > 0 && (($row[0] != '' && $row[1] != '') || ($row[0] >= 0 && $row[1] >= 0))){ //Header tidak diikutkan di save
+                        //Define
+                        $skor_asal = trim($row[0]);
+                        $skor_konversi = trim($row[1]);
+
+                        $data = [];
+        
+                        $tbl = $this->tbl_detail_konversi_skor;
+                        $data = array(
+                            'konversi_skor_id' => $konversi_id,
+                            'skor_asal' => $skor_asal,
+                            'skor_konversi' => $skor_konversi,
+                            'created_datetime' => date('Y-m-d H:i:s')
+                        );
+
+                        $insert_konversi = $this->general->input_data($tbl, $data);
+
+                        $no_upload++;
+                    } elseif($key > 0 && ($row[0] == '' && $row[1] == '')){
+                        $no_null++;
+                    }
+                }
+
+                if($no_null){
+                    $text = '<div class="alert alert-info">'.$no_upload.' Data berhasil disimpan, Tetapi Terdapat '.$no_null.' data upload yang gagal, periksa kembali jika ada data yang masih kosong</div>';
+                    $this->import_detail_konversi($konversi_id_crypt, $text);
+                } else {
+                    $text = '<div class="alert alert-success">'.$no_upload.' Data berhasil disimpan</div>';
+                    $this->import_detail_konversi($konversi_id_crypt, $text);
+                }
+            } else {
+                $text = '<div class="alert alert-danger">Hanya tipe excel .xls dan .xlsx yang diijinkan</div>';
+                $this->import_detail_konversi($konversi_id_crypt, $text);
+            }
+        } else {
+            $text = '<div class="alert alert-danger">Tidak ada file yang diupload</div>';
+            $this->import_detail_konversi($konversi_id_crypt, $text);
+        }
     }
 
 }

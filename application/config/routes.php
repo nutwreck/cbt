@@ -122,12 +122,15 @@ $route['admin/add-group-soal/(:any)'] = 'website/lembaga/Tes_online/add_group_so
 $route['admin/detail-group-soal/(:any)/(:any)'] = 'website/lembaga/Tes_online/detail_group_soal/$1/$2';
 $route['admin/edit-group-soal/(:any)/(:any)'] = 'website/lembaga/Tes_online/edit_group_soal/$1/$2';
 $route['admin/disable-group-soal/(:any)/(:any)'] = 'website/lembaga/Tes_online/disable_group_soal/$1/$2';
-$route['admin/konversi'] = 'website/lembaga/Konversi_skor/konversi';
-$route['admin/add-konversi'] = 'website/lembaga/Konversi_skor/add_konversi';
-$route['admin/disable-konversi-skor/(:any)'] = 'website/lembaga/Konversi_skor/disable_konversi_skor/$1';
-$route['admin/edit-konversi/(:any)'] = 'website/lembaga/Konversi_skor/edit_konversi/$1';
-$route['admin/detail-konversi/(:any)'] = 'website/lembaga/Konversi_skor/detail_konversi/$1';
-$route['admin/add-detail-konversi'] = 'website/lembaga/Konversi_skor/add_detail_konversi';
+$route['admin/konversi-skor'] = 'website/lembaga/Management/konversi';
+$route['admin/add-konversi-skor'] = 'website/lembaga/Management/add_konversi';
+$route['admin/edit-konversi-skor/(:any)'] = 'website/lembaga/Management/edit_konversi/$1';
+$route['admin/delete-konversi-skor/(:any)'] = 'website/lembaga/Management/disable_konversi/$1';
+$route['admin/detail-konversi-skor/(:any)'] = 'website/lembaga/Management/detail_konversi/$1';
+$route['admin/add-detail-konversi-skor/(:any)'] = 'website/lembaga/Management/add_detail_konversi/$1';
+$route['admin/edit-detail-konversi-skor/(:any)/(:any)'] = 'website/lembaga/Management/edit_detail_konversi/$1/$2';
+$route['admin/delete-detail-konversi-skor/(:any)/(:any)'] = 'website/lembaga/Management/disable_detail_konversi/$1/$2';
+$route['admin/import-detail-konversi-skor/(:any)'] = 'website/lembaga/Management/import_detail_konversi/$1';
 /*
 |
 | START WEBSITE URL FOR LEMBAGA ONLY
