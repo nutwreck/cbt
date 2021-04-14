@@ -61,6 +61,9 @@
                                 <li>
                                     <a href="<?php echo base_url(); ?>admin/success-payment">Pembayaran Sukses</a>
                                 </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>admin/buku-setting">Buku Setting</a>
+                                </li>
                             </ul>
                         </li>
                         <li>
