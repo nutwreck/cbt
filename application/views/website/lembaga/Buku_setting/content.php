@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="overview-wrap">
-                            <h2 class="title-1">Konversi</h2>
+                            <h2 class="title-1">Data Setting Buku</h2>
                         </div>
                     </div>
                 </div>
@@ -14,9 +14,7 @@
                         <!-- DATA TABLE -->
                         <div class="table-data__tool">
                             <div class="table-data__tool-right">
-                                <button class="au-btn au-btn-icon au-btn--green au-btn--small" onclick="add_data()">
-                                    <i class="zmdi zmdi-plus"></i>Tambah
-                                </button>
+                             
                                
                             </div>
                         </div>
@@ -50,7 +48,7 @@
                                                 <i class="zmdi zmdi-plus"></i>
                                                 </a>
                                                
-                                                <a href="<?php echo base_url(); ?>admin/edit-buku/<?php echo $value->id; ?>" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                <a href="<?php echo base_url(); ?>admin/edit-buku/<?=urlencode(base64_encode($value->id))?>" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
                                                 <i class="zmdi zmdi-edit"></i>
                                                 </a>
                                                 <a href="<?=base_url()?>admin/disable-buku/<?=urlencode(base64_encode($value->id))?>" class="item" onclick="return confirm(<?=$value->id?>)">

@@ -575,6 +575,7 @@ $config['_token_input_soal_data'] = '8c064f61a5d9059125ea94df78809fef'; //soal-d
 $config['_token_tampil_soal'] = '206b3a13a65afd2ea84090f6276d63f5'; //tampil-soal
 $config['_token_bacaan_soal'] = '4cdf658a25ff361d2618b233e0b66f3f'; //bacaan-soal
 $config['_token_group_soal'] = '6bdb7093cb56431ead841dd8ce53f3b7'; //group-soal
+$config['_token_modul'] = '586b4cca03255330f4da77001ebbfd67'; //modul-soal
 /*
 |---------------------------------------------------------------------------
 | OPSI JAWABAN

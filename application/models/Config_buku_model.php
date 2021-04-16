@@ -17,10 +17,16 @@ class Config_buku_model extends CI_Model{
 
                 }
 
+   
+            
     public function get_detail_buku_by_buku($bukuid){
                     return $this->db->order_by('id ASC')
                         ->get_where('buku_detail', array('buku_id' => $bukuid, 'is_enable' => 1))->result();
-                }           
+                }    
+     public function get_buku_by_id($buku_id){
+                    return $this->db->get_where('buku', array('id' => $buku_id, 'is_enable' => 1))->row();
+                }       
+
     public function get_materi_user(){
         return $this->db->select('T1.*, T2.name AS user_created_name, T3.name AS user_edited_name', FALSE)
                     ->join('lembaga_user AS T2', 'T2.user_id = T1.created_by')

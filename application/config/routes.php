@@ -139,6 +139,11 @@ $route['admin/delete-detail-konversi-skor/(:any)/(:any)'] = 'website/lembaga/Man
 $route['admin/import-detail-konversi-skor/(:any)'] = 'website/lembaga/Management/import_detail_konversi/$1';
 $route['admin/buku-setting'] = 'website/lembaga/Buku_setting/setting_buku';
 $route['admin/detail-buku/(:any)'] = 'website/lembaga/Buku_setting/setting_buku_detail/$1';
+$route['admin/add-soal/(:any)'] = 'website/lembaga/Tes_online/add_soal/$1';
+$route['admin/edit-buku/(:any)'] = 'website/lembaga/Buku_setting/edit_buku/$1';
+$route['admin/disable-buku/(:any)'] = 'website/lembaga/Buku_setting/disable_buku/$1';
+$route['admin/edit-buku-detail/(:any)/(:any)'] = 'website/lembaga/Buku_setting/edit_detail/$1/$2';
+
 /*
 |
 | START WEBSITE URL FOR LEMBAGA ONLY
