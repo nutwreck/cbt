@@ -1124,6 +1124,41 @@ REPLACE INTO `paket_soal` (`id`, `name`, `type_paket_id`, `type_paket_name`, `bu
 	(9, 'Modul Matematika', 2, 'BUKU', 2, 'SBMPTN', 1, 'SAINTEK', 27, 'UMUM', 12, 'SBMPTN', 3, 1, 1, 2, 0, 0, 0, '<p><br></p>', 0, NULL, NULL, 27, '2021-04-15 14:41:56', NULL, NULL, 1);
 /*!40000 ALTER TABLE `paket_soal` ENABLE KEYS */;
 
+-- Dumping structure for table candraaj_cbt.payment_method
+CREATE TABLE IF NOT EXISTS `payment_method` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `created_datetime` datetime NOT NULL,
+  `updated_datetime` datetime DEFAULT NULL,
+  `is_enable` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Dumping data for table candraaj_cbt.payment_method: ~0 rows (approximately)
+/*!40000 ALTER TABLE `payment_method` DISABLE KEYS */;
+/*!40000 ALTER TABLE `payment_method` ENABLE KEYS */;
+
+-- Dumping structure for table candraaj_cbt.payment_method_detail
+CREATE TABLE IF NOT EXISTS `payment_method_detail` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `payment_method_id` int(11) NOT NULL,
+  `logo_payment` varchar(255) DEFAULT NULL,
+  `image_payment` varchar(255) DEFAULT NULL,
+  `bank_name` varchar(20) DEFAULT NULL,
+  `bank_account` varchar(150) DEFAULT NULL,
+  `bank_number` varchar(100) DEFAULT NULL,
+  `created_datetime` datetime NOT NULL,
+  `updated_datetime` datetime DEFAULT NULL,
+  `is_enable` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`),
+  KEY `payment_method_detail` (`payment_method_id`),
+  CONSTRAINT `payment_method_detail` FOREIGN KEY (`payment_method_id`) REFERENCES `payment_method` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Dumping data for table candraaj_cbt.payment_method_detail: ~0 rows (approximately)
+/*!40000 ALTER TABLE `payment_method_detail` DISABLE KEYS */;
+/*!40000 ALTER TABLE `payment_method_detail` ENABLE KEYS */;
+
 -- Dumping structure for table candraaj_cbt.pembahasan
 CREATE TABLE IF NOT EXISTS `pembahasan` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
