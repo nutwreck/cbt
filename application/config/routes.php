@@ -76,6 +76,7 @@ $route['ujian'] = 'website/user/Ujian';
 | START WEBSITE URL FOR LEMBAGA ONLY
 |
 */
+$route['admin'] = 'website/lembaga/Dashboard';
 $route['admin/dashboard'] = 'website/lembaga/Dashboard';
 $route['admin/materi'] = 'website/lembaga/Tes_online/materi';
 $route['admin/add-materi'] = 'website/lembaga/Tes_online/add_materi';
@@ -95,6 +96,11 @@ $route['admin/edit-soal/(:any)/(:any)/(:num)'] = 'website/lembaga/Tes_online/edi
 $route['admin/disable-soal/(:any)/(:any)/(:num)'] = 'website/lembaga/Tes_online/disable_soal/$1/$2/$3';
 $route['admin/drop-all/(:any)'] = 'website/lembaga/Tes_online/disable_all_soal/$1';
 $route['admin/sesi-pelaksana'] = 'website/lembaga/Tes_online/sesi_pelaksana';
+$route['admin/paket-sesi-pelaksana'] = 'website/lembaga/Tes_online/paket_sesi_pelaksana';
+$route['admin/add-sesi-pelaksana/(:any)'] = 'website/lembaga/Tes_online/add_sesi_pelaksana/$1';
+$route['admin/edit-sesi-pelaksana/(:any)'] = 'website/lembaga/Tes_online/edit_sesi_pelaksana/$1';
+$route['admin/detail-sesi-pelaksana/(:any)'] = 'website/lembaga/Tes_online/detail_sesi_pelaksana/$1';
+$route['admin/delete-sesi-pelaksana/(:any)'] = 'website/lembaga/Tes_online/disable_sesi_pelaksana/$1';
 $route['admin/user-lembaga'] = 'website/lembaga/User/user_lembaga';
 $route['admin/add-user-lembaga'] = 'website/lembaga/User/add_user_lembaga';
 $route['admin/edit-user-lembaga/(:any)/(:any)'] = 'website/lembaga/User/edit_user_lembaga/$1/$2';

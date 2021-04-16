@@ -491,7 +491,7 @@ $config['csrf_token_name'] = 'csrf_token_nutwreck';
 $config['csrf_cookie_name'] = 'csrf_cookie_nutwreck';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = TRUE;
-$config['csrf_exclude_uris'] = array(''); /* website/lembaga/Tes_online/editor_paket_soal */
+$config['csrf_exclude_uris'] = array('website/lembaga/Tes_online/get_peserta_by_select'); /* website/lembaga/Tes_online/editor_paket_soal */
 
 /*
 |--------------------------------------------------------------------------

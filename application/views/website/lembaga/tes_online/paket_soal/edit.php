@@ -27,17 +27,56 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12 col-lg-3" style="margin-top:1%">
-                                        <h5 class="label-text">Buku</h5>
+                                        <h5 class="label-text">Tipe Paket</h5>
                                     </div>
                                     <div class="col-sm-12 col-lg-9">
                                         <div class="form-group">
-                                            <select id="buku" class="form-control selectpicker" data-live-search="true" data-width="auto" name="buku" required>
-                                            <option data-tokens="<?=$paket_soal->buku_name?>" value="<?=$paket_soal->buku_id?>|<?=$paket_soal->buku_name?>" selected><?=$paket_soal->buku_name?></option>
-                                                <?php foreach($get_buku as $val_buku){ ?>
-                                                    <option data-tokens="<?=$val_buku->name?>" value="<?=$val_buku->id?>|<?=$val_buku->name?>"><?=$val_buku->name?></option>
+                                            <select id="type_paket" class="form-control selectpicker" data-live-search="true" data-width="auto" name="type_paket" required onchange="choosen_type_paket()">
+                                            <option data-tokens="<?=$paket_soal->type_paket_name?>" value="<?=$paket_soal->type_paket_id?>|<?=$paket_soal->type_paket_name?>" selected><?=$paket_soal->type_paket_name?></option>
+                                                <?php foreach($get_type_paket as $val_type_paket){ ?>
+                                                    <option data-tokens="<?=$val_type_paket->name?>" value="<?=$val_type_paket->id?>|<?=$val_type_paket->name?>"><?=$val_type_paket->name?></option>
                                                 <?php } ?>
                                             </select>
-                                            <small for="buku" id="buku_er" class="bg-danger text-white"></small>
+                                            <small for="type_paket" id="type_paket_er" class="bg-danger text-white"></small>
+                                            <div class="alert alert-info">
+                                                <p>
+                                                    Jika paket yang akan dibuat untuk <b>keperluan ujian</b>, pilih <b>ujian</b> kemudian nantinya anda perlu setting <b>sesi pelaksanaannya</b>, Jika paket yang dibuat untuk <b>keperluan buku</b> maka pilih buku dan tidak perlu setting <b>sesi pelaksanaan</b>, jika paket yang anda buat untuk <b>ujian dan buku</b> pilih <b>Fleksible</b> dan tetap mengatur sesi pelaksanaannya untuk ujian.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="buku_pilih" style="display:none;">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-lg-3" style="margin-top:1%">
+                                            <h5 class="label-text">Buku</h5>
+                                        </div>
+                                        <div class="col-sm-12 col-lg-9">
+                                            <div class="form-group">
+                                                <select id="buku" class="form-control selectpicker" data-live-search="true" data-width="auto" name="buku" onchange="choosen_buku()">
+                                                <option data-tokens="<?=$paket_soal->buku_name?>" value="<?=$paket_soal->buku_id?>|<?=$paket_soal->buku_name?>" selected><?=$paket_soal->buku_name?></option>
+                                                    <?php foreach($get_buku as $val_buku){ ?>
+                                                        <option data-tokens="<?=$val_buku->name?>" value="<?=$val_buku->id?>|<?=$val_buku->name?>"><?=$val_buku->name?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="detail_buku_pilih" style="display:none;">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-lg-3" style="margin-top:1%">
+                                            <h5 class="label-text">Jurusan</h5>
+                                        </div>
+                                        <div class="col-sm-12 col-lg-9">
+                                            <div class="form-group">
+                                                <select id="detail_buku" class="form-control selectpicker" data-live-search="true" data-width="auto" name="detail_buku">
+                                                <option data-tokens="<?=$paket_soal->detail_buku_name?>" value="<?=$paket_soal->detail_buku_id?>|<?=$paket_soal->detail_buku_name?>" selected><?=$paket_soal->detail_buku_name?></option>
+                                                    <?php foreach($get_detail_buku as $val_detail_buku){ ?>
+                                                        <option data-tokens="<?=$val_detail_buku->name?>" value="<?=$val_detail_buku->id?>|<?=$val_detail_buku->name?>"><?=$val_detail_buku->name?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -156,7 +195,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-sm-12 col-lg-3" style="margin-top:1%">
                                         <h5 class="label-text">Skor Bila Tidak Menjawab</h5>
                                     </div>
@@ -165,7 +204,7 @@
                                             <input id="skor_tdk_jwb" name="skor_tdk_jwb" type="text" class="form-control" aria-required="true" aria-invalid="false" value="<?=$paket_soal->skor_null?>" required>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="row">
                                     <div class="col-sm-12 col-lg-3" style="margin-top:0.3%">
                                         <h5 class="label-text">Pengerjaan Continous</h5>

@@ -62,6 +62,14 @@
                                     <a href="<?php echo base_url(); ?>admin/konversi-skor">Konversi Skor</a>
                                 </li>
                                 <li>
+                                    <a href="<?php echo base_url(); ?>admin/buku-setting">Buku Setting</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-sub">
+                            <a class="js-arrow" href="#"><i class="fa fa-folder-open"></i>Lembaga Management</a>
+                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                                <li>
                                     <a href="<?php echo base_url(); ?>admin/invoice">All Invoice</a>
                                 </li>
                                 <li>

@@ -146,6 +146,7 @@ class Tes_online extends CI_Controller {
 
     public function submit_add_materi(){
         $data['name'] = ucwords($this->input->post('materi', TRUE));
+        $data['created_by'] = $this->session->userdata('user_id');
         $data['created_datetime'] = date('Y-m-d H:i:s');
         $tbl = $this->tbl_materi;
         $input = $this->general->input_data($tbl, $data);
@@ -238,7 +239,9 @@ class Tes_online extends CI_Controller {
          $data['content']['get_kelas'] = $this->tes->get_kelas_enable();
          $data['content']['get_mode_jawaban'] = $this->tes->get_mode_jawaban_enable();
          $data['content']['get_skala_nilai'] = $this->tes->get_skala_nilai_enable();
+         $data['content']['get_type_paket'] = $this->tes->get_type_paket();
          $data['content']['get_buku'] = $this->tes->get_buku_enable();
+         $data['content']['get_detail_buku'] = $this->tes->get_detail_buku();
          $data['title_header'] = ['title' => 'Tambah Paket Soal'];
  
          //for load view
@@ -252,10 +255,21 @@ class Tes_online extends CI_Controller {
 
     public function submit_add_paket_soal(){
         $data['name'] = ucwords($this->input->post('name', TRUE));
+        $type_paket  = $this->input->post('type_paket', TRUE);
+        $exp_type_paket = explode("|", $type_paket);
+        $data['type_paket_id'] = $exp_type_paket[0];
+        $data['type_paket_name'] = $exp_type_paket[1];
+
         $buku  = $this->input->post('buku', TRUE);
         $exp_buku = explode("|", $buku);
         $data['buku_id'] = $exp_buku[0];
         $data['buku_name'] = $exp_buku[1];
+
+        $detail_buku  = $this->input->post('detail_buku', TRUE);
+        $exp_detail_buku = explode("|", $detail_buku);
+        $data['detail_buku_id'] = $exp_detail_buku[0];
+        $data['detail_buku_name'] = $exp_detail_buku[1];
+
         $kelas  = $this->input->post('kelas', TRUE);
         $exp_kelas = explode("|", $kelas);
         $data['kelas_id'] = $exp_kelas[0];
@@ -268,13 +282,14 @@ class Tes_online extends CI_Controller {
         $data['is_acak_soal'] = $this->input->post('acak_soal', TRUE);
         $data['is_acak_jawaban'] = $this->input->post('acak_jawaban', TRUE);
         $data['pengaturan_universal_id'] = $this->input->post('skala_nilai', TRUE);
-        $data['skor_null'] = $this->input->post('skor_tdk_jwb', TRUE);
+        /* $data['skor_null'] = $this->input->post('skor_tdk_jwb', TRUE); */
         $data['is_continuous'] = $this->input->post('continous', TRUE);
         $data['is_jawab'] = $this->input->post('menjawab', TRUE);
         $data['petunjuk'] = $this->input->post('petunjuk_text');
         $data['visual_limit'] = $this->input->post('audio_limit', TRUE);
         $data['file'] = $this->input->post('petunjuk_audio', TRUE);
         $data['created_datetime'] = date('Y-m-d H:i:s');
+        $data['created_by'] = $this->session->userdata('user_id');
 
         $allowed_type 	= [
             "audio/mpeg", "audio/mpg", "audio/mpeg3", "audio/mp3", "audio/x-wav", "audio/wave", "audio/wav"
@@ -321,6 +336,8 @@ class Tes_online extends CI_Controller {
         $data['content']['get_mode_jawaban'] = $this->tes->get_mode_jawaban_selected($paket_soal->detail_mode_jwb_id);
         $data['content']['get_skala_nilai'] = $this->tes->get_skala_nilai_selected($paket_soal->pengaturan_universal_id);
         $data['content']['get_buku'] = $this->tes->get_buku_selected($paket_soal->buku_id);
+        $data['content']['get_type_paket'] = $this->tes->get_type_paket_selected($paket_soal->type_paket_id);
+        $data['content']['get_detail_buku'] = $this->tes->get_detail_buku_selected($paket_soal->detail_buku_id);
         $data['title_header'] = ['title' => 'Edit Paket Soal'];
 
         //for load view
@@ -335,10 +352,22 @@ class Tes_online extends CI_Controller {
     public function submit_edit_paket_soal(){
         $id_paket_soal = $this->input->post('id_paket_soal');
         $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+
+        $type_paket  = $this->input->post('type_paket', TRUE);
+        $exp_type_paket = explode("|", $type_paket);
+        $data['type_paket_id'] = $exp_type_paket[0];
+        $data['type_paket_name'] = $exp_type_paket[1];
+
         $buku  = $this->input->post('buku', TRUE);
         $exp_buku = explode("|", $buku);
         $data['buku_id'] = $exp_buku[0];
         $data['buku_name'] = $exp_buku[1];
+
+        $detail_buku  = $this->input->post('detail_buku', TRUE);
+        $exp_detail_buku = explode("|", $detail_buku);
+        $data['detail_buku_id'] = $exp_detail_buku[0];
+        $data['detail_buku_name'] = $exp_detail_buku[1];
+
         $data['name'] = ucwords($this->input->post('name', TRUE));
         $kelas  = $this->input->post('kelas', TRUE);
         $exp_kelas = explode("|", $kelas);
@@ -352,7 +381,7 @@ class Tes_online extends CI_Controller {
         $data['is_acak_soal'] = $this->input->post('acak_soal', TRUE);
         $data['is_acak_jawaban'] = $this->input->post('acak_jawaban', TRUE);
         $data['pengaturan_universal_id'] = $this->input->post('skala_nilai', TRUE);
-        $data['skor_null'] = $this->input->post('skor_tdk_jwb', TRUE);
+        /* $data['skor_null'] = $this->input->post('skor_tdk_jwb', TRUE); */
         $data['is_continuous'] = $this->input->post('continous', TRUE);
         $data['is_jawab'] = $this->input->post('menjawab', TRUE);
         $data['petunjuk'] = $this->input->post('petunjuk_text');
@@ -1673,8 +1702,70 @@ class Tes_online extends CI_Controller {
         $this->delete_end($delete, $urly, $urlx);
     }
 
-    public function sesi_pelaksana($paket_soal_id){
-        
+    public function sesi_pelaksana(){
+        $data['content']['sesi_pelaksanaan'] = $this->tes->get_sesi_pelaksanaan();
+        $data['title_header'] = ['title' => 'Sesi Pelaksanaan'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/sesi_pelaksanaan/css';
+        $view['content'] = 'website/lembaga/tes_online/sesi_pelaksanaan/content';
+        $view['js_additional'] = 'website/lembaga/tes_online/sesi_pelaksanaan/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function paket_sesi_pelaksana(){
+        $data['content']['paket_soal'] = $this->tes->get_paket_soal_sesi();
+        $data['title_header'] = ['title' => 'Pilihan Paket Soal'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/sesi_pelaksanaan/css';
+        $view['content'] = 'website/lembaga/tes_online/sesi_pelaksanaan/browse_paket';
+        $view['js_additional'] = 'website/lembaga/tes_online/sesi_pelaksanaan/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function add_sesi_pelaksana($id_paket_soal){
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+        $data['content']['id_paket_soal'] = $id_paket_soal;
+        $data['content']['paket_soal'] = $this->tes->get_paket_soal_sesi_selected($paket_soal_id);
+        $data['content']['komposisi_soal'] = $this->tes->get_komposisi_soal($paket_soal_id);
+        $data['content']['group_peserta'] = $this->tes->get_group_peserta();
+        $data['title_header'] = ['title' => 'Add Sesi Pelaksanaan'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/sesi_pelaksanaan/css';
+        $view['content'] = 'website/lembaga/tes_online/sesi_pelaksanaan/add';
+        $view['js_additional'] = 'website/lembaga/tes_online/sesi_pelaksanaan/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function get_peserta_by_select(){
+        $searchTerm = $this->input->post('searchTerm');
+        $response = $this->tes->getUsers($searchTerm);
+
+        echo json_encode($response);
+    }
+
+    public function submit_add_sesi_pelaksana(){
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+    }
+
+    public function edit_sesi_pelaksana($id_sesi_pelaksana){
+
+    }
+
+    public function detail_sesi_pelaksana($id_sesi_pelaksana){
+
+    }
+
+    public function disable_sesi_pelaksana($id_sesi_pelaksana){
+
     }
 
 }

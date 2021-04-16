@@ -25,8 +25,8 @@
                                         <form id="formadd" name="formadd" action="<?php echo base_url(); ?>website/lembaga/Tes_online/submit_add_materi" method="post" onsubmit = "return(validate_addform());">
                                         <input type="hidden" id="csrf-hash-form" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" style="display: none">
                                             <div class="form-group">
-                                                <label for="nama" class="control-label mb-1">Nama Materi</label>
-                                                <small for="nama" id="materi_er" class="bg-danger text-white"></small>
+                                                <label for="materi" class="control-label mb-1">Nama Materi</label>
+                                                <small for="materi" id="materi_er" class="bg-danger text-white"></small>
                                                 <input id="materi" name="materi" type="text" class="form-control" aria-required="true" aria-invalid="false" placeholder="Masukkan nama materi">
                                             </div>
                                             <div>

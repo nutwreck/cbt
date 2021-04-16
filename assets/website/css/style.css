@@ -84,3 +84,10 @@ hr.message-inner-separator
 .dropdown:hover>.dropdown-menu {
   display: block;
 }
+
+.isDisabled {
+  color: currentColor;
+  cursor: not-allowed;
+  opacity: 0.5;
+  text-decoration: none;
+}

@@ -44,6 +44,28 @@ class Tes_online_model extends CI_Model{
                     ->get_where('v_kelas', array('kelas_id !=' => $kelas_id, 'is_enable_kelas' => 1, 'is_enable_groupkelas' => 1))->result();
     }
 
+    public function get_type_paket(){
+        return $this->db->order_by('id ASC')
+                    ->get_where('type_paket', array('is_enable' => 1))->result();
+    }
+
+    public function get_type_paket_selected($type_paket_id){
+        return $this->db->select('id, name')
+                    ->order_by('id ASC')
+                    ->get_where('type_paket', array('id !=' => $type_paket_id, 'is_enable' => 1))->result();
+    }
+
+    public function get_detail_buku(){
+        return $this->db->order_by('id ASC')
+                    ->get_where('detail_buku', array('is_enable' => 1))->result();
+    }
+
+    public function get_detail_buku_selected($detail_buku_id){
+        return $this->db->select('id, name')
+                    ->order_by('id ASC')
+                    ->get_where('detail_buku', array('id !=' => $detail_buku_id, 'is_enable' => 1))->result();
+    }
+
     public function get_mode_jawaban_enable(){
         return $this->db->select('id, name')
                     ->order_by('id ASC')
@@ -127,6 +149,45 @@ class Tes_online_model extends CI_Model{
     public function get_bacaan_soal_by_kode($kode_bacaan, $paket_soal_id){
         return $this->db->get_where('bacaan_soal', array('kode_bacaan' => $kode_bacaan, 'paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->row();
     }
+
+    public function get_sesi_pelaksanaan(){
+        return $this->db->get('v_sesi_pelaksanaan')->result();
+    }
+
+    public function get_paket_soal_sesi(){
+        return $this->db->order_by('paket_soal_id DESC')
+                    ->get_where('v_paket_soal', array('type_paket_id !=' => 2,  'is_enable' => 1))->result();
+    }
+
+    public function get_paket_soal_sesi_selected($paket_soal_id){
+        return $this->db->get_where('v_paket_soal', array('paket_soal_id' => $paket_soal_id, 'type_paket_id !=' => 2,  'is_enable' => 1))->row();
+    }
+
+    public function get_group_peserta(){
+        return $this->db->get('v_group_peserta')->result();
+    }
+
+    public function get_komposisi_soal($paket_soal_id){
+        return $this->db->get_where('v_komposisi_soal', array('paket_soal_id' => $paket_soal_id))->result();
+    }
+
+    public function getUsers($searchTerm=""){
+
+        // Fetch users
+        $this->db->select('*');
+        $this->db->where("name like '%".$searchTerm."%' ");
+        $this->db->where('is_enable', 1);
+        $this->db->where('is_lock', 0);
+        $fetched_records = $this->db->get('peserta');
+        $users = $fetched_records->result_array();
+   
+        // Initialize Array with fetched data
+        $data = array();
+        foreach($users as $user){
+           $data[] = array("id"=>$user['id'], "text"=>$user['no_peserta'].' '.$user['name']);
+        }
+        return $data;
+     }
 
     public function get_all_soal_by_paketid($paket_soal_id){
        /*  $config_acakan_soal = $this->get_paket_soal_by_id($paket_soal_id);

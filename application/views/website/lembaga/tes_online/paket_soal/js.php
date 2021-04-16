@@ -11,6 +11,11 @@
         $('#table_paket').DataTable( {
             
         } );
+
+        if (document.getElementById('id_paket_soal') != null){
+            choosen_type_paket();
+            choosen_buku();
+        }
     } );
 
     function add_data() {
@@ -142,6 +147,37 @@
             document.formadd.buku.focus();
             return false;
         }
+        if( document.formadd.type_paket.value == "-1" ) {
+            document.getElementById('type_paket_er').innerHTML = 'Tipe Paket wajib dipilih!';
+            document.formadd.type_paket.focus();
+            return false;
+        }
         return( true );
+    }
+</script>
+
+<!-- PEMILIHAN PERGANTIAN VIEW TIPE PAKET -->
+<script>
+    function choosen_type_paket(){
+        var type_paket = document.getElementById('type_paket').value;
+        var buku_pilih = document.getElementById('buku_pilih');
+        if(type_paket == '1|UJIAN'){
+            buku_pilih.style.display = 'none';
+        } else {
+            buku_pilih.style.display = 'block';
+        }
+    }
+</script>
+
+<!-- PEMILIHAN PERGANTIAN VIEW PEMILHAN BUKU -->
+<script>
+    function choosen_buku(){
+        var buku = document.getElementById('buku').value;
+        var detail_buku_pilih = document.getElementById('detail_buku_pilih');
+        if(buku == '2|SBMPTN'){
+            detail_buku_pilih.style.display = 'block';
+        } else {
+            detail_buku_pilih.style.display = 'none';
+        }
     }
 </script>

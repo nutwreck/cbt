@@ -50,6 +50,14 @@
                                     <a href="<?php echo base_url(); ?>admin/konversi-skor">Konversi Skor</a>
                                 </li>
                                 <li>
+                                    <a href="<?php echo base_url(); ?>admin/buku-setting">Buku Setting</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-sub">
+                            <a class="js-arrow" href="#"><i class="fa fa-money"></i>Keuangan</a>
+                            <ul class="list-unstyled navbar__sub-list js-sub-list">
+                                <li>
                                     <a href="<?php echo base_url(); ?>admin/invoice">All Invoice</a>
                                 </li>
                                 <li>
@@ -60,9 +68,6 @@
                                 </li>
                                 <li>
                                     <a href="<?php echo base_url(); ?>admin/success-payment">Pembayaran Sukses</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo base_url(); ?>admin/buku-setting">Buku Setting</a>
                                 </li>
                             </ul>
                         </li>
