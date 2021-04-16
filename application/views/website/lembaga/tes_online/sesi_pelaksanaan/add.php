@@ -63,8 +63,7 @@
                                         </div>
                                         <div class="col-sm-12 col-lg-9">
                                             <div class="form-group">
-                                                <select id="group_peserta_id" class="form-control selectpicker" data-live-search="true" data-width="auto" name="group_peserta_id" required>
-                                                    <option value = "0" selected>Pilih</option>
+                                                <select id="group_peserta_id" class="form-control selectpicker dropup" data-header="Pilih Kelompok Soal" data-live-search="true" data-width="auto" name="group_peserta_id[]" multiple>
                                                     <?php foreach($group_peserta as $val_group_peserta){ ?>
                                                         <option data-tokens="<?=$val_group_peserta->group_peserta_name?>" value="<?=$val_group_peserta->group_peserta_id?>"><?=$val_group_peserta->group_peserta_name?> (<?=$val_group_peserta->jumlah_peserta?> Peserta)</option>
                                                     <?php } ?>
@@ -80,7 +79,7 @@
                                         </div>
                                         <div class="col-sm-12 col-lg-9">
                                             <div class="form-group">
-                                                <select name="manual_peserta_id" id="manual_peserta_id" class="form-control select2" multiple>
+                                                <select name="manual_peserta_id[]" id="manual_peserta_id" class="form-control select2" multiple>
                                                     <option value='0'></option>
                                                 </select>
                                             </div>
@@ -136,7 +135,7 @@
                                         </div>
                                         <div class="col-sm-12 col-lg-9">
                                             <div class="form-group">
-                                                <input type="text" class="form-control datetimepicker-input" id="datetimepicker6" data-toggle="datetimepicker" data-target="#datetimepicker6" name="batas_pengerjaan" placeholder="Pilih tanggal dan waktu" required/>
+                                                <input type="text" class="form-control datetimepicker-input" id="datetimepicker6" data-toggle="datetimepicker" data-target="#datetimepicker6" name="batas_pengerjaan" placeholder="Pilih tanggal dan waktu"/>
                                             </div>
                                             <div class="alert alert-info">
                                                 <p>
@@ -152,7 +151,7 @@
                                     </div>
                                     <div class="col-sm-12 col-lg-9">
                                         <div class="form-group">
-                                            <input id="blok_layar" name="blok_layar" type="number" class="form-control" aria-required="true" aria-invalid="false" value="0" required>
+                                            <input id="blok_layar" name="blok_layar" type="number" class="form-control" aria-required="true" aria-invalid="false" value="0">
                                         </div>
                                         <div class="alert alert-info">
                                             <p>
@@ -231,8 +230,8 @@
                                 </div>
                                 <div id="komposisi_soal_detail" style="display:none;">
                                     <div class="row">
-                                        <div class="col-sm-12 col-lg-3" style="margin-top:0.3%">
-                                            <h5 class="label-text">Komposisi Soal</h5>
+                                        <div class="col-sm-12 col-lg-3">
+                                            
                                         </div>
                                         <div class="col-sm-12 col-lg-9">
                                             <div class="form-group">

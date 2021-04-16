@@ -17,6 +17,9 @@ class Tes_online extends CI_Controller {
     private $tbl_paket_soal = 'paket_soal'; //SET TABEL PAKET SOAL
     private $tbl_bacaan_soal = 'bacaan_soal'; //SET TABEL BACAAN SOAL
     private $tbl_group_soal = 'group_soal'; //SET TABEL GROUP SOAL
+    private $tbl_sesi_pelaksanaan = 'sesi_pelaksanaan'; //SET SESI PELAKSANAAN
+    private $tbl_sesi_pelaksanaan_komposisi = 'sesi_pelaksanaan_komposisi'; //SET SESI PELAKSANAAN KOMPOSISI
+    private $tbl_sesi_pelaksanaan_user = 'sesi_pelaksanaan_user';
 
     public function __construct(){
         parent::__construct();
@@ -1753,7 +1756,109 @@ class Tes_online extends CI_Controller {
     }
 
     public function submit_add_sesi_pelaksana(){
-        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+        $paket_soal_id_crypt = $this->input->post('id_paket_soal');
+
+        $data_sesi = [];
+        $data_komposisi = [];
+        $data_user = [];
+        
+        //SESI PELAKSANAAN
+        $mode_peserta = $this->input->post('mode_peserta', TRUE);
+        $data_sesi['paket_soal_id'] = base64_decode(urldecode($paket_soal_id_crypt));
+        $data_sesi['name'] = $this->input->post('name', TRUE);
+        $data_sesi['mode_peserta_id'] = $this->input->post('mode_peserta', TRUE);
+        $waktu_mulai = $this->input->post('waktu_mulai', TRUE);
+        $waktu_mulai_input = date("Y-m-d H:i", strtotime($waktu_mulai));  
+        $data_sesi['waktu_mulai'] = $waktu_mulai_input;
+        $data_sesi['lama_pengerjaan'] = $this->input->post('lama_pengerjaan', TRUE);
+        $lama_pengerjaan = $data_sesi['lama_pengerjaan'];
+        $data_sesi['is_fleksible'] = $this->input->post('is_fleksible', TRUE);
+        $fleksible = $data_sesi['is_fleksible'];
+        $batas_pengerjaan = $this->input->post('batas_pengerjaan', TRUE);
+        if($fleksible == 0){
+            $batas_pengerjaan_input = date("Y-m-d H:i", strtotime($waktu_mulai. ' + '.$lama_pengerjaan.' minutes'));
+        } else {
+            $batas_pengerjaan_input = date("Y-m-d H:i", strtotime($batas_pengerjaan));
+        }
+        $data_sesi['batas_pengerjaan'] = $batas_pengerjaan_input;
+        $data_sesi['blok_layar'] = $this->input->post('blok_layar', TRUE);
+        $data_sesi['is_hasil'] = $this->input->post('is_hasil', TRUE);
+        $data_sesi['is_ranking'] = $this->input->post('is_ranking', TRUE);
+        $data_sesi['is_pembahasan'] = $this->input->post('is_pembahasan', TRUE);
+        $data_sesi['created_datetime'] = date('Y-m-d H:i:s');
+
+        $tbl_sesi = $this->tbl_sesi_pelaksanaan;
+        $insert_sesi = $this->general->input_data_id($tbl_sesi, $data_sesi);
+
+        if($insert_sesi){
+            //SESI PELAKSANA KOMPOSISI
+            $id_group_soal = $this->input->post('id_group_soal', TRUE);
+            $total_soal = $this->input->post('total_soal', TRUE);
+
+            $index_komposisi = 0;
+            foreach($id_group_soal as $value_group){
+                array_push($data_komposisi, array(
+                    'sesi_pelaksanaan_id' => $insert_sesi,
+                    'group_soal_id' => $value_group,
+                    'total_soal' => $total_soal[$index_komposisi],
+                    'created_datetime' => date('Y-m-d H:i:s')
+                ));
+                
+                $index_komposisi++;
+            }
+
+            $tbl_komposisi = $this->tbl_sesi_pelaksanaan_komposisi;
+            $input_komposisi = $this->general->input_batch($tbl_komposisi, $data_komposisi);
+
+            //SESI USER
+            if($mode_peserta == 1){ //1 KELOMPOK 2 MANUAL INPUT
+                $group_peserta_id = $this->input->post('group_peserta_id', TRUE);
+                
+                foreach($group_peserta_id as $val_group_peserta){
+                    $insert_user_sesi = $this->insert_group_peserta_komposisi($val_group_peserta, $insert_sesi);
+                }
+            } else {
+                $peserta_id = $this->input->post('manual_peserta_id', TRUE);
+                
+                foreach($peserta_id as $val_peserta){
+                    $data_user[] = array(
+                        'sesi_pelaksanaan_id' => $insert_sesi,
+                        'group_peserta_id' => 0,
+                        'user_id' => $val_peserta,
+                        'created_datetime' => date('Y-m-d H:i:s')
+                    );
+                }
+
+                $tbl_sesi_user = $this->tbl_sesi_pelaksanaan_user;
+                $input_user = $this->general->input_batch($tbl_sesi_user, $data_user);
+            }
+
+            $this->session->set_flashdata('success', 'Data sesi pelaksanaan berhasil disimpan!');
+		    redirect('admin/sesi-pelaksana');
+        } else {
+            $this->session->set_flashdata('error', 'Data sesi pelaksanaan gagal disimpan!');
+		    redirect('admin/add-sesi-pelaksana/'.$paket_soal_id_crypt);
+        }
+    }
+
+    private function insert_group_peserta_komposisi($val_group_peserta, $insert_sesi){
+        $data_user = [];
+
+        $get_peserta_by_group = $this->tes->get_peserta_by_group($val_group_peserta);
+
+        foreach($get_peserta_by_group as $val_peserta){
+            $data_user[] = array(
+                'sesi_pelaksanaan_id' => $insert_sesi,
+                'group_peserta_id' => $val_group_peserta,
+                'user_id' => $val_peserta->user_id,
+                'created_datetime' => date('Y-m-d H:i:s')
+            );
+        }
+
+        $tbl_sesi_user = $this->tbl_sesi_pelaksanaan_user;
+        $input_user = $this->general->input_batch($tbl_sesi_user, $data_user);
+
+        return true;
     }
 
     public function edit_sesi_pelaksana($id_sesi_pelaksana){

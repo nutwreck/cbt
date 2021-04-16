@@ -171,6 +171,11 @@ class Tes_online_model extends CI_Model{
         return $this->db->get_where('v_komposisi_soal', array('paket_soal_id' => $paket_soal_id))->result();
     }
 
+    public function get_peserta_by_group($group_peserta_id){
+        return $this->db->select('user_id')
+            ->get_where('peserta', array('group_peserta_id' => $group_peserta_id, 'is_enable' => 1, 'is_lock' => 0))->result();
+    }
+
     public function getUsers($searchTerm=""){
 
         // Fetch users
@@ -184,7 +189,7 @@ class Tes_online_model extends CI_Model{
         // Initialize Array with fetched data
         $data = array();
         foreach($users as $user){
-           $data[] = array("id"=>$user['id'], "text"=>$user['no_peserta'].' '.$user['name']);
+           $data[] = array("id"=>$user['user_id'], "text"=>$user['no_peserta'].' '.$user['name']);
         }
         return $data;
      }

@@ -32,6 +32,17 @@ class General extends CI_Model{
 			return $id;
 		}
     }
+    public function input_batch($tbl, $data){
+        $this->db->trans_start();
+        $query = $this->db->insert_batch($tbl, $data);
+        if ($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return null;
+		} else{
+			$this->db->trans_commit();
+			return $query;
+		}
+      }
     public function update_data($tbl, $data, $id){
         $this->db->where('id', $id);
         $query = $this->db->update($tbl, $data);

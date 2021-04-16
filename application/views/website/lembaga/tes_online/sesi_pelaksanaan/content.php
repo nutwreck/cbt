@@ -27,7 +27,7 @@
                                         <th>Aksi</th>
                                         <th>Waktu</th>
                                         <th>Materi Ujian</th>
-                                        <th>Tipe Peserta</th>
+                                        <th>Kelompok</th>
                                         <th>Total Peserta</th>
                                         <th>Status Sesi</th>
                                     </tr>
@@ -42,7 +42,7 @@
                                         <td><?=$no++?></td>
                                         <td>
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     Pilih
                                                 </button>
                                                 <div class="dropdown-menu">
@@ -71,7 +71,7 @@
                                             <?php } ?>
                                         </td>
                                         <td><?=$value->user_total?></td>
-                                        <td><?=$value->status?></td>
+                                        <td><?=$value->status_sesi_pelakasanaan?></td>
                                     </tr>
                                 <?php } ?>
                                 </tbody>

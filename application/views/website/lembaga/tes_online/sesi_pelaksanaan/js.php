@@ -100,8 +100,7 @@
       $('#datetimepicker6').datetimepicker({
         locale: 'id',
         format: 'DD-MM-YYYY HH:mm',
-        autoclose: true,
-        defaultDate:new Date()
+        autoclose: true
       });
   });
 </script>
