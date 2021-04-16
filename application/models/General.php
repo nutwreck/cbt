@@ -44,8 +44,20 @@ class General extends CI_Model{
 		}
       }
     public function update_data($tbl, $data, $id){
+        $this->db->trans_start();
         $this->db->where('id', $id);
         $query = $this->db->update($tbl, $data);
+        if ($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return null;
+		} else{
+			$this->db->trans_commit();
+			return $query;
+		}
+    }
+    public function update_batch($tbl, $data, $id){
+        $this->db->trans_start();
+        $query = $this->db->update_batch($tbl, $data, $id);
         if ($this->db->trans_status() === FALSE){
 			$this->db->trans_rollback();
 			return null;

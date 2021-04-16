@@ -1785,6 +1785,7 @@ class Tes_online extends CI_Controller {
         $data_sesi['is_hasil'] = $this->input->post('is_hasil', TRUE);
         $data_sesi['is_ranking'] = $this->input->post('is_ranking', TRUE);
         $data_sesi['is_pembahasan'] = $this->input->post('is_pembahasan', TRUE);
+        $data_sesi['is_komposisi_soal'] = $this->input->post('komposisi_soal', TRUE);
         $data_sesi['created_datetime'] = date('Y-m-d H:i:s');
 
         $tbl_sesi = $this->tbl_sesi_pelaksanaan;
@@ -1862,15 +1863,131 @@ class Tes_online extends CI_Controller {
     }
 
     public function edit_sesi_pelaksana($id_sesi_pelaksana){
+        $sesi_pelaksana_id = base64_decode(urldecode($id_sesi_pelaksana));
+        $data['content']['id_sesi_pelaksana'] = $id_sesi_pelaksana;
+        $sesi_pelaksanaan = $this->tes->get_sesi_pelaksana_by_id($sesi_pelaksana_id);
+        $data['content']['sesi_pelaksana'] = $sesi_pelaksanaan;
+        $data['content']['id_paket_soal'] = urlencode(base64_encode($sesi_pelaksanaan->paket_soal_id));
+        $data['content']['paket_soal'] = $this->tes->get_paket_soal_sesi_selected($sesi_pelaksanaan->paket_soal_id);
+        $data['content']['komposisi_soal'] = $this->tes->get_komposisi_soal_by_id($sesi_pelaksana_id);
+        $data['content']['group_peserta'] = $this->tes->get_group_peserta();
+        $data['title_header'] = ['title' => 'Edit Sesi Pelaksanaan'];
 
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/sesi_pelaksanaan/css';
+        $view['content'] = 'website/lembaga/tes_online/sesi_pelaksanaan/edit';
+        $view['js_additional'] = 'website/lembaga/tes_online/sesi_pelaksanaan/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_edit_sesi_pelaksana(){
+        $paket_soal_id_crypt = $this->input->post('id_paket_soal');
+        $sesi_pelaksana_id_crypt = $this->input->post('id_sesi_pelaksana');
+        $paket_soal_id = base64_decode(urldecode($paket_soal_id_crypt));
+        $sesi_pelaksana_id = base64_decode(urldecode($sesi_pelaksana_id_crypt));
+
+        $data_sesi = [];
+        $data_komposisi = [];
+        
+        //SESI PELAKSANAAN
+        $mode_peserta = $this->input->post('mode_peserta', TRUE);
+        $data_sesi['name'] = $this->input->post('name', TRUE);
+        $waktu_mulai = $this->input->post('waktu_mulai', TRUE);
+        $waktu_mulai_input = date("Y-m-d H:i", strtotime($waktu_mulai));  
+        $data_sesi['waktu_mulai'] = $waktu_mulai_input;
+        $data_sesi['lama_pengerjaan'] = $this->input->post('lama_pengerjaan', TRUE);
+        $lama_pengerjaan = $data_sesi['lama_pengerjaan'];
+        $data_sesi['is_fleksible'] = $this->input->post('is_fleksible', TRUE);
+        $fleksible = $data_sesi['is_fleksible'];
+        $batas_pengerjaan = $this->input->post('batas_pengerjaan', TRUE);
+        if($fleksible == 0){
+            $batas_pengerjaan_input = date("Y-m-d H:i", strtotime($waktu_mulai. ' + '.$lama_pengerjaan.' minutes'));
+        } else {
+            $batas_pengerjaan_input = date("Y-m-d H:i", strtotime($batas_pengerjaan));
+        }
+        $data_sesi['batas_pengerjaan'] = $batas_pengerjaan_input;
+        $data_sesi['blok_layar'] = $this->input->post('blok_layar', TRUE);
+        $data_sesi['is_hasil'] = $this->input->post('is_hasil', TRUE);
+        $data_sesi['is_ranking'] = $this->input->post('is_ranking', TRUE);
+        $data_sesi['is_pembahasan'] = $this->input->post('is_pembahasan', TRUE);
+        $data_sesi['is_komposisi_soal'] = $this->input->post('komposisi_soal', TRUE);
+        $data_sesi['updated_datetime'] = date('Y-m-d H:i:s');
+
+        $tbl_sesi = $this->tbl_sesi_pelaksanaan;
+        $update_sesi = $this->general->update_data($tbl_sesi, $data_sesi, $sesi_pelaksana_id);
+
+        if($update_sesi){
+            //SESI PELAKSANA KOMPOSISI
+            $id_group_soal = $this->input->post('id_group_soal', TRUE);
+            $total_soal = $this->input->post('total_soal', TRUE);
+            $id_sesi_pelaksana_komposisi = $this->input->post('id_sesi_pelaksana_komposisi', TRUE);
+
+            $index_komposisi = 0;
+            foreach($id_group_soal as $value_group){
+                array_push($data_komposisi, array(
+                    'id' => $id_sesi_pelaksana_komposisi[$index_komposisi],
+                    'sesi_pelaksanaan_id' => $sesi_pelaksana_id,
+                    'group_soal_id' => $value_group,
+                    'total_soal' => $total_soal[$index_komposisi],
+                    'updated_datetime' => date('Y-m-d H:i:s')
+                ));
+                
+                $index_komposisi++;
+            }
+
+            $tbl_komposisi = $this->tbl_sesi_pelaksanaan_komposisi;
+            $update_komposisi = $this->general->update_batch($tbl_komposisi, $data_komposisi, 'id');
+
+            if($update_komposisi){
+                $this->session->set_flashdata('success', 'Data sesi pelaksanaan berhasil disimpan!');
+		        redirect('admin/sesi-pelaksana');
+            } else {
+                $this->session->set_flashdata('error', 'Data sesi pelaksanaan gagal disimpan saat update komposisi soal!');
+		        redirect('admin/edit-sesi-pelaksana/'.$sesi_pelaksana_id_crypt);
+            }
+        } else {
+            $this->session->set_flashdata('error', 'Data sesi pelaksanaan gagal disimpan!');
+		    redirect('admin/edit-sesi-pelaksana/'.$sesi_pelaksana_id_crypt);
+        }
     }
 
     public function detail_sesi_pelaksana($id_sesi_pelaksana){
+        $sesi_pelaksana_id = base64_decode(urldecode($id_sesi_pelaksana));
+        $data['content']['id_sesi_pelaksana'] = $id_sesi_pelaksana;
+        $sesi_pelaksanaan = $this->tes->get_sesi_pelaksana_by_id($sesi_pelaksana_id);
+        $data['content']['sesi_pelaksana'] = $sesi_pelaksanaan;
+        $data['content']['id_paket_soal'] = urlencode(base64_encode($sesi_pelaksanaan->paket_soal_id));
+        $data['content']['paket_soal'] = $this->tes->get_paket_soal_sesi_selected($sesi_pelaksanaan->paket_soal_id);
+        $data['content']['komposisi_soal'] = $this->tes->get_komposisi_soal_by_id($sesi_pelaksana_id);
+        $data['content']['group_peserta'] = $this->tes->get_group_peserta();
+        $data['title_header'] = ['title' => 'Detail Sesi Pelaksanaan'];
 
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/sesi_pelaksanaan/css';
+        $view['content'] = 'website/lembaga/tes_online/sesi_pelaksanaan/detail';
+        $view['js_additional'] = 'website/lembaga/tes_online/sesi_pelaksanaan/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
     }
 
     public function disable_sesi_pelaksana($id_sesi_pelaksana){
+        $data = [];
 
+        $sesi_pelaksana_id = base64_decode(urldecode($id_sesi_pelaksana));
+
+        $data = array(
+            'is_enable' => 0,
+            'updated_datetime' => date('Y-m-d H:i:s')
+        );
+
+        $delete = $this->tes->disable_sesi_pelaksana($sesi_pelaksana_id, $data);
+
+        $urly = 'admin/sesi-pelaksana';
+        $urlx = 'admin/sesi-pelaksana';
+        $this->delete_end($delete, $urly, $urlx);
     }
 
 }

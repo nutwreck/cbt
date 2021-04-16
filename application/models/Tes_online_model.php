@@ -176,6 +176,23 @@ class Tes_online_model extends CI_Model{
             ->get_where('peserta', array('group_peserta_id' => $group_peserta_id, 'is_enable' => 1, 'is_lock' => 0))->result();
     }
 
+    public function get_sesi_pelaksana_by_id($sesi_pelaksana_id){
+        return $this->db->get_where('v_sesi_pelaksanaan', array('sesi_pelaksanaan_id' => $sesi_pelaksana_id))->row();
+    }
+
+    public function get_komposisi_soal_by_id($sesi_pelaksana_id){
+        $query = $this->db->query("SELECT
+                T1.*,
+                T2.id AS sesi_pelaksanaan_komposisi_id,
+                T2.sesi_pelaksanaan_id,
+                T2.total_soal
+            FROM v_komposisi_soal AS T1
+            JOIN sesi_pelaksanaan_komposisi AS T2 ON T2.group_soal_id = T1.id_group_soal
+            WHERE T2.sesi_pelaksanaan_id = '".$sesi_pelaksana_id."'
+            AND T2.is_enable = 1");
+        return $query->result();
+    }
+
     public function getUsers($searchTerm=""){
 
         // Fetch users
@@ -446,6 +463,7 @@ class Tes_online_model extends CI_Model{
     }
 
     public function update_bacaan_soal($data, $bacaan_soal_id, $paket_soal_id){
+        $this->db->trans_start();
         $this->db->where('id', $bacaan_soal_id);
         $this->db->where('paket_soal_id', $paket_soal_id);
         $query = $this->db->update('bacaan_soal', $data);
@@ -459,6 +477,7 @@ class Tes_online_model extends CI_Model{
     }
 
     public function update_group_soal($data, $group_soal_id, $paket_soal_id){
+        $this->db->trans_start();
         $this->db->where('id', $group_soal_id);
         $this->db->where('paket_soal_id', $paket_soal_id);
         $query = $this->db->update('group_soal', $data);
@@ -468,6 +487,20 @@ class Tes_online_model extends CI_Model{
 		} else{
 			$this->db->trans_commit();
 			return $query;
+		}
+    }
+
+    public function disable_sesi_pelaksana($sesi_pelaksana_id, $data){
+        $this->db->trans_start();
+        $query_sesi = $this->db->where('id', $sesi_pelaksana_id)->update('sesi_pelaksanaan', $data);
+        $query_kelompok = $this->db->where('sesi_pelaksanaan_id', $sesi_pelaksana_id)->update('sesi_pelaksanaan_komposisi', $data);
+        $query_user = $this->db->where('sesi_pelaksanaan_id', $sesi_pelaksana_id)->update('sesi_pelaksanaan_user', $data);
+        if ($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return null;
+		} else{
+			$this->db->trans_commit();
+			return 1;
 		}
     }
 
