@@ -15,6 +15,7 @@ class Management extends CI_Controller {
     private $tbl_lembaga = 'lembaga';
     private $tbl_konversi_skor = 'konversi_skor';
     private $tbl_detail_konversi_skor = 'detail_konversi_skor';
+    private $tbl_payment_method_detail = 'payment_method_detail';
 
     public function __construct(){
         parent::__construct();
@@ -419,6 +420,225 @@ class Management extends CI_Controller {
             $text = '<div class="alert alert-danger">Tidak ada file yang diupload</div>';
             $this->import_detail_konversi($konversi_id_crypt, $text);
         }
+    }
+
+    public function pembayaran_master(){
+        //for passing data to view
+        $data['content']['pembayaran_master'] = $this->management->get_pembayaran_master();
+        $data['title_header'] = ['title' => 'Master Pembayaran'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/pembayaran_master/css';
+        $view['content'] = 'website/lembaga/management/pembayaran_master/content';
+        $view['js_additional'] = 'website/lembaga/management/pembayaran_master/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function detail_pembayaran_master($id_pembayaran_master){
+        $pembayaran_master_id = base64_decode(urldecode($id_pembayaran_master));
+        //for passing data to view
+        $data['content']['detail_pembayaran_master'] = $this->management->get_pembayaran_master_by_id($pembayaran_master_id);
+        $data['content']['pembayaran_master_id'] = $pembayaran_master_id;
+        $data['content']['id_pembayaran_master'] = $id_pembayaran_master;
+        $data['title_header'] = ['title' => 'Detail Master Pembayaran'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/pembayaran_master/css';
+        $view['content'] = 'website/lembaga/management/pembayaran_master/detail';
+        $view['js_additional'] = 'website/lembaga/management/pembayaran_master/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function add_detail_pembayaran_master($pembayaran_master_id){
+        //for passing data to view
+        $data['content']['id_pembayaran_master'] = $pembayaran_master_id;
+        $data['title_header'] = ['title' => 'Add Detail Master Pembayaran'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/pembayaran_master/css';
+        $view['content'] = 'website/lembaga/management/pembayaran_master/add';
+        $view['js_additional'] = 'website/lembaga/management/pembayaran_master/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_add_detail_pembayaran_master(){
+        $data = [];
+        $pembayaran_master_id_crypt = $this->input->post('id_pembayaran_master');
+        $pembayaran_master_id = base64_decode(urldecode($pembayaran_master_id_crypt));
+
+        $data['payment_method_id'] = $pembayaran_master_id;
+        //logo payment
+        $config['upload_path']      = FCPATH.'storage/website/lembaga/grandsbmptn/master_pembayaran/';
+        $config['allowed_types']    = 'jpg|png|jpeg';
+        $config['encrypt_name']     = TRUE;
+        $_upload_path = $config['upload_path'];
+
+        if(!file_exists($_upload_path)){
+            mkdir($_upload_path,0777);
+        }
+        
+        $this->load->library('upload', $config);
+
+        if(!empty($_FILES['logo_payment']['name'])){
+            if (!$this->upload->do_upload('logo_payment')){
+                $error = $this->upload->display_errors();
+                show_error($error, 500, 'File Gambar Logo Payment Error');
+                exit();
+            }else{
+                $data['logo_payment'] = $this->upload->data('file_name');
+            }
+        }
+
+        //Image Payment
+        $config['upload_path']      = FCPATH.'storage/website/lembaga/grandsbmptn/master_pembayaran/';
+        $config['allowed_types']    = 'jpg|png|jpeg';
+        $config['encrypt_name']     = TRUE;
+        $_upload_path = $config['upload_path'];
+
+        if(!file_exists($_upload_path)){
+            mkdir($_upload_path,0777);
+        }
+        
+        $this->load->library('upload', $config);
+
+        if(!empty($_FILES['image_payment']['name'])){
+            if (!$this->upload->do_upload('image_payment')){
+                $error = $this->upload->display_errors();
+                show_error($error, 500, 'File Gambar Image Payment Error');
+                exit();
+            }else{
+                $data['image_payment'] = $this->upload->data('file_name');
+            }
+        }
+
+        $data['bank_name'] = $this->input->post('bank_name', TRUE);
+        $data['bank_account'] = $this->input->post('bank_account', TRUE);
+        $data['bank_number'] = $this->input->post('bank_number', TRUE);
+        $data['created_datetime'] = date('Y-m-d H:i:s');
+
+        $tbl = $this->tbl_payment_method_detail;
+        $input = $this->general->input_data($tbl, $data);
+
+        $urly = 'admin/detail-pembayaran-master/'.$pembayaran_master_id_crypt;
+        $urlx = 'admin/add-detail-pembayaran-master/'.$pembayaran_master_id_crypt;
+        $this->input_end($input, $urly, $urlx);
+    }
+
+    public function edit_detail_pembayaran_master($id_pembayaran_detail_master){
+        $pembayaran_detail_master_id = base64_decode(urldecode($id_pembayaran_detail_master));
+        //for passing data to view
+        $data['content']['detail_pembayaran_master'] = $this->management->get_detail_master_pembayaran($pembayaran_detail_master_id);
+        $data['content']['id_pembayaran_detail_master'] = $id_pembayaran_detail_master;
+        $data['title_header'] = ['title' => 'Edit Detail Master Pembayaran'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/pembayaran_master/css';
+        $view['content'] = 'website/lembaga/management/pembayaran_master/edit';
+        $view['js_additional'] = 'website/lembaga/management/pembayaran_master/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_edit_detail_pembayaran_master(){
+        $data = [];
+        $pembayaran_detail_master_id_crypt = $this->input->post('id_pembayaran_detail_master');
+        $pembayaran_detail_master_id = base64_decode(urldecode($pembayaran_detail_master_id_crypt));
+
+        $pembayaran_master_id_crypt = $this->input->post('id_pembayaran_master');
+        $pembayaran_master_id = base64_decode(urldecode($pembayaran_master_id_crypt));
+
+        //logo payment
+        $old_name_logo = $this->input->post('old_name_logo');
+            if($old_name_logo == NULL || $old_name_logo == ''){
+                $old_name_logo_x = NULL;
+            } else {
+                $old_name_logo_x = $old_name_logo;
+            }
+        //image payment
+        $old_name_image = $this->input->post('old_name_image');
+            if($old_name_image == NULL || $old_name_image == ''){
+                $old_name_image_x = NULL;
+            } else {
+                $old_name_image_x = $old_name_image;
+            }
+
+        //logo payment
+        $config['upload_path']      = FCPATH.'storage/website/lembaga/grandsbmptn/master_pembayaran/';
+        $config['allowed_types']    = 'jpg|png|jpeg';
+        $config['encrypt_name']     = TRUE;
+        $_upload_path = $config['upload_path'];
+
+        if(!file_exists($_upload_path)){
+            mkdir($_upload_path,0777);
+        }
+        
+        $this->load->library('upload', $config);
+
+        if(!empty($_FILES['logo_payment']['name'])){
+            if (!$this->upload->do_upload('logo_payment')){
+                $error = $this->upload->display_errors();
+                show_error($error, 500, 'File Gambar Logo Payment Error');
+                exit();
+            }else{
+                $data['logo_payment'] = $this->upload->data('file_name');
+            }
+        } else {
+            $data['logo_payment'] = $old_name_logo_x;
+        }
+
+        //Image Payment
+        $config['upload_path']      = FCPATH.'storage/website/lembaga/grandsbmptn/master_pembayaran/';
+        $config['allowed_types']    = 'jpg|png|jpeg';
+        $config['encrypt_name']     = TRUE;
+        $_upload_path = $config['upload_path'];
+
+        if(!file_exists($_upload_path)){
+            mkdir($_upload_path,0777);
+        }
+        
+        $this->load->library('upload', $config);
+
+        if(!empty($_FILES['image_payment']['name'])){
+            if (!$this->upload->do_upload('image_payment')){
+                $error = $this->upload->display_errors();
+                show_error($error, 500, 'File Gambar Image Payment Error');
+                exit();
+            }else{
+                $data['image_payment'] = $this->upload->data('file_name');
+            }
+        } else {
+            $data['image_payment'] = $old_name_image_x;
+        }
+
+        $data['bank_name'] = $this->input->post('bank_name', TRUE);
+        $data['bank_account'] = $this->input->post('bank_account', TRUE);
+        $data['bank_number'] = $this->input->post('bank_number', TRUE);
+        $data['updated_datetime'] = date('Y-m-d H:i:s');
+
+        $tbl = $this->tbl_payment_method_detail;
+        $update = $this->general->update_data($tbl, $data, $pembayaran_detail_master_id);
+
+        $urly = 'admin/detail-pembayaran-master/'.$pembayaran_master_id_crypt;
+        $urlx = 'admin/edit-detail-pembayaran-master/'.$pembayaran_master_id_crypt;
+        $this->input_end($update, $urly, $urlx);
+    }
+
+    public function disable_detail_pembayaran_master($id_pembayaran_detail_master, $id_pembayaran_master){
+        $pembayaran_detail_master_id = base64_decode(urldecode($id_pembayaran_detail_master));
+
+        $tbl = $this->tbl_payment_method_detail;
+        $delete = $this->general->delete_data($tbl, $pembayaran_detail_master_id);
+
+        $urly = 'admin/detail-pembayaran-master/'.$id_pembayaran_master;
+        $urlx = 'admin/detail-pembayaran-master/'.$id_pembayaran_master;
+        $this->delete_end($delete, $urly, $urlx);
     }
 
 }

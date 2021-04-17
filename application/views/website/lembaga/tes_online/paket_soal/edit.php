@@ -280,7 +280,7 @@
                                             <div class="custom-file">
                                                 <input type="hidden" id="old_name_audio" name="old_name_audio" value="<?=$paket_soal->lampiran_petunjuk?>" style="display: none">
                                                 <input type="hidden" id="old_type_audio" name="old_type_audio" value="<?=$paket_soal->tipe_file?>" style="display: none">
-                                                <input type="file" class="custom-file-input" id="petunjuk_audio">
+                                                <input type="file" class="custom-file-input" id="petunjuk_audio" name="petunjuk_audio">
                                                 <label id="file-name" class="custom-file-label" for="petunjuk_audio">Pilih Audio</label>
                                             </div>
                                         </div>

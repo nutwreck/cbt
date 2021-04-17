@@ -139,6 +139,11 @@ $route['admin/delete-detail-konversi-skor/(:any)/(:any)'] = 'website/lembaga/Man
 $route['admin/import-detail-konversi-skor/(:any)'] = 'website/lembaga/Management/import_detail_konversi/$1';
 $route['admin/buku-setting'] = 'website/lembaga/Buku_setting/setting_buku';
 $route['admin/detail-buku/(:any)'] = 'website/lembaga/Buku_setting/setting_buku_detail/$1';
+$route['admin/pembayaran-master'] = 'website/lembaga/Management/pembayaran_master';
+$route['admin/detail-pembayaran-master/(:any)'] = 'website/lembaga/Management/detail_pembayaran_master/$1';
+$route['admin/add-detail-pembayaran-master/(:any)'] = 'website/lembaga/Management/add_detail_pembayaran_master/$1';
+$route['admin/edit-detail-pembayaran-master/(:any)'] = 'website/lembaga/Management/edit_detail_pembayaran_master/$1';
+$route['admin/delete-detail-pembayaran-master/(:any)/(:any)'] = 'website/lembaga/Management/disable_detail_pembayaran_master/$12';
 /*
 |
 | START WEBSITE URL FOR LEMBAGA ONLY

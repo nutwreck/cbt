@@ -64,10 +64,13 @@
                                 <li>
                                     <a href="<?php echo base_url(); ?>admin/buku-setting">Buku Setting</a>
                                 </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>admin/pembayaran-master">Master Pembayaran</a>
+                                </li>
                             </ul>
                         </li>
                         <li class="has-sub">
-                            <a class="js-arrow" href="#"><i class="fa fa-folder-open"></i>Lembaga Management</a>
+                            <a class="js-arrow" href="#"><i class="fa fa-folder-money"></i>Keuangan</a>
                             <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
                                 <li>
                                     <a href="<?php echo base_url(); ?>admin/invoice">All Invoice</a>

@@ -52,6 +52,9 @@
                                 <li>
                                     <a href="<?php echo base_url(); ?>admin/buku-setting">Buku Setting</a>
                                 </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>admin/pembayaran-master">Master Pembayaran</a>
+                                </li>
                             </ul>
                         </li>
                         <li class="has-sub">
