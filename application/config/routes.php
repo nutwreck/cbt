@@ -143,7 +143,7 @@ $route['admin/pembayaran-master'] = 'website/lembaga/Management/pembayaran_maste
 $route['admin/detail-pembayaran-master/(:any)'] = 'website/lembaga/Management/detail_pembayaran_master/$1';
 $route['admin/add-detail-pembayaran-master/(:any)'] = 'website/lembaga/Management/add_detail_pembayaran_master/$1';
 $route['admin/edit-detail-pembayaran-master/(:any)'] = 'website/lembaga/Management/edit_detail_pembayaran_master/$1';
-$route['admin/delete-detail-pembayaran-master/(:any)/(:any)'] = 'website/lembaga/Management/disable_detail_pembayaran_master/$12';
+$route['admin/delete-detail-pembayaran-master/(:any)/(:any)'] = 'website/lembaga/Management/disable_detail_pembayaran_master/$1/$2';
 /*
 |
 | START WEBSITE URL FOR LEMBAGA ONLY
