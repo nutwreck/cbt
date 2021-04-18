@@ -5,29 +5,21 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="overview-wrap">
-                            <h2 class="title-1">Data Setting Buku</h2>
+                            <h2 class="title-1">Setting Buku</h2>
                         </div>
                     </div>
                 </div>
                 <div class="row mt-3">
                     <div class="col-md-12">
-                        <!-- DATA TABLE -->
-                        <div class="table-data__tool">
-                            <div class="table-data__tool-right">
-                             
-                               
-                            </div>
-                        </div>
                         <div class="table-responsive table-responsive-data2">
-                            <table id="table_materi" class="display text-center">
+                            <table id="table_setting_buku" class="display text-center">
                                 <thead>
                                     <tr>
-                                        <th width="15px">No.</th>
+                                        <th width="15px">No</th>
                                         <th>Nama Buku</th>  
                                         <th>Jumlah Paket Gratis</th>  
                                         <th>Harga</th>                               
                                         <th>Aksi</th>
-                                        
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -40,25 +32,14 @@
                                         <td><?=$value->name?></td>
                                         <td><?=$value->free_paket?></td>
                                         <td><?=$value->price?></td>
-                                        
                                         <td>
                                             <div class="table-data-feature">
-
-                                                <a href="<?=base_url()?>admin/detail-buku/<?=urlencode(base64_encode($value->id))?>" class="item" onclick="return confirm(<?=$value->id?>)">
-                                                <i class="zmdi zmdi-plus"></i>
-                                                </a>
-                                               
-                                                <a href="<?php echo base_url(); ?>admin/edit-buku/<?=urlencode(base64_encode($value->id))?>" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
-                                                <i class="zmdi zmdi-edit"></i>
-                                                </a>
-                                                <a href="<?=base_url()?>admin/disable-buku/<?=urlencode(base64_encode($value->id))?>" class="item" onclick="return confirm(<?=$value->id?>)">
-                                                <i class="zmdi zmdi-delete"></i>
+                                                <a href="<?=base_url()?>admin/detail-buku/<?=urlencode(base64_encode($value->id))?>" class="item" data-toggle="tooltip" data-placement="top" title="Tambah Modul">
+                                                    <i class="zmdi zmdi-plus"></i>
                                                 </a>
                                             </div>
-                                        </td>                                     
-                                      
+                                        </td>
                                     </tr>
-                                    
                                 <?php } ?>
                                 </tbody>
                             </table>

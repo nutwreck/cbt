@@ -52,4 +52,18 @@ class Management_model extends CI_Model{
     public function get_detail_master_pembayaran($pembayaran_detail_master_id){
         return $this->db->get_where('payment_method_detail', array('id' => $pembayaran_detail_master_id, 'is_enable' => 1))->row();
     }
+
+    public function get_buku_config(){
+        return $this->db->select('b.id, b.name, cb.free_paket, cb.price, b.created_datetime, b.updated_datetime')
+            ->join('config_buku as cb', 'cb.buku_id = b.id')
+            ->where('b.is_enable', '1')
+            ->get('buku as b')->result();
+    }
+
+    public function get_detail_buku_by_buku($buku_id){
+        return $this->db->select('T1.*, T2.name AS buku_name')
+            ->join('buku AS T2', 'T1.buku_id = T2.id')
+            ->order_by('T1.id DESC')
+            ->get_where('config_buku_detail AS T1', array('T1.buku_id' => $buku_id, 'T1.is_enable' => 1, 'T2.is_enable' => 1))->result();
+    }   
 }

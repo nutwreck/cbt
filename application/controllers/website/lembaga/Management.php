@@ -16,6 +16,9 @@ class Management extends CI_Controller {
     private $tbl_konversi_skor = 'konversi_skor';
     private $tbl_detail_konversi_skor = 'detail_konversi_skor';
     private $tbl_payment_method_detail = 'payment_method_detail';
+    private $tbl_buku = 'buku';
+    private $tbl_config_buku = 'config_buku';
+    private $tbl_config_buku_detail = 'config_buku_detail';
 
     public function __construct(){
         parent::__construct();
@@ -639,6 +642,192 @@ class Management extends CI_Controller {
         $urly = 'admin/detail-pembayaran-master/'.$id_pembayaran_master;
         $urlx = 'admin/detail-pembayaran-master/'.$id_pembayaran_master;
         $this->delete_end($delete, $urly, $urlx);
+    }
+
+    public function setting_buku(){
+        //for passing data to view
+        $data['content']['buku_data'] = $this->management->get_buku_config();
+        $data['title_header'] = ['title' => 'Setting Buku'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/buku_setting/css';
+        $view['content'] = 'website/lembaga/management/buku_setting/content';
+        $view['js_additional'] = 'website/lembaga/management/buku_setting/js';
+     
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function setting_buku_detail($id_buku){
+        $buku_id = base64_decode(urldecode($id_buku));
+
+        //for passing data to view
+        $config_buku_detail_data = $this->management->get_detail_buku_by_buku($buku_id);
+        $data['content']['detail_buku'] = $config_buku_detail_data;
+        $data['content']['id_buku'] = $id_buku;
+        $data['content']['buku_name'] = $config_buku_detail_data[0]->buku_name;
+        $data['title_header'] = ['title' => 'Detail Modul'];
+ 
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/buku_setting/css';
+        $view['content'] = 'website/lembaga/management/buku_setting/detail';
+        $view['js_additional'] = 'website/lembaga/management/buku_setting/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function add_detail_buku_setting($id_buku){
+        $data['content']['id_buku'] = $id_buku;
+        $data['title_header'] = ['title' => 'Add Detail Modul'];
+ 
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/buku_setting/css';
+        $view['content'] = 'website/lembaga/management/buku_setting/add_detail';
+        $view['js_additional'] = 'website/lembaga/management/buku_setting/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function save_gambar_buku_detail() {
+        $buku_id_encrypt = $this->input->post('id_buku');
+            
+        $data['buku_id'] = base64_decode(urldecode($buku_id_encrypt));
+        $data['name'] = $this->input->post('name', TRUE);
+
+        $config['upload_path']    = './storage/website/lembaga/grandsbmptn/modul';
+        $config['allowed_types']  = 'gif|jpg|png';
+        $config['encrypt_name']   = TRUE;
+
+        $_upload_path = $config['upload_path'];
+
+        if(!file_exists($_upload_path)){
+            mkdir($_upload_path,0777);
+        }
+
+        $this->load->library('upload', $config);
+
+        if ( ! $this->upload->do_upload('filegambar')) {
+            $error = array('error' => $this->upload->display_errors());
+            show_error($error, 500, 'File Gambar Modul Error');
+            exit();     
+        } else {
+            $data['nama_file'] = $this->upload->data('file_name');
+            $data['type_file'] = '1';// gambar
+            $data ['created_date'] = date('Y-m-d H:i:s');
+            $tbl = $this->tbl_config_buku_detail;
+            $input = $this->general->input_data($tbl, $data);
+            $urly = 'admin/detail-buku/'.$buku_id_encrypt;
+            $urlx = 'admin/detail-buku/'.$buku_id_encrypt;
+            $this->input_end($input, $urly, $urlx);
+        }
+    }
+
+    public function save_audio_buku_detail() {
+        $buku_id_encrypt = $this->input->post('id_buku');
+            
+        $data['buku_id'] = base64_decode(urldecode($buku_id_encrypt));
+        $data['name'] = $this->input->post('name', TRUE);
+
+        $config['upload_path']     = './storage/website/lembaga/grandsbmptn/modul';
+        $config['allowed_types']   = 'mpeg|mpg|mpeg3|mp3|/x-wav|wave|wav';
+        $config['encrypt_name']    = TRUE;
+
+        $_upload_path = $config['upload_path'];
+
+        if(!file_exists($_upload_path)){
+            mkdir($_upload_path,0777);
+        }
+
+        $this->load->library('upload', $config);
+
+        if ( ! $this->upload->do_upload('fileaudio')) {
+            $error = array('error' => $this->upload->display_errors());
+            show_error($error, 500, 'File Audio Modul Error');
+            exit();
+        } else {
+            $gambar= $this->upload->data('file_name');
+        
+            $data['nama_file'] = $gambar;
+            $data['type_file'] = '2' ; // audio
+            $data ['created_date']= date('Y-m-d H:i:s');
+            $tbl = $this->tbl_config_buku_detail;
+            $input = $this->general->input_data($tbl, $data);
+            $urly = 'admin/detail-buku/'.$buku_id_encrypt;
+            $urlx = 'admin/detail-buku/'.$buku_id_encrypt;
+            $this->input_end($input, $urly, $urlx);
+        }
+    }
+
+    public function save_video_buku_detail(){
+        $buku_id_encrypt = $this->input->post('id_buku');
+            
+        $data['buku_id'] = base64_decode(urldecode($buku_id_encrypt));
+        $data['name'] = $this->input->post('name', TRUE);
+
+        $config['upload_path']    = './storage/website/lembaga/grandsbmptn/modul';
+        $config['allowed_types']  = 'avi|flv|wmv|mp3|mp4';
+        $config['encrypt_name']   = TRUE;
+
+        $_upload_path = $config['upload_path'];
+
+        if(!file_exists($_upload_path)){
+            mkdir($_upload_path,0777);
+        }
+        
+        $this->load->library('upload', $config);
+
+        if ( ! $this->upload->do_upload('filevideo')) {
+            $error = array('error' => $this->upload->display_errors());
+            show_error($error, 500, 'File Video Modul Error');
+            exit();
+        } else {
+            $gambar = $this->upload->data('file_name');
+            $data['nama_file'] = $gambar;
+            $data['type_file'] = '3';//video
+            $data ['created_date']= date('Y-m-d H:i:s');
+            $tbl = $this->tbl_config_buku_detail;
+            $input = $this->general->input_data($tbl, $data);
+
+            $urly = 'admin/detail-buku/'.$buku_id_encrypt;
+            $urlx = 'admin/detail-buku/'.$buku_id_encrypt;
+            $this->input_end($input, $urly, $urlx);
+        }
+    }
+
+    public function save_link_buku_detail(){
+        $buku_id_encrypt = $this->input->post('id_buku');
+        
+        $data['buku_id'] = $konversi_id = base64_decode(urldecode($buku_id_encrypt));
+        $data['name'] = $this->input->post('name', TRUE);
+        $data['nama_file'] = $this->input->post('link');
+        $data['type_file'] = '4'; //link
+        $data['created_date'] = date('Y-m-d H:i:s');
+
+        $tbl = $this->tbl_buku_detail;
+        $input = $this->general->input_data($tbl, $data);
+
+        $urly = 'admin/detail-buku/'.$buku_id_encrypt;
+        $urlx = 'admin/detail-buku/'.$buku_id_encrypt;
+        $this->input_end($input, $urly, $urlx);
+    }
+
+    public function save_text_buku_detail(){
+        $buku_id_encrypt = $this->input->post('id_buku');
+        
+        $data['buku_id'] = $konversi_id = base64_decode(urldecode($buku_id_encrypt));
+        $data['name'] = $this->input->post('name', TRUE);
+        $data['nama_file'] = $this->input->post('summernote');
+        $data['type_file'] = '5'; //text
+        $data['created_date'] = date('Y-m-d H:i:s');
+
+        $tbl = $this->tbl_buku_detail;
+        $input = $this->general->input_data($tbl, $data);
+
+        $urly = 'admin/detail-buku/'.$buku_id_encrypt;
+        $urlx = 'admin/detail-buku/'.$buku_id_encrypt;
+        $this->input_end($input, $urly, $urlx);
     }
 
 }

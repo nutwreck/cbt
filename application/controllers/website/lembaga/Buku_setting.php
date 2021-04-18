@@ -10,7 +10,7 @@ class Buku_setting extends CI_Controller {
      *      - {date} | {description}
 	 */
 
-    private $tbl_buku = 'buku'; //SET TABEL KONVERSI
+    private $tbl_buku = 'buku';
     private $tbl_config_buku = 'config_buku';
     private $tbl_buku_detail = 'buku_detail';
 

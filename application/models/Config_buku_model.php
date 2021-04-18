@@ -9,13 +9,13 @@ class Config_buku_model extends CI_Model{
     }
 
     public function get_buku_config(){
-        return $this->db->select('b.id,b.name,cb.free_paket,cb.price,b.created_datetime,b.updated_datetime')
-                    ->join ('config_buku as cb','cb.buku_id = b.id')
-                   // ->get_where('konversi_skor', array('is_enable' => 1))->result();
-                    ->where('b.is_enable','1' )
-                   ->get('buku as b')->result();
+            return $this->db->select('b.id,b.name,cb.free_paket,cb.price,b.created_datetime,b.updated_datetime')
+            ->join ('config_buku as cb','cb.buku_id = b.id')
+            // ->get_where('konversi_skor', array('is_enable' => 1))->result();
+            ->where('b.is_enable','1' )
+            ->get('buku as b')->result();
 
-                }
+        }
 
    
             
