@@ -138,7 +138,7 @@
                                     <i class="fa fa-phone-square text-muted"></i>
                                 </span>
                             </div>
-                            <input id="phoneNumber" type="tel" name="phone" placeholder="Nomor Telp Aktif. Ex : 85823445xxx" onkeypress="return /[0-9]/i.test(event.key)" minlength="10" maxlength="13" pattern=".{10,13}" title="Minimal 10 Angka Maksimal 13 Angka" class="form-control bg-white border-md border-left-0" required>
+                            <input id="phoneNumber" type="tel" name="phone" placeholder="Nomor Telp Aktif. Ex : 085823445xxx" onkeypress="return /[0-9]/i.test(event.key)" minlength="10" maxlength="13" pattern=".{10,13}" title="Minimal 10 Angka Maksimal 13 Angka" class="form-control bg-white border-md border-left-0" required>
                         </div>
 
                         <!-- Password -->
