@@ -94,6 +94,7 @@ class Login extends CI_Controller {
 
         if($input){
             $data['login_user'] = $this->general->login_user($data);
+            $this->session->sess_destroy();
 
             $user_datas = array(
                     'user_id' => $data['login_user'][0]['user_id'],
@@ -126,7 +127,9 @@ class Login extends CI_Controller {
         $decode = $this->encryption->decrypt($data['login_user'][0]['password']);
 
         if($data['login_user'] && $decode == $data['password']){
-            $$user_datas = array(
+            $this->session->sess_destroy();
+
+            $user_datas = array(
                     'user_id' => $data['login_user'][0]['user_id'],
                     'is_login' => $data['login_user'][0]['is_login'],
                     'peserta_name' => $data['login_user'][0]['peserta_name'],
