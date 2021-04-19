@@ -9,7 +9,7 @@
                             <div class="row">
                                 <div class="col">Tambah Detail Modul Buku</div>
                                 <div class="col text-right">
-                                    <a href="<?=base_url()?>admin/buku-setting" class="btn btn-sm btn-outline-secondary">Kembali</button>
+                                    <a href="<?=base_url()?>admin/buku-setting" class="btn btn-sm btn-outline-secondary">Kembali</a>
                                 </div>
                             </div>
                         </div>
@@ -253,7 +253,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12 col-lg-3" style="margin-top:1%">
-                                        <h5 class="label-text">Link (Google Drive)</h5>
+                                        <h5 class="label-text">Link</h5>
                                     </div>
                                     <div class="col-sm-12 col-lg-9">
                                         <div class="form-group">

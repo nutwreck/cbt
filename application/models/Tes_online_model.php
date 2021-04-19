@@ -215,8 +215,9 @@ class Tes_online_model extends CI_Model{
        /*  $config_acakan_soal = $this->get_paket_soal_by_id($paket_soal_id);
         $order = $config_acakan_soal->is_acak_soal == 1 ? "CASE WHEN is_acak_soal = 1 THEN 1 ELSE 0 END, CASE WHEN is_acak_soal = 0 THEN id END, RAND()" : 'id ASC'; */
         //Nanti acakan buat user saja
-        return $this->db->select('id, RANK() OVER ( ORDER BY id ASC ) AS no_soal', FALSE)
-                    ->get_where('bank_soal', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->result();
+        //RANK() OVER ( ORDER BY id ASC )
+        return $this->db->select('id, @curRank := @curRank + 1 AS no_soal', FALSE)
+                    ->get_where('bank_soal p, SELECT @curRank := 0) r', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->result();
     }
 
     public function get_soal_by_id($paket_soal_id, $bank_soal_id){

@@ -77,7 +77,6 @@
             upload_video.style.display = 'none';
             upload_text.style.display = 'none';
             upload_link.style.display = 'none';
-
         }
     }
 </script>
