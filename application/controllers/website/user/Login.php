@@ -67,6 +67,13 @@ class Login extends CI_Controller {
         $username = $this->input->post('email', TRUE);
         $password = $this->input->post('password', TRUE);
 
+        $check_username = $this->user->get_checking_username($username);
+
+        if(!empty($check_username)){
+            $this->session->set_flashdata('error', 'Email anda sudah terdaftar! Silahkan login.');
+            redirect("register");
+        }
+
         //Data User
         $data_user['role_user_id'] = $role_user_id;
         $data_user['username'] = $username;
@@ -108,5 +115,41 @@ class Login extends CI_Controller {
             $this->session->set_flashdata('error', 'Pendaftaran gagal! Silahkan coba beberapa saat lagi');
             redirect("register");
         }
+    }
+
+    public function submit_login(){
+        $data['username'] = $this->input->post('username', TRUE);
+        $data['password'] = $this->input->post('password', TRUE);
+
+        $data['login_user'] = $this->general->login_user($data);
+
+        $decode = $this->encryption->decrypt($data['login_user'][0]['password']);
+
+        if($data['login_user'] && $decode == $data['password']){
+            $$user_datas = array(
+                    'user_id' => $data['login_user'][0]['user_id'],
+                    'is_login' => $data['login_user'][0]['is_login'],
+                    'peserta_name' => $data['login_user'][0]['peserta_name'],
+                    'group_peserta_id' => $data['login_user'][0]['group_peserta_id'],
+                    'group_peserta_name' => $data['login_user'][0]['group_peserta_name'],
+                    'role_user_id' => $data['login_user'][0]['role_user_id'],
+                    'has_login' => 1
+            );
+
+            $this->session->set_userdata($user_datas);
+            session_start();
+
+            $this->session->set_flashdata('success', 'Selamat Datang '.$data['login_user'][0]['peserta_name']);
+
+            redirect('dashboard');
+        } else {
+            $this->session->set_flashdata('error', 'Pendaftaran gagal! Silahkan coba beberapa saat lagi');
+            redirect("login");
+        }
+    }
+
+    public function logout(){
+        $this->session->sess_destroy();
+        redirect("login");
     }
 }

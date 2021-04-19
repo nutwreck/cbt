@@ -88,7 +88,7 @@
         <nav class="navbar navbar-expand-lg navbar-light py-0">
             <div class="container">
                 <!-- Navbar Brand -->
-                <a href="#" class="navbar-brand">
+                <a href="<?=base_url()?>" class="navbar-brand">
                     <img src="<?=config_item('_assets_general')?>header_logo/header_logo_user.png" alt="logo" width="150">
                 </a>
             </div>
@@ -106,7 +106,8 @@
 
             <!-- Registeration Form -->
             <div class="col-md-7 col-lg-6 ml-auto">
-                <form action="#">
+                <form id="form_login" name="form_login" action="<?php echo base_url(); ?>website/user/Login/submit_login" class="form-register" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" id="csrf-hash-form" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" style="display: none">
                     <div class="row">
 
                         <!-- Email Address -->
@@ -116,7 +117,7 @@
                                     <i class="fa fa-envelope text-muted"></i>
                                 </span>
                             </div>
-                            <input id="email" type="email" name="email" placeholder="Email Address" class="form-control bg-white border-left-0 border-md">
+                            <input id="username" type="text" name="username" placeholder="Masukkan Email" class="form-control bg-white border-left-0 border-md" required>
                         </div>
 
                         <!-- Password -->
@@ -126,16 +127,16 @@
                                     <i class="fa fa-lock text-muted"></i>
                                 </span>
                             </div>
-                            <input id="password" type="password" name="password" placeholder="Password" class="form-control bg-white border-left-0 border-md">
+                            <input id="password" type="password" name="password" placeholder="Masukkan Password" class="form-control bg-white border-left-0 border-md" required>
                         </div>
 
                         <!-- Submit Button -->
                         <div class="form-group col-lg-12 mx-auto mb-0">
-                            <a href="#" class="btn btn-primary btn-block py-2">
+                            <button type="submit" class="btn btn-primary btn-block py-2">
                                 <span class="font-weight-bold">Login</span>
-                            </a>
+                            </button>
                         </div>
-
+                </form>
                         <!-- Divider Text -->
                         <div class="form-group col-lg-12 mx-auto d-flex align-items-center my-4">
                             <div class="border-bottom w-100 ml-5"></div>
@@ -149,7 +150,6 @@
                         </div>
 
                     </div>
-                </form>
             </div>
         </div>
     </div>

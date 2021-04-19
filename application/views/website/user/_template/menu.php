@@ -28,7 +28,7 @@
                 </ul>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#"><i class="fa fa-sign-out" aria-hidden="true"></i> <b>Keluar</b></a>
+                <a class="nav-link" href="<?=base_url()?>logout"><i class="fa fa-sign-out" aria-hidden="true"></i> <b>Keluar</b></a>
             </li>
         </ul>
     </div>  
