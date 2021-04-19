@@ -84,10 +84,10 @@
 
 <script>
     var id_buku = <?php if(isset($id_buku)) { echo base64_decode(urldecode($id_buku)); } else { echo 0; } ; ?>;
-    var IMAGE_FOLDER = 'storage/website/lembaga/grandsbmptn/modul/soal_'+id_buku+'/';
+    var IMAGE_FOLDER = 'storage/website/lembaga/grandsbmptn/modul/buku_'+id_buku+'/';
     function uploadFileEditor($summernote,file)
 	{
-        var csrfhash = document.getElementById('csrf-hash-form').value;
+        var csrfhash = document.getElementById('csrf-hash-form-text').value;
 		var formData = new FormData();
 		formData.append("file", file);
 		formData.append("folder", IMAGE_FOLDER);
@@ -95,7 +95,7 @@
         formData.append(csrfname, csrfhash);
         formData.append('id_buku', id_buku);
 		$.ajax({
-			url: base_url+'website/lembaga/Buku_setting/editor_modul',
+			url: base_url+'website/lembaga/Management/editor_modul',
 			data: formData,
 			cache: false,
 			contentType: false,
@@ -111,7 +111,7 @@
 		});
 	}
     function deleteFileEditor(src) {
-        var csrfhash = document.getElementById('csrf-hash-form').value;
+        var csrfhash = document.getElementById('csrf-hash-form-text').value;
         var formData = new FormData();
 		formData.append("src", src);
         formData.append('_token', '586b4cca03255330f4da77001ebbfd67');
@@ -120,14 +120,13 @@
         $.ajax({
             data: formData,
             type: "POST",
-            url: base_url+'website/lembaga/Buku_setting/editor_modul_delete',
+            url: base_url+'website/lembaga/Management/editor_modul_delete',
             cache: false,
             contentType: false,
 			processData: false,
             success: function(response) {
                 obj = JSON.parse(response);
                 document.getElementById('csrf-hash-form-text').value = obj.csrf;
-                /* console.log(obj.text); */
             }
         });
     }
@@ -147,8 +146,7 @@
           ['para', ['ul', 'ol', 'paragraph']],
           ['table', ['table']],
           ['insert', ['link', 'picture']],
-          ['view', ['codeview']],
-          ['katex', ['math']]
+          ['view', ['codeview']]
         ],
         callbacks: {
             onImageUpload: function (files) {
@@ -160,10 +158,7 @@
         }
         
     });
-      // @param {String} color
-      $('.summernote').summernote('backColor', 'transparent');
+    // @param {String} color
+    $('.summernote').summernote('backColor', 'transparent');
     $('.summernote').summernote('foreColor', 'black');
-    if(document.getElementById("id_bank_soal") != null){
-        $('.summernote').summernote('code');
-    }
 </script>

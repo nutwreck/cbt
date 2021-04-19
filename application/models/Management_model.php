@@ -65,5 +65,22 @@ class Management_model extends CI_Model{
             ->join('buku AS T2', 'T1.buku_id = T2.id')
             ->order_by('T1.id DESC')
             ->get_where('config_buku_detail AS T1', array('T1.buku_id' => $buku_id, 'T1.is_enable' => 1, 'T2.is_enable' => 1))->result();
-    }   
+    }  
+
+    public function get_buku($buku_id){
+        return $this->db->select('name as buku_name')
+                    ->get_where('buku', array('id' => $buku_id, 'is_enable' => 1))->row();
+    }
+    
+    public function get_detail_jurusan(){
+        return $this->db->order_by('id ASC')
+                    ->get_where('detail_buku', array('is_enable' => 1))->result();
+    }
+
+    public function get_detail_jurusan_selected($detail_buku_id){
+        return $this->db->select('id, name')
+                    ->order_by('id ASC')
+                    ->get_where('detail_buku', array('id !=' => $detail_buku_id, 'is_enable' => 1))->result();
+    }
+    
 }

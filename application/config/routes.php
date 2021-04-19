@@ -145,8 +145,7 @@ $route['admin/delete-detail-pembayaran-master/(:any)/(:any)'] = 'website/lembaga
 $route['admin/buku-setting'] = 'website/lembaga/Management/setting_buku';
 $route['admin/detail-buku/(:any)'] = 'website/lembaga/Management/setting_buku_detail/$1';
 $route['admin/add-detail-buku/(:any)'] = 'website/lembaga/Management/add_detail_buku_setting/$1';
-$route['admin/edit-detail-buku/(:any)'] = 'website/lembaga/Management/setting_buku_detail/$1';
-$route['admin/delete-detail-buku/(:any)'] = 'website/lembaga/Management/setting_buku_detail/$1';
+$route['admin/delete-detail-buku/(:any)/(:any)'] = 'website/lembaga/Management/disable_detail_buku_setting/$1/$2';
 /*
 |
 | START WEBSITE URL FOR LEMBAGA ONLY

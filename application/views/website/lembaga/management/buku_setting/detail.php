@@ -55,10 +55,7 @@
                                         </td>
                                         <td>
                                             <div class="table-data-feature">
-                                                <a href="<?php echo base_url(); ?>admin/edit-buku-detail/<?=urlencode(base64_encode($value->id))?>" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
-                                                    <i class="zmdi zmdi-edit"></i>
-                                                </a>
-                                                <a href="<?=base_url()?>admin/disable-buku-detail/<?=urlencode(base64_encode($value->id))?>" class="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                <a href="<?=base_url()?>admin/delete-detail-buku/<?=urlencode(base64_encode($value->id))?>/<?=urlencode(base64_encode($value->buku_id))?>" class="item" data-toggle="tooltip" data-placement="top" title="Delete">
                                                     <i class="zmdi zmdi-delete"></i>
                                                 </a>
                                             </div>

@@ -229,7 +229,7 @@ class Management extends CI_Controller {
     }
 
     public function disable_konversi($id_konversi){
-        $konversi_skor_id = $konversi_id = base64_decode(urldecode($id_konversi));
+        $konversi_skor_id = base64_decode(urldecode($id_konversi));
 
         $tbl = $this->tbl_konversi_skor;
         $delete = $this->general->delete_data($tbl, $konversi_skor_id);
@@ -662,10 +662,10 @@ class Management extends CI_Controller {
         $buku_id = base64_decode(urldecode($id_buku));
 
         //for passing data to view
-        $config_buku_detail_data = $this->management->get_detail_buku_by_buku($buku_id);
-        $data['content']['detail_buku'] = $config_buku_detail_data;
+        $get_buku = $this->management->get_buku($buku_id);
+        $data['content']['detail_buku'] = $this->management->get_detail_buku_by_buku($buku_id);
         $data['content']['id_buku'] = $id_buku;
-        $data['content']['buku_name'] = $config_buku_detail_data[0]->buku_name;
+        $data['content']['buku_name'] = $get_buku->buku_name;
         $data['title_header'] = ['title' => 'Detail Modul'];
  
         //for load view
@@ -679,6 +679,7 @@ class Management extends CI_Controller {
 
     public function add_detail_buku_setting($id_buku){
         $data['content']['id_buku'] = $id_buku;
+        $data['content']['detail_jurusan'] = $this->management->get_detail_jurusan();
         $data['title_header'] = ['title' => 'Add Detail Modul'];
  
         //for load view
@@ -694,7 +695,14 @@ class Management extends CI_Controller {
         $buku_id_encrypt = $this->input->post('id_buku');
             
         $data['buku_id'] = base64_decode(urldecode($buku_id_encrypt));
-        $data['name'] = $this->input->post('name', TRUE);
+        $data['name'] = ucwords($this->input->post('name', TRUE));
+        $detail_buku_id = $this->input->post('detail_buku_id', TRUE);
+        if($detail_buku_id == '' || empty($detail_buku_id)){
+            $detail_buku_id_x = 0;
+        } else {
+            $detail_buku_id_x = $detail_buku_id;
+        }
+        $data['detail_buku_id'] = $detail_buku_id_x;
 
         $config['upload_path']    = './storage/website/lembaga/grandsbmptn/modul';
         $config['allowed_types']  = 'gif|jpg|png';
@@ -728,7 +736,14 @@ class Management extends CI_Controller {
         $buku_id_encrypt = $this->input->post('id_buku');
             
         $data['buku_id'] = base64_decode(urldecode($buku_id_encrypt));
-        $data['name'] = $this->input->post('name', TRUE);
+        $data['name'] = ucwords($this->input->post('name', TRUE));
+        $detail_buku_id = $this->input->post('detail_buku_id', TRUE);
+        if($detail_buku_id == '' || empty($detail_buku_id)){
+            $detail_buku_id_x = 0;
+        } else {
+            $detail_buku_id_x = $detail_buku_id;
+        }
+        $data['detail_buku_id'] = $detail_buku_id_x;
 
         $config['upload_path']     = './storage/website/lembaga/grandsbmptn/modul';
         $config['allowed_types']   = 'mpeg|mpg|mpeg3|mp3|/x-wav|wave|wav';
@@ -764,7 +779,14 @@ class Management extends CI_Controller {
         $buku_id_encrypt = $this->input->post('id_buku');
             
         $data['buku_id'] = base64_decode(urldecode($buku_id_encrypt));
-        $data['name'] = $this->input->post('name', TRUE);
+        $data['name'] = ucwords($this->input->post('name', TRUE));
+        $detail_buku_id = $this->input->post('detail_buku_id', TRUE);
+        if($detail_buku_id == '' || empty($detail_buku_id)){
+            $detail_buku_id_x = 0;
+        } else {
+            $detail_buku_id_x = $detail_buku_id;
+        }
+        $data['detail_buku_id'] = $detail_buku_id_x;
 
         $config['upload_path']    = './storage/website/lembaga/grandsbmptn/modul';
         $config['allowed_types']  = 'avi|flv|wmv|mp3|mp4';
@@ -796,16 +818,23 @@ class Management extends CI_Controller {
         }
     }
 
-    public function save_link_buku_detail(){
+    public function save_text_buku_detail(){
         $buku_id_encrypt = $this->input->post('id_buku');
         
         $data['buku_id'] = $konversi_id = base64_decode(urldecode($buku_id_encrypt));
-        $data['name'] = $this->input->post('name', TRUE);
-        $data['nama_file'] = $this->input->post('link');
-        $data['type_file'] = '4'; //link
+        $data['name'] = ucwords($this->input->post('name', TRUE));
+        $detail_buku_id = $this->input->post('detail_buku_id', TRUE);
+        if($detail_buku_id == '' || empty($detail_buku_id)){
+            $detail_buku_id_x = 0;
+        } else {
+            $detail_buku_id_x = $detail_buku_id;
+        }
+        $data['detail_buku_id'] = $detail_buku_id_x;
+        $data['nama_file'] = $this->input->post('summernote');
+        $data['type_file'] = '4'; //text
         $data['created_date'] = date('Y-m-d H:i:s');
 
-        $tbl = $this->tbl_buku_detail;
+        $tbl = $this->tbl_config_buku_detail;
         $input = $this->general->input_data($tbl, $data);
 
         $urly = 'admin/detail-buku/'.$buku_id_encrypt;
@@ -813,21 +842,108 @@ class Management extends CI_Controller {
         $this->input_end($input, $urly, $urlx);
     }
 
-    public function save_text_buku_detail(){
+    public function save_link_buku_detail(){
         $buku_id_encrypt = $this->input->post('id_buku');
         
         $data['buku_id'] = $konversi_id = base64_decode(urldecode($buku_id_encrypt));
-        $data['name'] = $this->input->post('name', TRUE);
-        $data['nama_file'] = $this->input->post('summernote');
-        $data['type_file'] = '5'; //text
+        $data['name'] = ucwords($this->input->post('name', TRUE));
+        $detail_buku_id = $this->input->post('detail_buku_id', TRUE);
+        if($detail_buku_id == '' || empty($detail_buku_id)){
+            $detail_buku_id_x = 0;
+        } else {
+            $detail_buku_id_x = $detail_buku_id;
+        }
+        $data['detail_buku_id'] = $detail_buku_id_x;
+        $data['nama_file'] = $this->input->post('link');
+        $data['type_file'] = '5'; //link
         $data['created_date'] = date('Y-m-d H:i:s');
 
-        $tbl = $this->tbl_buku_detail;
+        $tbl = $this->tbl_config_buku_detail;
         $input = $this->general->input_data($tbl, $data);
 
         $urly = 'admin/detail-buku/'.$buku_id_encrypt;
         $urlx = 'admin/detail-buku/'.$buku_id_encrypt;
         $this->input_end($input, $urly, $urlx);
+    }
+
+    public function editor_modul(){
+        $data = [];
+        $datas = [];
+        $_token = $this->input->post('_token', TRUE);
+        $validation = config_item('_token_modul');
+        $target_dir = $this->input->post('folder', TRUE);
+        $buku_id = urlencode(base64_encode($this->input->post('id_buku')));
+
+        if($validation != $_token || empty($_token)){
+            $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
+            redirect('admin/detail-buku/'.$buku_id);
+        } else {
+            if(!file_exists($target_dir)){
+                mkdir($target_dir,0777);
+            }
+
+            $config['upload_path']          = $target_dir;
+            $config['allowed_types']        = 'jpg|png|jpeg';
+            $config['max_size']             = 500;
+            $config['remove_spaces']        = TRUE;        
+            $config['encrypt_name']         = TRUE;
+
+            $this->load->library('upload', $config);
+
+            if ( ! $this->upload->do_upload('file')) {
+                $datas = array(
+                    'link' => '',
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+            }
+            else {
+                $data = array('upload_data' => $this->upload->data());
+                $datas = array(
+                    'link' => base_url().$target_dir.$data['upload_data']['file_name'],
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+            }
+            echo json_encode($datas);
+        }
+    }
+
+    public function editor_modul_delete(){
+        $datas = [];
+        $_token = $this->input->post('_token', TRUE);
+        $validation = config_item('_token_modul');
+        $src = $this->input->post('src', TRUE); 
+        $file_name = str_replace(base_url(), '', $src);
+        $buku_id = urlencode(base64_encode($this->input->post('id_buku')));
+
+        if($validation != $_token || empty($_token)){
+            $this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
+            redirect('admin/detail-buku/'.$buku_id);
+        } else {
+            if(unlink($file_name)){
+                $datas = array(
+                    'text' => 'Success Delete Data Image',
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+            } else {
+                $datas = array(
+                    'text' => 'Failed Delete Data Image',
+                    'csrf' => $this->security->get_csrf_hash()
+                );
+            }
+
+            echo json_encode($datas);
+        }
+    }
+
+    public function disable_detail_buku_setting($id_config_buku_detail, $id_buku){
+        $config_buku_detail_id = base64_decode(urldecode($id_config_buku_detail));
+
+        $tbl = $this->tbl_config_buku_detail;
+        $delete = $this->general->delete_data($tbl, $config_buku_detail_id);
+
+        $urly = 'admin/detail-buku/'.$id_buku;
+        $urlx = 'admin/detail-buku/'.$id_buku;
+        $this->delete_end($delete, $urly, $urlx);
     }
 
 }
