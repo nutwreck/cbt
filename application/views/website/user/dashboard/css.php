@@ -12,7 +12,7 @@
     }
 
     .sesi-detail{
-        font-size:85%;
+        font-size:75%;
     }
 
     .btn-mulai {

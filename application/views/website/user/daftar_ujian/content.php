@@ -203,7 +203,7 @@
         </div>
         <div class="col-sm-12 col-md-4 mt-3 mb-3">
             <div class="card border-primary h-100">
-                <div class="card-header bg-transparent border-primary font-arial-bold sesi-head">Reading</div>
+                <div class="card-header bg-transparent border-primary sesi-head">Reading</div>
                     <div class="card-body">
                         <h5 class="card-title">Reading Comprehension</h5>
                         <table class="table-responsive mb-0 sesi-detail">
@@ -229,7 +229,7 @@
         </div>
         <div class="col-sm-12 col-md-4 mt-3 mb-3">
             <div class="card border-primary h-100">
-                <div class="card-header bg-transparent border-primary font-arial-bold sesi-head">Reading</div>
+                <div class="card-header bg-transparent border-primary sesi-head">Reading</div>
                     <div class="card-body">
                         <h5 class="card-title">Reading Comprehension</h5>
                         <table class="table-responsive mb-0 sesi-detail">

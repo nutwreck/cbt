@@ -36,7 +36,7 @@ class Dashboard extends CI_Controller {
         $this->load->view('website/user/_template/header', $data['title_header']);
         $this->load->view($view['css_additional']);
         $this->load->view('website/user/_template/content');
-        $this->load->view($view['menu_header']);
+        $this->load->view('website/user/_template/sidebar');
         $this->load->view($view['content'], $data['content']);
         $this->load->view('website/user/_template/js_main');
         $this->load->view($view['js_additional']);
@@ -56,7 +56,6 @@ class Dashboard extends CI_Controller {
 
         //for load view
         $view['css_additional'] = 'website/user/dashboard/css';
-        $view['menu_header'] = 'website/user/_template/menu';
         $view['content'] = 'website/user/dashboard/content';
         $view['js_additional'] = 'website/user/dashboard/js';
 
