@@ -77,6 +77,17 @@ class User_model extends CI_Model{
         }
     }
 
+    public function checking_nomor_peserta($no_preserta){
+        $query = $this->db->select('id')
+                        ->get_where('peserta', array('no_peserta' => $no_preserta, 'is_enable' => 1))->row();
+                        
+        if($query){
+            return $query;
+        } else {
+            return null;
+        }
+    }
+
     public function checking_peserta($lembaga_id, $user_id){
         $query = $this->db->select('id')
                         ->get_where('peserta', array('lembaga_id' => $lembaga_id, 'user_id' => $user_id, 'is_enable' => 1))->row();

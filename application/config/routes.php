@@ -59,6 +59,8 @@ $route['translate_uri_dashes'] = FALSE;
 | START WEBSITE URL FOR USER ONLY
 |
 */
+$route['login'] = 'website/user/Login/login';
+$route['register'] = 'website/user/Login';
 $route['dashboard'] = 'website/user/Dashboard';
 $route['history'] = 'website/user/Dashboard/history_ujian';
 $route['detail-history'] = 'website/user/Dashboard/detail_history_ujian';
