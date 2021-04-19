@@ -54,7 +54,7 @@ class Management_model extends CI_Model{
     }
 
     public function get_buku_config(){
-        return $this->db->select('b.id, b.name, cb.free_paket, cb.price, b.created_datetime, b.updated_datetime')
+        return $this->db->select('cb.id, b.id as buku_id, b.name, cb.free_paket, cb.price, b.created_datetime, b.updated_datetime')
             ->join('config_buku as cb', 'cb.buku_id = b.id')
             ->where('b.is_enable', '1')
             ->get('buku as b')->result();
@@ -81,6 +81,10 @@ class Management_model extends CI_Model{
         return $this->db->select('id, name')
                     ->order_by('id ASC')
                     ->get_where('detail_buku', array('id !=' => $detail_buku_id, 'is_enable' => 1))->result();
+    }
+
+    public function get_buku_config_by_id($config_buku_id){
+        return $this->db->get_where('config_buku', array('id' => $config_buku_id, 'is_enable' => 1))->row();
     }
     
 }

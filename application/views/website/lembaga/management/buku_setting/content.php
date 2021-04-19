@@ -34,8 +34,11 @@
                                         <td><?=$value->price?></td>
                                         <td>
                                             <div class="table-data-feature">
-                                                <a href="<?=base_url()?>admin/detail-buku/<?=urlencode(base64_encode($value->id))?>" class="item" data-toggle="tooltip" data-placement="top" title="Tambah Modul">
+                                                <a href="<?=base_url()?>admin/detail-buku/<?=urlencode(base64_encode($value->buku_id))?>" class="item" data-toggle="tooltip" data-placement="top" title="Tambah Modul">
                                                     <i class="zmdi zmdi-plus"></i>
+                                                </a>
+                                                <a href="<?php echo base_url(); ?>admin/edit-buku-setting/<?php echo urlencode(base64_encode($value->id)); ?>" class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                    <i class="zmdi zmdi-edit"></i>
                                                 </a>
                                             </div>
                                         </td>

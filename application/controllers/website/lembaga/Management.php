@@ -215,7 +215,7 @@ class Management extends CI_Controller {
 
     public function submit_edit_konversi(){
         $konversi_skor_id_crypt = $this->input->post('id_konversi');
-        $konversi_skor_id = $konversi_id = base64_decode(urldecode($konversi_skor_id_crypt));
+        $konversi_skor_id = base64_decode(urldecode($konversi_skor_id_crypt));
 
         $data['name'] = $this->input->post('name', TRUE);
         $data['updated_datetime'] = date('Y-m-d H:i:s');
@@ -933,6 +933,38 @@ class Management extends CI_Controller {
 
             echo json_encode($datas);
         }
+    }
+
+    public function edit_setting_buku($id_config_buku){
+        $config_buku_id = base64_decode(urldecode($id_config_buku));
+        //for passing data to view
+        $data['content']['config_buku'] = $this->management->get_buku_config_by_id($config_buku_id);
+        $data['content']['id_config_buku'] = $id_config_buku;
+        $data['title_header'] = ['title' => 'Edit Buku'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/buku_setting/css';
+        $view['content'] = 'website/lembaga/management/buku_setting/edit';
+        $view['js_additional'] = 'website/lembaga/management/buku_setting/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_edit_setting_buku(){
+        $config_buku_id_crypt = $this->input->post('id_config_buku');
+        $config_buku_id = base64_decode(urldecode($config_buku_id_crypt));
+
+        $data['free_paket'] = $this->input->post('free_paket', TRUE);
+        $data['price'] = $this->input->post('price', TRUE);
+        $data['updated_datetime'] = date('Y-m-d H:i:s');
+
+        $tbl = $this->tbl_config_buku;
+        $update = $this->general->update_data($tbl, $data, $config_buku_id);
+
+        $urly = 'admin/buku-setting';
+        $urlx = 'admin/edit-buku-setting/'.$config_buku_id_crypt;
+        $this->update_end($update, $urly, $urlx);
     }
 
     public function disable_detail_buku_setting($id_config_buku_detail, $id_buku){
