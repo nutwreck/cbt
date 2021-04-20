@@ -64,10 +64,12 @@
     function onTimesUp() {
         clearInterval(timerInterval);
         document.getElementById("app").innerHTML = "<h5 class='text-center'>Mengalihkan</h5>";
+        var id_sesi_pelaksana = document.getElementById("id_sesi_pelaksana").innerHTML;
+        var enkrip = document.getElementById("enkrip").innerHTML;
         setTimeout(function(){ document.getElementById("app").innerHTML = "<h5 class='text-center'>Mengalihkan.</h5>"; }, 500);
         setTimeout(function(){ document.getElementById("app").innerHTML = "<h5 class='text-center'>Mengalihkan..</h5>"; }, 1000);
         setTimeout(function(){ document.getElementById("app").innerHTML = "<h5 class='text-center'>Mengalihkan...</h5>"; }, 1500);
-        setTimeout(function(){ window.location.href = base_url + "ujian"; }, 1700);
+        setTimeout(function(){ window.location.href = base_url + "ujian/" + id_sesi_pelaksana + "/" + enkrip; }, 1700);
     }
 
     function startTimer() {
@@ -119,9 +121,9 @@
     function calculateTimeFraction() {
         const rawTimeFraction = timeLeft / TIME_LIMIT;
         return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction);
-        }
+    }
 
-        function setCircleDasharray() {
+    function setCircleDasharray() {
         const circleDasharray = `${(
             calculateTimeFraction() * FULL_DASH_ARRAY
         ).toFixed(0)} 283`;

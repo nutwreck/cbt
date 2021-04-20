@@ -9,12 +9,22 @@
         if (t.length) {
             sisawaktu(t.data('time'));
         }
+
+        //Sidebar hidden
+        $('#sidebar, #content').toggleClass('active');
+        $('.collapse.in').toggleClass('in');
+        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+
+        //disable F5
+        /* $(document).on("keydown", disableF5); */
     });
+
+    function disableF5(e) { if ((e.which || e.keyCode) == 116 || (e.which || e.keyCode) == 82) e.preventDefault(); };
 </script>
 
 <!-- User pindah tab lain atau pindah dari browser aktif sekarang -->
 <script type="text/javascript">
-    document.addEventListener("visibilitychange", event => {
+    /* document.addEventListener("visibilitychange", event => {
         var modal = document.getElementById("alert-away");
         var timeleft  = 5;
 
@@ -32,15 +42,15 @@
             document.getElementById("msg_footer_away").innerHTML = "Tunggu waktu penalti selesai untuk dapat melanjutkan pengerjaan soal kembali.";
             modal.style.display = "block";
         }
-    })
+    }) */
 </script>
 
 <!-- Intro JS -->
 <script>
-    introJs().setOptions({
+    /* introJs().setOptions({
         showProgress: true,
         showBullets: false
-    }).start()
+    }).start() */
 </script>
 
 <!-- For Mobile Menu SideBar --> 

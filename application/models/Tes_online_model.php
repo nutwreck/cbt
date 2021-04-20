@@ -154,6 +154,18 @@ class Tes_online_model extends CI_Model{
         return $this->db->get('v_sesi_pelaksanaan')->result();
     }
 
+    public function get_sesi_pelaksanaan_existing(){
+        $now = date('Y-m-d H:i:s');
+        return $this->db->order_by('waktu_mulai ASC')
+            ->get_where('v_sesi_pelaksanaan', array('batas_pengerjaan >=' => $now))->result();
+    }
+
+    public function get_sesi_pelaksanaan_selected($sesi_pelaksana_id){
+        $now = date('Y-m-d H:i:s');
+        return $this->db->order_by('waktu_mulai ASC')
+            ->get_where('v_sesi_pelaksanaan', array('sesi_pelaksanaan_id' => $sesi_pelaksana_id, 'batas_pengerjaan >=' => $now))->row();
+    }
+
     public function get_paket_soal_sesi(){
         return $this->db->order_by('paket_soal_id DESC')
                     ->get_where('v_paket_soal', array('type_paket_id !=' => 2,  'is_enable' => 1))->result();
@@ -161,6 +173,10 @@ class Tes_online_model extends CI_Model{
 
     public function get_paket_soal_sesi_selected($paket_soal_id){
         return $this->db->get_where('v_paket_soal', array('paket_soal_id' => $paket_soal_id, 'type_paket_id !=' => 2,  'is_enable' => 1))->row();
+    }
+
+    public function get_paket_soal_sesi_by_id($paket_soal_id){
+        return $this->db->get_where('v_paket_soal', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->row();
     }
 
     public function get_group_peserta(){
@@ -324,6 +340,37 @@ class Tes_online_model extends CI_Model{
     public function get_total_peserta(){
         return $this->db->select('COUNT(peserta_id) AS total_peserta', FALSE)
                         ->get('v_peserta', array('is_enable' => 1))->row();
+    }
+
+    public function get_checking_ujian($paket_soal_id, $user_id){
+        $query = $this->db->select('id')
+                        ->get_where('ujian', array('paket_soal_id' => $paket_soal_id, 'user_id' => $user_id, 'status' => 0, 'is_enable' => 1))->row();
+        
+        if($query){
+            return $query;
+        } else {
+            return null;
+        }
+    }
+
+    public function get_bank_soal_ujian($paket_soal_id, $group_soal_id, $total_soal){
+        $config_acakan_soal = $this->get_paket_soal_by_id($paket_soal_id);
+        $order = $config_acakan_soal->is_acak_soal == 1 ? "CASE WHEN is_acak_soal = 1 THEN 1 ELSE 0 END, CASE WHEN is_acak_soal = 0 THEN bank_soal_id END, RAND()" : 'bank_soal_id ASC';
+        $query = $this->db->query("
+                    SELECT `bank_soal_id` 
+                    FROM `v_bank_soal` 
+                    WHERE `paket_soal_id` = '".$paket_soal_id."' 
+                    AND `group_soal_id` = '".$group_soal_id."' 
+                    AND `is_enable` = 1 
+                    ORDER BY ".$order." 
+                    LIMIT ".$total_soal."
+                ");
+        $check = $query->result_array();
+        if($check > 0){
+            return $check;
+        } else{
+            return false;
+        }
     }
 
     public function save_soal($data){

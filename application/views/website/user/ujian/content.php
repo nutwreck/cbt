@@ -1,5 +1,8 @@
 <?php
-$waktu_habis = strtotime('2021-04-11 19:34:40');
+$now = date('Y-m-d H:i:s');
+$lama_pengerjaan = date("Y-m-d H:i:s", strtotime($now. ' + '.$sesi_pelaksana->lama_pengerjaan.' minutes'));
+
+$waktu_habis = strtotime($sesi_pelaksana->batas_pengerjaan);
 if(time() >= $waktu_habis)
 {
     $this->session->set_flashdata('error', 'Waktu ujian telah berakhir!');
@@ -18,13 +21,13 @@ if(time() >= $waktu_habis)
                         <table class="table table-hover">
                             <tbody>
                                 <tr>
-                                    <td>Sesi Tes</td><td>:</td><td>UTBK Online</td>
+                                    <td>Sesi Tes</td><td>:</td><td><?=ucwords($sesi_pelaksana->sesi_pelaksanaan_name)?></td>
                                 </tr>
                                 <tr>
-                                    <td>Peserta</td><td>:</td><td>Candra Aji Pamungkas (<b>2021031000001</b>)</td>
+                                    <td>Peserta</td><td>:</td><td><?=ucwords($this->session->userdata('peserta_name'))?> (<b><?=$this->session->userdata('no_peserta')?></b>)</td>
                                 </tr>
                                 <tr>
-                                    <td>Materi</td><td>:</td><td>Penalaran Umum - <b>10 Butir Soal</b></td>
+                                    <td>Materi</td><td>:</td><td><?=ucwords(strtolower($sesi_pelaksana->materi_name))?> - <b><?=$sesi_pelaksana->total_soal?> Butir Soal</b></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -41,7 +44,7 @@ if(time() >= $waktu_habis)
                     <div class="card-body">
                         <div class="text-center">
                             <h5 class="sisawaktu-title font-poppins">Sisa Waktu</h5>
-                            <span class="sisawaktu font-arial-bold" data-intro="Sisa waktu pengerjaan anda." data-position="left" data-time="2021-04-11 19:34:40"></span>
+                            <span class="sisawaktu font-arial-bold" data-intro="Sisa waktu pengerjaan anda." data-position="left" data-time="<?=$lama_pengerjaan?>"></span>
                             <div class="row mt-3">
                                 <div class="col" data-intro="Untuk menampilkan dan menyembunyikan navigasi soal." data-position="left">
                                     <button class="btn btn-md btn-primary" onclick="toggle_soal()"><i id="toogle-navigasi-ico" class="fa fa-chevron-circle-up" aria-hidden="true"></i> Navigasi</button>
@@ -67,7 +70,7 @@ if(time() >= $waktu_habis)
                         </div>
                         <div class="col text-right">
                             <button id="_increase" class="btn btn-sm text-primary bg-white" data-intro="Memperbesar ukuran huruf pada lembar soal anda." data-position="up"><i class="fa fa-plus-square" aria-hidden="true" title="Zoom In"></i></button>
-                            <button id="_reset" class="btn btn-sm text-primary bg-white" data-intro="Mengembalikan ukuran huruf seperti semula pada lembar soal anda." data-position="up"><i class="fa fa-refresh" aria-hidden="true" title="Default"></i></button>
+                            <button id="_reset" class="btn btn-sm text-primary bg-white" data-intro="Mengembalikan ukuran huruf seperti semula pada lembar soal anda." data-position="up"><i class="fa fa-sync" aria-hidden="true" title="Default"></i></button>
                             <button id="_decrease" class="btn btn-sm text-primary bg-white" data-intro="Memperkecil ukuran huruf pada lembar soal anda." data-position="up"><i class="fa fa-minus-square" aria-hidden="true" title="Zoom Out"></i></button>
                             <span class="btn-nxt-brf-hrd">|</span>
                             <button id="_decrease" class="btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>

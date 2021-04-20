@@ -7,7 +7,7 @@
     <ul class="list-unstyled components">
         <!-- <p>Dummy Heading</p> -->
         <li class="active">
-            <a href="#"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
+            <a href="<?=base_url()?>dashboard"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
         </li>
         <li>
             <a href="#simulasimateri" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-book" aria-hidden="true"></i> Simulasi & Materi</a>
@@ -24,21 +24,16 @@
             </ul>
         </li>
         <li>
-            <a href="#pengaturan" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-cogs" aria-hidden="true"></i> Pengaturan</a>
-            <ul class="collapse list-unstyled" id="pengaturan">
-                <li>
-                    <a href="#">Akun</a>
-                </li>
-                <li>
-                    <a href="#">History Ujian</a>
-                </li>
-                <li>
-                    <a href="#">Status Pembelian</a>
-                </li>
-            </ul>
+            <a href="<?=base_url()?>account"><i class="fa fa-user" aria-hidden="true"></i> Akun</a>
         </li>
         <li>
-            <a href="<?=base_url()?>logout">Logout</a>
+            <a href="<?=base_url()?>history"><i class="fa fa-database" aria-hidden="true"></i> History Ujian</a>
+        </li>
+        <li>
+            <a href="<?=base_url()?>purchase"><i class="fa fa-list" aria-hidden="true"></i> Status Pembelian</a>
+        </li>
+        <li>
+            <a href="<?=base_url()?>logout"><i class="fa fa-power-off" aria-hidden="true"></i> Logout</a>
         </li>
     </ul>
 </nav>

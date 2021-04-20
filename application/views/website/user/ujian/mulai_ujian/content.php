@@ -10,18 +10,20 @@
     <div class="row">
         <div class="box effect-box rounded text-white">
             <div class="col-sm-12">
-                <h4 class="ls-1 text-center mb-5 font-weight-bold text-uppercase">GRANDSBMPTN 2021</h4>
-                <h3 class="font-arial-bold ls-2 text-center">Penalaran Umum</h3>
-                <div class="col-sm-12 col-md-6 offset-md-3 col-lg-6 offset-lg-4 mb-5">
-                    <table class="table-borderless m-2">
+                <h4 class="ls-1 text-center mb-5 font-weight-bold text-uppercase"><?=$sesi_pelaksana->nama_paket_soal?></h4>
+                <h3 class="font-arial-bold ls-2 text-center"><?=ucwords(strtolower($sesi_pelaksana->materi_name))?></h3>
+                <center>
+                <div class="col-sm-12 mb-5">
+                    <table class="table-borderless">
                         <tr>
-                            <td><h5>Waktu Pengerjaan</h5></td><td><h5> : </h5></td><td><h5>120 Menit</h5></td>
+                            <td><h5>Waktu Pengerjaan</h5></td><td><h5> &nbsp;:&nbsp; </h5></td><td><h5><?=$sesi_pelaksana->lama_pengerjaan?> Menit</h5></td>
                         </tr>
                         <tr>
-                            <td><h5>Jumlah Soal</h5></td><td><h5> : </h5></td><td><h5>10 Butir</h5></td>
+                            <td><h5>Jumlah Soal</h5></td><td><h5> &nbsp;:&nbsp; </h5></td><td><h5><?=$sesi_pelaksana->total_soal?> Butir</h5></td>
                         </tr>
                     </table>
                 </div>
+                </center>
                 <div class="text-center">
                     <a href="#petunjuk" class="btn btn-md btn-primary" onclick="show_petunjuk()">Petunjuk Pengerjaan</a>
                 </div>
@@ -34,10 +36,9 @@
                 <div>
                     <span class="font-weight-bold" style="font-size: 24px;">Petunjuk Pengerjaan</span><br>
                 </div>
-                <ul>
-                    <li>Berdoa sebelum mengerjakan</li>
-                    <li>Maksimalkan waktu yang ada</li>
-                </ul>
+                <div>
+                    <?=$sesi_pelaksana->petunjuk?>
+                </div>
                 <div>
                     <span class="font-weight-bold" style="font-size: 24px;">Petunjuk Teknis</span><br>
                 </div>
@@ -55,6 +56,8 @@
                 </ul>
                 <h5 id="info_mulai" class="text-center font-poppins text-informasi" style="display:none;">Tes akan dimulai dalam hitungan</h5>
                 <div id="mulai_tes" class="text-center">
+                    <p id="id_sesi_pelaksana" style="display:none;"><?=$id_sesi_pelaksana?></p>
+                    <p id="enkrip" style="display:none;"><?=$encrypt?></p>
                     <a href="#app" class="btn btn-md btn-success m-2" onclick="mulai_tes()">Mulai Pengerjaan</a>
                     <h6><i>Atau</i></h6>
                     <button type="button" class="btn btn-outline-secondary" onclick="back_dashboard()">Kembali</button>

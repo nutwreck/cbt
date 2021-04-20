@@ -8,6 +8,8 @@ class Dashboard extends CI_Controller {
         if (!$this->session->has_userdata('has_login')){
             redirect('login');
         }
+        $this->load->model('General','general');
+        $this->load->model('Tes_online_model','tes');
     }
 
     /*
@@ -51,7 +53,7 @@ class Dashboard extends CI_Controller {
 
     public function index(){ //
         //for passing data to view
-        $data['content'] = [];
+        $data['content']['sesi_pelaksana'] = $this->tes->get_sesi_pelaksanaan_existing();
         $data['title_header'] = ['title' => 'Daftar Sesi Ujian'];
 
         //for load view

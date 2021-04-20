@@ -97,7 +97,9 @@ class Login extends CI_Controller {
             
             $user_datas = array(
                     'user_id' => $data['login_user'][0]['user_id'],
+                    'username' => $data['login_user'][0]['username'],
                     'is_login' => $data['login_user'][0]['is_login'],
+                    'no_peserta' => $data['login_user'][0]['no_peserta'],
                     'peserta_name' => $data['login_user'][0]['peserta_name'],
                     'group_peserta_id' => $data['login_user'][0]['group_peserta_id'],
                     'group_peserta_name' => $data['login_user'][0]['group_peserta_name'],
@@ -128,7 +130,9 @@ class Login extends CI_Controller {
         if($data['login_user'] && $decode == $data['password']){
             $user_datas = array(
                     'user_id' => $data['login_user'][0]['user_id'],
+                    'username' => $data['login_user'][0]['username'],
                     'is_login' => $data['login_user'][0]['is_login'],
+                    'no_peserta' => $data['login_user'][0]['no_peserta'],
                     'peserta_name' => $data['login_user'][0]['peserta_name'],
                     'group_peserta_id' => $data['login_user'][0]['group_peserta_id'],
                     'group_peserta_name' => $data['login_user'][0]['group_peserta_name'],

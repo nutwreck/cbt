@@ -157,6 +157,7 @@ class General extends CI_Model{
                     password,
                     is_login,
                     peserta_name,
+                    no_peserta,
                     group_peserta_id,
                     group_peserta_name,
                     role_user_id
