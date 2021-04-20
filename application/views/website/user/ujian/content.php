@@ -62,7 +62,8 @@ if(time() >= $waktu_habis)
 
     <div class="row">
         <div id="lembar_soal" data-intro="Lembar soal anda." data-position="right" class="col-sm-12 col-md-8 mb-3">
-            <div class="card text-left h-100 font-poppins">
+            <?=$lembar_jawaban?>
+            <!-- <div class="card text-left h-100 font-poppins">
                 <div class="card-header bg-primary text-white">
                     <div class="row">
                         <div class="col">
@@ -134,7 +135,7 @@ if(time() >= $waktu_habis)
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div id="panel-toogle-soal" data-intro="Menampilkan nomor soal untuk membantu anda mengakses halaman soal lebih cepat." data-position="up" class="col-sm-12 col-md-4 mb-3" style="display:block;">
             <div class="card text-center font-poppins">

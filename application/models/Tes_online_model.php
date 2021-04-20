@@ -232,8 +232,10 @@ class Tes_online_model extends CI_Model{
         $order = $config_acakan_soal->is_acak_soal == 1 ? "CASE WHEN is_acak_soal = 1 THEN 1 ELSE 0 END, CASE WHEN is_acak_soal = 0 THEN id END, RAND()" : 'id ASC'; */
         //Nanti acakan buat user saja
         //RANK() OVER ( ORDER BY id ASC )
-        return $this->db->select('id, @curRank := @curRank + 1 AS no_soal', FALSE)
-                    ->get_where('bank_soal p, SELECT @curRank := 0) r', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->result();
+        //curRank := @curRank + 1 //select
+        //ank_soal p, SELECT @curRank := 0) r //get
+        return $this->db->select('id, RANK() OVER ( ORDER BY id ASC ) AS no_soal', FALSE)
+                    ->get_where('bank_soal', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->result();
     }
 
     public function get_soal_by_id($paket_soal_id, $bank_soal_id){
@@ -252,6 +254,15 @@ class Tes_online_model extends CI_Model{
         */ //Nanti buat acakan pas user
         return $this->db->select('id, bank_soal_id, order, name, score, is_key')
                     ->order_by('order ASC, id ASC')
+                    ->get_where('jawaban', array('bank_soal_id' => $bank_soal_id, 'is_enable' => 1))->result();
+    }
+
+    public function get_jawaban_by_id_user($bank_soal_id, $paket_soal_id){
+        $paket_acakan_jwb = $this->get_paket_soal_by_id($paket_soal_id);
+        $soal_acakan_jwb = $this->get_soal_by_id($paket_soal_id, $bank_soal_id); 
+        $order = $paket_acakan_jwb->is_acak_jawaban == 1 && $soal_acakan_jwb->is_acak_jawaban == 1 ? 'RAND()' : 'order ASC, id ASC';
+        return $this->db->select('id, bank_soal_id, order, name, score, is_key')
+                    ->order_by($order)
                     ->get_where('jawaban', array('bank_soal_id' => $bank_soal_id, 'is_enable' => 1))->result();
     }
 
@@ -343,7 +354,7 @@ class Tes_online_model extends CI_Model{
     }
 
     public function get_checking_ujian($paket_soal_id, $user_id){
-        $query = $this->db->select('id')
+        $query = $this->db->select('id, user_id, user_no, user_name, user_email, list_soal, list_jawaban, tgl_mulai, tgl_selesai, status')
                         ->get_where('ujian', array('paket_soal_id' => $paket_soal_id, 'user_id' => $user_id, 'status' => 0, 'is_enable' => 1))->row();
         
         if($query){
@@ -371,6 +382,15 @@ class Tes_online_model extends CI_Model{
         } else{
             return false;
         }
+    }
+
+    public function get_ujian_list_user($pc_urut_soal_jwb, $pc_urut_soal_id, $paket_soal_id){
+        $this->db->select("*, {$pc_urut_soal_jwb} AS jawaban");
+        $this->db->from('v_bank_soal');
+        $this->db->where('bank_soal_id', $pc_urut_soal_id);
+        $this->db->where('paket_soal_id', $paket_soal_id);
+        $this->db->where('is_enable', 1);
+        return $this->db->get()->row();
     }
 
     public function save_soal($data){
