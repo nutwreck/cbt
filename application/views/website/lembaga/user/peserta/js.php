@@ -5,8 +5,40 @@
 <script>
     $(document).ready(function() {
         $('#table_participants').DataTable( {
-            
+            "columnDefs": [
+                { "orderable": false, "targets": 1 },
+                { "orderable": false, "targets": 2 }
+            ]
         } );
+
+        $('.delete_checkbox').click(function(){
+            if($(this).is(':checked')) {
+                $(this).closest('tr').addClass('removeRow');
+            } else {
+                $(this).closest('tr').removeClass('removeRow');
+            }
+        });
+
+        $('#delete_all').click(function(){
+            var checkbox = $('.delete_checkbox:checked');
+            if(checkbox.length > 0) {
+                var checkbox_value = [];
+                $(checkbox).each(function(){
+                    checkbox_value.push($(this).val());
+                });
+                $.ajax({
+                    url:"<?php echo base_url(); ?>website/lembaga/User/user_multiple_delete_all",
+                    method:"POST",
+                    data:{checkbox_value:checkbox_value},
+                    success:function()
+                    {
+                    $('.removeRow').fadeOut(1500);
+                    }
+                })
+            } else {
+                alert('Pilih minimal 1 data');
+            }
+        });
     } );
 
     function add_data() {

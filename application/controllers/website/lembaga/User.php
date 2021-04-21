@@ -820,4 +820,19 @@ class User extends CI_Controller {
         $this->delete_end($disable, $urly, $urlx);
     }
 
+    public function user_multiple_delete_all(){
+        if($this->input->post('checkbox_value')) {
+            $id = $this->input->post('checkbox_value');
+
+            $data = array(
+                'is_enable' => 0,
+                'updated_datetime' => date('Y-m-d H:i:s')
+            );
+            
+            for($count = 0; $count < count($id); $count++) {
+                $this->user->disable_peserta_user($id[$count]);
+            }
+        }
+    }
+
 }

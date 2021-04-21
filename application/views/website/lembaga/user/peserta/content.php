@@ -27,6 +27,7 @@
                                 <thead>
                                     <tr>
                                         <th width="15px">No</th>
+                                        <th width="2%"><button type="button" name="delete_all" id="delete_all" class="btn btn-sm btn-danger btn-xs"><i class="fa fa-trash"></i></button></th>
                                         <th>Aksi</th>
                                         <th>Nomor</th>
                                         <th>Nama</th>
@@ -42,6 +43,7 @@
                                 ?>
                                     <tr>
                                         <td><?=$no++?></td>
+                                        <td><input type="checkbox" class="delete_checkbox" value="'.$value->peserta_id.'" /></td>
                                         <td>
                                             <div class="btn-group">
                                                 <a href="<?=base_url()?>admin/edit-participants/<?=urlencode(base64_encode($value->peserta_id))?>/<?=urlencode(base64_encode($value->user_id))?>" class="btn btn-sm btn-primary mr-1"><i class="fa fa-pencil"></i></a>
