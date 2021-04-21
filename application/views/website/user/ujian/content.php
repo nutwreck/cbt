@@ -1,8 +1,5 @@
 <?php
-$now = date('Y-m-d H:i:s');
-$lama_pengerjaan = date("Y-m-d H:i:s", strtotime($now. ' + '.$sesi_pelaksana->lama_pengerjaan.' minutes'));
-
-$waktu_habis = strtotime($sesi_pelaksana->batas_pengerjaan);
+$waktu_habis = strtotime($waktu_selesai);
 if(time() >= $waktu_habis)
 {
     $this->session->set_flashdata('error', 'Waktu ujian telah berakhir!');
@@ -44,7 +41,7 @@ if(time() >= $waktu_habis)
                     <div class="card-body">
                         <div class="text-center">
                             <h5 class="sisawaktu-title font-poppins">Sisa Waktu</h5>
-                            <span class="sisawaktu font-arial-bold" data-intro="Sisa waktu pengerjaan anda." data-position="left" data-time="<?=$lama_pengerjaan?>"></span>
+                            <span class="sisawaktu font-arial-bold" data-intro="Sisa waktu pengerjaan anda." data-position="left" data-time="<?=$waktu_selesai?>"></span>
                             <div class="row mt-3">
                                 <div class="col" data-intro="Untuk menampilkan dan menyembunyikan navigasi soal." data-position="left">
                                     <button class="btn btn-md btn-primary" onclick="toggle_soal()"><i id="toogle-navigasi-ico" class="fa fa-chevron-circle-up" aria-hidden="true"></i> Navigasi</button>
@@ -62,95 +59,17 @@ if(time() >= $waktu_habis)
 
     <div class="row">
         <div id="lembar_soal" data-intro="Lembar soal anda." data-position="right" class="col-sm-12 col-md-8 mb-3">
-            <?=$lembar_jawaban?>
-            <!-- <div class="card text-left h-100 font-poppins">
-                <div class="card-header bg-primary text-white">
-                    <div class="row">
-                        <div class="col">
-                            <h5><i class="fa fa-braille" aria-hidden="true"></i> Soal No #2 / 10</h5>
-                        </div>
-                        <div class="col text-right">
-                            <button id="_increase" class="btn btn-sm text-primary bg-white" data-intro="Memperbesar ukuran huruf pada lembar soal anda." data-position="up"><i class="fa fa-plus-square" aria-hidden="true" title="Zoom In"></i></button>
-                            <button id="_reset" class="btn btn-sm text-primary bg-white" data-intro="Mengembalikan ukuran huruf seperti semula pada lembar soal anda." data-position="up"><i class="fa fa-sync" aria-hidden="true" title="Default"></i></button>
-                            <button id="_decrease" class="btn btn-sm text-primary bg-white" data-intro="Memperkecil ukuran huruf pada lembar soal anda." data-position="up"><i class="fa fa-minus-square" aria-hidden="true" title="Zoom Out"></i></button>
-                            <span class="btn-nxt-brf-hrd">|</span>
-                            <button id="_decrease" class="btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
-                            <button id="_decrease" class="btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="card-text text-justify"><p class="math">$$\begin{rcases}
-                    a &\text{if } b \\
-                    c &\text{if } d
-                    \end{rcases}⇒…$$</p><p>Benda apakah itu?</p>
-                    </div>
-                    <hr>
-                    <div class="card-text mt-2">
-                        <p><b>Pilih salah satu jawaban!</b></p>
-                    </div>
-                    <div class="funkyradio text-justify">
-                        <div class="funkyradio-success">
-                            <input type="radio" id="opsi_a" name="opsi" value="A"> 
-                            <label for="opsi_a">
-                                <div class="huruf_opsi">A</div> 
-                                <div class="card-text"><p class="math">$$\begin{rcases}
-                                    a &\text{if } b \\
-                                    c &\text{if } d
-                                    \end{rcases}⇒…$$</p></div>
-                            </label>
-                        </div>
-                        <div class="funkyradio-success">
-                            <input type="radio" id="opsi_b" name="opsi" value="B"> 
-                            <label for="opsi_b">
-                                <div class="huruf_opsi">B</div> 
-                                <div class="card-text"><p class="math">$$\begin{Vmatrix}
-                                    a & b \\
-                                    c & d
-                                    \end{Vmatrix}$$</p></div>
-                            </label>
-                        </div>
-                        <div class="funkyradio-success">
-                            <input type="radio" id="opsi_c" name="opsi" value="C"> 
-                            <label for="opsi_c">
-                                <div class="huruf_opsi">C</div> 
-                                <div class="card-text"><p class="math">$$x = \begin{cases}
-                                    a &\text{if } b \\
-                                    c &\text{if } d
-                                    \end{cases}$$</p></div>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer text-muted">
-                    <div class="row text-center">
-                        <div class="col">
-                            <button class="btn btn-md btn-primary">No 1</button>
-                        </div>
-                        <div class="col" data-intro="Membantu untuk menandai soal jika dirasa anda ragu untuk menjawabnya. Akan muncul warna oranye pada navigasi soal." data-position="up">
-                            <button class="btn btn-md btn-warning">Ragu</button>
-                        </div>
-                        <div class="col">
-                            <button class="btn btn-md btn-primary">No 3</button>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
+            <?=form_open('', array('id'=>'ujian'), array('id'=> $ujian_id));?>
+                <h3 class="box-title" style="display:none;"><span class="badge bg-blue">Soal #<span id="soalke"></span> </span></h3>
+                <?=$lembar_jawaban?>
+                <input type="hidden" name="jml_soal" id="jml_soal" value="<?=$jumlah_soal; ?>">
+            <?=form_close();?>
         </div>
         <div id="panel-toogle-soal" data-intro="Menampilkan nomor soal untuk membantu anda mengakses halaman soal lebih cepat." data-position="up" class="col-sm-12 col-md-4 mb-3" style="display:block;">
             <div class="card text-center font-poppins">
                 <h5 class="m-3">Navigasi Soal</h5>
-                <div class="card-body text-white btn-navigasi">
-                    <button class="btn button-round btn-success">1</button>
-                    <button class="btn button-round btn-outline-secondary">2</button>
-                    <button class="btn button-round btn-warning">3</button>
-                    <button class="btn button-round btn-outline-secondary">4</button>
-                    <button class="btn button-round btn-outline-secondary">5</button>
-                    <button class="btn button-round btn-outline-secondary">6</button>
-                    <button class="btn button-round btn-outline-secondary">7</button>
-                    <button class="btn button-round btn-outline-secondary">8</button>
-                    <button class="btn button-round btn-outline-secondary">9</button>
-                    <button class="btn button-round btn-outline-secondary">10</button>
+                <div id="tampil_jawaban" class="card-body text-white btn-navigasi">
+                
                 </div>
             </div>
         </div>

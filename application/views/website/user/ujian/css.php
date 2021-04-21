@@ -143,55 +143,12 @@
         font-size:17px;
     }
 
-    /* .sidenav { FOR NEXT DESIGN UJIAN
-        width: 25%;
-        position: fixed;
-        z-index: 1;
-        right: 10px;
-        top:100px;
-        background: rgb(9,165,255);
-        background: -moz-linear-gradient(90deg, rgba(9,165,255,1) 0%, rgba(81,230,218,1) 100%);
-        background: -webkit-linear-gradient(90deg, rgba(9,165,255,1) 0%, rgba(81,230,218,1) 100%);
-        background: linear-gradient(90deg, rgba(9,165,255,1) 0%, rgba(81,230,218,1) 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#09a5ff",endColorstr="#51e6da",GradientType=1);
-        overflow-x: hidden;
-        padding: 8px 0;
-        border-radius: 25px;
-    } 
-
-    .sidenav a {
-        padding: 1% 5% 1% 5%;
-        text-decoration: none;
-        font-size: 18px;
-        color: white;
-        display: block;
-    }
-
-    .sidenav a:hover {
-        color: #064579;
-    } 
-
-    .collapsible {
-        display: none;
-        overflow: hidden;
-    } 
-
-    .content {
-        display: block;
-    }
-
-    .main {
-        margin-top: 100px;
-        width: 75%;
-        padding: 0px 10px;
-    } */
-
     .math{
         width:10%;
     }
 
     .button-round {
-        display: inline-block;
+        display: inline-flex;
         position: relative;
         height: 50px;
         width: 50px;
@@ -200,6 +157,13 @@
         padding: 0;
         font-size: 100%;
         font-weight: bold;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .button-round span{
+        height: 100px;
     }
 
     .sisawaktu-title{
@@ -242,13 +206,6 @@
     /* ***************** */
     @media only screen and (max-width: 420px) {
         .base-timer {left: 33%; margin-right: -33%;}
-        /* .sidenav {padding-top: 2%} FOR NEXT DESIGN UJIAN
-        .sidenav a {font-size: 18px;}
-        .main {width: 100%;margin-top: 180px;}
-        .sidenav {width: 90%; right:0px; margin: 0 5% 0 5%}
-        .content {display: none; overflow: hidden;}
-        .collapsible {display: block; padding: 0% 7% 0% 7%;} 
-        .collapsible button {border: 2px solid #ffffff;} */
         .modal-content {margin: 50% auto;}
         .btn-nxt-brf-hrd {display: none;}
     }
