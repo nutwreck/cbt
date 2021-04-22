@@ -115,6 +115,7 @@ $route['admin/disable-group-participants/(:any)'] = 'website/lembaga/user/disabl
 $route['admin/participants'] = 'website/lembaga/User/participants';
 $route['admin/add-participants'] = 'website/lembaga/User/add_participants';
 $route['admin/add-import-participants'] = 'website/lembaga/User/add_import_excel_participants';
+$route['admin/export-participants'] = 'website/lembaga/User/export_participants';
 $route['admin/edit-participants/(:any)/(:any)'] = 'website/lembaga/user/edit_participants/$1/$2';
 $route['admin/disable-participants/(:any)/(:any)'] = 'website/lembaga/user/disable_participants/$1/$2';
 $route['admin/disable-all-participants'] = 'website/lembaga/user/user_peserta_delete_all';

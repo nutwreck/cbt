@@ -20,6 +20,9 @@
                                 <button class="btn btn-md btn-success m-1" onclick="import_excel()">
                                     <i class="fa fa-upload"></i> Import Excel
                                 </button>
+                                <button class="btn btn-md btn-success m-1" onclick="export_excel()">
+                                    <i class="fa fa-download"></i> Export Excel
+                                </button>
                                 <a href="<?=base_url()?>admin/disable-all-participants" class="btn btn-md btn-danger m-1" onclick="return confirm('Apakah anda yakin menghapus semua data peserta?')"><i class="fa fa-trash"></i> Hapus Semua</a>
                             </div>
                         </div>

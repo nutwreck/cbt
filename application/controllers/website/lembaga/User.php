@@ -851,4 +851,45 @@ class User extends CI_Controller {
         $this->delete_end($disable, $urly, $urlx);
     }
 
+    public function export_participants(){
+        $lembaga_id = $this->session->userdata('lembaga_id');
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Nomor Peserta');
+        $sheet->setCellValue('C1', 'Nama');
+        $sheet->setCellValue('D1', 'Kelompok');
+        $sheet->setCellValue('E1', 'Username/Email');
+        $sheet->setCellValue('F1', 'Password');
+        
+        $siswa = $this->user->get_peserta_by_lembaga($lembaga_id);
+        $no = 1;
+        $x = 2;
+        foreach($siswa as $row)
+        {
+            $sheet->setCellValue('A'.$x, $no++);
+            $sheet->setCellValue('B'.$x, (int) $row->no_peserta);
+            $sheet->setCellValue('C'.$x, $row->peserta_name);
+            $sheet->setCellValue('D'.$x, $row->group_peserta_name);
+            $sheet->setCellValue('E'.$x, $row->username);
+            $sheet->setCellValue('F'.$x, $this->encryption->decrypt($row->password));
+            $x++;
+        }
+
+        // Column sizing
+        foreach(range('A','F') as $columnID){
+            $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'All-Data-Peserta';
+        
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"'); 
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+    }
+
 }

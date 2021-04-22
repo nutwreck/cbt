@@ -49,6 +49,10 @@
     function import_excel() {
         window.location.href = "<?php echo base_url(); ?>admin/add-import-participants";
     }
+
+    function export_excel() {
+        window.location.href = "<?php echo base_url(); ?>admin/export-participants";
+    }
 </script>
 
 <!-- Nama file muncul saat upload -->
