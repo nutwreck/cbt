@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `bacaan_soal` (
   CONSTRAINT `paket_soal_id_bacaan` FOREIGN KEY (`paket_soal_id`) REFERENCES `paket_soal` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.bacaan_soal: ~1 rows (approximately)
+-- Dumping data for table candraaj_cbt.bacaan_soal: ~0 rows (approximately)
 /*!40000 ALTER TABLE `bacaan_soal` DISABLE KEYS */;
 REPLACE INTO `bacaan_soal` (`id`, `paket_soal_id`, `kode_bacaan`, `name`, `bacaan`, `created_datetime`, `updated_datetime`, `is_enable`) VALUES
 	(1, 6, 'PENALARAN UMUM', 'BACAAN 1 - 6', '<p style="margin: 0in 0in 0.0001pt; text-align: justify; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;"><span style="background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;">Kementerian Kesehatan merilis total ada 502.110 orang yang dinyatakan positif virus corona. Kasus-kasus positif ini menyebar di seluruh provinsi, namun hampir separuhnya ada di Pulau Jawa. Jumlah kasus positif terbanyak didominasi DKI Jakarta dengan 127.164 orang, disusul Jawa Timur sebanyak 58.679 kasus positif, serta Jawa Barat (48.064), dan Jawa Tengah (47.380). Pembatasan Sosial Berskala Besar transisi masih diberlakukan di Jakarta - terus-menerus diperpanjang sejak bulan Juni. Sementara Jawa Timur sudah mengakhiri PSBB pada bulan Juni, kendati jumlah kasus terus bertambah. Dari total kasus positif yang mencapai lebih dari setengah juta orang itu, Kementerian Kesehatan menyatakan 16.002 meninggal dunia dan 422.386 orang sembuh.</span><o:p></o:p></p><p style="margin: 0in 0in 0.0001pt; text-align: justify; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;">&nbsp;<o:p></o:p></p><p style="margin: 0in 0in 0.0001pt; text-align: justify; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;"><span style="background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;">Sejak pertama kali dikonfirmasi pemerintah pada 2 Maret, kasus konfirmasi positif virus corona terus naik dan belum ada tanda akan turun. Pada bulan Juni, pertambahan kasus harian berkisar di angka 1000-an dan 2000-an, lalu terus meningkat hingga kini sekitar 4.000 kasus positif per hari, bahkan sempat menyentuh 5.000 kasus baru dalam sehari. Presiden Joko Widodo pada bulan Agustus 2020 memasang target sebanyak 30.000 spesimen per hari untuk tes PCR. Saat itu pakar epidemiologi memperingatkan bahwa jumlah tes masih di bawah standar minimal yang ditetapkan WHO, dan menyebut Indonesia kini "dalam situasi kritis". Dalam sepekan terakhir hingga 23 November, rata-rata pemerintah mengadakan 40.000-an tes PCR per hari.</span><o:p></o:p></p><p style="margin: 0in 0in 0.0001pt; text-align: justify; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;"><br></p><p style="margin: 0in 0in 0.0001pt; text-align: justify; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;"><span style="background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;">Pemerintah mengaku jumlah tes ini masih di bawah standar Badan Kesehatan Dunia-WHO yang menghitung seharusnya dilakukan tes terhadap 267.000 orang per minggu berdasarkan jumlah penduduk Indonesia.<o:p></o:p></span></p><p style="margin: 0in 0in 0.0001pt; text-align: justify; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;"><o:p>&nbsp;</o:p></p><p style="margin-bottom: 10px; text-align: justify;"><span style="line-height: 14.98px; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;">Berikut kurva penularan virus corona di Indonesia</span></p><p style="margin-bottom: 10px; text-align: justify;"><img style="width: 50%;" src="http://localhost/cbt/storage/website/lembaga/grandsbmptn/bacaan_soal/bacaan_6/92e9717d0f1b375a6a15bdb53658deb8.png"><br></p><p style="margin-bottom: 10px; text-align: justify;">Pada 13 November tercatat kasus baru positif virus corona harian tertinggi selama delapan bulan terakhir yakni sebanyak 5.444 orang dalam 24 jam. Rekor kasus harian tertinggi sebelumnya yang juga sempat jadi sorotan yakni 2.719 kasus pada Kamis (27/08) ketika terjadi klaster di Sekolah Pendidikan Calon Perwira Angkatan Darat (Secapa AD), Bandung, Jawa Barat. Penambahan kasus positif di Indonesia mulai melaju cepat sejak 6 April yakni sekitar 200-300 orang per hari, lalu bergerak naik 300-400an kasus baru per hari. Dan pada bulan Juni, bergerak fluktuatif antara 400-an kasus hingga lebih dari 4.000 kasus baru per hari.</p><p style="margin: 0cm; text-align: justify; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;"><span lang="EN-US" style="background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;">&nbsp;</span></p><p style="margin: 0cm; text-align: justify; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;"><span lang="EN-US" style="background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;">Jumlah kasus di Indonesia resmi melampaui China pada 19 Juli, ketika terdata 86.521 kasus, melampaui China. Jakarta dalam masa perpanjangan transisi PSBB bulan Juli, masih terdata di tiga besar provinsi dengan tambahan kasus harian terbanyak, sekitar 1.000an kasus baru per hari. Bandingkan dengan pertambahan pada bulan Juli yang masih sekitar 400-an kasus baru per hari. Pada masa sebelum transisi, penambahan kasus positif di Jakarta sempat bergerak di kisaran 70-100an kasus per hari.</span><span lang="EN-US"><o:p></o:p></span></p><p style="margin: 0cm; text-align: justify; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;"><span lang="EN-US">&nbsp;</span><span lang="EN-US"><o:p></o:p></span></p><p style="margin: 0cm; text-align: justify; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;"><span lang="EN-US" style="background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;">Pembatasan Sosial Berskala Besar transisi terus-menerus diperpanjang sejak bulan Juni di Jakarta. Gubernur DKI Jakarta Anies Baswedan pada Agustus memutuskan kembali memperpanjang masa transisi PSBB karena \'belum ada perbaikan\' dan kini ia memperpanjang kembali PSBB hingga 6 Desember. Anies mengatakan, berdasarkan data-data epidemiologis selama penerapan PSBB Masa Transisi dua pekan terakhir, kondisi Covid-19 masih terkendali dan menuju aman. "Akan tetapi, kita harus semakin waspada dan semakin disiplin dalam protokol kesehatan," kata Anies. Saat memperpanjang masa transisi PSBB untuk kedua kalinya pada pertengahan Juli, Gubernur DKI Jakarta Anies Baswedan mengatakan masih ada \'ketidakdisiplinan masyarakat dalam mencuci tangan, memakai masker, dan menjaga jarak\'. Jakarta \'awasi ketat pasar tradisional dan KRL\' dalam masa perpanjangan transisi PSBB ini.</span><span lang="EN-US"><o:p></o:p></span></p><p style="margin: 0cm; text-align: justify; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;"><span lang="EN-US" style="background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;">&nbsp;</span></p><p style="margin: 0cm; text-align: justify; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;"><span lang="EN-US" style="background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;">Awalnya Anies menetapkan bulan Juni sebagai masa transisi dengan pelonggaran kegiatan secara bertahap di berbagai sektor. Namun masa transisi ini diklamin \'bisa dihentikan setiap saat\' ketika ada indikator yang buruk. Salah satu indikator yang biasa dipantau adalah angka reproduksi R yang ditargetkan di bawah 1. Target tersebut bermakna satu orang positif berpotensi tidak akan menularkan pada orang lainnya.<o:p></o:p></span></p><p style="margin: 0cm; text-align: justify; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;"><span lang="EN-US">&nbsp;</span></p><p style="margin-bottom: 10px;"></p><div>(Dikutip dari: <a href="https://www.bbc.com/indonesia/)" target="_blank">https://www.bbc.com/indonesia/)</a></div><div><b>Edited</b></div>', '2021-04-12 16:04:55', '2021-04-12 16:54:44', 1);
@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `buku` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.buku: ~3 rows (approximately)
+-- Dumping data for table candraaj_cbt.buku: ~2 rows (approximately)
 /*!40000 ALTER TABLE `buku` DISABLE KEYS */;
 REPLACE INTO `buku` (`id`, `name`, `created_datetime`, `updated_datetime`, `is_enable`) VALUES
 	(1, 'TOEFL', '2021-04-12 11:16:31', NULL, 1),
@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `config_buku` (
   CONSTRAINT `buku_id_config` FOREIGN KEY (`buku_id`) REFERENCES `buku` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.config_buku: ~3 rows (approximately)
+-- Dumping data for table candraaj_cbt.config_buku: ~2 rows (approximately)
 /*!40000 ALTER TABLE `config_buku` DISABLE KEYS */;
 REPLACE INTO `config_buku` (`id`, `buku_id`, `free_paket`, `price`, `created_datetime`, `updated_datetime`, `is_enable`) VALUES
 	(1, 1, 2, 50000, '2021-04-17 12:48:01', NULL, 1),
@@ -165,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `config_buku_detail` (
   CONSTRAINT `buku_id_detail` FOREIGN KEY (`buku_id`) REFERENCES `buku` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.config_buku_detail: ~6 rows (approximately)
+-- Dumping data for table candraaj_cbt.config_buku_detail: ~5 rows (approximately)
 /*!40000 ALTER TABLE `config_buku_detail` DISABLE KEYS */;
 REPLACE INTO `config_buku_detail` (`id`, `buku_id`, `detail_buku_id`, `name`, `type_file`, `nama_file`, `created_date`, `updated_date`, `is_enable`) VALUES
 	(1, 1, 0, 'Modul Fisika', 1, 'bca5dbc29414c00a7a95aeed0bc161e4.jpg', '2021-04-18 21:27:46', NULL, 1),
@@ -362,10 +362,12 @@ CREATE TABLE IF NOT EXISTS `invoice` (
   CONSTRAINT `payment_method_detail_inv` FOREIGN KEY (`payment_method_detail_id`) REFERENCES `payment_method_detail` (`id`),
   CONSTRAINT `payment_method_id_inv` FOREIGN KEY (`payment_method_id`) REFERENCES `payment_method` (`id`),
   CONSTRAINT `user_id_inv` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.invoice: ~0 rows (approximately)
+-- Dumping data for table candraaj_cbt.invoice: ~1 rows (approximately)
 /*!40000 ALTER TABLE `invoice` DISABLE KEYS */;
+REPLACE INTO `invoice` (`id`, `invoice_number`, `payment_method_id`, `payment_method_name`, `payment_method_detail_id`, `payment_method_detail_name`, `user_id`, `user_name`, `user_email`, `user_no_telp`, `buku_id`, `invoice_total_cost`, `kode_unik`, `invoice_date_create`, `invoice_date_expirate`, `invoice_date_update`, `confirm_image`, `status`, `created_datetime`, `updated_datetime`, `is_enable`) VALUES
+	(2, '202104220001', 1, 'BANK', 2, 'BANK BRI - 82893982938', 25, 'Afanda', 'afanda@gmail.com', '0828576857485', 2, 45300, 300, '2021-04-22 23:00:18', '2021-04-23 23:00:21', NULL, NULL, 0, '2021-04-22 23:00:30', NULL, 1);
 /*!40000 ALTER TABLE `invoice` ENABLE KEYS */;
 
 -- Dumping structure for table candraaj_cbt.jawaban
@@ -384,7 +386,7 @@ CREATE TABLE IF NOT EXISTS `jawaban` (
   CONSTRAINT `bank_soal_id` FOREIGN KEY (`bank_soal_id`) REFERENCES `bank_soal` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.jawaban: ~44 rows (approximately)
+-- Dumping data for table candraaj_cbt.jawaban: ~41 rows (approximately)
 /*!40000 ALTER TABLE `jawaban` DISABLE KEYS */;
 REPLACE INTO `jawaban` (`id`, `bank_soal_id`, `order`, `name`, `score`, `is_key`, `created_datetime`, `updated_datetime`, `is_enable`) VALUES
 	(21, 8, 1, '<p>pleci ajah</p>', 1, 1, '2021-03-22 15:22:58', '2021-03-29 13:22:32', 1),
@@ -485,7 +487,7 @@ CREATE TABLE IF NOT EXISTS `kode_unik` (
   `updated_datetime` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.kode_unik: ~1 rows (approximately)
+-- Dumping data for table candraaj_cbt.kode_unik: ~0 rows (approximately)
 /*!40000 ALTER TABLE `kode_unik` DISABLE KEYS */;
 REPLACE INTO `kode_unik` (`id`, `number`, `updated_datetime`) VALUES
 	(1, 300, '2021-04-22 17:01:34');
@@ -521,7 +523,7 @@ CREATE TABLE IF NOT EXISTS `kota_kab` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=513 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.kota_kab: ~512 rows (approximately)
+-- Dumping data for table candraaj_cbt.kota_kab: ~473 rows (approximately)
 /*!40000 ALTER TABLE `kota_kab` DISABLE KEYS */;
 REPLACE INTO `kota_kab` (`id`, `name`, `created_datetime`, `update_datetime`, `is_enable`) VALUES
 	(1, 'KAB.KEPULAUAN SERIBU', '2021-03-30 12:31:02', NULL, 1),
@@ -1066,7 +1068,7 @@ CREATE TABLE IF NOT EXISTS `lembaga` (
   CONSTRAINT `lembaga_type_id` FOREIGN KEY (`lembaga_type_id`) REFERENCES `lembaga_type` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.lembaga: ~1 rows (approximately)
+-- Dumping data for table candraaj_cbt.lembaga: ~0 rows (approximately)
 /*!40000 ALTER TABLE `lembaga` DISABLE KEYS */;
 REPLACE INTO `lembaga` (`id`, `lembaga_type_id`, `name`, `email`, `no_telp`, `alamat`, `kota_kab_id`, `kota_kab`, `file_ktp`, `file_logo`, `file_banner`, `pengaturan_universal_id`, `informasi`, `pernyataan`, `multiple_login`, `is_verify`, `created_datetime`, `updated_datetime`, `is_enable`) VALUES
 	(2, 4, 'Zambert Course', 'zambertcourse@gmail.com', '081286364461', 'Aliansi Mahasiswa Perguruan Tinggi Negeri Seluruh Indonesia', 65, 'KOTA SEMARANG', '', NULL, NULL, 3, '<p>Simulasi SBMPTN terbaik di Indonesia</p>\r\n<p>IG : @grand_sbmptn</p>\r\n<p>Line :@grand_sbmptn</p>\r\n<p>FB Fanpage : @grand_sbmptn</p>', NULL, 0, 1, '2021-03-30 12:48:12', NULL, 1);
@@ -1082,7 +1084,7 @@ CREATE TABLE IF NOT EXISTS `lembaga_type` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.lembaga_type: ~10 rows (approximately)
+-- Dumping data for table candraaj_cbt.lembaga_type: ~9 rows (approximately)
 /*!40000 ALTER TABLE `lembaga_type` DISABLE KEYS */;
 REPLACE INTO `lembaga_type` (`id`, `name`, `created_datetime`, `updated_datetime`, `is_enable`) VALUES
 	(1, 'SD/Sederajat', '2021-03-30 12:42:31', NULL, 1),
@@ -1115,7 +1117,7 @@ CREATE TABLE IF NOT EXISTS `lembaga_user` (
   CONSTRAINT `user_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.lembaga_user: ~2 rows (approximately)
+-- Dumping data for table candraaj_cbt.lembaga_user: ~1 rows (approximately)
 /*!40000 ALTER TABLE `lembaga_user` DISABLE KEYS */;
 REPLACE INTO `lembaga_user` (`id`, `lembaga_id`, `user_id`, `name`, `email`, `file`, `created_datetime`, `updated_datetime`, `is_enable`) VALUES
 	(3, 2, 3, 'Candra Aji Pamungkas', 'candraajipamungkas@gmail.com', '', '2021-03-30 15:23:35', '2021-04-11 22:08:13', 1),
@@ -1134,7 +1136,7 @@ CREATE TABLE IF NOT EXISTS `materi` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.materi: ~2 rows (approximately)
+-- Dumping data for table candraaj_cbt.materi: ~1 rows (approximately)
 /*!40000 ALTER TABLE `materi` DISABLE KEYS */;
 REPLACE INTO `materi` (`id`, `name`, `created_by`, `created_datetime`, `updated_by`, `updated_datetime`, `is_enable`) VALUES
 	(2, 'PENALARAN UMUM', 27, '2021-03-18 00:00:00', 27, '2021-03-27 12:10:48', 1),
@@ -1199,7 +1201,7 @@ CREATE TABLE IF NOT EXISTS `paket_soal` (
   CONSTRAINT `type_paket_soal` FOREIGN KEY (`type_paket_id`) REFERENCES `type_paket` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.paket_soal: ~2 rows (approximately)
+-- Dumping data for table candraaj_cbt.paket_soal: ~1 rows (approximately)
 /*!40000 ALTER TABLE `paket_soal` DISABLE KEYS */;
 REPLACE INTO `paket_soal` (`id`, `name`, `type_paket_id`, `type_paket_name`, `buku_id`, `buku_name`, `detail_buku_id`, `detail_buku_name`, `kelas_id`, `kelas_name`, `materi_id`, `materi_name`, `detail_mode_jwb_id`, `is_acak_soal`, `is_acak_jawaban`, `pengaturan_universal_id`, `skor_null`, `is_continuous`, `is_jawab`, `petunjuk`, `visual_limit`, `file`, `tipe_file`, `created_by`, `created_datetime`, `updated_by`, `updated_datetime`, `is_enable`) VALUES
 	(6, 'SOAL GRANDSBMPTN', 1, 'UJIAN', 0, '', 0, '', 2, 'SD KELAS 2', 2, 'PENALARAN UMUM', 3, 1, 1, 1, 0, 0, 0, '<p><span class="note-math"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mrow><mo fence="true">{</mo><mtable rowspacing="0.3600em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>a</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mtext>if&nbsp;</mtext><mi>b</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>c</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mtext>if&nbsp;</mtext><mi>d</mi></mrow></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">x = \\begin{cases}\r\n   a &amp;\\text{if } b \\\\\r\n   c &amp;\\text{if } d\r\n\\end{cases}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 3.00003em; vertical-align: -1.25003em;"></span><span class="minner"><span class="mopen delimcenter" style="top: 0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.69em;"><span class="" style="top: -3.69em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord mathnormal">a</span></span></span><span class="" style="top: -2.25em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord mathnormal">c</span></span></span></span><span class="vlist-s">?</span></span><span class="vlist-r"><span class="vlist" style="height: 1.19em;"><span class=""></span></span></span></span></span><span class="arraycolsep" style="width: 1em;"></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.69em;"><span class="" style="top: -3.69em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">if&nbsp;</span></span><span class="mord mathnormal">b</span></span></span><span class="" style="top: -2.25em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">if&nbsp;</span></span><span class="mord mathnormal">d</span></span></span></span><span class="vlist-s">?</span></span><span class="vlist-r"><span class="vlist" style="height: 1.19em;"><span class=""></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="note-latex" style="display: none;"><br></span></span></p><p><span class="note-math"><span class="note-latex" style="display: none;"><br></span></span></p><p><span class="note-math"><span class="note-latex" style="display: none;"><br></span></span>ORA UMUM</p>', 1, NULL, NULL, 27, '2021-03-21 12:36:01', 27, '2021-04-15 13:11:49', 1),
@@ -1240,7 +1242,7 @@ CREATE TABLE IF NOT EXISTS `payment_method_detail` (
   CONSTRAINT `payment_method_detail` FOREIGN KEY (`payment_method_id`) REFERENCES `payment_method` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.payment_method_detail: ~3 rows (approximately)
+-- Dumping data for table candraaj_cbt.payment_method_detail: ~2 rows (approximately)
 /*!40000 ALTER TABLE `payment_method_detail` DISABLE KEYS */;
 REPLACE INTO `payment_method_detail` (`id`, `payment_method_id`, `logo_payment`, `image_payment`, `bank_name`, `bank_account`, `bank_number`, `created_datetime`, `updated_datetime`, `is_enable`) VALUES
 	(2, 1, '292f4c94ea09ef2b89516fbb18bfe5ae.png', NULL, 'BNI', 'Mohammad Fakhrulzami', '0619303221', '2021-04-17 12:16:24', '2021-04-17 12:31:45', 1),
@@ -1283,7 +1285,7 @@ CREATE TABLE IF NOT EXISTS `pengaturan_universal` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.pengaturan_universal: ~8 rows (approximately)
+-- Dumping data for table candraaj_cbt.pengaturan_universal: ~6 rows (approximately)
 /*!40000 ALTER TABLE `pengaturan_universal` DISABLE KEYS */;
 REPLACE INTO `pengaturan_universal` (`id`, `name`, `detail`, `param`, `created_datetime`, `updated_datetime`, `is_enable`) VALUES
 	(1, 'SKALA NILAI', 'SKALA 100', '', '2021-03-19 00:00:00', NULL, 1),
@@ -1319,7 +1321,7 @@ CREATE TABLE IF NOT EXISTS `peserta` (
   CONSTRAINT `peserta_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.peserta: ~16 rows (approximately)
+-- Dumping data for table candraaj_cbt.peserta: ~14 rows (approximately)
 /*!40000 ALTER TABLE `peserta` DISABLE KEYS */;
 REPLACE INTO `peserta` (`id`, `user_id`, `lembaga_id`, `no_peserta`, `no_telp`, `group_peserta_id`, `name`, `file`, `created_datetime`, `updated_datetime`, `is_lock`, `is_enable`) VALUES
 	(3, 6, 2, '202103310001', NULL, 1, 'Candra Aji Pamungkas', '', '2021-03-31 15:49:00', '2021-04-22 10:39:14', 0, 1),
@@ -1510,7 +1512,7 @@ CREATE TABLE IF NOT EXISTS `ujian` (
   CONSTRAINT `user_ujian` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.ujian: ~1 rows (approximately)
+-- Dumping data for table candraaj_cbt.ujian: ~0 rows (approximately)
 /*!40000 ALTER TABLE `ujian` DISABLE KEYS */;
 REPLACE INTO `ujian` (`id`, `sesi_pelaksanaan_id`, `paket_soal_id`, `user_id`, `user_no`, `user_name`, `user_email`, `list_soal`, `list_jawaban`, `jml_benar`, `skor`, `tgl_mulai`, `tgl_selesai`, `status`, `created_datetime`, `is_enable`) VALUES
 	(11, 1, 6, 30, '202104190337', 'Temam Murbianto', 'temam@gmail.com', '0|15,0|22,0|23,0|24,0|34,0|16,0|19,0|17,0|8,0|11,0|20,0|12,0|18,0|21,1|32,2|35,4|40,4|41', '0|15||N,0|22||N,0|23||N,0|24||N,0|34||N,0|16||N,0|19||N,0|17||N,0|8||N,0|11||N,0|20||N,0|12||N,0|18||N,0|21||N,1|32||N,2|35||N,4|40||N,4|41||N', 0, 0, '2021-04-22 16:40:58', '2021-04-22 22:40:58', 0, '2021-04-22 16:40:58', 1);
@@ -1532,7 +1534,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   CONSTRAINT `user_role_user_id` FOREIGN KEY (`role_user_id`) REFERENCES `role_user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1 COMMENT='untuk detail peserta ada di tabel peserta\r\nuntuk detail lembaga ada di tabel lembaga';
 
--- Dumping data for table candraaj_cbt.user: ~16 rows (approximately)
+-- Dumping data for table candraaj_cbt.user: ~15 rows (approximately)
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 REPLACE INTO `user` (`id`, `role_user_id`, `username`, `password`, `is_login`, `created_datetime`, `updated_datetime`, `is_enable`) VALUES
 	(3, 3, 'candraajipamungkas@gmail.com', '1db65964703b23346537b3df0012dd7ca57dd14948d785d8acd16f620104633916fe5aa00bc087f235a524e4d9074bad605ecd056c928b1a9b05c6bddd0b6b8eFyjxLo55HJ2Nldu5S11F1Fz5Nihvfy6TeBe5CaTjAQc=', 0, '2021-03-30 15:23:35', '2021-04-22 10:39:14', 1),
@@ -1616,6 +1618,119 @@ CREATE TABLE `v_group_soal` (
 	`created_datetime` DATETIME NOT NULL,
 	`updated_datetime` DATETIME NULL,
 	`is_enable` TINYINT(1) NOT NULL
+) ENGINE=MyISAM;
+
+-- Dumping structure for view candraaj_cbt.v_invoice_all
+-- Creating temporary table to overcome VIEW dependency errors
+CREATE TABLE `v_invoice_all` (
+	`id_invoice` INT(11) NOT NULL,
+	`invoice_number` VARCHAR(12) NOT NULL COLLATE 'latin1_swedish_ci',
+	`payment_method_id` INT(11) NOT NULL,
+	`payment_method_name` VARCHAR(10) NOT NULL COLLATE 'latin1_swedish_ci',
+	`payment_method_detail_id` INT(11) NOT NULL,
+	`payment_method_detail_name` VARCHAR(100) NOT NULL COLLATE 'latin1_swedish_ci',
+	`payment_logo` VARCHAR(255) NULL COLLATE 'latin1_swedish_ci',
+	`bank_name` VARCHAR(20) NULL COLLATE 'latin1_swedish_ci',
+	`bank_account` VARCHAR(150) NULL COLLATE 'latin1_swedish_ci',
+	`bank_number` VARCHAR(100) NULL COLLATE 'latin1_swedish_ci',
+	`user_id` INT(11) NOT NULL,
+	`user_name` VARCHAR(150) NOT NULL COLLATE 'latin1_swedish_ci',
+	`user_email` VARCHAR(175) NOT NULL COLLATE 'latin1_swedish_ci',
+	`user_no_telp` VARCHAR(13) NOT NULL COLLATE 'latin1_swedish_ci',
+	`buku_id` INT(11) NOT NULL,
+	`buku_name` VARCHAR(150) NOT NULL COLLATE 'latin1_swedish_ci',
+	`invoice_total_cost` INT(11) NOT NULL,
+	`kode_unik` INT(3) NOT NULL,
+	`invoice_date_create` DATETIME NOT NULL,
+	`invoice_date_expirate` DATETIME NOT NULL,
+	`date_left` INT(7) NULL,
+	`invoice_date_update` DATETIME NULL,
+	`confirm_image` VARCHAR(255) NULL COLLATE 'latin1_swedish_ci',
+	`status_invoice` VARCHAR(15) NULL COLLATE 'utf8mb4_general_ci'
+) ENGINE=MyISAM;
+
+-- Dumping structure for view candraaj_cbt.v_invoice_confirm
+-- Creating temporary table to overcome VIEW dependency errors
+CREATE TABLE `v_invoice_confirm` (
+	`id_invoice` INT(11) NOT NULL,
+	`invoice_number` VARCHAR(12) NOT NULL COLLATE 'latin1_swedish_ci',
+	`payment_method_id` INT(11) NOT NULL,
+	`payment_method_name` VARCHAR(10) NOT NULL COLLATE 'latin1_swedish_ci',
+	`payment_method_detail_id` INT(11) NOT NULL,
+	`payment_method_detail_name` VARCHAR(100) NOT NULL COLLATE 'latin1_swedish_ci',
+	`payment_logo` VARCHAR(255) NULL COLLATE 'latin1_swedish_ci',
+	`bank_name` VARCHAR(20) NULL COLLATE 'latin1_swedish_ci',
+	`bank_account` VARCHAR(150) NULL COLLATE 'latin1_swedish_ci',
+	`bank_number` VARCHAR(100) NULL COLLATE 'latin1_swedish_ci',
+	`user_id` INT(11) NOT NULL,
+	`user_name` VARCHAR(150) NOT NULL COLLATE 'latin1_swedish_ci',
+	`user_email` VARCHAR(175) NOT NULL COLLATE 'latin1_swedish_ci',
+	`user_no_telp` VARCHAR(13) NOT NULL COLLATE 'latin1_swedish_ci',
+	`buku_id` INT(11) NOT NULL,
+	`buku_name` VARCHAR(150) NOT NULL COLLATE 'latin1_swedish_ci',
+	`invoice_total_cost` INT(11) NOT NULL,
+	`kode_unik` INT(3) NOT NULL,
+	`invoice_date_create` DATETIME NOT NULL,
+	`invoice_date_expirate` DATETIME NOT NULL,
+	`invoice_date_update` DATETIME NULL,
+	`confirm_image` VARCHAR(255) NULL COLLATE 'latin1_swedish_ci',
+	`status_invoice` VARCHAR(15) NULL COLLATE 'utf8mb4_general_ci'
+) ENGINE=MyISAM;
+
+-- Dumping structure for view candraaj_cbt.v_invoice_expired
+-- Creating temporary table to overcome VIEW dependency errors
+CREATE TABLE `v_invoice_expired` (
+	`id_invoice` INT(11) NOT NULL,
+	`invoice_number` VARCHAR(12) NOT NULL COLLATE 'latin1_swedish_ci',
+	`payment_method_id` INT(11) NOT NULL,
+	`payment_method_name` VARCHAR(10) NOT NULL COLLATE 'latin1_swedish_ci',
+	`payment_method_detail_id` INT(11) NOT NULL,
+	`payment_method_detail_name` VARCHAR(100) NOT NULL COLLATE 'latin1_swedish_ci',
+	`payment_logo` VARCHAR(255) NULL COLLATE 'latin1_swedish_ci',
+	`bank_name` VARCHAR(20) NULL COLLATE 'latin1_swedish_ci',
+	`bank_account` VARCHAR(150) NULL COLLATE 'latin1_swedish_ci',
+	`bank_number` VARCHAR(100) NULL COLLATE 'latin1_swedish_ci',
+	`user_id` INT(11) NOT NULL,
+	`user_name` VARCHAR(150) NOT NULL COLLATE 'latin1_swedish_ci',
+	`user_email` VARCHAR(175) NOT NULL COLLATE 'latin1_swedish_ci',
+	`user_no_telp` VARCHAR(13) NOT NULL COLLATE 'latin1_swedish_ci',
+	`buku_id` INT(11) NOT NULL,
+	`buku_name` VARCHAR(150) NOT NULL COLLATE 'latin1_swedish_ci',
+	`invoice_total_cost` INT(11) NOT NULL,
+	`kode_unik` INT(3) NOT NULL,
+	`invoice_date_create` DATETIME NOT NULL,
+	`invoice_date_expirate` DATETIME NOT NULL,
+	`invoice_date_update` DATETIME NULL,
+	`confirm_image` VARCHAR(255) NULL COLLATE 'latin1_swedish_ci',
+	`status_invoice` VARCHAR(15) NULL COLLATE 'utf8mb4_general_ci'
+) ENGINE=MyISAM;
+
+-- Dumping structure for view candraaj_cbt.v_invoice_success
+-- Creating temporary table to overcome VIEW dependency errors
+CREATE TABLE `v_invoice_success` (
+	`id_invoice` INT(11) NOT NULL,
+	`invoice_number` VARCHAR(12) NOT NULL COLLATE 'latin1_swedish_ci',
+	`payment_method_id` INT(11) NOT NULL,
+	`payment_method_name` VARCHAR(10) NOT NULL COLLATE 'latin1_swedish_ci',
+	`payment_method_detail_id` INT(11) NOT NULL,
+	`payment_method_detail_name` VARCHAR(100) NOT NULL COLLATE 'latin1_swedish_ci',
+	`payment_logo` VARCHAR(255) NULL COLLATE 'latin1_swedish_ci',
+	`bank_name` VARCHAR(20) NULL COLLATE 'latin1_swedish_ci',
+	`bank_account` VARCHAR(150) NULL COLLATE 'latin1_swedish_ci',
+	`bank_number` VARCHAR(100) NULL COLLATE 'latin1_swedish_ci',
+	`user_id` INT(11) NOT NULL,
+	`user_name` VARCHAR(150) NOT NULL COLLATE 'latin1_swedish_ci',
+	`user_email` VARCHAR(175) NOT NULL COLLATE 'latin1_swedish_ci',
+	`user_no_telp` VARCHAR(13) NOT NULL COLLATE 'latin1_swedish_ci',
+	`buku_id` INT(11) NOT NULL,
+	`buku_name` VARCHAR(150) NOT NULL COLLATE 'latin1_swedish_ci',
+	`invoice_total_cost` INT(11) NOT NULL,
+	`kode_unik` INT(3) NOT NULL,
+	`invoice_date_create` DATETIME NOT NULL,
+	`invoice_date_expirate` DATETIME NOT NULL,
+	`invoice_date_update` DATETIME NULL,
+	`confirm_image` VARCHAR(255) NULL COLLATE 'latin1_swedish_ci',
+	`status_invoice` VARCHAR(15) NULL COLLATE 'utf8mb4_general_ci'
 ) ENGINE=MyISAM;
 
 -- Dumping structure for view candraaj_cbt.v_kelas
@@ -1932,6 +2047,210 @@ LEFT OUTER JOIN konversi_skor AS T3 ON T1.konversi_skor_id = T3.id
 	AND T3.is_enable = 1
 WHERE T1.is_enable = 1
 ORDER BY T1.parent_id ASC, T1.id DESC ;
+
+-- Dumping structure for view candraaj_cbt.v_invoice_all
+-- Removing temporary table and create final VIEW structure
+DROP TABLE IF EXISTS `v_invoice_all`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_invoice_all` AS SELECT
+	T1.id AS id_invoice,
+	T1.invoice_number,
+	T1.payment_method_id,
+	T1.payment_method_name,
+	T1.payment_method_detail_id,
+	T1.payment_method_detail_name,
+	CASE
+		WHEN T1.payment_method_id = 1 THEN T5.logo_payment
+		WHEN T1.payment_method_id = 2 THEN T5.image_payment
+	END AS payment_logo,
+	T5.bank_name,
+	T5.bank_account,
+	T5.bank_number,
+	T1.user_id,
+	T1.user_name,
+	T1.user_email,
+	T1.user_no_telp,
+	T1.buku_id,
+	T6.name AS buku_name,
+	T1.invoice_total_cost,
+	T1.kode_unik,
+	T1.invoice_date_create,
+	T1.invoice_date_expirate,
+	CASE
+		WHEN DATEDIFF(T1.invoice_date_expirate, T1.invoice_date_create) <= 0 THEN 0
+		ELSE DATEDIFF(T1.invoice_date_expirate, T1.invoice_date_create)
+	END AS date_left,
+	T1.invoice_date_update,
+	T1.confirm_image,
+	CASE
+		WHEN T1.`status` = 0 THEN 'New Invoice'
+		WHEN T1.`status` = 1 THEN 'Upload Confirm'
+		WHEN T1.`status` = 2 THEN 'Success Confirm'
+		WHEN T1.`status` = 3 THEN 'Expired'
+	END AS status_invoice
+FROM invoice AS T1
+JOIN user AS T2 ON T1.user_id = T2.id
+	AND T2.is_enable = 1
+JOIN peserta AS T3 ON T2.id = T3.user_id
+	AND T3.is_lock = 0
+	AND T3.is_enable = 1
+JOIN payment_method AS T4 ON T1.payment_method_id = T4.id
+	AND T4.is_enable = 1
+JOIN payment_method_detail AS T5 ON T1.payment_method_detail_id = T5.id
+	AND T5.is_enable = 1
+JOIN buku AS T6 ON T1.buku_id = T6.id
+	AND T6.is_enable = 1
+WHERE T1.is_enable = 1 ;
+
+-- Dumping structure for view candraaj_cbt.v_invoice_confirm
+-- Removing temporary table and create final VIEW structure
+DROP TABLE IF EXISTS `v_invoice_confirm`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_invoice_confirm` AS SELECT
+	T1.id AS id_invoice,
+	T1.invoice_number,
+	T1.payment_method_id,
+	T1.payment_method_name,
+	T1.payment_method_detail_id,
+	T1.payment_method_detail_name,
+	CASE
+		WHEN T1.payment_method_id = 1 THEN T5.logo_payment
+		WHEN T1.payment_method_id = 2 THEN T5.image_payment
+	END AS payment_logo,
+	T5.bank_name,
+	T5.bank_account,
+	T5.bank_number,
+	T1.user_id,
+	T1.user_name,
+	T1.user_email,
+	T1.user_no_telp,
+	T1.buku_id,
+	T6.name AS buku_name,
+	T1.invoice_total_cost,
+	T1.kode_unik,
+	T1.invoice_date_create,
+	T1.invoice_date_expirate,
+	T1.invoice_date_update,
+	T1.confirm_image,
+	CASE
+		WHEN T1.`status` = 0 THEN 'New Invoice'
+		WHEN T1.`status` = 1 THEN 'Upload Confirm'
+		WHEN T1.`status` = 2 THEN 'Success Confirm'
+		WHEN T1.`status` = 3 THEN 'Expired'
+	END AS status_invoice
+FROM invoice AS T1
+JOIN user AS T2 ON T1.user_id = T2.id
+	AND T2.is_enable = 1
+JOIN peserta AS T3 ON T2.id = T3.user_id
+	AND T3.is_lock = 0
+	AND T3.is_enable = 1
+JOIN payment_method AS T4 ON T1.payment_method_id = T4.id
+	AND T4.is_enable = 1
+JOIN payment_method_detail AS T5 ON T1.payment_method_detail_id = T5.id
+	AND T5.is_enable = 1
+JOIN buku AS T6 ON T1.buku_id = T6.id
+	AND T6.is_enable = 1
+WHERE T1.is_enable = 1
+AND T1.`status` = 1
+AND T1.confirm_image IS NOT NULL ;
+
+-- Dumping structure for view candraaj_cbt.v_invoice_expired
+-- Removing temporary table and create final VIEW structure
+DROP TABLE IF EXISTS `v_invoice_expired`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_invoice_expired` AS SELECT
+	T1.id AS id_invoice,
+	T1.invoice_number,
+	T1.payment_method_id,
+	T1.payment_method_name,
+	T1.payment_method_detail_id,
+	T1.payment_method_detail_name,
+	CASE
+		WHEN T1.payment_method_id = 1 THEN T5.logo_payment
+		WHEN T1.payment_method_id = 2 THEN T5.image_payment
+	END AS payment_logo,
+	T5.bank_name,
+	T5.bank_account,
+	T5.bank_number,
+	T1.user_id,
+	T1.user_name,
+	T1.user_email,
+	T1.user_no_telp,
+	T1.buku_id,
+	T6.name AS buku_name,
+	T1.invoice_total_cost,
+	T1.kode_unik,
+	T1.invoice_date_create,
+	T1.invoice_date_expirate,
+	T1.invoice_date_update,
+	T1.confirm_image,
+	CASE
+		WHEN T1.`status` = 0 THEN 'New Invoice'
+		WHEN T1.`status` = 1 THEN 'Upload Confirm'
+		WHEN T1.`status` = 2 THEN 'Success Confirm'
+		WHEN T1.`status` = 3 THEN 'Expired'
+	END AS status_invoice
+FROM invoice AS T1
+JOIN user AS T2 ON T1.user_id = T2.id
+	AND T2.is_enable = 1
+JOIN peserta AS T3 ON T2.id = T3.user_id
+	AND T3.is_lock = 0
+	AND T3.is_enable = 1
+JOIN payment_method AS T4 ON T1.payment_method_id = T4.id
+	AND T4.is_enable = 1
+JOIN payment_method_detail AS T5 ON T1.payment_method_detail_id = T5.id
+	AND T5.is_enable = 1
+JOIN buku AS T6 ON T1.buku_id = T6.id
+	AND T6.is_enable = 1
+WHERE T1.is_enable = 1
+AND T1.`status` = 3 ;
+
+-- Dumping structure for view candraaj_cbt.v_invoice_success
+-- Removing temporary table and create final VIEW structure
+DROP TABLE IF EXISTS `v_invoice_success`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_invoice_success` AS SELECT
+	T1.id AS id_invoice,
+	T1.invoice_number,
+	T1.payment_method_id,
+	T1.payment_method_name,
+	T1.payment_method_detail_id,
+	T1.payment_method_detail_name,
+	CASE
+		WHEN T1.payment_method_id = 1 THEN T5.logo_payment
+		WHEN T1.payment_method_id = 2 THEN T5.image_payment
+	END AS payment_logo,
+	T5.bank_name,
+	T5.bank_account,
+	T5.bank_number,
+	T1.user_id,
+	T1.user_name,
+	T1.user_email,
+	T1.user_no_telp,
+	T1.buku_id,
+	T6.name AS buku_name,
+	T1.invoice_total_cost,
+	T1.kode_unik,
+	T1.invoice_date_create,
+	T1.invoice_date_expirate,
+	T1.invoice_date_update,
+	T1.confirm_image,
+	CASE
+		WHEN T1.`status` = 0 THEN 'New Invoice'
+		WHEN T1.`status` = 1 THEN 'Upload Confirm'
+		WHEN T1.`status` = 2 THEN 'Success Confirm'
+		WHEN T1.`status` = 3 THEN 'Expired'
+	END AS status_invoice
+FROM invoice AS T1
+JOIN user AS T2 ON T1.user_id = T2.id
+	AND T2.is_enable = 1
+JOIN peserta AS T3 ON T2.id = T3.user_id
+	AND T3.is_lock = 0
+	AND T3.is_enable = 1
+JOIN payment_method AS T4 ON T1.payment_method_id = T4.id
+	AND T4.is_enable = 1
+JOIN payment_method_detail AS T5 ON T1.payment_method_detail_id = T5.id
+	AND T5.is_enable = 1
+JOIN buku AS T6 ON T1.buku_id = T6.id
+	AND T6.is_enable = 1
+WHERE T1.is_enable = 1
+AND T1.`status` = 2 ;
 
 -- Dumping structure for view candraaj_cbt.v_kelas
 -- Removing temporary table and create final VIEW structure
