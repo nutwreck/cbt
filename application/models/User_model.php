@@ -12,6 +12,14 @@ class User_model extends CI_Model{
         return $this->db->get_where('v_lembaga_user', array('lembaga_user_id' => $lembaga_user_id, 'user_id' => $user_id))->row();
     }
 
+    public function get_id_by_username($id){
+        return $this->db->select('id')
+        ->get_where('user', array('username' => $id, 'is_enable' => 1))->row();
+}
+    public function get_data_user_by_id($id){
+    return $this->db->select('id, username, password')
+                ->get_where('user', array('id' => $id, 'is_enable' => 1))->row();
+}
     public function get_lembaga_by_id($lembaga_id){
         return $this->db->select('lembaga_id, lembaga_name, is_verify')
                     ->get_where('v_lembaga', array('lembaga_id' => $lembaga_id))->row();

@@ -61,6 +61,8 @@ $route['translate_uri_dashes'] = FALSE;
 */
 $route['login'] = 'website/user/Login/login';
 $route['register'] = 'website/user/Login';
+$route['account'] = 'website/user/User_account/user_account';
+$route['lupa_password'] = 'website/user/Lupa_password/lupa_password';
 $route['logout'] = 'website/user/Login/logout';
 $route['dashboard'] = 'website/user/Dashboard';
 $route['history'] = 'website/user/Dashboard/history_ujian';
