@@ -17,6 +17,7 @@
                 <div class="card border-primary h-100">
                     <div class="card-header bg-transparent border-primary sesi-head"><?=ucwords(strtolower($val_sesi->nama_paket_soal))?></div>
                         <div class="card-body">
+                        <div class="m-0"><?php if(!empty($val_sesi->check_status_ujian)){ ?> <span class="badge badge-danger">Ujian sedang berlangsung harap kembali!</span> <?php } else { echo ''; } ?></div>
                             <h5 class="card-title"><?=ucwords(strtolower($val_sesi->materi_name))?></h5>
                             <table class="table-responsive mb-0 sesi-detail">
                                 <tr>
@@ -38,6 +39,8 @@
                             <div class="col-sm-6 offset-sm-3">
                                 <?php if($val_sesi->waktu_mulai >= $now){ ?>
                                     <a href="#" class="btn btn-block btn-mulai isDisabled" onclick="return swal('Informasi', 'Waktu ujian belum dimulai!', 'info')">Mulai</a>
+                                <?php } elseif(!empty($val_sesi->tgl_selesai_user) && $val_sesi->tgl_selesai_user <= $now) { ?>
+                                    <a href="#" class="btn btn-block btn-mulai isDisabled">Selesai</a>
                                 <?php } elseif($val_sesi->batas_pengerjaan <= $now) { ?>
                                     <a href="#" class="btn btn-block btn-mulai isDisabled">Selesai</a>
                                 <?php } else { ?>

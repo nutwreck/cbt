@@ -188,8 +188,8 @@ class Ujian extends CI_Controller {
                 $no_next = $nomor_soal+1;
 
                 if($group_soal_next == $group_soal_before){
-                    $arrow_back = $nomor_soal == 1 ? '<a class="btn btn-sm text-primary bg-white btn-nxt-brf-hrd disabled"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>' : '<a rel="0" onclick="return back();" class="back btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>';
-                    $arrow_next = $nomor_soal == $jumlah_soal ? '<a class="btn btn-sm text-primary bg-white btn-nxt-brf-hrd disabled"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>' : '<a rel="2" onclick="return next();" class="next btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>';
+                    $arrow_back = $nomor_soal == 1 ? '<a class="btn btn-sm text-primary bg-white btn-nxt-brf-hrd disabled"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>' : '<a rel="0" onclick="return back();" class="back btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-left" aria-hidden="true" title="Soal Sebelumnya"></i></a>';
+                    $arrow_next = $nomor_soal == $jumlah_soal ? '<a class="btn btn-sm text-primary bg-white btn-nxt-brf-hrd disabled"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>' : '<a rel="2" onclick="return next();" class="next btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-right" aria-hidden="true" title="Soal Berikutnya"></i></a>';
                     
                     $previous_number = $nomor_soal == 1 ? '<div class="col"></div>' : '<div class="col"><a rel="0" onclick="return back();" class="back btn btn-md btn-primary text-white">No '.$no_previous.'</a></div>';
                     $next_number = $nomor_soal == $jumlah_soal ? '<div class="col"></div>' : '<div class="col"><a rel="2" onclick="return next();" class="next btn btn-md btn-primary text-white">No '.$no_next.'</a></div>';
@@ -277,6 +277,7 @@ class Ujian extends CI_Controller {
         $data['content']['ujian_id'] = $this->encryption->encrypt($ujian_data->id);
         $data['content']['jumlah_soal'] = $nomor_soal;
         $data['content']['waktu_selesai'] = $ujian_data->tgl_selesai;
+        $data['content']['audio_limit'] = $paket_soal->visual_limit;
         $data['title_header'] = ['title' => 'Lembar Ujian Online'];
 
         //for load view
@@ -342,6 +343,11 @@ class Ujian extends CI_Controller {
 
         //get function view website
         $this->_generate_view($view, $data);
+    }
+
+    public function ujian_berakhir(){
+        $this->session->set_flashdata('error', 'Waktu ujian telah berakhir!');
+        redirect('dashboard');
     }
 
 }

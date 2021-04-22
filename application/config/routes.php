@@ -67,6 +67,7 @@ $route['history'] = 'website/user/Dashboard/history_ujian';
 $route['detail-history'] = 'website/user/Dashboard/detail_history_ujian';
 $route['pre-ujian/(:any)'] = 'website/user/Ujian/mulai_ujian/$1';
 $route['ujian/(:any)/(:any)'] = 'website/user/Ujian/portal_tes/$1/$2';
+$route['ujian-berakhir'] = 'website/user/Ujian/ujian_berakhir';
 /* $route['ujian2'] = 'website/user/Ujian/ujian_page_next_design'; */
 /*
 |

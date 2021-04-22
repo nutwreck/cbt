@@ -2,8 +2,7 @@
 $waktu_habis = strtotime($waktu_selesai);
 if(time() >= $waktu_habis)
 {
-    $this->session->set_flashdata('error', 'Waktu ujian telah berakhir!');
-    redirect('dashboard', 'location', 301);
+    redirect('ujian-berakhir', 'location', 301);
 }
 ?>
 <div class="container-fluid mt-100-st">

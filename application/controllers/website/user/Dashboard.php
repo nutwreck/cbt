@@ -52,8 +52,9 @@ class Dashboard extends CI_Controller {
     */
 
     public function index(){ //
+        $user_id = $this->session->userdata('user_id');
         //for passing data to view
-        $data['content']['sesi_pelaksana'] = $this->tes->get_sesi_pelaksanaan_existing();
+        $data['content']['sesi_pelaksana'] = $this->tes->get_sesi_pelaksanaan_existing($user_id);
         $data['title_header'] = ['title' => 'Daftar Sesi Ujian'];
 
         //for load view

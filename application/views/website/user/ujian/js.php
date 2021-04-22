@@ -26,9 +26,32 @@
         simpan_sementara();
 
         $("#widget_1").show();
+
+        //Visual Limit Audio
+        var audio_limit = <?=$audio_limit?>;
+        if (audio_limit != 0) {
+            limit_audio(audio_limit);
+        }
+        
     });
 
     function disableF5(e) { if ((e.which || e.keyCode) == 116 || (e.which || e.keyCode) == 82) e.preventDefault(); };
+
+    function limit_audio(limit){
+        var loopLimit = limit;
+        var loopCounter = 0;
+        document.getElementById('loop-limited').addEventListener('ended', function(){
+            if (loopCounter < loopLimit){
+                this.currentTime = 0;
+                this.play();
+                loopCounter++;
+            } else {
+                var ply = document.getElementById('loop-limited');
+                var oldSrc = ply.src;
+                ply.src = "";
+            }
+        }, false);
+    }
 
     function getFormData($form) {
         var unindexed_array = $form.serializeArray();
