@@ -104,7 +104,7 @@ class Login extends CI_Controller {
                     'group_peserta_id' => $data['login_user'][0]['group_peserta_id'],
                     'group_peserta_name' => $data['login_user'][0]['group_peserta_name'],
                     'role_user_id' => $data['login_user'][0]['role_user_id'],
-                    'has_login' => 1
+                    'has_login_user' => 1
             );
 
             $this->session->set_userdata($user_datas);
@@ -137,7 +137,7 @@ class Login extends CI_Controller {
                     'group_peserta_id' => $data['login_user'][0]['group_peserta_id'],
                     'group_peserta_name' => $data['login_user'][0]['group_peserta_name'],
                     'role_user_id' => $data['login_user'][0]['role_user_id'],
-                    'has_login' => 1
+                    'has_login_user' => 1
             );
 
             $this->session->set_userdata($user_datas);
@@ -147,7 +147,7 @@ class Login extends CI_Controller {
 
             redirect('dashboard');
         } else {
-            $this->session->set_flashdata('error', 'Pendaftaran gagal! Silahkan coba beberapa saat lagi');
+            $this->session->set_flashdata('error', 'Login gagal! Silahkan coba beberapa saat lagi');
             redirect("login");
         }
     }

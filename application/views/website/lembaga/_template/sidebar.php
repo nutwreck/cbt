@@ -64,13 +64,13 @@
                                     <a href="<?php echo base_url(); ?>admin/invoice">All Invoice</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo base_url(); ?>admin/confirm-payment">Konfirmasi Pembayaran</a>
+                                    <a href="<?php echo base_url(); ?>admin/invoice-confirm">Konfirmasi Pembayaran</a>
                                 </li>
                                 <li>
                                     <a href="<?php echo base_url(); ?>admin/invoice-expired">Invoice Expired</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo base_url(); ?>admin/success-payment">Pembayaran Sukses</a>
+                                    <a href="<?php echo base_url(); ?>admin/invoice-success">Pembayaran Sukses</a>
                                 </li>
                             </ul>
                         </li>

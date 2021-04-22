@@ -8,7 +8,7 @@ class Ujian extends CI_Controller {
 
     public function __construct(){
         parent::__construct();
-        if (!$this->session->has_userdata('has_login')){
+        if (!$this->session->has_userdata('has_login_user')){
             redirect('login');
         }
         $this->load->library('encryption');

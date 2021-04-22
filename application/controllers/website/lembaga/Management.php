@@ -27,6 +27,10 @@ class Management extends CI_Controller {
         }
         $this->load->model('General','general');
         $this->load->model('Management_model','management');
+        $this->load->model('Invoice_list_admin_model','invoice_list_admin');
+        $this->load->model('Invoice_confirm_admin_model','invoice_confirm_admin');
+        $this->load->model('Invoice_success_admin_model','invoice_success_admin');
+        $this->load->model('Invoice_expired_admin_model','invoice_expired_admin');
     }
 
     /*
@@ -975,6 +979,451 @@ class Management extends CI_Controller {
 
         $urly = 'admin/detail-buku/'.$id_buku;
         $urlx = 'admin/detail-buku/'.$id_buku;
+        $this->delete_end($delete, $urly, $urlx);
+    }
+
+    public function invoice_list(){
+        //for passing data to view
+        $data['content'] = [];
+        $data['title_header'] = ['title' => 'Invoice All List'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/invoice/invoice_all/css';
+        $view['content'] = 'website/lembaga/management/invoice/invoice_all/content';
+        $view['js_additional'] = 'website/lembaga/management/invoice/invoice_all/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function invoice_list_all(){ //page 1
+        $list = $this->invoice_list_admin->get_datatables();
+		$data = array();
+        $no = $_POST['start'];
+        $url_manual_confirm = base_url().'admin/invoice/manual-confirm/1/';
+        $url_delete = base_url().'admin/invoice/delete-invoice/1/';
+		foreach ($list as $field) {
+			$no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = '<div class="table-data-feature">
+                        <a href="'.$url_manual_confirm.urlencode(base64_encode($field->id_invoice)).'" class="item" data-toggle="tooltip" data-placement="top" title="Manual Confirm">
+                            <i class="zmdi zmdi-check"></i>
+                        </a>
+                        <a href="'.$url_delete.urlencode(base64_encode($field->id_invoice)).'" class="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                            <i class="zmdi zmdi-delete"></i>
+                        </a>
+                    </div>';
+            $row[] = $field->invoice_number;
+            $row[] = $field->status_invoice;
+            $row[] = $field->invoice_total_cost;
+            $row[] = $field->payment_method_detail_name;
+            $row[] = $field->buku_name;
+            $row[] = $field->user_name;
+            $row[] = $field->user_email;
+            $row[] = $field->user_no_telp;
+            $row[] = format_indo($field->invoice_date_create);
+            $row[] = format_indo($field->invoice_date_expirate);
+            $row[] = $field->date_left.' Left';
+
+			$data[] = $row;
+		}
+
+		$output = array(
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $this->invoice_list_admin->count_all(),
+			"recordsFiltered" => $this->invoice_list_admin->count_filtered(),
+			"data" => $data,
+		);
+		//output dalam format JSON
+		echo json_encode($output);
+    }
+
+    public function export_invoice_all(){
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Invoice');
+        $sheet->setCellValue('C1', 'Status Invoice');
+        $sheet->setCellValue('D1', 'Harga');
+        $sheet->setCellValue('E1', 'Payment');
+        $sheet->setCellValue('F1', 'Buku');
+        $sheet->setCellValue('G1', 'Name');
+        $sheet->setCellValue('H1', 'Email');
+        $sheet->setCellValue('I1', 'No Telp');
+        $sheet->setCellValue('J1', 'Tanggal Invoice Dibuat');
+        $sheet->setCellValue('K1', 'Tanggal Invoice Kadaluarsa');
+        
+        $siswa = $this->management->get_invoice_all();
+        $no = 1;
+        $x = 2;
+        foreach($siswa as $row)
+        {
+            $sheet->setCellValue('A'.$x, $no++);
+            $sheet->setCellValue('B'.$x, $row->invoice_number);
+            $sheet->setCellValue('C'.$x, $row->status_invoice);
+            $sheet->setCellValue('D'.$x, $row->invoice_total_cost);
+            $sheet->setCellValue('E'.$x, $row->payment_method_detail_name);
+            $sheet->setCellValue('F'.$x, $row->buku_name);
+            $sheet->setCellValue('G'.$x, $row->user_name);
+            $sheet->setCellValue('H'.$x, $row->user_email);
+            $sheet->setCellValue('I'.$x, $row->user_no_telp);
+            $sheet->setCellValue('J'.$x, format_indo($row->invoice_date_create));
+            $sheet->setCellValue('K'.$x, format_indo($row->invoice_date_expirate));
+            $x++;
+        }
+
+        // Column sizing
+        foreach(range('A','K') as $columnID){
+            $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'All-Data-invoice';
+        
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"'); 
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+    }
+
+    public function invoice_confirm(){
+        //for passing data to view
+        $data['content'] = [];
+        $data['title_header'] = ['title' => 'Invoice All Confirm'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/invoice/invoice_confirm/css';
+        $view['content'] = 'website/lembaga/management/invoice/invoice_confirm/content';
+        $view['js_additional'] = 'website/lembaga/management/invoice/invoice_confirm/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function invoice_list_confirm_all(){ //page 2
+        $list = $this->invoice_confirm_admin->get_datatables();
+		$data = array();
+        $no = $_POST['start'];
+        $url_manual_confirm = base_url().'admin/invoice/manual-confirm/2/';
+        $url_delete = base_url().'admin/invoice/delete-invoice/2/';
+		foreach ($list as $field) {
+			$no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = '<div class="table-data-feature">
+                        <a href="'.$url_manual_confirm.urlencode(base64_encode($field->id_invoice)).'" class="item" data-toggle="tooltip" data-placement="top" title="Manual Confirm">
+                            <i class="zmdi zmdi-check"></i>
+                        </a>
+                        <a href="'.$url_delete.urlencode(base64_encode($field->id_invoice)).'" class="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                            <i class="zmdi zmdi-delete"></i>
+                        </a>
+                    </div>';
+            $row[] = '<a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="Nomor #'.$field->invoice_number.'" data-caption="" data-image="'.config_item('_dir_website').'lembaga/grandsbmptn/confirm_payment/'.$field->invoice_number.'" data-target="#image-gallery">
+                            <img class="img-responsive" src="'.config_item('_dir_website').'lembaga/grandsbmptn/confirm_payment/'.$field->invoice_number.'" style="width:100px;" alt="'.$field->invoice_number.'">
+                    </a>';
+            $row[] = $field->invoice_number;
+            $row[] = $field->status_invoice;
+            $row[] = $field->invoice_total_cost;
+            $row[] = $field->payment_method_detail_name;
+            $row[] = $field->buku_name;
+            $row[] = $field->user_name;
+            $row[] = $field->user_email;
+            $row[] = $field->user_no_telp;
+            $row[] = format_indo($field->invoice_date_create);
+            $row[] = format_indo($field->invoice_date_expirate);
+            $row[] = $field->date_left.' Left';
+
+			$data[] = $row;
+		}
+
+		$output = array(
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $this->invoice_confirm_admin->count_all(),
+			"recordsFiltered" => $this->invoice_confirm_admin->count_filtered(),
+			"data" => $data,
+		);
+		//output dalam format JSON
+		echo json_encode($output);
+    }
+
+    public function export_invoice_all_confirm(){
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Invoice');
+        $sheet->setCellValue('C1', 'Status Invoice');
+        $sheet->setCellValue('D1', 'Harga');
+        $sheet->setCellValue('E1', 'Payment');
+        $sheet->setCellValue('F1', 'Buku');
+        $sheet->setCellValue('G1', 'Name');
+        $sheet->setCellValue('H1', 'Email');
+        $sheet->setCellValue('I1', 'No Telp');
+        $sheet->setCellValue('J1', 'Tanggal Invoice Dibuat');
+        $sheet->setCellValue('K1', 'Tanggal Invoice Kadaluarsa');
+        
+        $siswa = $this->management->get_invoice_confirm();
+        $no = 1;
+        $x = 2;
+        foreach($siswa as $row)
+        {
+            $sheet->setCellValue('A'.$x, $no++);
+            $sheet->setCellValue('B'.$x, $row->invoice_number);
+            $sheet->setCellValue('C'.$x, $row->status_invoice);
+            $sheet->setCellValue('D'.$x, $row->invoice_total_cost);
+            $sheet->setCellValue('E'.$x, $row->payment_method_detail_name);
+            $sheet->setCellValue('F'.$x, $row->buku_name);
+            $sheet->setCellValue('G'.$x, $row->user_name);
+            $sheet->setCellValue('H'.$x, $row->user_email);
+            $sheet->setCellValue('I'.$x, $row->user_no_telp);
+            $sheet->setCellValue('J'.$x, format_indo($row->invoice_date_create));
+            $sheet->setCellValue('K'.$x, format_indo($row->invoice_date_expirate));
+            $x++;
+        }
+
+        // Column sizing
+        foreach(range('A','K') as $columnID){
+            $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'All-Data-invoice-confirm';
+        
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"'); 
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+    }
+
+    public function invoice_success(){
+        //for passing data to view
+        $data['content'] = [];
+        $data['title_header'] = ['title' => 'Invoice All Success'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/invoice/invoice_success/css';
+        $view['content'] = 'website/lembaga/management/invoice/invoice_success/content';
+        $view['js_additional'] = 'website/lembaga/management/invoice/invoice_success/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function invoice_list_success_all(){ //page 3
+        $list = $this->invoice_success_admin->get_datatables();
+		$data = array();
+        $no = $_POST['start'];
+        $url_manual_confirm = base_url().'admin/invoice/manual-confirm/3/';
+        $url_delete = base_url().'admin/invoice/delete-invoice/3/';
+		foreach ($list as $field) {
+			$no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = $field->invoice_number;
+            $row[] = $field->status_invoice;
+            $row[] = $field->invoice_total_cost;
+            $row[] = $field->payment_method_detail_name;
+            $row[] = $field->buku_name;
+            $row[] = $field->user_name;
+            $row[] = $field->user_email;
+            $row[] = $field->user_no_telp;
+            $row[] = format_indo($field->invoice_date_create);
+            $row[] = format_indo($field->invoice_date_expirate);
+
+			$data[] = $row;
+		}
+
+		$output = array(
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $this->invoice_success_admin->count_all(),
+			"recordsFiltered" => $this->invoice_success_admin->count_filtered(),
+			"data" => $data,
+		);
+		//output dalam format JSON
+		echo json_encode($output);
+    }
+
+    public function export_invoice_all_success(){
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Invoice');
+        $sheet->setCellValue('C1', 'Status Invoice');
+        $sheet->setCellValue('D1', 'Harga');
+        $sheet->setCellValue('E1', 'Payment');
+        $sheet->setCellValue('F1', 'Buku');
+        $sheet->setCellValue('G1', 'Name');
+        $sheet->setCellValue('H1', 'Email');
+        $sheet->setCellValue('I1', 'No Telp');
+        $sheet->setCellValue('J1', 'Tanggal Invoice Dibuat');
+        $sheet->setCellValue('K1', 'Tanggal Invoice Kadaluarsa');
+        
+        $siswa = $this->management->get_invoice_success();
+        $no = 1;
+        $x = 2;
+        foreach($siswa as $row)
+        {
+            $sheet->setCellValue('A'.$x, $no++);
+            $sheet->setCellValue('B'.$x, $row->invoice_number);
+            $sheet->setCellValue('C'.$x, $row->status_invoice);
+            $sheet->setCellValue('D'.$x, $row->invoice_total_cost);
+            $sheet->setCellValue('E'.$x, $row->payment_method_detail_name);
+            $sheet->setCellValue('F'.$x, $row->buku_name);
+            $sheet->setCellValue('G'.$x, $row->user_name);
+            $sheet->setCellValue('H'.$x, $row->user_email);
+            $sheet->setCellValue('I'.$x, $row->user_no_telp);
+            $sheet->setCellValue('J'.$x, format_indo($row->invoice_date_create));
+            $sheet->setCellValue('K'.$x, format_indo($row->invoice_date_expirate));
+            $x++;
+        }
+
+        // Column sizing
+        foreach(range('A','K') as $columnID){
+            $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'All-Data-invoice-success';
+        
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"'); 
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+    }
+
+    public function invoice_expired(){
+        //for passing data to view
+        $data['content'] = [];
+        $data['title_header'] = ['title' => 'Invoice All Expired'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/invoice/invoice_expired/css';
+        $view['content'] = 'website/lembaga/management/invoice/invoice_expired/content';
+        $view['js_additional'] = 'website/lembaga/management/invoice/invoice_expired/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function invoice_list_expired_all(){ //page 4
+        $list = $this->invoice_expired_admin->get_datatables();
+		$data = array();
+        $no = $_POST['start'];
+        $url_manual_confirm = base_url().'admin/invoice/manual-confirm/4/';
+        $url_delete = base_url().'admin/invoice/delete-invoice/4/';
+		foreach ($list as $field) {
+			$no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = '<div class="table-data-feature">
+                        <a href="'.$url_manual_confirm.urlencode(base64_encode($field->id_invoice)).'" class="item" data-toggle="tooltip" data-placement="top" title="Manual Confirm">
+                            <i class="zmdi zmdi-check"></i>
+                        </a>
+                        <a href="'.$url_delete.urlencode(base64_encode($field->id_invoice)).'" class="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                            <i class="zmdi zmdi-delete"></i>
+                        </a>
+                    </div>';
+            $row[] = $field->invoice_number;
+            $row[] = $field->status_invoice;
+            $row[] = $field->invoice_total_cost;
+            $row[] = $field->payment_method_detail_name;
+            $row[] = $field->buku_name;
+            $row[] = $field->user_name;
+            $row[] = $field->user_email;
+            $row[] = $field->user_no_telp;
+            $row[] = format_indo($field->invoice_date_create);
+            $row[] = format_indo($field->invoice_date_expirate);
+            $row[] = $field->date_left.' Left';
+
+			$data[] = $row;
+		}
+
+		$output = array(
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $this->invoice_expired_admin->count_all(),
+			"recordsFiltered" => $this->invoice_expired_admin->count_filtered(),
+			"data" => $data,
+		);
+		//output dalam format JSON
+		echo json_encode($output);
+    }
+
+    public function export_invoice_all_expired(){
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Invoice');
+        $sheet->setCellValue('C1', 'Status Invoice');
+        $sheet->setCellValue('D1', 'Harga');
+        $sheet->setCellValue('E1', 'Payment');
+        $sheet->setCellValue('F1', 'Buku');
+        $sheet->setCellValue('G1', 'Name');
+        $sheet->setCellValue('H1', 'Email');
+        $sheet->setCellValue('I1', 'No Telp');
+        $sheet->setCellValue('J1', 'Tanggal Invoice Dibuat');
+        $sheet->setCellValue('K1', 'Tanggal Invoice Kadaluarsa');
+        
+        $siswa = $this->management->get_invoice_expired();
+        $no = 1;
+        $x = 2;
+        foreach($siswa as $row)
+        {
+            $sheet->setCellValue('A'.$x, $no++);
+            $sheet->setCellValue('B'.$x, $row->invoice_number);
+            $sheet->setCellValue('C'.$x, $row->status_invoice);
+            $sheet->setCellValue('D'.$x, $row->invoice_total_cost);
+            $sheet->setCellValue('E'.$x, $row->payment_method_detail_name);
+            $sheet->setCellValue('F'.$x, $row->buku_name);
+            $sheet->setCellValue('G'.$x, $row->user_name);
+            $sheet->setCellValue('H'.$x, $row->user_email);
+            $sheet->setCellValue('I'.$x, $row->user_no_telp);
+            $sheet->setCellValue('J'.$x, format_indo($row->invoice_date_create));
+            $sheet->setCellValue('K'.$x, format_indo($row->invoice_date_expirate));
+            $x++;
+        }
+
+        // Column sizing
+        foreach(range('A','K') as $columnID){
+            $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'All-Data-invoice-expired';
+        
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"'); 
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+    }
+
+    public function manual_confirm_invoice($page, $id_invoice){
+        $invoice_id = base64_decode(urldecode($id_invoice));
+    }
+
+    public function disable_invoice($page, $id_invoice){
+        $invoice_id = base64_decode(urldecode($id_invoice));
+
+        $tbl = $this->tbl_invoice;
+        $delete = $this->general->delete_data($tbl, $invoice_id);
+
+        if($page == 1){ //1 Invoice All 2 Confirm 3 Success 4 Expired
+            $urly = 'admin/invoice';
+            $urlx = 'admin/invoice';
+        } elseif($page == 2){
+            $urly = 'admin/invoice-confirm';
+            $urlx = 'admin/invoice-confirm';
+        } elseif($page == 3){
+            $urly = 'admin/invoice-success';
+            $urlx = 'admin/invoice-success';
+        } elseif($page == 4){
+            $urly = 'admin/invoice-expired';
+            $urlx = 'admin/invoice-expired';
+        }
+
         $this->delete_end($delete, $urly, $urlx);
     }
 

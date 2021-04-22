@@ -157,6 +157,19 @@ ul.CTAs a {
     width: 100%;
 }
 
+.table-responsive {
+    padding-right: 1px;
+}
+
+.table-responsive.table--no-card {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
+}
+
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
@@ -176,6 +189,12 @@ ul.CTAs a {
     }
     #sidebarCollapse span {
         display: none;
+    }
+}
+
+@media (min-width: 1200px) {
+    .table-responsive-data2 {
+        overflow: visible;
     }
 }
 

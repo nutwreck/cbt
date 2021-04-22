@@ -86,5 +86,21 @@ class Management_model extends CI_Model{
     public function get_buku_config_by_id($config_buku_id){
         return $this->db->get_where('config_buku', array('id' => $config_buku_id, 'is_enable' => 1))->row();
     }
+
+    public function get_invoice_all(){
+        return $this->db->get('v_invoice_all')->result();
+    }
+
+    public function get_invoice_confirm(){
+        return $this->db->get('v_invoice_confirm')->result();
+    }
+
+    public function get_invoice_success(){
+        return $this->db->get('v_invoice_success')->result();
+    }
+
+    public function get_invoice_expired(){
+        return $this->db->get('v_invoice_expired')->result();
+    }
     
 }

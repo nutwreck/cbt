@@ -153,6 +153,20 @@ $route['admin/edit-buku-setting/(:any)'] = 'website/lembaga/Management/edit_sett
 $route['admin/detail-buku/(:any)'] = 'website/lembaga/Management/setting_buku_detail/$1';
 $route['admin/add-detail-buku/(:any)'] = 'website/lembaga/Management/add_detail_buku_setting/$1';
 $route['admin/delete-detail-buku/(:any)/(:any)'] = 'website/lembaga/Management/disable_detail_buku_setting/$1/$2';
+$route['admin/invoice'] = 'website/lembaga/Management/invoice_list';
+$route['admin/invoice-confirm'] = 'website/lembaga/Management/invoice_confirm';
+$route['admin/invoice-success'] = 'website/lembaga/Management/invoice_success';
+$route['admin/invoice-expired'] = 'website/lembaga/Management/invoice_expired';
+$route['admin/invoice-all'] = 'website/lembaga/Management/invoice_list_all';
+$route['admin/invoice-confirm-all'] = 'website/lembaga/Management/invoice_list_confirm_all';
+$route['admin/invoice-success-all'] = 'website/lembaga/Management/invoice_list_success_all';
+$route['admin/invoice-expired-all'] = 'website/lembaga/Management/invoice_list_expired_all';
+$route['admin/export-all-invoice'] = 'website/lembaga/Management/export_invoice_all';
+$route['admin/export-all-invoice-confirm'] = 'website/lembaga/Management/export_invoice_all_confirm';
+$route['admin/export-all-invoice-success'] = 'website/lembaga/Management/export_invoice_all_success';
+$route['admin/export-all-invoice-expired'] = 'website/lembaga/Management/export_invoice_all_expired';
+$route['admin/invoice/manual-confirm/(:num)/(:any)'] = 'website/lembaga/Management/manual_confirm_invoice/$1/$2';
+$route['admin/invoice/delete-invoice/(:num)/(:any)'] = 'website/lembaga/Management/disable_invoice/$1/$2';
 /*
 |
 | START WEBSITE URL FOR LEMBAGA ONLY
