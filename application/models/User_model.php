@@ -227,4 +227,22 @@ class User_model extends CI_Model{
 		}
     }
 
+    public function disable_all_peserta_user($data){
+        $this->db->trans_start();
+        $user = $this->db->update('user', $data);
+        if ($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return null;
+		} else {
+            $peserta = $this->db->update('peserta', $data);
+            if ($this->db->trans_status() === FALSE){
+                $this->db->trans_rollback();
+                return null;
+            } else {
+                $this->db->trans_commit();
+			    return $peserta;
+            }
+		}
+    }
+
 }

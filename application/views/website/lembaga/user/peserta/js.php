@@ -32,7 +32,8 @@
                     data:{checkbox_value:checkbox_value},
                     success:function()
                     {
-                    $('.removeRow').fadeOut(1500);
+                        $('.removeRow').fadeOut(1500);
+                        alert('Hapus peserta sukses!');
                     }
                 })
             } else {

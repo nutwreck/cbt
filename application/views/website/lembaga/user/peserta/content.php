@@ -14,12 +14,13 @@
                         <!-- DATA TABLE -->
                         <div class="table-data__tool">
                             <div class="table-data__tool-right">
-                                <button class="au-btn au-btn-icon au-btn--blue au-btn--small" onclick="add_data()">
-                                    <i class="zmdi zmdi-plus"></i>Tambah
+                                <button class="btn btn-md btn-primary m-1" onclick="add_data()">
+                                    <i class="zmdi zmdi-plus"></i> Tambah
                                 </button>
-                                <button class="au-btn au-btn-icon au-btn--green au-btn--small" onclick="import_excel()">
-                                    <i class="fa fa-upload"></i>Import Excel
+                                <button class="btn btn-md btn-success m-1" onclick="import_excel()">
+                                    <i class="fa fa-upload"></i> Import Excel
                                 </button>
+                                <a href="<?=base_url()?>admin/disable-all-participants" class="btn btn-md btn-danger m-1" onclick="return confirm('Apakah anda yakin menghapus semua data peserta?')"><i class="fa fa-trash"></i> Hapus Semua</a>
                             </div>
                         </div>
                         <div class="table-responsive table-responsive-data2">
@@ -43,7 +44,7 @@
                                 ?>
                                     <tr>
                                         <td><?=$no++?></td>
-                                        <td><input type="checkbox" class="delete_checkbox" value="'.$value->peserta_id.'" /></td>
+                                        <td><input type="checkbox" class="delete_checkbox" value="<?=$value->peserta_id?>|<?=$value->user_id?>.'" /></td>
                                         <td>
                                             <div class="btn-group">
                                                 <a href="<?=base_url()?>admin/edit-participants/<?=urlencode(base64_encode($value->peserta_id))?>/<?=urlencode(base64_encode($value->user_id))?>" class="btn btn-sm btn-primary mr-1"><i class="fa fa-pencil"></i></a>

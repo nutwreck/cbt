@@ -830,9 +830,25 @@ class User extends CI_Controller {
             );
             
             for($count = 0; $count < count($id); $count++) {
-                $this->user->disable_peserta_user($id[$count]);
+                $peserta_exp = explode("|", $id[$count]);
+                $peserta_id = $peserta_exp[0];
+                $user_id = $peserta_exp[1];
+                $this->user->disable_peserta_user($peserta_id, $user_id, $data);
             }
         }
+    }
+
+    public function user_peserta_delete_all(){
+        $data = array(
+            'is_enable' => 0,
+            'updated_datetime' => date('Y-m-d H:i:s')
+        );
+        
+        $disable = $this->user->disable_all_peserta_user($data);
+
+        $urly = 'admin/participants';
+        $urlx = 'admin/participants';
+        $this->delete_end($disable, $urly, $urlx);
     }
 
 }
