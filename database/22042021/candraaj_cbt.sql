@@ -330,6 +330,44 @@ REPLACE INTO `group_soal` (`id`, `paket_soal_id`, `parent_id`, `konversi_skor_id
 	(4, 6, 0, 0, 'SOAL BACAAN', 'SOAL BACAAN', '<p>Baca dengan teliti sebelum menjawab</p>', NULL, NULL, 0, 0, '2021-04-13 09:59:52', NULL, 1);
 /*!40000 ALTER TABLE `group_soal` ENABLE KEYS */;
 
+-- Dumping structure for table candraaj_cbt.invoice
+CREATE TABLE IF NOT EXISTS `invoice` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `invoice_number` varchar(12) NOT NULL DEFAULT '',
+  `payment_method_id` int(11) NOT NULL,
+  `payment_method_name` varchar(10) NOT NULL DEFAULT '',
+  `payment_method_detail_id` int(11) NOT NULL,
+  `payment_method_detail_name` varchar(100) NOT NULL DEFAULT '',
+  `user_id` int(11) NOT NULL,
+  `user_name` varchar(150) NOT NULL DEFAULT '',
+  `user_email` varchar(175) NOT NULL DEFAULT '',
+  `user_no_telp` varchar(13) NOT NULL DEFAULT '',
+  `buku_id` int(11) NOT NULL,
+  `invoice_total_cost` int(11) NOT NULL,
+  `kode_unik` int(3) NOT NULL DEFAULT 300,
+  `invoice_date_create` datetime NOT NULL,
+  `invoice_date_expirate` datetime NOT NULL,
+  `invoice_date_update` datetime DEFAULT NULL,
+  `confirm_image` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0 Submit, 1 Upload Confirm, 2 Success, 3 Expired',
+  `created_datetime` datetime NOT NULL,
+  `updated_datetime` datetime DEFAULT NULL,
+  `is_enable` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`),
+  KEY `payment_method_id_inv` (`payment_method_id`),
+  KEY `payment_method_detail_inv` (`payment_method_detail_id`),
+  KEY `user_id_inv` (`user_id`),
+  KEY `buku_id_inv` (`buku_id`),
+  CONSTRAINT `buku_id_inv` FOREIGN KEY (`buku_id`) REFERENCES `buku` (`id`),
+  CONSTRAINT `payment_method_detail_inv` FOREIGN KEY (`payment_method_detail_id`) REFERENCES `payment_method_detail` (`id`),
+  CONSTRAINT `payment_method_id_inv` FOREIGN KEY (`payment_method_id`) REFERENCES `payment_method` (`id`),
+  CONSTRAINT `user_id_inv` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Dumping data for table candraaj_cbt.invoice: ~0 rows (approximately)
+/*!40000 ALTER TABLE `invoice` DISABLE KEYS */;
+/*!40000 ALTER TABLE `invoice` ENABLE KEYS */;
+
 -- Dumping structure for table candraaj_cbt.jawaban
 CREATE TABLE IF NOT EXISTS `jawaban` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -439,6 +477,19 @@ REPLACE INTO `kelas` (`id`, `group_kelas_id`, `name`, `created_datetime`, `updat
 	(26, 9, 'C', '2021-03-19 00:00:00', NULL, 1),
 	(27, 10, 'UMUM', '2021-03-19 00:00:00', NULL, 1);
 /*!40000 ALTER TABLE `kelas` ENABLE KEYS */;
+
+-- Dumping structure for table candraaj_cbt.kode_unik
+CREATE TABLE IF NOT EXISTS `kode_unik` (
+  `id` tinyint(1) NOT NULL DEFAULT 0,
+  `number` int(3) NOT NULL,
+  `updated_datetime` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Dumping data for table candraaj_cbt.kode_unik: ~1 rows (approximately)
+/*!40000 ALTER TABLE `kode_unik` DISABLE KEYS */;
+REPLACE INTO `kode_unik` (`id`, `number`, `updated_datetime`) VALUES
+	(1, 300, '2021-04-22 17:01:34');
+/*!40000 ALTER TABLE `kode_unik` ENABLE KEYS */;
 
 -- Dumping structure for table candraaj_cbt.konversi_skor
 CREATE TABLE IF NOT EXISTS `konversi_skor` (
@@ -1151,7 +1202,7 @@ CREATE TABLE IF NOT EXISTS `paket_soal` (
 -- Dumping data for table candraaj_cbt.paket_soal: ~2 rows (approximately)
 /*!40000 ALTER TABLE `paket_soal` DISABLE KEYS */;
 REPLACE INTO `paket_soal` (`id`, `name`, `type_paket_id`, `type_paket_name`, `buku_id`, `buku_name`, `detail_buku_id`, `detail_buku_name`, `kelas_id`, `kelas_name`, `materi_id`, `materi_name`, `detail_mode_jwb_id`, `is_acak_soal`, `is_acak_jawaban`, `pengaturan_universal_id`, `skor_null`, `is_continuous`, `is_jawab`, `petunjuk`, `visual_limit`, `file`, `tipe_file`, `created_by`, `created_datetime`, `updated_by`, `updated_datetime`, `is_enable`) VALUES
-	(6, 'SOAL GRANDSBMPTN', 1, 'UJIAN', 0, '', 0, '', 2, 'SD KELAS 2', 2, 'PENALARAN UMUM', 3, 1, 1, 1, 0, 0, 0, '<p><span class="note-math"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mrow><mo fence="true">{</mo><mtable rowspacing="0.3600em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>a</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mtext>if&nbsp;</mtext><mi>b</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>c</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mtext>if&nbsp;</mtext><mi>d</mi></mrow></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">x = \\begin{cases}\r\n   a &amp;\\text{if } b \\\\\r\n   c &amp;\\text{if } d\r\n\\end{cases}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 3.00003em; vertical-align: -1.25003em;"></span><span class="minner"><span class="mopen delimcenter" style="top: 0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.69em;"><span class="" style="top: -3.69em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord mathnormal">a</span></span></span><span class="" style="top: -2.25em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord mathnormal">c</span></span></span></span><span class="vlist-s">?</span></span><span class="vlist-r"><span class="vlist" style="height: 1.19em;"><span class=""></span></span></span></span></span><span class="arraycolsep" style="width: 1em;"></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.69em;"><span class="" style="top: -3.69em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">if&nbsp;</span></span><span class="mord mathnormal">b</span></span></span><span class="" style="top: -2.25em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">if&nbsp;</span></span><span class="mord mathnormal">d</span></span></span></span><span class="vlist-s">?</span></span><span class="vlist-r"><span class="vlist" style="height: 1.19em;"><span class=""></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="note-latex" style="display: none;"><br></span></span></p><p><span class="note-math"><span class="note-latex" style="display: none;"><br></span></span></p><p><span class="note-math"><span class="note-latex" style="display: none;"><br></span></span>ORA UMUM</p>', 0, NULL, NULL, 27, '2021-03-21 12:36:01', 27, '2021-04-15 13:11:49', 1),
+	(6, 'SOAL GRANDSBMPTN', 1, 'UJIAN', 0, '', 0, '', 2, 'SD KELAS 2', 2, 'PENALARAN UMUM', 3, 1, 1, 1, 0, 0, 0, '<p><span class="note-math"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mrow><mo fence="true">{</mo><mtable rowspacing="0.3600em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>a</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mtext>if&nbsp;</mtext><mi>b</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>c</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mtext>if&nbsp;</mtext><mi>d</mi></mrow></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">x = \\begin{cases}\r\n   a &amp;\\text{if } b \\\\\r\n   c &amp;\\text{if } d\r\n\\end{cases}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 3.00003em; vertical-align: -1.25003em;"></span><span class="minner"><span class="mopen delimcenter" style="top: 0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.69em;"><span class="" style="top: -3.69em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord mathnormal">a</span></span></span><span class="" style="top: -2.25em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord mathnormal">c</span></span></span></span><span class="vlist-s">?</span></span><span class="vlist-r"><span class="vlist" style="height: 1.19em;"><span class=""></span></span></span></span></span><span class="arraycolsep" style="width: 1em;"></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.69em;"><span class="" style="top: -3.69em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">if&nbsp;</span></span><span class="mord mathnormal">b</span></span></span><span class="" style="top: -2.25em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">if&nbsp;</span></span><span class="mord mathnormal">d</span></span></span></span><span class="vlist-s">?</span></span><span class="vlist-r"><span class="vlist" style="height: 1.19em;"><span class=""></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="note-latex" style="display: none;"><br></span></span></p><p><span class="note-math"><span class="note-latex" style="display: none;"><br></span></span></p><p><span class="note-math"><span class="note-latex" style="display: none;"><br></span></span>ORA UMUM</p>', 1, NULL, NULL, 27, '2021-03-21 12:36:01', 27, '2021-04-15 13:11:49', 1),
 	(9, 'Modul Matematika', 2, 'BUKU', 2, 'SBMPTN', 1, 'SAINTEK', 27, 'UMUM', 12, 'SBMPTN', 3, 1, 1, 2, 0, 0, 0, '<p><br></p>', 0, NULL, NULL, 27, '2021-04-15 14:41:56', NULL, NULL, 1);
 /*!40000 ALTER TABLE `paket_soal` ENABLE KEYS */;
 
@@ -1335,7 +1386,7 @@ CREATE TABLE IF NOT EXISTS `sesi_pelaksanaan` (
 -- Dumping data for table candraaj_cbt.sesi_pelaksanaan: ~1 rows (approximately)
 /*!40000 ALTER TABLE `sesi_pelaksanaan` DISABLE KEYS */;
 REPLACE INTO `sesi_pelaksanaan` (`id`, `paket_soal_id`, `name`, `mode_peserta_id`, `waktu_mulai`, `lama_pengerjaan`, `batas_pengerjaan`, `blok_layar`, `is_fleksible`, `is_hasil`, `is_ranking`, `is_pembahasan`, `is_komposisi_soal`, `created_datetime`, `updated_datetime`, `is_enable`) VALUES
-	(1, 6, 'Sesi Ujian Grandsbmptn 2021', 1, '2021-04-21 11:21:00', 360, '2021-04-23 22:30:00', 1, 1, 1, 1, 1, 1, '2021-04-16 16:37:53', '2021-04-16 23:07:41', 1);
+	(1, 6, 'Sesi Ujian Grandsbmptn 2021', 1, '2021-04-21 11:21:00', 360, '2021-04-23 16:00:00', 1, 1, 1, 1, 1, 1, '2021-04-16 16:37:53', '2021-04-16 23:07:41', 1);
 /*!40000 ALTER TABLE `sesi_pelaksanaan` ENABLE KEYS */;
 
 -- Dumping structure for table candraaj_cbt.sesi_pelaksanaan_komposisi
@@ -1375,13 +1426,11 @@ CREATE TABLE IF NOT EXISTS `sesi_pelaksanaan_user` (
   PRIMARY KEY (`id`),
   KEY `sesi_pelaksanaan_user` (`sesi_pelaksanaan_id`),
   KEY `user_id_sesi` (`user_id`),
-  KEY `group_peserta_sesi` (`group_peserta_id`) USING BTREE,
-  CONSTRAINT `group_peserta_sesi` FOREIGN KEY (`group_peserta_id`) REFERENCES `group_peserta` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `sesi_pelaksanaan_user` FOREIGN KEY (`sesi_pelaksanaan_id`) REFERENCES `sesi_pelaksanaan` (`id`),
   CONSTRAINT `user_id_sesi` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.sesi_pelaksanaan_user: ~11 rows (approximately)
+-- Dumping data for table candraaj_cbt.sesi_pelaksanaan_user: ~12 rows (approximately)
 /*!40000 ALTER TABLE `sesi_pelaksanaan_user` DISABLE KEYS */;
 REPLACE INTO `sesi_pelaksanaan_user` (`id`, `sesi_pelaksanaan_id`, `group_peserta_id`, `user_id`, `created_datetime`, `updated_datetime`, `is_enable`) VALUES
 	(1, 1, 1, 6, '2021-04-16 16:37:53', '2021-04-16 23:07:41', 1),
@@ -1394,7 +1443,8 @@ REPLACE INTO `sesi_pelaksanaan_user` (`id`, `sesi_pelaksanaan_id`, `group_pesert
 	(8, 1, 10, 25, '2021-04-16 16:37:53', '2021-04-16 23:07:41', 1),
 	(9, 1, 10, 26, '2021-04-16 16:37:53', '2021-04-16 23:07:41', 1),
 	(10, 1, 10, 17, '2021-04-16 16:37:53', '2021-04-16 23:07:41', 1),
-	(11, 1, 10, 18, '2021-04-16 16:37:53', '2021-04-16 23:07:41', 1);
+	(11, 1, 10, 18, '2021-04-16 16:37:53', '2021-04-16 23:07:41', 1),
+	(17, 1, 0, 30, '2021-04-22 15:43:17', NULL, 1);
 /*!40000 ALTER TABLE `sesi_pelaksanaan_user` ENABLE KEYS */;
 
 -- Dumping structure for table candraaj_cbt.tipe_kesulitan
@@ -1458,12 +1508,12 @@ CREATE TABLE IF NOT EXISTS `ujian` (
   KEY `user_ujian` (`user_id`),
   CONSTRAINT `paket_soal_ujian` FOREIGN KEY (`paket_soal_id`) REFERENCES `paket_soal` (`id`),
   CONSTRAINT `user_ujian` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table candraaj_cbt.ujian: ~1 rows (approximately)
 /*!40000 ALTER TABLE `ujian` DISABLE KEYS */;
 REPLACE INTO `ujian` (`id`, `sesi_pelaksanaan_id`, `paket_soal_id`, `user_id`, `user_no`, `user_name`, `user_email`, `list_soal`, `list_jawaban`, `jml_benar`, `skor`, `tgl_mulai`, `tgl_selesai`, `status`, `created_datetime`, `is_enable`) VALUES
-	(7, 1, 6, 30, '202104190337', 'Temam Murbianto', 'temam@gmail.com', '0|15,0|22,0|23,0|24,0|34,0|16,0|20,0|30,0|18,0|21,0|19,0|8,0|9,0|12,1|32,2|35,4|40,4|41', '0|15||N,0|22||N,0|23|ahsd kbbasjd jansd|N,0|24||N,0|34||N,0|16||N,0|20|ujujujkij kasjdkas|N,0|30||N,0|18||N,0|21||N,0|19||N,0|8||N,0|9||N,0|12||N,1|32|2|N,2|35||N,4|40||N,4|41||N', 0, 0, '2021-04-21 22:12:56', '2021-04-22 04:12:56', 0, '2021-04-21 22:12:57', 1);
+	(11, 1, 6, 30, '202104190337', 'Temam Murbianto', 'temam@gmail.com', '0|15,0|22,0|23,0|24,0|34,0|16,0|19,0|17,0|8,0|11,0|20,0|12,0|18,0|21,1|32,2|35,4|40,4|41', '0|15||N,0|22||N,0|23||N,0|24||N,0|34||N,0|16||N,0|19||N,0|17||N,0|8||N,0|11||N,0|20||N,0|12||N,0|18||N,0|21||N,1|32||N,2|35||N,4|40||N,4|41||N', 0, 0, '2021-04-22 16:40:58', '2021-04-22 22:40:58', 0, '2021-04-22 16:40:58', 1);
 /*!40000 ALTER TABLE `ujian` ENABLE KEYS */;
 
 -- Dumping structure for table candraaj_cbt.user
