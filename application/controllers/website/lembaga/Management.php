@@ -19,6 +19,7 @@ class Management extends CI_Controller {
     private $tbl_buku = 'buku';
     private $tbl_config_buku = 'config_buku';
     private $tbl_config_buku_detail = 'config_buku_detail';
+    private $tbl_invoice = 'invoice';
 
     public function __construct(){
         parent::__construct();
@@ -1109,7 +1110,8 @@ class Management extends CI_Controller {
         $url_manual_confirm = base_url().'admin/invoice/manual-confirm/2/';
         $url_delete = base_url().'admin/invoice/delete-invoice/2/';
 		foreach ($list as $field) {
-			$no++;
+            $no++;
+            $status_invoice = !empty($field->invoice_date_update) || $field->invoice_date_update != '' ? '<h6>'.$field->status_invoice.'<br /><small class="bg-success text-white">'.format_indo($field->invoice_date_update).'</small></h6>' : '<h6>'.$field->status_invoice.'<br /><small class="bg-danger text-white">Tanggal Tidak Tersimpan</small></h6>';
             $row = array();
             $row[] = $no;
             $row[] = '<div class="table-data-feature">
@@ -1120,11 +1122,15 @@ class Management extends CI_Controller {
                             <i class="zmdi zmdi-delete"></i>
                         </a>
                     </div>';
-            $row[] = '<a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="Nomor #'.$field->invoice_number.'" data-caption="" data-image="'.config_item('_dir_website').'lembaga/grandsbmptn/confirm_payment/'.$field->invoice_number.'" data-target="#image-gallery">
-                            <img class="img-responsive" src="'.config_item('_dir_website').'lembaga/grandsbmptn/confirm_payment/'.$field->invoice_number.'" style="width:100px;" alt="'.$field->invoice_number.'">
-                    </a>';
+            $row[] = '<a class="lightbox" href="#'.$field->invoice_number.'" title="Klik untuk memperbesar gambar">
+                        <img src="'.config_item('_dir_website').'lembaga/grandsbmptn/confirm_payment/'.$field->confirm_image.'"/>
+                    </a>
+                    <div class="lightbox-target" id="'.$field->invoice_number.'">
+                        <img src="'.config_item('_dir_website').'lembaga/grandsbmptn/confirm_payment/'.$field->confirm_image.'"/>
+                        <a class="lightbox-close" href="#"></a>
+                    </div>';
             $row[] = $field->invoice_number;
-            $row[] = $field->status_invoice;
+            $row[] = $status_invoice;
             $row[] = $field->invoice_total_cost;
             $row[] = $field->payment_method_detail_name;
             $row[] = $field->buku_name;
@@ -1133,7 +1139,6 @@ class Management extends CI_Controller {
             $row[] = $field->user_no_telp;
             $row[] = format_indo($field->invoice_date_create);
             $row[] = format_indo($field->invoice_date_expirate);
-            $row[] = $field->date_left.' Left';
 
 			$data[] = $row;
 		}
@@ -1162,6 +1167,7 @@ class Management extends CI_Controller {
         $sheet->setCellValue('I1', 'No Telp');
         $sheet->setCellValue('J1', 'Tanggal Invoice Dibuat');
         $sheet->setCellValue('K1', 'Tanggal Invoice Kadaluarsa');
+        $sheet->setCellValue('L1', 'Tanggal Invoice Konfirmasi');
         
         $siswa = $this->management->get_invoice_confirm();
         $no = 1;
@@ -1179,6 +1185,7 @@ class Management extends CI_Controller {
             $sheet->setCellValue('I'.$x, $row->user_no_telp);
             $sheet->setCellValue('J'.$x, format_indo($row->invoice_date_create));
             $sheet->setCellValue('K'.$x, format_indo($row->invoice_date_expirate));
+            $sheet->setCellValue('L'.$x, format_indo($row->invoice_date_update));
             $x++;
         }
 
@@ -1213,16 +1220,18 @@ class Management extends CI_Controller {
 
     public function invoice_list_success_all(){ //page 3
         $list = $this->invoice_success_admin->get_datatables();
+        
 		$data = array();
         $no = $_POST['start'];
         $url_manual_confirm = base_url().'admin/invoice/manual-confirm/3/';
         $url_delete = base_url().'admin/invoice/delete-invoice/3/';
 		foreach ($list as $field) {
+            $status_invoice = !empty($field->invoice_date_update) || $field->invoice_date_update != '' ? '<h6>'.$field->status_invoice.'<br /><small class="bg-success text-white">'.format_indo($field->invoice_date_update).'</small></h6>' : '<h6>'.$field->status_invoice.'<br /><small class="bg-danger text-white">Tanggal Tidak Tersimpan</small></h6>';
 			$no++;
             $row = array();
             $row[] = $no;
             $row[] = $field->invoice_number;
-            $row[] = $field->status_invoice;
+            $row[] = $status_invoice;
             $row[] = $field->invoice_total_cost;
             $row[] = $field->payment_method_detail_name;
             $row[] = $field->buku_name;
@@ -1259,6 +1268,7 @@ class Management extends CI_Controller {
         $sheet->setCellValue('I1', 'No Telp');
         $sheet->setCellValue('J1', 'Tanggal Invoice Dibuat');
         $sheet->setCellValue('K1', 'Tanggal Invoice Kadaluarsa');
+        $sheet->setCellValue('L1', 'Tanggal Invoice Terkonfirmasi');
         
         $siswa = $this->management->get_invoice_success();
         $no = 1;
@@ -1276,11 +1286,12 @@ class Management extends CI_Controller {
             $sheet->setCellValue('I'.$x, $row->user_no_telp);
             $sheet->setCellValue('J'.$x, format_indo($row->invoice_date_create));
             $sheet->setCellValue('K'.$x, format_indo($row->invoice_date_expirate));
+            $sheet->setCellValue('L'.$x, format_indo($row->invoice_date_update));
             $x++;
         }
 
         // Column sizing
-        foreach(range('A','K') as $columnID){
+        foreach(range('A','L') as $columnID){
             $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
         }
 
@@ -1336,7 +1347,6 @@ class Management extends CI_Controller {
             $row[] = $field->user_no_telp;
             $row[] = format_indo($field->invoice_date_create);
             $row[] = format_indo($field->invoice_date_expirate);
-            $row[] = $field->date_left.' Left';
 
 			$data[] = $row;
 		}

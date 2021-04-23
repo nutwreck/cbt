@@ -31,7 +31,6 @@
                                 <th>No Telp</th>
                                 <th>Tanggal Invoice</th>
                                 <th>Tanggal Expired</th>
-                                <th>Sisa Waktu</th>
                             </tr>
                         </thead>
                         <tbody>
