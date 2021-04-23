@@ -103,7 +103,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row" style="display:none">
                                 <div class="col-sm-12 col-lg-3" style="margin-top:1%">
                                     <h5 class="label-text">Skala Penilaian</h5>
                                 </div>
