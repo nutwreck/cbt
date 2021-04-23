@@ -12,7 +12,7 @@
     <meta name="twitter:description" content="Aplikasi ujian online &amp; ujian online berbasis komputer dengan mudah cepat dan praktis">
     <meta name="twitter:title" content="Aplikasi Ujian Online">
 
-    <title>Zambert Online Test</title>
+    <title>Zambert Online Test | Register</title>
 
     <noscript>
           <meta http-equiv="Refresh" content="0;<?php echo base_url(); ?>javascript-not-available">
@@ -121,6 +121,9 @@
                         </div>
 
                         <!-- Email Address -->
+                        <div class="col-lg-12">
+                            <small for="email" id="email_er" class="bg-danger text-white"></small>
+                        </div>
                         <div class="input-group col-lg-12 mb-4">
                             <div class="input-group-prepend">
                                 <span class="input-group-text bg-white px-4 border-md border-right-0">
@@ -128,7 +131,6 @@
                                 </span>
                             </div>
                             <input id="email" type="email" name="email" placeholder="Masukkan Email Aktif" class="form-control bg-white border-left-0 border-md" required>
-                            <small for="email" id="email_er" class="bg-danger text-white"></small>
                         </div>
 
                         <!-- Phone Number -->
@@ -194,7 +196,7 @@
             
             if (atpos < 1 || ( dotpos - atpos < 2 )) {
                 document.getElementById('email_er').innerHTML = 'Input Email dengan benar!';
-                document.formadd.email.focus() ;
+                document.form_register.email.focus() ;
                 return false;
             }
         }

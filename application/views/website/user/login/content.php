@@ -12,7 +12,7 @@
     <meta name="twitter:description" content="Aplikasi ujian online &amp; ujian online berbasis komputer dengan mudah cepat dan praktis">
     <meta name="twitter:title" content="Aplikasi Ujian Online">
 
-    <title>Zambert Online Test</title>
+    <title>Zambert Online Test | Login</title>
 
     <noscript>
           <meta http-equiv="Refresh" content="0;<?php echo base_url(); ?>javascript-not-available">
@@ -131,10 +131,14 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <div class="form-group col-lg-12 mx-auto mb-0">
+                        <div class="form-group col-lg-12 mx-auto mb-2">
                             <button type="submit" class="btn btn-primary btn-block py-2">
                                 <span class="font-weight-bold">Login</span>
                             </button>
+                        </div>
+
+                        <div class="text-center w-100">
+                            <small class="text-muted font-weight-bold">Lupa Password? <a href="<?=base_url()?>lupa-password" class="text-primary ml-2">Klik Disini</a></small>
                         </div>
                 </form>
                         <!-- Divider Text -->

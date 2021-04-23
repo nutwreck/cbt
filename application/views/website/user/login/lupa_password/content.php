@@ -12,7 +12,7 @@
     <meta name="twitter:description" content="Aplikasi ujian online &amp; ujian online berbasis komputer dengan mudah cepat dan praktis">
     <meta name="twitter:title" content="Aplikasi Ujian Online">
 
-    <title>Zambert Online Test</title>
+    <title>Zambert Online Test | Lupa Password</title>
 
     <noscript>
           <meta http-equiv="Refresh" content="0;<?php echo base_url(); ?>javascript-not-available">
@@ -106,20 +106,21 @@
 
             <!-- Registeration Form -->
             <div class="col-md-7 col-lg-6 ml-auto">
-                <form id="form_login" name="form_login" action="<?php echo base_url(); ?>website/user/Lupa_password/submit_lupa_password" class="form-register" method="POST" enctype="multipart/form-data">
+                <form id="lupa_form" name="lupa_form" action="<?php echo base_url(); ?>website/user/Lupa_password/submit_lupa_password" class="form-register" method="POST" enctype="multipart/form-data" onsubmit="return(validate_register());">
                     <input type="hidden" id="csrf-hash-form" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" style="display: none">
                     <div class="row">
-
                         <!-- Email Address -->
+                        <div class="col-lg-12">
+                            <small for="username" id="username_er" class="bg-danger text-white"></small>
+                        </div>
                         <div class="input-group col-lg-12 mb-4">
                             <div class="input-group-prepend">
                                 <span class="input-group-text bg-white px-4 border-md border-right-0">
                                     <i class="fa fa-envelope text-muted"></i>
                                 </span>
                             </div>
-                            <input id="username" type="text" name="username" placeholder="Masukkan Email" class="form-control bg-white border-left-0 border-md" required>
+                            <input id="username" type="email" name="username" placeholder="Masukkan Email" class="form-control bg-white border-left-0 border-md" required>
                         </div>
-
                         <!-- Password -->
                         <!-- Submit Button -->
                         <div class="form-group col-lg-12 mx-auto mb-0">
@@ -155,6 +156,21 @@
                 $(this).parent().find('.input-group-text').css('border-color', '#ced4da');
             });
         });
+    </script>
+
+    <!-- Validasi Form Register -->
+    <script>
+        function validate_register(){
+            var emailID = document.lupa_form.username.value;
+            atpos = emailID.indexOf("@");
+            dotpos = emailID.lastIndexOf(".");
+            
+            if (atpos < 1 || ( dotpos - atpos < 2 )) {
+                document.getElementById('username_er').innerHTML = 'Input Email dengan benar!';
+                document.lupa_form.username.focus() ;
+                return false;
+            }
+        }
     </script>
 
     <script type="text/javascript"> //POP UP
