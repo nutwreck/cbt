@@ -137,11 +137,6 @@
             document.formadd.mode_jawaban.focus();
             return false;
         }
-        if( document.formadd.skala_nilai.value == "-1" ) {
-            document.getElementById('skala_nilai_er').innerHTML = 'Skala nilai wajib dipilih!';
-            document.formadd.skala_nilai.focus();
-            return false;
-        }
         if( document.formadd.buku.value == "-1" ) {
             document.getElementById('buku_er').innerHTML = 'Buku wajib dipilih!';
             document.formadd.buku.focus();

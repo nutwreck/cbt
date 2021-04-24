@@ -174,8 +174,8 @@ class Ujian extends CI_Controller {
                 $bacaan_soal = $s->isi_bacaan_soal <> 0 || !empty($s->isi_bacaan_soal) ? $s->isi_bacaan_soal.'<br />' : ''; // bacaan soal
                 $bacaan_soal_name = $s->bacaan_soal_name <> 0 || !empty($s->bacaan_soal_name) ? '<b>'.$s->bacaan_soal_name.'</b><br />' : ''; // bacaan soal judul
                 $group_soal_petunjuk = $s->group_soal_petunjuk <> 0 || !empty($s->group_soal_petunjuk) ? $s->group_soal_petunjuk.'<br />' : '';
-                $group_soal_audio = $s->group_soal_audio <> 0 || !empty($s->group_soal_audio) ? '<audio id="loop-limited" controls><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/group_soal/group_'.$s->paket_soal_id.'/'.$s->group_soal_audio.'" type="'.$s->group_soal_tipe_audio.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
-                $soal_audio = $s->file <> 0 || !empty($s->file) ? '<audio id="loop-limited" controls><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/paket_soal/soal_'.$s->paket_soal_id.'/'.$s->file.'" type="'.$s->tipe_file.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
+                $group_soal_audio = $s->group_soal_audio <> 0 || !empty($s->group_soal_audio) ? '<audio id="loop-limited-'.$nomor_soal.'" controls><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/group_soal/group_'.$s->paket_soal_id.'/'.$s->group_soal_audio.'" type="'.$s->group_soal_tipe_audio.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
+                $soal_audio = $s->file <> 0 || !empty($s->file) ? '<audio id="loop-limited-'.$nomor_soal.'" controls><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/paket_soal/soal_'.$s->paket_soal_id.'/'.$s->file.'" type="'.$s->tipe_file.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
                 
                 $html .= '<div class="step card text-left font-poppins" id="widget_'.$nomor_soal.'">';
                 $vrg = $arr_jawab[$s->bank_soal_id]["r"] == "" ? "N" : $arr_jawab[$s->bank_soal_id]["r"];
@@ -188,17 +188,17 @@ class Ujian extends CI_Controller {
                 $no_next = $nomor_soal+1;
 
                 if($group_soal_next == $group_soal_before){
-                    $arrow_back = $nomor_soal == 1 ? '<a class="btn btn-sm text-primary bg-white btn-nxt-brf-hrd disabled"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>' : '<a rel="0" onclick="return back();" class="back btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-left" aria-hidden="true" title="Soal Sebelumnya"></i></a>';
+                    $arrow_back = $nomor_soal == 1 ? '<a id="arrow_back" class="btn btn-sm text-primary bg-white btn-nxt-brf-hrd disabled"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>' : '<a rel="0" onclick="return back();" class="back btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-left" aria-hidden="true" title="Soal Sebelumnya"></i></a>';
                     $arrow_next = $nomor_soal == $jumlah_soal ? '<a class="btn btn-sm text-primary bg-white btn-nxt-brf-hrd disabled"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>' : '<a rel="2" onclick="return next();" class="next btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-right" aria-hidden="true" title="Soal Berikutnya"></i></a>';
                     
-                    $previous_number = $nomor_soal == 1 ? '<div class="col"></div>' : '<div class="col"><a rel="0" onclick="return back();" class="back btn btn-md btn-primary text-white">No '.$no_previous.'</a></div>';
+                    $previous_number = $nomor_soal == 1 ? '<div class="col"></div>' : '<div class="col"><a id="previous_back" rel="0" onclick="return back();" class="back btn btn-md btn-primary text-white">No '.$no_previous.'</a></div>';
                     $next_number = $nomor_soal == $jumlah_soal ? '<div class="col"></div>' : '<div class="col"><a rel="2" onclick="return next();" class="next btn btn-md btn-primary text-white">No '.$no_next.'</a></div>';
                 } else {
                     $num_group_soal++;
-                    $arrow_back = '<a rel="0" onclick="return back();" class="back btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fas fa-info-circle"></i></a>';
+                    $arrow_back = '<a rel="0" onclick="return back_group();" class="back btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fas fa-info-circle"></i></a>';
                     $arrow_next = $nomor_soal == $jumlah_soal ? '<a class="btn btn-sm text-primary bg-white btn-nxt-brf-hrd disabled"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>' : '<a rel="2" onclick="return next();" class="next btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>';;
 
-                    $previous_number = '<div class="col"><a rel="0" onclick="return back();" class="back btn btn-md btn-primary text-white">Petunjuk Group</a></div>';
+                    $previous_number = '<div class="col"><a rel="0" onclick="return back_group();" class="back btn btn-md btn-primary text-white">Petunjuk Group</a></div>';
                     $next_number = $nomor_soal == $jumlah_soal ? '<div class="col"></div>' : '<div class="col"><a rel="2" onclick="return next();" class="next btn btn-md btn-primary text-white">No '.$no_next.'</a></div>';
                 }
 
@@ -211,9 +211,9 @@ class Ujian extends CI_Controller {
                                 <h5><i class="fa fa-braille" aria-hidden="true"></i> Soal No #'.$nomor_soal.' / '.$jumlah_soal.'</h5>
                             </div>
                             <div class="col text-right">
-                                <a id="_increase" class="btn btn-sm text-primary bg-white" data-intro="Memperbesar ukuran huruf pada lembar soal anda." data-position="up" onclick="return _increase();"><i class="fa fa-plus-square" aria-hidden="true" title="Zoom In"></i></a>
-                                <a id="_reset" class="btn btn-sm text-primary bg-white" data-intro="Mengembalikan ukuran huruf seperti semula pada lembar soal anda." data-position="up" onclick="return _reset();"><i class="fa fa-sync" aria-hidden="true" title="Default"></i></a>
-                                <a id="_decrease" class="btn btn-sm text-primary bg-white" data-intro="Memperkecil ukuran huruf pada lembar soal anda." data-position="up" onclick="return _decrease();"><i class="fa fa-minus-square" aria-hidden="true" title="Zoom Out"></i></a>
+                                <a id="_increase" class="btn btn-sm text-primary bg-white" data-position="up" onclick="return _increase();"><i class="fa fa-plus-square" aria-hidden="true" title="Zoom In"></i></a>
+                                <a id="_reset" class="btn btn-sm text-primary bg-white" data-position="up" onclick="return _reset();"><i class="fa fa-sync" aria-hidden="true" title="Default"></i></a>
+                                <a id="_decrease" class="btn btn-sm text-primary bg-white" data-position="up" onclick="return _decrease();"><i class="fa fa-minus-square" aria-hidden="true" title="Zoom Out"></i></a>
                                 <span class="btn-nxt-brf-hrd">|</span>
                                 '.$arrow_back.'
                                 '.$arrow_next.'
@@ -257,7 +257,7 @@ class Ujian extends CI_Controller {
                 $html .= '<div class="card-footer text-muted">
                         <div class="row text-center">
                             '.$previous_number.'
-                            <div class="col" data-intro="Membantu untuk menandai soal jika dirasa anda ragu untuk menjawabnya. Akan muncul warna oranye pada navigasi soal." data-position="up">
+                            <div class="col" data-position="up">
                                 <a rel="1" class="ragu_ragu btn btn-md btn-warning text-white" onclick="return tidak_jawab();">Ragu</a>
                             </div>
                             '.$next_number.'
@@ -278,6 +278,9 @@ class Ujian extends CI_Controller {
         $data['content']['jumlah_soal'] = $nomor_soal;
         $data['content']['waktu_selesai'] = $ujian_data->tgl_selesai;
         $data['content']['audio_limit'] = $paket_soal->visual_limit;
+        $data['content']['is_jawab'] = $paket_soal->is_jawab;
+        $data['content']['is_continuous'] = $paket_soal->is_continuous;
+        $data['content']['blok_layar'] = (int) $sesi_detail->blok_layar*60;
         $data['title_header'] = ['title' => 'Lembar Ujian Online'];
 
         //for load view

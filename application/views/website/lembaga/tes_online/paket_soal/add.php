@@ -173,24 +173,26 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row" style="display:none">
-                                    <div class="col-sm-12 col-lg-3" style="margin-top:1%">
-                                        <h5 class="label-text">Skala Penilaian</h5>
-                                    </div>
-                                    <div class="col-sm-12 col-lg-9">
-                                        <div class="form-group">
-                                            <select class="form-control selectpicker" data-live-search="true" data-width="auto" name="skala_nilai" required>
-                                                <option value = "-1" selected>Pilih</option>
-                                                <?php foreach($get_skala_nilai as $val_skala_nilai){ ?>
-                                                    <option data-tokens="<?=$val_skala_nilai->detail?>" value="<?=$val_skala_nilai->id?>"><?=$val_skala_nilai->detail?></option>
-                                                <?php } ?>
-                                            </select>
-                                            <small for="skala_nilai" id="skala_nilai_er" class="bg-danger text-white"></small>
+                                <div style="display:none">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-lg-3" style="margin-top:1%">
+                                            <h5 class="label-text">Skala Penilaian</h5>
                                         </div>
-                                        <div class="alert alert-info">
-                                            <p>
-                                                Jika anda memilih skala penilaian <b>sesuai skor total</b>, maka anda perlu menambahkan skor pada jawaban benar. Jika memilih <b>skala 100</b> maka perhitungan skor pada jawaban benar akan otomatis dihitung proporsional dari total jumlah soal.
-                                            </p>
+                                        <div class="col-sm-12 col-lg-9">
+                                            <div class="form-group">
+                                                <select class="form-control selectpicker" data-live-search="true" data-width="auto" name="skala_nilai">
+                                                    <option value = "-1" selected>Pilih</option>
+                                                    <?php foreach($get_skala_nilai as $val_skala_nilai){ ?>
+                                                        <option data-tokens="<?=$val_skala_nilai->detail?>" value="<?=$val_skala_nilai->id?>"><?=$val_skala_nilai->detail?></option>
+                                                    <?php } ?>
+                                                </select>
+                                                <small for="skala_nilai" id="skala_nilai_er" class="bg-danger text-white"></small>
+                                            </div>
+                                            <div class="alert alert-info">
+                                                <p>
+                                                    Jika anda memilih skala penilaian <b>sesuai skor total</b>, maka anda perlu menambahkan skor pada jawaban benar. Jika memilih <b>skala 100</b> maka perhitungan skor pada jawaban benar akan otomatis dihitung proporsional dari total jumlah soal.
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

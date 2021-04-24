@@ -7,6 +7,10 @@
     var id_tes          = "<?=$ujian_id; ?>";
     var widget          = $(".step");
     var total_widget    = widget.length;
+    var audio_limit     = <?=$audio_limit?>;
+    var is_jawab        = <?=$is_jawab?>;
+    var is_continuous   = <?=$is_continuous?>;
+    var blok_layar      = <?=$blok_layar?>;
 
     $(document).ready(function () {
         var t = $('.sisawaktu');
@@ -20,37 +24,72 @@
         $('a[aria-expanded=true]').attr('aria-expanded', 'false');
 
         //disable F5
-        /* $(document).on("keydown", disableF5); */
+        $(document).on("keydown", disableF5);
 
         buka(1);
         simpan_sementara();
 
         $("#widget_1").show();
 
-        //Visual Limit Audio
-        var audio_limit = <?=$audio_limit?>;
-        if (audio_limit != 0) {
-            limit_audio(audio_limit);
-        }
-        
+        limit_audio(audio_limit, 1);
     });
 
     function disableF5(e) { if ((e.which || e.keyCode) == 116 || (e.which || e.keyCode) == 82) e.preventDefault(); };
 
-    function limit_audio(limit){
-        var loopLimit = limit;
-        var loopCounter = 0;
-        document.getElementById('loop-limited').addEventListener('ended', function(){
-            if (loopCounter < loopLimit){
-                this.currentTime = 0;
-                this.play();
-                loopCounter++;
+    //Visual Limit Audio
+    function limit_audio(audio_limit, no){
+        if (audio_limit != 0 && document.getElementById('loop-limited-' + no) != null) {
+            var loopLimit = audio_limit;
+            var loopCounter = 0;
+            document.getElementById('loop-limited-' + no).addEventListener('ended', function(){
+                if (loopCounter < loopLimit){
+                    this.currentTime = 0;
+                    this.play();
+                    loopCounter++;
+                } else {
+                    var ply = document.getElementById('loop-limited-' + no);
+                    var oldSrc = ply.src;
+                    ply.src = "";
+                }
+            }, false);
+        }
+    }
+
+    function harus_jawab(no){
+        if(is_jawab == 1){
+            var f_asal = $("#ujian");
+            var form = getFormData(f_asal);
+
+            var gr_m = 'id_group_mode_jwb' + no;
+            var group_m = form[gr_m];
+
+            if(group_m == 1){ //1 Pilihan Ganda 2 Essay
+                var pil_gan = $('input:radio[name=opsi_'+no+']:checked').val();
+                if ( !pil_gan ) {
+                    swal({ title: "Informasi",
+                        text: "Pilihan Jawaban harus dipilih salah satu!",
+                        button: "Kembali",
+                        icon: "info"}).then(okay => {
+                        if (okay) {
+                            buka_return(no);
+                        }
+                    });
+                }
             } else {
-                var ply = document.getElementById('loop-limited');
-                var oldSrc = ply.src;
-                ply.src = "";
+                var name_essay = 'essay_' + no;
+                var x = document.forms["ujian"][name_essay].value;
+                if (x == "") {
+                    swal({ title: "Informasi",
+                        text: "Jawaban harus diisi!",
+                        button: "Kembali",
+                        icon: "info"}).then(okay => {
+                        if (okay) {
+                            buka_return(no);
+                        }
+                    });
+                }
             }
-        }, false);
+        }
     }
 
     function getFormData($form) {
@@ -78,16 +117,40 @@
         return jawab_text;
     }
 
+    function buka_return(id_widget) {
+        $(".next").attr('rel', (id_widget + 1));
+        $(".back").attr('rel', (id_widget - 1));
+        $(".ragu_ragu").attr('rel', (id_widget));
+        cek_status_ragu(id_widget);
+
+        limit_audio(audio_limit, id_widget);
+
+        $("#soalke").html(id_widget);
+
+        $(".step").hide();
+        $("#widget_" + id_widget).show();
+
+        simpan();
+    }
+
     function buka(id_widget) {
         $(".next").attr('rel', (id_widget + 1));
         $(".back").attr('rel', (id_widget - 1));
         $(".ragu_ragu").attr('rel', (id_widget));
         cek_status_ragu(id_widget);
 
+        limit_audio(audio_limit, id_widget);
+
+        if(id_widget != 1){
+            harus_jawab(before_widget);
+        }
+
         $("#soalke").html(id_widget);
 
         $(".step").hide();
         $("#widget_" + id_widget).show();
+
+        before_widget = id_widget;
 
         simpan();
     }
@@ -107,6 +170,10 @@
         berikutnya = parseInt(berikutnya);
         berikutnya = berikutnya > total_widget ? total_widget : berikutnya;
 
+        limit_audio(audio_limit, berikutnya);
+
+        harus_jawab(berikutnya - 1);
+
         $("#soalke").html(berikutnya);
 
         $(".next").attr('rel', (berikutnya + 1));
@@ -121,21 +188,30 @@
     }
 
     function back() {
-        var back = $(".back").attr('rel');
-        back = parseInt(back);
-        back = back < 1 ? 1 : back;
+        if (is_continuous == 1){
+            document.getElementById('arrow_back').className = "btn btn-sm text-primary bg-white btn-nxt-brf-hrd disabled";
+            document.getElementById('previous_back').className = "back btn btn-md btn-primary text-white disabled";
+        } else {
+            var back = $(".back").attr('rel');
+            back = parseInt(back);
+            back = back < 1 ? 1 : back;
 
-        $("#soalke").html(back);
+            limit_audio(audio_limit, back);
 
-        $(".back").attr('rel', (back - 1));
-        $(".next").attr('rel', (back + 1));
-        $(".ragu_ragu").attr('rel', (back));
-        cek_status_ragu(back);
+            harus_jawab(back + 1);
 
-        $(".step").hide();
-        $("#widget_" + back).show();
+            $("#soalke").html(back);
 
-        simpan();
+            $(".back").attr('rel', (back - 1));
+            $(".next").attr('rel', (back + 1));
+            $(".ragu_ragu").attr('rel', (back));
+            cek_status_ragu(back);
+
+            $(".step").hide();
+            $("#widget_" + back).show();
+
+            simpan();
+        }
     }
 
     function tidak_jawab() {
@@ -255,7 +331,15 @@
             var group_before = group;
         }
 
-        $("#tampil_jawaban").html('<div id="yes"></div>' + hasil_jawaban);
+        if (is_continuous == 1){
+            var cont = document.getElementById('panel-toogle-soal');
+            cont.style.display = 'none';
+            document.getElementById("button-nav").disabled = true;
+            document.getElementById('toogle-navigasi-ico').className = 'fa fa-chevron-circle-up'; //Ganti Icon Navigasi
+            document.getElementById('lembar_soal').className = 'col-sm-12 col-md-12 mb-3'; //Ganti Panjang Desai Lembar Soal
+        } else {
+            $("#tampil_jawaban").html('<div id="yes"></div>' + hasil_jawaban);
+        }
     }
 
     function done_soal(){
@@ -328,33 +412,35 @@
 
 <!-- User pindah tab lain atau pindah dari browser aktif sekarang -->
 <script type="text/javascript">
-    /* document.addEventListener("visibilitychange", event => {
-        var modal = document.getElementById("alert-away");
-        var timeleft  = 5;
+    document.addEventListener("visibilitychange", event => {
+        if(blok_layar != 0){
+            var modal = document.getElementById("alert-away");
+            var timeleft = blok_layar;
 
-        if (document.visibilityState == "visible") {
-            var openBlockTimer = setInterval(function(){
-            timeleft--;
-            document.getElementById("countdownblocktimer").innerHTML = timeleft;
-            if(timeleft == 0){
-                clearInterval(openBlockTimer);
-                modal.style.display = "none";
-            } }, 1000);
-        } else {
-            document.getElementById("msg_title_away").innerHTML = "PESAN SISTEM!";
-            document.getElementById("msg_content_away").innerHTML = "Anda terdeteksi meninggalkan halaman ini.";
-            document.getElementById("msg_footer_away").innerHTML = "Tunggu waktu penalti selesai untuk dapat melanjutkan pengerjaan soal kembali.";
-            modal.style.display = "block";
+            if (document.visibilityState == "visible") {
+                var openBlockTimer = setInterval(function(){
+                timeleft--;
+                document.getElementById("countdownblocktimer").innerHTML = timeleft;
+                if(timeleft == 0){
+                    clearInterval(openBlockTimer);
+                    modal.style.display = "none";
+                } }, 1000);
+            } else {
+                document.getElementById("msg_title_away").innerHTML = "PESAN SISTEM!";
+                document.getElementById("msg_content_away").innerHTML = "Anda terdeteksi meninggalkan halaman ini.";
+                document.getElementById("msg_footer_away").innerHTML = "Tunggu waktu penalti selesai untuk dapat melanjutkan pengerjaan soal kembali.";
+                modal.style.display = "block";
+            }
         }
-    }) */
+    })
 </script>
 
 <!-- Intro JS -->
 <script>
-    /* introJs().setOptions({
+    introJs().setOptions({
         showProgress: true,
         showBullets: false
-    }).start() */
+    }).start()
 </script>
 
 <!-- NAVIGASI TOOGLE SOAL -->
@@ -365,8 +451,7 @@
             cont.style.display = 'none';
             document.getElementById('toogle-navigasi-ico').className = 'fa fa-chevron-circle-down'; //Ganti Icon Navigasi
             document.getElementById('lembar_soal').className = 'col-sm-12 col-md-12 mb-3'; //Ganti Panjang Desai Lembar Soal
-        }
-        else { //jika panel dihide ditampilkan
+        } else { //jika panel dihide ditampilkan
             cont.style.display = 'block';
             document.getElementById('toogle-navigasi-ico').className = 'fa fa-chevron-circle-up'; //Ganti Icon Navigasi
             document.getElementById('lembar_soal').className = 'col-sm-12 col-md-8 mb-3'; //Ganti Panjang Desai Lembar Soal

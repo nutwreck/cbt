@@ -1135,7 +1135,7 @@ class Tes_online extends CI_Controller {
         //SAVE SOAL
         $id_bank_soal = base64_decode(urldecode($bank_soal_id));
         $data['paket_soal_id']  = base64_decode(urldecode($this->input->post('id_paket_soal', TRUE)));
-        $data['group_mode_jwb_id']  = $this->input->post('jenis_soal', TRUE);
+        $data['group_mode_jwb_id']  = $type_exam;
         $data['no_soal']  = $nomor_soal;
         $data['name']  = $this->input->post('soal');
         $data['kata_kunci']  = $this->input->post('kata_kunci', TRUE);
@@ -1542,8 +1542,9 @@ class Tes_online extends CI_Controller {
 
     public function submit_add_group_soal(){
         $paket_soal_id = $this->input->post('id_paket_soal'); //EncryptIdPaketSoal
+        $id_paket_soal = base64_decode(urldecode($paket_soal_id));
 
-        $data['paket_soal_id']  = base64_decode(urldecode($paket_soal_id));
+        $data['paket_soal_id']  = $id_paket_soal;
         $data['name']  = $this->input->post('name', TRUE);
         $data['kode_group']  = strtoupper($this->input->post('kode_group', TRUE));
         $data['petunjuk']  = $this->input->post('petunjuk');
@@ -1555,8 +1556,7 @@ class Tes_online extends CI_Controller {
         $allowed_type 	= [
             "audio/mpeg", "audio/mpg", "audio/mpeg3", "audio/mp3", "audio/x-wav", "audio/wave", "audio/wav"
         ];
-        $_id_paket_soal = $data['paket_soal_id'];
-        $config['upload_path']      = FCPATH.'storage/website/lembaga/grandsbmptn/group_soal/group_'.$_id_paket_soal.'/';
+        $config['upload_path']      = FCPATH.'storage/website/lembaga/grandsbmptn/group_soal/group_'.$id_paket_soal.'/';
         $config['allowed_types']    = 'mpeg|mpg|mpeg3|mp3|wav|wave';
         $config['encrypt_name']     = TRUE;
         $_upload_path = $config['upload_path'];
@@ -1638,8 +1638,8 @@ class Tes_online extends CI_Controller {
         $allowed_type 	= [
             "audio/mpeg", "audio/mpg", "audio/mpeg3", "audio/mp3", "audio/x-wav", "audio/wave", "audio/wav"
         ];
-        $_id_paket_soal = $data['paket_soal_id'];
-        $config['upload_path']      = FCPATH.'storage/website/lembaga/grandsbmptn/group_soal/group_'.$_id_paket_soal.'/';
+        
+        $config['upload_path']      = FCPATH.'storage/website/lembaga/grandsbmptn/group_soal/group_'.$paket_soal_id.'/';
         $config['allowed_types']    = 'mpeg|mpg|mpeg3|mp3|wav|wave';
         $config['encrypt_name']     = TRUE;
         $_upload_path = $config['upload_path'];

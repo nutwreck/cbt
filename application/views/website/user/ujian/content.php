@@ -43,7 +43,7 @@ if(time() >= $waktu_habis)
                             <span class="sisawaktu font-arial-bold" data-intro="Sisa waktu pengerjaan anda." data-position="left" data-time="<?=$waktu_selesai?>"></span>
                             <div class="row mt-3">
                                 <div class="col" data-intro="Untuk menampilkan dan menyembunyikan navigasi soal." data-position="left">
-                                    <button class="btn btn-md btn-primary" onclick="toggle_soal()"><i id="toogle-navigasi-ico" class="fa fa-chevron-circle-up" aria-hidden="true"></i> Navigasi</button>
+                                    <button id="button-nav" class="btn btn-md btn-primary" onclick="toggle_soal()"><i id="toogle-navigasi-ico" class="fa fa-chevron-circle-up" aria-hidden="true"></i> Navigasi</button>
                                 </div>
                                 <div class="col" data-intro="Jika anda sudah selesai mengerjakan sebelum waktu habis." data-position="left">
                                     <button class="btn btn-md btn-success" onclick="done_soal()"><i class="fa fa-check-circle" aria-hidden="true"></i> Selesai</button>

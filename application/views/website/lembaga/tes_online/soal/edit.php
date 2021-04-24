@@ -32,11 +32,8 @@
                                     </div>
                                     <div class="col-sm-12 col-lg-9">
                                         <div class="form-group">
-                                            <select id="pilihan_jenis_soal" class="form-control selectpicker" data-live-search="true" data-width="auto" name="jenis_soal" required disabled>
+                                            <select id="pilihan_jenis_soal" class="form-control selectpicker" data-live-search="true" data-width="auto" name="jenis_soal" required readonly>
                                                 <option value="<?=$soal_detail->group_mode_jwb_id?>" selected><?=$soal_detail->group_mode_jwb_name?></option>
-                                                <?php foreach($jenis_soal as $val_jenis_soal){ ?>
-                                                    <option data-tokens="<?=$val_jenis_soal->name?>" value="<?=$val_jenis_soal->id?>"><?=$val_jenis_soal->name?></option>
-                                                <?php } ?>
                                             </select>
                                         </div>
                                     </div>

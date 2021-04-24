@@ -15,7 +15,7 @@
         foreach($sesi_pelaksana as $val_sesi){ ?>
             <div class="col-sm-12 col-md-6 col-lg-4 mt-3 mb-3">
                 <div class="card border-primary h-100">
-                    <div class="card-header bg-transparent border-primary sesi-head"><?=ucwords(strtolower($val_sesi->nama_paket_soal))?></div>
+                    <div class="card-header bg-transparent border-primary sesi-head"><?=$val_sesi->nama_paket_soal?></div>
                         <div class="card-body">
                         <div class="m-0"><?php if(!empty($val_sesi->check_status_ujian) && !empty($val_sesi->tgl_selesai_user) && $val_sesi->tgl_selesai_user >= $now){ ?> <span class="badge badge-danger">Ujian sedang berlangsung harap kembali!</span> <?php } else { echo ''; } ?></div>
                             <h5 class="card-title"><?=ucwords(strtolower($val_sesi->materi_name))?></h5>
