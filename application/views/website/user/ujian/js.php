@@ -422,30 +422,32 @@
     }
 
     function selesai() {
-        /* simpan();
-        ajaxcsrf();
+        simpan();
         $.ajax({
             type: "POST",
-            url: base_url + "ujian/simpan_akhir",
+            url: base_url + "website/user/Ujian/simpan_akhir",
             data: { id: id_tes },
             beforeSend: function () {
                 simpan();
                 // $('.ajax-loading').show();    
             },
             success: function (r) {
-                console.log(r);
+                /* console.log(r); */
                 if (r.status) {
-                    window.location.href = base_url + 'ujian/list';
+                    window.location.href = base_url + 'dashboard';
                 }
             }
-        }); */
+        });
     }
 
     function waktuHabis() {
         selesai();
-        alert('');
         swal("Informasi", "Waktu ujian telah habis!", "info");
-        window.location.href = base_url + 'dashboard';
+        setTimeout(() => { swal("Informasi", "Waktu ujian telah habis! Mengalihkan", "info"); }, 1000);
+        setTimeout(() => { swal("Informasi", "Waktu ujian telah habis! Mengalihkan.", "info"); }, 2000);
+        setTimeout(() => { swal("Informasi", "Waktu ujian telah habis! Mengalihkan..", "info"); }, 3000);
+        setTimeout(() => { swal("Informasi", "Waktu ujian telah habis! Mengalihkan...", "info"); }, 4000);
+        setTimeout(() => { window.location.href = base_url + 'dashboard'; }, 5000);
     }
 </script>
 

@@ -157,14 +157,13 @@ class Tes_online_model extends CI_Model{
     public function get_sesi_pelaksanaan_existing($user_id){
         $query = $this->db->query("
             SELECT
-                T1.*, T3.id AS check_status_ujian, T3.tgl_selesai AS tgl_selesai_user
+                T1.*, T3.id AS check_status_ujian, T3.tgl_selesai AS tgl_selesai_user, T3.status AS status_ujian
             FROM v_sesi_pelaksanaan AS T1
             JOIN sesi_pelaksanaan_user AS T2 ON T1.sesi_pelaksanaan_id = T2.sesi_pelaksanaan_id
                 AND T2.is_enable = 1
                 AND T2.user_id = '".$user_id."'
             LEFT OUTER JOIN ujian AS T3 ON T1.sesi_pelaksanaan_id = T3.sesi_pelaksanaan_id
                 AND T3.user_id = '".$user_id."'
-                AND T3.`status` = 0
                 AND T3.is_enable = 1
             WHERE T1.batas_pengerjaan >= NOW()");
         return $query->result();
@@ -280,6 +279,27 @@ class Tes_online_model extends CI_Model{
         return $this->db->select('id, bank_soal_id, order, name, score, is_key')
                     ->order_by('order ASC, id ASC')
                     ->get_where('jawaban', array('bank_soal_id' => $bank_soal_id, 'is_enable' => 1))->result();
+    }
+
+    public function get_jawaban_ujian($ujian_id){
+        return $this->db->select('list_jawaban')
+                ->get_where('ujian', array('id' => $ujian_id, 'is_enable' => 1, 'status' => 0))->row()->list_jawaban;
+    }
+
+    public function get_jawaban_soal($bank_soal_id){
+        return $this->db->select('order')
+                ->where('bank_soal_id', $bank_soal_id)
+                ->where('is_enable', 1)
+                ->where('is_key', 1)
+                ->get('jawaban')->row()->order;
+    }
+
+    public function get_jawaban_score_soal($bank_soal_id){
+        return $this->db->select('CASE WHEN score IS NULL THEN 0 ELSE score END AS score', FALSE)
+                ->where('bank_soal_id', $bank_soal_id)
+                ->where('is_enable', 1)
+                ->where('is_key', 1)
+                ->get('jawaban')->row()->score;
     }
 
     public function get_jenis_soal_selected($group_mode_jwb_id){

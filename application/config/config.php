@@ -491,7 +491,7 @@ $config['csrf_token_name'] = 'csrf_token_nutwreck';
 $config['csrf_cookie_name'] = 'csrf_cookie_nutwreck';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = TRUE;
-$config['csrf_exclude_uris'] = array('website/lembaga/Tes_online/get_peserta_by_select', 'website/user/Ujian/simpan_satu', 'website/user/Ujian/open_group_soal', 'website/lembaga/User/user_multiple_delete_all', 'admin/invoice-all', 'admin/invoice-confirm-all', 'admin/invoice-success-all', 'admin/invoice-expired-all', 'website/user/Ujian/buka_group'); /* website/lembaga/Tes_online/editor_paket_soal */
+$config['csrf_exclude_uris'] = array('website/lembaga/Tes_online/get_peserta_by_select', 'website/user/Ujian/simpan_satu', 'website/user/Ujian/open_group_soal', 'website/lembaga/User/user_multiple_delete_all', 'admin/invoice-all', 'admin/invoice-confirm-all', 'admin/invoice-success-all', 'admin/invoice-expired-all', 'website/user/Ujian/buka_group', 'website/user/Ujian/simpan_akhir'); /* website/lembaga/Tes_online/editor_paket_soal */
 
 /*
 |--------------------------------------------------------------------------

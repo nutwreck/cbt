@@ -60,7 +60,8 @@ class Ujian extends CI_Controller {
         return $random_string;
     }
 
-    private function output_json($data, $encode = true){
+    public function output_json($data, $encode = true)
+	{
         if($encode) $data = json_encode($data);
         $this->output->set_content_type('application/json')->set_output($data);
 	}
@@ -376,6 +377,63 @@ class Ujian extends CI_Controller {
 
         //get function view website
         $this->_generate_view($view, $data);
+    }
+
+    public function simpan_akhir(){
+        $d_update = [];
+        // Decrypt Id
+		$id_tes = $this->input->post('id', true);
+		$id_tes = $this->encryption->decrypt($id_tes);
+		
+		// Get Jawaban
+		$list_jawaban = $this->tes->get_jawaban_ujian($id_tes);
+
+		// Pecah Jawaban
+		$pc_jawaban = explode(",", $list_jawaban);
+		
+		$jumlah_benar 	= 0;
+		$jumlah_salah 	= 0;
+        $jumlah_kosong  = 0;
+        $jumlah_ragu    = 0;
+		$skor 	        = 0;
+		$jumlah_soal	= sizeof($pc_jawaban);
+
+		foreach ($pc_jawaban as $jwb) {
+            $pc_dt 		= explode("|", $jwb);
+            $group_soal = $pc_dt[0];
+			$id_soal 	= (int) $pc_dt[1];
+			$jawaban 	= $pc_dt[2];
+            $ragu 		= $pc_dt[3];
+
+            $cek_jwb 	= $this->tes->get_jawaban_soal($id_soal);
+            $cek_score 	= $this->tes->get_jawaban_score_soal($id_soal);
+
+            $dataaa[] = $cek_score;
+
+            $jawaban == $cek_jwb ?  $jumlah_benar++ : $jumlah_salah++;
+
+            $cek_score == 0 && $jawaban == $cek_jwb ? $skor++ : $skor+$cek_score;
+            $cek_score != 0 && $jawaban == $cek_jwb ? $skor++ : '';
+
+            $jawaban == '' || empty($jawaban) ? $jumlah_kosong++ : $jumlah_kosong;
+
+            $ragu == 'Y' && $jawaban != '' ? $jumlah_ragu++ : $jumlah_ragu;
+        }
+
+		/* $nilai = ($jumlah_benar / $jumlah_soal)  * 100;
+		$nilai_bobot = ($total_bobot / $jumlah_soal)  * 100; */
+
+		$d_update = [
+			'jml_benar'		=> $jumlah_benar,
+			'jml_salah'		=> $jumlah_salah,
+			'jml_ragu'		=> $jumlah_ragu,
+			'jml_kosong'	=> $jumlah_kosong,
+			'skor'			=> $skor,
+			'status'		=> 1
+        ];
+
+		$this->general->update_data('ujian', $d_update, $id_tes);
+		$this->output_json(['status'=>TRUE, 'data'=>$d_update, 'id'=>$id_tes]);
     }
 
     public function ujian_berakhir(){

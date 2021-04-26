@@ -45,6 +45,17 @@ class Dashboard extends CI_Controller {
         $this->load->view('website/user/_template/footer');
     }
 
+    private function generate_string($input, $strength = 16) {
+        $input_length = strlen($input);
+        $random_string = '';
+        for($i = 0; $i < $strength; $i++) {
+            $random_character = $input[mt_rand(0, $input_length - 1)];
+            $random_string .= $random_character;
+        }
+    
+        return $random_string;
+    }
+
     /*
     |
     | END FUNCTION IN THIS CONTROLLER
@@ -52,9 +63,13 @@ class Dashboard extends CI_Controller {
     */
 
     public function index(){ //
+        $permitted_chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $generate_string = $this->generate_string($permitted_chars, 175);
+
         $user_id = $this->session->userdata('user_id');
         //for passing data to view
         $data['content']['sesi_pelaksana'] = $this->tes->get_sesi_pelaksanaan_existing($user_id);
+        $data['content']['encrypt'] = $generate_string;
         $data['title_header'] = ['title' => 'Daftar Sesi Ujian'];
 
         //for load view

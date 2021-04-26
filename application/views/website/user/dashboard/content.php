@@ -17,7 +17,7 @@
                 <div class="card border-primary h-100">
                     <div class="card-header bg-transparent border-primary sesi-head"><?=$val_sesi->nama_paket_soal?></div>
                         <div class="card-body">
-                        <div class="m-0"><?php if(!empty($val_sesi->check_status_ujian) && !empty($val_sesi->tgl_selesai_user) && $val_sesi->tgl_selesai_user >= $now){ ?> <span class="badge badge-danger">Ujian sedang berlangsung harap kembali!</span> <?php } else { echo ''; } ?></div>
+                        <div class="m-0"><?php if(!empty($val_sesi->check_status_ujian) && !empty($val_sesi->tgl_selesai_user) && $val_sesi->tgl_selesai_user >= $now && $val_sesi->status_ujian == 0){ ?> <span class="badge badge-danger">Ujian sedang berlangsung harap kembali!</span> <?php } else { echo ''; } ?></div>
                             <h5 class="card-title"><?=ucwords(strtolower($val_sesi->materi_name))?></h5>
                             <table class="table-responsive mb-0 sesi-detail">
                                 <tr>
@@ -43,6 +43,10 @@
                                     <a href="#" class="btn btn-block btn-mulai isDisabled">Selesai</a>
                                 <?php } elseif($val_sesi->batas_pengerjaan <= $now) { ?>
                                     <a href="#" class="btn btn-block btn-mulai isDisabled">Selesai</a>
+                                <?php } elseif($val_sesi->status_ujian == 1) { ?>
+                                    <a href="#" class="btn btn-block btn-mulai isDisabled">Selesai</a>
+                                <?php } elseif(!empty($val_sesi->check_status_ujian) && !empty($val_sesi->tgl_selesai_user) && $val_sesi->tgl_selesai_user >= $now && $val_sesi->status_ujian == 0){ ?>
+                                    <a href="<?php echo base_url(); ?>ujian/<?=urlencode(base64_encode($val_sesi->sesi_pelaksanaan_id))?>/<?=$encrypt?>" class="btn btn-block btn-mulai">Lanjut</a>
                                 <?php } else { ?>
                                     <a href="<?php echo base_url(); ?>pre-ujian/<?=urlencode(base64_encode($val_sesi->sesi_pelaksanaan_id))?>" class="btn btn-block btn-mulai">Mulai</a>
                                 <?php } ?>

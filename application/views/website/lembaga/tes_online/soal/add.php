@@ -172,7 +172,7 @@
                                                     <td class="text-center font-weight-bold"><?=$alpha++?></td>
                                                     <td class="text-center">
                                                         <div class="form-check">
-                                                            <input class="form-check-input position-static" type="radio" name="tanda_jawaban" value="<?=$x?>" id="blankRadio<?=$x?>">
+                                                            <input class="form-check-input position-static" type="radio" name="tanda_jawaban" value="<?=$x?>" id="blankRadio<?=$x?>" required>
                                                         </div>
                                                     </td>
                                                     <td>
