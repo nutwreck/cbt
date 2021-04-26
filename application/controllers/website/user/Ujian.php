@@ -168,7 +168,9 @@ class Ujian extends CI_Controller {
             $nomor_soal = 1;
             $num_group_soal = 0;
             foreach ($soal_urut_ok as $s) {
-                $group_soal_next = $s->group_soal_id;
+                $group_soal_next = $s->group_soal_parent != 0 || !empty($s->group_soal_parent) ? $s->group_soal_parent : $s->group_soal_id;
+
+                $id_group_soal_p = $s->group_soal_parent != 0 || !empty($s->group_soal_parent) ? $s->group_soal_parent : $s->group_soal_id;
 
                 $cek_group_mode_jwb = $s->group_mode_jwb_id == 1 ? '' : 'style="display:none;"'; //1 Pilihan ganda 2 essay
                 $bacaan_soal = $s->isi_bacaan_soal <> 0 || !empty($s->isi_bacaan_soal) ? $s->isi_bacaan_soal.'<br />' : ''; // bacaan soal
@@ -180,26 +182,30 @@ class Ujian extends CI_Controller {
                 $html .= '<div class="step card text-left font-poppins" id="widget_'.$nomor_soal.'">';
                 $vrg = $arr_jawab[$s->bank_soal_id]["r"] == "" ? "N" : $arr_jawab[$s->bank_soal_id]["r"];
                 $html .= '<input type="hidden" name="id_group_mode_jwb'.$nomor_soal.'" value="'.$s->group_mode_jwb_id.'">';
-                $html .= '<input type="hidden" name="id_group_soal_'.$nomor_soal.'" value="'.$s->group_soal_id.'">';
+                $html .= '<input type="hidden" name="id_group_soal_'.$nomor_soal.'" value="'.$id_group_soal_p.'">';
 				$html .= '<input type="hidden" name="id_bank_soal_'.$nomor_soal.'" value="'.$s->bank_soal_id.'">';
 				$html .= '<input type="hidden" name="rg_'.$nomor_soal.'" id="rg_'.$nomor_soal.'" value="'.$vrg.'">';
                 
                 $no_previous = $nomor_soal-1;
                 $no_next = $nomor_soal+1;
 
-                if($group_soal_next == $group_soal_before){
+                if($group_soal_next == $group_soal_before){ //Isi Group
                     $arrow_back = $nomor_soal == 1 ? '<a id="arrow_back" class="btn btn-sm text-primary bg-white btn-nxt-brf-hrd disabled"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>' : '<a rel="0" onclick="return back();" class="back btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-left" aria-hidden="true" title="Soal Sebelumnya"></i></a>';
                     $arrow_next = $nomor_soal == $jumlah_soal ? '<a class="btn btn-sm text-primary bg-white btn-nxt-brf-hrd disabled"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>' : '<a rel="2" onclick="return next();" class="next btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-right" aria-hidden="true" title="Soal Berikutnya"></i></a>';
                     
                     $previous_number = $nomor_soal == 1 ? '<div class="col"></div>' : '<div class="col"><a id="previous_back" rel="0" onclick="return back();" class="back btn btn-md btn-primary text-white">No '.$no_previous.'</a></div>';
                     $next_number = $nomor_soal == $jumlah_soal ? '<div class="col"></div>' : '<div class="col"><a rel="2" onclick="return next();" class="next btn btn-md btn-primary text-white">No '.$no_next.'</a></div>';
-                } else {
+
+                    $ragu_ragu = '<div class="col" data-position="up"><a rel="1" class="ragu_ragu btn btn-md btn-warning text-white" onclick="return tidak_jawab();">Ragu</a></div>';
+                } else { // Parent Group
                     $num_group_soal++;
-                    $arrow_back = '<a rel="0" onclick="return back_group();" class="back btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fas fa-info-circle"></i></a>';
+                    $arrow_back = $nomor_soal == 1 ? '<a id="group_petunjuk_'.$nomor_soal.'" rel="0" onclick="return back();" class="back btn btn-sm text-primary bg-white btn-nxt-brf-hrd disabled"><i class="fa fa-arrow-left"></i></a>' : '<a id="group_petunjuk_'.$nomor_soal.'" rel="0" onclick="return back();" class="back btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-left"></i></a>';
                     $arrow_next = $nomor_soal == $jumlah_soal ? '<a class="btn btn-sm text-primary bg-white btn-nxt-brf-hrd disabled"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>' : '<a rel="2" onclick="return next();" class="next btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>';;
 
-                    $previous_number = '<div class="col"><a rel="0" onclick="return back_group();" class="back btn btn-md btn-primary text-white">Petunjuk Group</a></div>';
+                    $previous_number = $nomor_soal == 1 ? '<div class="col"></div>' : '<div class="col"><a id="group_petunjuk_'.$nomor_soal.'" rel="0" onclick="return back();" onclick="return back_group();" class="back btn btn-md btn-primary text-white">No '.$no_previous.'</a></div>';
                     $next_number = $nomor_soal == $jumlah_soal ? '<div class="col"></div>' : '<div class="col"><a rel="2" onclick="return next();" class="next btn btn-md btn-primary text-white">No '.$no_next.'</a></div>';
+                    
+                    $ragu_ragu = '<div class="col" data-position="up"><a rel="1" class="ragu_ragu btn btn-md btn-warning text-white" onclick="return tidak_jawab();">Ragu</a></div>';
                 }
 
                 $group_soal_name = $s->group_soal_name <> 0 || !empty($s->group_soal_name) ? '<b> GROUP '.$s->group_soal_name.' (G'.$num_group_soal.')</b><br /><br />' : '';
@@ -220,8 +226,8 @@ class Ujian extends CI_Controller {
                             </div>
                         </div>
                     </div>';
-                
-                $html .= ' <div class="card-body">
+
+                $html .= '<div class="card-body">
                     <div class="card-text text-justify">'.$group_soal_name.$group_soal_audio.$bacaan_soal_name.$bacaan_soal.$soal_audio.$s->bank_soal_name.'</div><hr>';
 
                 if($s->group_mode_jwb_id == 1){
@@ -232,16 +238,18 @@ class Ujian extends CI_Controller {
                     $jawaban = $this->tes->get_jawaban_by_id_user($s->bank_soal_id, $s->paket_soal_id);
                     $opsi = config_item('_def_opsi_jawaban');
                     $jawaban_soal = [];
+                    $number_opsi = 1;
                     foreach($jawaban as $key_jawaban => $val_jawaban) {
                         $checked = $arr_jawab[$s->bank_soal_id]["j"] == $val_jawaban->order ? "checked" : "";
                         $html .= '<div class="funkyradio-success" onclick="return simpan_sementara();">
-                                <input type="radio" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'" '.$checked.'> 
+                                <input type="radio" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'" '.$checked.'> 
                                 <label for="opsi_'.$opsi.'_'.$nomor_soal.'">
                                     <div class="huruf_opsi">'.$opsi.'</div> 
                                     <div class="card-text">'.$val_jawaban->name.'</div>
                                 </label>
                             </div>';
                         $opsi++;
+                        $number_opsi++;
                     };
                     $html .= '</div>';
                 } else{
@@ -257,9 +265,7 @@ class Ujian extends CI_Controller {
                 $html .= '<div class="card-footer text-muted">
                         <div class="row text-center">
                             '.$previous_number.'
-                            <div class="col" data-position="up">
-                                <a rel="1" class="ragu_ragu btn btn-md btn-warning text-white" onclick="return tidak_jawab();">Ragu</a>
-                            </div>
+                            '.$ragu_ragu.'
                             '.$next_number.'
                         </div>
                     </div>
@@ -270,11 +276,15 @@ class Ujian extends CI_Controller {
                 $group_soal_before = $group_soal_next;
             }
         }
+
+        /* echo '<pre>';
+        var_dump($html);die(); */
         
         //for passing data to view
         $data['content']['sesi_pelaksana'] = $sesi_detail;
         $data['content']['lembar_jawaban'] = $html;
         $data['content']['ujian_id'] = $this->encryption->encrypt($ujian_data->id);
+        $data['content']['random_secure'] = $random_secure;
         $data['content']['jumlah_soal'] = $nomor_soal;
         $data['content']['waktu_selesai'] = $ujian_data->tgl_selesai;
         $data['content']['audio_limit'] = $paket_soal->visual_limit;
@@ -306,11 +316,13 @@ class Ujian extends CI_Controller {
             
             $_tjawabes 	= "essay_".$i;
             $_tjawab 	= "opsi_".$i;
+            $jwb_exp = explode("|", $input[$_tjawab]);
+            $jawab_order = $jwb_exp[0];
             $_tidgroup	= "id_group_soal_".$i;
 			$_tidsoal 	= "id_bank_soal_".$i;
 			$_ragu 		= "rg_".$i;
             if($_imode == 1){ //1 Pilihan ganda 2 Essay
-                $jawaban_ 	= empty($input[$_tjawab]) ? "" : $input[$_tjawab];
+                $jawaban_ 	= empty($jawab_order) ? "" : $jawab_order;
                 $list_jawaban	.= $input[$_tidgroup]."|".$input[$_tidsoal]."|".$jawaban_."|".$input[$_ragu].",";
             } else {
                 $jawaban_ 	= empty($input[$_tjawabes]) ? "" : $input[$_tjawabes];
@@ -326,7 +338,25 @@ class Ujian extends CI_Controller {
         $tbl = $this->tbl_ujian;
 		$this->general->update_data($tbl, $d_simpan, $id_tes);
 		$this->output_json(['status'=>true]);
-	}
+    }
+    
+    public function buka_group(){
+        $data = [];
+        $id_group = $this->input->post('id_group', true);
+        $urutan = $this->input->post('urutan', true);
+
+        $petunjuk = $this->tes->get_petunjuk_by_id($id_group);
+
+        $data = array(
+            'judul' => $petunjuk->name.' (G'.$urutan.')',
+            'petunjuk' => $petunjuk->petunjuk,
+            'footer' => '<button type="button" class="btn btn-primary" onclick="return buka_non_group('.$urutan.')">Lanjut No '.$urutan.'</button>'
+        );
+        
+        header("Content-Type: application/json");
+
+        echo json_encode($data);
+    }
 
     public function mulai_ujian($id_sesi_pelaksana){
         $permitted_chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

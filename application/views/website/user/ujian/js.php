@@ -24,7 +24,7 @@
         $('a[aria-expanded=true]').attr('aria-expanded', 'false');
 
         //disable F5
-        $(document).on("keydown", disableF5);
+        /* $(document).on("keydown", disableF5); */
 
         buka(1);
         simpan_sementara();
@@ -48,8 +48,9 @@
                     loopCounter++;
                 } else {
                     var ply = document.getElementById('loop-limited-' + no);
-                    var oldSrc = ply.src;
-                    ply.src = "";
+                    /* var oldSrc = ply.src; */
+                    /* ply.src = ""; */
+                    ply.style.display = 'none';
                 }
             }, false);
         }
@@ -127,8 +128,14 @@
 
         $("#soalke").html(id_widget);
 
-        $(".step").hide();
-        $("#widget_" + id_widget).show();
+        var w = document.getElementById("group_petunjuk_"+id_widget); 
+
+        if(w != null){
+            buka_group(id_widget);
+        } else {
+            $(".step").hide();
+            $("#widget_" + id_widget).show();
+        }
 
         simpan();
     }
@@ -147,9 +154,39 @@
 
         $("#soalke").html(id_widget);
 
+        var w = document.getElementById("group_petunjuk_"+id_widget); 
+
+        if(w != null){
+            buka_group(id_widget);
+        } else {
+            $(".step").hide();
+            $("#widget_" + id_widget).show();
+        }
+
+        before_widget = id_widget;
+
+        simpan();
+    }
+
+    function buka_non_group(id_widget) {
+        $('#petunjukModal').modal('hide');
+
+        $(".next").attr('rel', (id_widget + 1));
+        $(".back").attr('rel', (id_widget - 1));
+        $(".ragu_ragu").attr('rel', (id_widget));
+        cek_status_ragu(id_widget);
+
+        limit_audio(audio_limit, id_widget);
+
+        if(id_widget != 1){
+            harus_jawab(before_widget);
+        }
+
+        $("#soalke").html(id_widget);
+
         $(".step").hide();
         $("#widget_" + id_widget).show();
-
+        
         before_widget = id_widget;
 
         simpan();
@@ -181,8 +218,14 @@
         $(".ragu_ragu").attr('rel', (berikutnya));
         cek_status_ragu(berikutnya);
 
-        $(".step").hide();
-        $("#widget_" + berikutnya).show();
+        var w = document.getElementById("group_petunjuk_"+berikutnya); 
+
+        if(w != null){
+            buka_group(berikutnya);
+        } else {
+            $(".step").hide();
+            $("#widget_" + berikutnya).show();
+        }
 
         simpan();
     }
@@ -207,8 +250,14 @@
             $(".ragu_ragu").attr('rel', (back));
             cek_status_ragu(back);
 
-            $(".step").hide();
-            $("#widget_" + back).show();
+            var w = document.getElementById("group_petunjuk_"+back); 
+
+            if(w != null){
+                buka_group(back);
+            } else {
+                $(".step").hide();
+                $("#widget_" + back).show();
+            }
 
             simpan();
         }
@@ -234,14 +283,25 @@
         simpan();
     }
 
-    function buka_group(id_group){
+    function buka_group(urutan){
+        var f_asal = $("#ujian");
+        var form = getFormData(f_asal);
+        var gr = 'id_group_soal_' + urutan;
+        var group = form[gr];
+
         $.ajax({
             type: "POST",
-            url: base_url + "website/user/Ujian/open_group_soal",
-            data: 'group_soal_id='+id_group,
+            url: base_url + "website/user/Ujian/buka_group",
+            data: 'id_group='+group+'&urutan='+urutan,
             dataType: 'json',
             success: function (data) {
-                /* console.log(data); */
+                // Add response in Modal body
+                $('#title-group').html(data.judul);
+                $('#body-group').html(data.petunjuk);
+                $('#footer-group').html(data.footer);
+
+                // Display Modal
+                $('#petunjukModal').modal('show');
             }
         });
     }
@@ -280,11 +340,14 @@
             var gr = 'id_group_soal_' + i;
             var idx2 = 'rg_' + i;
             var ragu = form[idx2];
-            var group = form[gr];
+            var group = form[gr]; //group soal
 
             if(group_m == 1){ //1 Pilihan Ganda 2 Essay
                 var idx = 'opsi_' + i;
-                var jawab = form[idx];
+                var jwb_exp = form[idx];
+                var jawab_pro = jwb_exp == undefined ? '' : jwb_exp.split('|');
+                var jawab = jawab_pro[1];
+
             } else {
                 var idx = 'essay_' + i;
                 var jawab = form[idx] == '' ? undefined : form[idx];
@@ -293,8 +356,8 @@
             var check = '<i style="margin-left:3px;" class="fa fa-check fa-xs"></i>';
             var times = '<i style="margin-left:3px;" class="fa fa-times fa-xs"></i>';
 
-            if(group != group_before && group != 0){
-                hasil_jawaban += '<a id="btn_group_' + (group_number) + '" class="btn button-round btn-primary text-white btn_group" onclick="return buka_group(' + (group) + ');">G' + (group_number) + "</a>";
+            if(group != group_before && group != 0) {
+                hasil_jawaban += '<a id="group_petunjuk_'+(i)+'" class="btn button-round btn-primary text-white btn_group" onclick="return buka_group(' + (i) + ');">G' + (group_number) + "</a>";
                 group_number++;
             }
 
@@ -412,7 +475,7 @@
 
 <!-- User pindah tab lain atau pindah dari browser aktif sekarang -->
 <script type="text/javascript">
-    document.addEventListener("visibilitychange", event => {
+    /* document.addEventListener("visibilitychange", event => {
         if(blok_layar != 0){
             var modal = document.getElementById("alert-away");
             var timeleft = blok_layar;
@@ -432,15 +495,15 @@
                 modal.style.display = "block";
             }
         }
-    })
+    }) */
 </script>
 
 <!-- Intro JS -->
 <script>
-    introJs().setOptions({
+    /* introJs().setOptions({
         showProgress: true,
         showBullets: false
-    }).start()
+    }).start() */
 </script>
 
 <!-- NAVIGASI TOOGLE SOAL -->

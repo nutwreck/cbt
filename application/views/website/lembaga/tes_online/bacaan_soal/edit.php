@@ -5,7 +5,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col">Tambah Bacaan Soal</div>
+                            <div class="col">Edit Bacaan Soal</div>
                             <div class="col text-right">
                                 <button class="btn btn-sm btn-outline-secondary" onclick="return window.history.back();">Kembali</button>
                             </div>

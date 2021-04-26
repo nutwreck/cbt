@@ -58,7 +58,7 @@ if(time() >= $waktu_habis)
 
     <div class="row">
         <div id="lembar_soal" data-intro="Lembar soal anda." data-position="right" class="col-sm-12 col-md-8 mb-3">
-            <?=form_open('', array('id'=>'ujian'), array('id'=> $ujian_id));?>
+            <?=form_open('', array('id'=>'ujian'), array('id'=> $ujian_id, 'random_secure' => $random_secure));?>
                 <h3 class="box-title" style="display:none;"><span class="badge bg-blue">Soal #<span id="soalke"></span> </span></h3>
                 <?=$lembar_jawaban?>
                 <input type="hidden" name="jml_soal" id="jml_soal" value="<?=$jumlah_soal; ?>">
@@ -86,4 +86,20 @@ if(time() >= $waktu_habis)
     <p id="msg_footer_away" class="text-white"></p>
   </div>
 
+</div>
+
+<!-- Modal -->
+<div class="modal" id="petunjukModal" data-backdrop="false">
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 id="title-group" class="modal-title"></h4>
+        </div>
+        <div id="body-group" class="modal-body">
+
+        </div>
+        <div id="footer-group" class="modal-footer">
+            
+        </div>
+    </div>
 </div>

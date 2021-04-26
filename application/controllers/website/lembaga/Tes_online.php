@@ -288,7 +288,12 @@ class Tes_online extends CI_Controller {
         /* $data['skor_null'] = $this->input->post('skor_tdk_jwb', TRUE); */
         $data['is_continuous'] = $this->input->post('continous', TRUE);
         $data['is_jawab'] = $this->input->post('menjawab', TRUE);
-        $data['petunjuk'] = $this->input->post('petunjuk_text');
+        $petunjuk = $this->input->post('petunjuk_text');
+        if($petunjuk == '<p><br></p>'){
+            $data['petunjuk'] = '';
+        } else {
+            $data['petunjuk'] = $petunjuk;
+        }
         $data['visual_limit'] = $this->input->post('audio_limit', TRUE);
         $data['file'] = $this->input->post('petunjuk_audio', TRUE);
         $data['created_datetime'] = date('Y-m-d H:i:s');
@@ -387,7 +392,12 @@ class Tes_online extends CI_Controller {
         /* $data['skor_null'] = $this->input->post('skor_tdk_jwb', TRUE); */
         $data['is_continuous'] = $this->input->post('continous', TRUE);
         $data['is_jawab'] = $this->input->post('menjawab', TRUE);
-        $data['petunjuk'] = $this->input->post('petunjuk_text');
+        $petunjuk = $this->input->post('petunjuk_text');
+        if($petunjuk == '<p><br></p>'){
+            $data['petunjuk'] = '';
+        } else {
+            $data['petunjuk'] = $petunjuk;
+        }
         $data['visual_limit'] = $this->input->post('audio_limit', TRUE);
         $data['file'] = $this->input->post('petunjuk_audio', TRUE);
         $old_name_audio = $this->input->post('old_name_audio');
@@ -671,7 +681,12 @@ class Tes_online extends CI_Controller {
         $data['paket_soal_id']  = base64_decode(urldecode($this->input->post('id_paket_soal', TRUE)));
         $data['group_mode_jwb_id']  = $this->input->post('jenis_soal', TRUE);
         $data['no_soal']  = $this->input->post('no_soal', TRUE);
-        $data['name']  = $this->input->post('soal');
+        $name  = $this->input->post('soal');
+        if($name == '<p><br></p>'){
+            $data['name'] = '';
+        } else {
+            $data['name'] = $name;
+        }
         $data['kata_kunci']  = $this->input->post('kata_kunci', TRUE);
         $data['tipe_kesulitan_id']  = $this->input->post('tipe_kesulitan', TRUE);
         $data['is_acak_soal']  = $this->input->post('acak_soal', TRUE);
@@ -1137,7 +1152,12 @@ class Tes_online extends CI_Controller {
         $data['paket_soal_id']  = base64_decode(urldecode($this->input->post('id_paket_soal', TRUE)));
         $data['group_mode_jwb_id']  = $type_exam;
         $data['no_soal']  = $nomor_soal;
-        $data['name']  = $this->input->post('soal');
+        $name  = $this->input->post('soal');
+        if($name == '<p><br></p>'){
+            $data['name'] = '';
+        } else {
+            $data['name'] = $name;
+        }
         $data['kata_kunci']  = $this->input->post('kata_kunci', TRUE);
         $data['tipe_kesulitan_id']  = $this->input->post('tipe_kesulitan', TRUE);
         $data['is_acak_soal']  = $this->input->post('acak_soal', TRUE);
@@ -1294,7 +1314,12 @@ class Tes_online extends CI_Controller {
         $data['paket_soal_id'] = base64_decode(urldecode($id_paket_soal));
         $data['name'] = $this->input->post('name', TRUE);
         $data['kode_bacaan'] = strtoupper($this->input->post('kode_bacaan', TRUE));
-        $data['bacaan'] = $this->input->post('bacaan');
+        $bacaan = $this->input->post('bacaan');
+        if($bacaan == '<p><br></p>'){
+            $data['bacaan'] = '';
+        } else {
+            $data['bacaan'] = $bacaan;
+        }
         $data['created_datetime'] = date('Y-m-d H:i:s');
 
         $tbl = $this->tbl_bacaan_soal;
@@ -1416,7 +1441,12 @@ class Tes_online extends CI_Controller {
 
         $data['name'] = $this->input->post('name', TRUE);
         $data['kode_bacaan'] = strtoupper($this->input->post('kode_bacaan', TRUE));
-        $data['bacaan'] = $this->input->post('bacaan');
+        $bacaan = $this->input->post('bacaan');
+        if($bacaan == '<p><br></p>'){
+            $data['bacaan'] = '';
+        } else {
+            $data['bacaan'] = $bacaan;
+        }
         $data['updated_datetime'] = date('Y-m-d H:i:s');
 
         $update = $this->tes->update_bacaan_soal($data, $bacaan_soal_id, $paket_soal_id);
@@ -1547,11 +1577,17 @@ class Tes_online extends CI_Controller {
         $data['paket_soal_id']  = $id_paket_soal;
         $data['name']  = $this->input->post('name', TRUE);
         $data['kode_group']  = strtoupper($this->input->post('kode_group', TRUE));
-        $data['petunjuk']  = $this->input->post('petunjuk');
+        $petunjuk = $this->input->post('petunjuk');
         $data['konversi_skor_id']  = $this->input->post('konversi_skor_id', TRUE);
         $data['parent_id']  = $this->input->post('parent_id', TRUE);
         $data['is_continuous']  = $this->input->post('is_continuous', TRUE);
         $data['created_datetime']  = date('Y-m-d H:i:s');
+
+        if($petunjuk == '<p><br></p>'){
+            $data['petunjuk'] = '';
+        } else {
+            $data['petunjuk'] = $petunjuk;
+        }
 
         $allowed_type 	= [
             "audio/mpeg", "audio/mpg", "audio/mpeg3", "audio/mp3", "audio/x-wav", "audio/wave", "audio/wav"
@@ -1617,7 +1653,12 @@ class Tes_online extends CI_Controller {
 
         $data['name']  = $this->input->post('name', TRUE);
         $data['kode_group']  = strtoupper($this->input->post('kode_group', TRUE));
-        $data['petunjuk']  = $this->input->post('petunjuk');
+        $petunjuk  = $this->input->post('petunjuk');
+        if($petunjuk == '<p><br></p>'){
+            $data['petunjuk'] = '';
+        } else {
+            $data['petunjuk'] = $petunjuk;
+        }
         $data['konversi_skor_id']  = $this->input->post('konversi_skor_id', TRUE);
         $data['parent_id']  = $this->input->post('parent_id', TRUE);
         $data['is_continuous']  = $this->input->post('is_continuous', TRUE);

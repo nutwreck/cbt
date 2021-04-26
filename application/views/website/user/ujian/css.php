@@ -187,10 +187,11 @@
     }
 
     .modal-content {
-        margin: 20% auto;
+        margin: 3% auto;
         padding: 20px;
         border: 1px solid #888;
         width: 80%;
+        height: 80%;
     }
 
     #msg_title_away{

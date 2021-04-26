@@ -326,6 +326,11 @@ class Tes_online_model extends CI_Model{
         return $this->db->get_where('v_group_soal', array('id_group_soal' => $group_soal_id, 'is_enable' => 1))->row();
     }
 
+    public function get_petunjuk_by_id($group_soal_id){
+        return $this->db->select('name, petunjuk')
+                ->get_where('group_soal', array('id' => $group_soal_id, 'is_enable' => 1))->row();
+    }
+
     public function get_konversi_skor_enable(){
         return $this->db->order_by('id ASC')->get_where('konversi_skor', array('is_enable' => 1))->result();
     }
