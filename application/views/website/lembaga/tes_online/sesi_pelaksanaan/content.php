@@ -46,7 +46,13 @@
                                                     Pilih
                                                 </button>
                                                 <div class="dropdown-menu">
-                                                    <a class="dropdown-item <?=$value->waktu_mulai >= $now ? '' : 'isDisabled'?>" href="<?=base_url()?>admin/edit-sesi-pelaksana/<?=urlencode(base64_encode($value->sesi_pelaksanaan_id))?>" >Edit Sesi</a>
+                                                    <?php if($value->status_sesi_pelakasanaan == 'Sesi Berlangsung'){ echo ''; } else { ?>
+                                                        <a class="dropdown-item" href="<?=base_url()?>admin/edit-sesi-pelaksana/<?=urlencode(base64_encode($value->sesi_pelaksanaan_id))?>" >Edit Sesi</a>
+                                                        <a class="dropdown-item" href="<?=base_url()?>admin/peserta-sesi-pelaksana/<?=urlencode(base64_encode($value->sesi_pelaksanaan_id))?>">Tambah Peserta</a>
+                                                    <?php } ?>
+                                                    <?php if($value->user_total > 0){ ?>
+                                                        <a class="dropdown-item" href="<?=base_url()?>admin/list-peserta-sesi-pelaksana/<?=urlencode(base64_encode($value->sesi_pelaksanaan_id))?>">List Peserta</a>
+                                                    <?php } else { echo ''; } ?>
                                                     <a class="dropdown-item" href="<?=base_url()?>admin/detail-sesi-pelaksana/<?=urlencode(base64_encode($value->sesi_pelaksanaan_id))?>">Detail Sesi Pelaksanaan</a>
                                                     <div class="dropdown-divider"></div>
                                                     <a class="dropdown-item" href="<?=base_url()?>admin/delete-sesi-pelaksana/<?=urlencode(base64_encode($value->sesi_pelaksanaan_id))?>">Hapus Sesi Pelaksanaan</a>

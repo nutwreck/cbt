@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="overview-wrap">
-                            <h2 class="title-1">Data Peserta</h2>
+                            <h2 class="title-1">List Peserta <?=$name_sesi_pelaksana?></h2>
                         </div>
                     </div>
                 </div>
@@ -14,20 +14,15 @@
                         <!-- DATA TABLE -->
                         <div class="table-data__tool">
                             <div class="table-data__tool-right">
-                                <button class="btn btn-md btn-primary m-1" onclick="add_data()">
-                                    <i class="zmdi zmdi-plus"></i> Tambah
-                                </button>
-                                <button class="btn btn-md btn-success m-1" onclick="import_excel()">
-                                    <i class="fa fa-upload"></i> Import Excel
-                                </button>
                                 <button class="btn btn-md btn-success m-1" onclick="export_excel()">
                                     <i class="fa fa-download"></i> Export Excel
                                 </button>
-                                <a href="<?=base_url()?>admin/disable-all-participants" class="btn btn-md btn-danger m-1" onclick="return confirm('Apakah anda yakin menghapus semua data peserta?')"><i class="fa fa-trash"></i> Hapus Semua</a>
+                                <a href="<?=base_url()?>admin/disable-all-list-peserta-sesi/<?=$id_sesi_pelaksana?>" class="btn btn-md btn-danger m-1" onclick="return confirm('Apakah anda yakin menghapus semua data peserta dalam sesi ini?')"><i class="fa fa-trash"></i> Hapus Semua</a>
+                                <a href="<?=base_url()?>admin/sesi-pelaksana" class="btn btn-md btn-outline-secondary">Kembali</a>
                             </div>
                         </div>
                         <div class="table-responsive table-responsive-data2">
-                            <table id="table_participants" class="display text-center">
+                            <table id="table_list" class="display text-center">
                                 <thead>
                                     <tr>
                                         <th width="15px">No</th>
@@ -43,15 +38,14 @@
                                 <tbody>
                                 <?php
                                 $no = 1;
-                                    foreach($participants as $value){
+                                    foreach($list_peserta_sesi as $value){
                                 ?>
                                     <tr>
                                         <td><?=$no++?></td>
-                                        <td><input type="checkbox" class="delete_checkbox" value="<?=$value->peserta_id?>|<?=$value->user_id?>" /></td>
+                                        <td><input type="checkbox" class="delete_checkbox" value="<?=$value->id_sesi_pelaksanaan_user?>" /></td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="<?=base_url()?>admin/edit-participants/<?=urlencode(base64_encode($value->peserta_id))?>/<?=urlencode(base64_encode($value->user_id))?>" class="btn btn-sm btn-primary mr-1"><i class="fa fa-pencil"></i></a>
-                                                <a href="<?=base_url()?>admin/disable-participants/<?=urlencode(base64_encode($value->peserta_id))?>/<?=urlencode(base64_encode($value->user_id))?>" class="btn btn-sm btn-danger" onclick="return confirm('Apakah anda yakin menghapus peserta ini?')"><i class="fa fa-trash"></i></a>
+                                                <a href="<?=base_url()?>admin/disable-peserta-sesi/<?=urlencode(base64_encode($value->id_sesi_pelaksanaan_user))?>/<?=urlencode(base64_encode($value->sesi_pelaksanaan_id))?>" class="btn btn-sm btn-danger" onclick="return confirm('Apakah anda yakin menghapus sesi peserta ini?')"><i class="fa fa-trash"></i></a>
                                             </div>
                                         </td>
                                         <td><?=$value->no_peserta?></td>

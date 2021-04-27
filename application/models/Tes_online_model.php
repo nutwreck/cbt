@@ -154,6 +154,11 @@ class Tes_online_model extends CI_Model{
         return $this->db->get('v_sesi_pelaksanaan')->result();
     }
 
+    public function get_sesi_pelaksanaan_by_id($sesi_pelaksana_id){
+        return $this->db->select('name AS sesi_pelaksanaan_name')
+            ->get_where('sesi_pelaksanaan', array('id' => $sesi_pelaksana_id, 'is_enable' => 1))->row();
+    }
+
     public function get_sesi_pelaksanaan_existing($user_id){
         $query = $this->db->query("
             SELECT
@@ -361,6 +366,71 @@ class Tes_online_model extends CI_Model{
                     ->get_where('konversi_skor', array('id !=' => $konversi_skor_id, 'is_enable' => 1))->result();
     }
 
+    public function get_group_soal_ujian($group_soal_id){
+        $query = $this->db->select('konversi_skor_id')
+            ->get_where('group_soal', array('id' => $group_soal_id, 'is_enable' => 1));
+
+        $num = $query->num_rows();
+        if($num > 0){
+            return $query->row()->konversi_skor_id;
+        }
+        else{
+            return null;
+        }
+    }
+
+    public function get_paket_soal_by_tes($tes_id){
+        $query = $this->db->select('paket_soal_id')
+            ->get_where('ujian', array('id' => $tes_id, 'is_enable' => 1));
+
+        $num = $query->num_rows();
+        if($num > 0){
+            return $query->row()->paket_soal_id;
+        }
+        else{
+            return null;
+        }
+    }
+
+    public function get_konversi_skor($konversi_id, $skor_asal){
+        $query = $this->db->select('skor_konversi')
+            ->get_where('detail_konversi_skor', array('konversi_skor_id' => $konversi_id, 'skor_asal' => $skor_asal, 'is_enable' => 1));
+
+        $num = $query->num_rows();
+        if($num > 0){
+            return $query->row()->skor_konversi;
+        }
+        else{
+            return null;
+        }
+    }
+
+    public function get_ujian_skor_detail($id_tes){
+        $query = $this->db->select('id')
+            ->get_where('ujian_skor', array('ujian_id' => $id_tes, 'is_enable' => 1));
+
+        $num = $query->num_rows();
+        if($num > 0){
+            return $query->result();
+        }
+        else{
+            return null;
+        }
+    }
+
+    public function get_ujian_skor_all($id_tes){
+        $query = $this->db->select('SUM(skor_konversi) AS total_skor', FALSE)
+            ->get_where('ujian_skor', array('ujian_id' => $id_tes, 'is_enable' => 1));
+
+        $num = $query->num_rows();
+        if($num > 0){
+            return $query->row()->total_skor;
+        }
+        else{
+            return null;
+        }
+    }
+
     public function get_parent_group($paket_soal_id){
         return $this->db->select('id, name')
                     ->order_by('id DESC')
@@ -392,6 +462,43 @@ class Tes_online_model extends CI_Model{
         $query = $this->db->select('id, user_id, user_no, user_name, user_email, list_soal, list_jawaban, tgl_mulai, tgl_selesai, status')
                         ->get_where('ujian', array('paket_soal_id' => $paket_soal_id, 'user_id' => $user_id, 'status' => 0, 'is_enable' => 1))->row();
         
+        if($query){
+            return $query;
+        } else {
+            return null;
+        }
+    }
+
+    public function get_checking_ujian_by_id($ujian_id){
+        $query = $this->db->select('id, user_id, user_no, user_name, user_email, list_soal, list_jawaban, tgl_mulai, tgl_selesai, status, jml_benar, jml_salah, jml_ragu, jml_kosong')
+                        ->get_where('ujian', array('id' => $ujian_id, 'status' => 1, 'is_enable' => 1))->row();
+        
+        if($query){
+            return $query;
+        } else {
+            return null;
+        }
+    }
+
+    public function get_total_user_ujian($sesi_pelaksanaan_id, $paket_soal_id){
+        $query = $this->db->select('COUNT(user_id) AS total_user_ujian')
+            ->get_where('ujian', array('sesi_pelaksanaan_id' => $sesi_pelaksanaan_id, 'paket_soal_id' => $paket_soal_id, 'status' => 1, 'is_enable' => 1))->row();
+
+        if($query){
+            return $query;
+        } else {
+            return null;
+        }
+    }
+
+    public function get_list_peserta_sesi($sesi_pelaksanaan_id){
+        return $this->db->get_where('v_peserta_sesi', array('sesi_pelaksanaan_id' => $sesi_pelaksanaan_id))->result();
+    }
+
+    public function get_ranking_ujian_user($ujian_id){
+        $query = $this->db->select('ranking')
+            ->get_where('v_ujian_ranking', array('id' => $ujian_id))->row();
+
         if($query){
             return $query;
         } else {
@@ -604,6 +711,20 @@ class Tes_online_model extends CI_Model{
 		} else{
 			$this->db->trans_commit();
 			return 1;
+		}
+    }
+
+    public function disable_peserta_sesi_pelaksanaan($tbl, $id){
+        $this->db->trans_start();
+        $this->db->set('is_enable', 0);
+        $this->db->where('sesi_pelaksanaan_id', $id);
+        $query = $this->db->update($tbl);
+        if ($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return null;
+		} else{
+			$this->db->trans_commit();
+			return $query;
 		}
     }
 

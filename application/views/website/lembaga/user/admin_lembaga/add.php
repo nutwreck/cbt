@@ -7,7 +7,7 @@
                         <div class="row">
                             <div class="col">Tambah Admin Lembaga</div>
                             <div class="col text-right">
-                                <button class="btn btn-sm btn-outline-secondary" onclick="return window.history.back();">Kembali</button>
+                                <a href="<?=base_url()?>admin/user-lembaga" class="btn btn-sm btn-outline-secondary">Kembali</a>
                             </div>
                         </div>
                     </div>

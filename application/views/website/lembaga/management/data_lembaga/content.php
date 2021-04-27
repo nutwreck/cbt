@@ -21,9 +21,6 @@ foreach($data_lembaga as $value){
                     <div class="card-header">
                         <div class="row">
                             <div class="col">Data Lembaga</div>
-                            <div class="col text-right">
-                                <button class="btn btn-sm btn-outline-secondary" onclick="return window.history.back();">Kembali</button>
-                            </div>
                         </div>
                     </div>
                     <form id="formdata" name="formdata" action="<?php echo base_url(); ?>website/lembaga/Management/submit_edit_data_lembaga" class="form-data-lembaga" method="POST" enctype="multipart/form-data" onsubmit="return(validate_form());">

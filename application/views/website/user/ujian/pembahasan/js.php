@@ -7,17 +7,8 @@
     var id_tes          = "<?=$ujian_id; ?>";
     var widget          = $(".step");
     var total_widget    = widget.length;
-    var audio_limit     = <?=$audio_limit?>;
-    var is_jawab        = <?=$is_jawab?>;
-    var is_continuous   = <?=$is_continuous?>;
-    var blok_layar      = <?=$blok_layar?>;
 
     $(document).ready(function () {
-        var t = $('.sisawaktu');
-        if (t.length) {
-            sisawaktu(t.data('time'));
-        }
-
         //Sidebar hidden
         $('#sidebar, #content').toggleClass('active');
         $('.collapse.in').toggleClass('in');
@@ -30,68 +21,7 @@
         simpan_sementara();
 
         $("#widget_1").show();
-
-        limit_audio(audio_limit, 1);
     });
-
-    function disableF5(e) { if ((e.which || e.keyCode) == 116 || (e.which || e.keyCode) == 82) e.preventDefault(); };
-
-    //Visual Limit Audio
-    function limit_audio(audio_limit, no){
-        if (audio_limit != 0 && document.getElementById('loop-limited-' + no) != null) {
-            var loopLimit = audio_limit;
-            var loopCounter = 0;
-            document.getElementById('loop-limited-' + no).addEventListener('ended', function(){
-                if (loopCounter < loopLimit){
-                    this.currentTime = 0;
-                    this.play();
-                    loopCounter++;
-                } else {
-                    var ply = document.getElementById('loop-limited-' + no);
-                    /* var oldSrc = ply.src; */
-                    /* ply.src = ""; */
-                    ply.style.display = 'none';
-                }
-            }, false);
-        }
-    }
-
-    function harus_jawab(no){
-        if(is_jawab == 1){
-            var f_asal = $("#ujian");
-            var form = getFormData(f_asal);
-
-            var gr_m = 'id_group_mode_jwb' + no;
-            var group_m = form[gr_m];
-
-            if(group_m == 1){ //1 Pilihan Ganda 2 Essay
-                var pil_gan = $('input:radio[name=opsi_'+no+']:checked').val();
-                if ( !pil_gan ) {
-                    swal({ title: "Informasi",
-                        text: "Pilihan Jawaban harus dipilih salah satu!",
-                        button: "Kembali",
-                        icon: "info"}).then(okay => {
-                        if (okay) {
-                            buka_return(no);
-                        }
-                    });
-                }
-            } else {
-                var name_essay = 'essay_' + no;
-                var x = document.forms["ujian"][name_essay].value;
-                if (x == "") {
-                    swal({ title: "Informasi",
-                        text: "Jawaban harus diisi!",
-                        button: "Kembali",
-                        icon: "info"}).then(okay => {
-                        if (okay) {
-                            buka_return(no);
-                        }
-                    });
-                }
-            }
-        }
-    }
 
     function getFormData($form) {
         var unindexed_array = $form.serializeArray();
@@ -124,8 +54,6 @@
         $(".ragu_ragu").attr('rel', (id_widget));
         cek_status_ragu(id_widget);
 
-        limit_audio(audio_limit, id_widget);
-
         $("#soalke").html(id_widget);
 
         var w = document.getElementById("group_petunjuk_"+id_widget); 
@@ -136,8 +64,6 @@
             $(".step").hide();
             $("#widget_" + id_widget).show();
         }
-
-        simpan();
     }
 
     function buka(id_widget) {
@@ -145,12 +71,6 @@
         $(".back").attr('rel', (id_widget - 1));
         $(".ragu_ragu").attr('rel', (id_widget));
         cek_status_ragu(id_widget);
-
-        limit_audio(audio_limit, id_widget);
-
-        if(id_widget != 1){
-            harus_jawab(before_widget);
-        }
 
         $("#soalke").html(id_widget);
 
@@ -164,8 +84,6 @@
         }
 
         before_widget = id_widget;
-
-        simpan();
     }
 
     function buka_non_group(id_widget) {
@@ -176,20 +94,12 @@
         $(".ragu_ragu").attr('rel', (id_widget));
         cek_status_ragu(id_widget);
 
-        limit_audio(audio_limit, id_widget);
-
-        if(id_widget != 1){
-            harus_jawab(before_widget);
-        }
-
         $("#soalke").html(id_widget);
 
         $(".step").hide();
         $("#widget_" + id_widget).show();
         
         before_widget = id_widget;
-
-        simpan();
     }
 
     function cek_status_ragu(id_soal) {
@@ -207,10 +117,6 @@
         berikutnya = parseInt(berikutnya);
         berikutnya = berikutnya > total_widget ? total_widget : berikutnya;
 
-        limit_audio(audio_limit, berikutnya);
-
-        harus_jawab(berikutnya - 1);
-
         $("#soalke").html(berikutnya);
 
         $(".next").attr('rel', (berikutnya + 1));
@@ -226,40 +132,27 @@
             $(".step").hide();
             $("#widget_" + berikutnya).show();
         }
-
-        simpan();
     }
 
     function back() {
-        if (is_continuous == 1){
-            document.getElementById('arrow_back').className = "btn btn-sm text-primary bg-white btn-nxt-brf-hrd disabled";
-            document.getElementById('previous_back').className = "back btn btn-md btn-primary text-white disabled";
+        var back = $(".back").attr('rel');
+        back = parseInt(back);
+        back = back < 1 ? 1 : back;
+
+        $("#soalke").html(back);
+
+        $(".back").attr('rel', (back - 1));
+        $(".next").attr('rel', (back + 1));
+        $(".ragu_ragu").attr('rel', (back));
+        cek_status_ragu(back);
+
+        var w = document.getElementById("group_petunjuk_"+back); 
+
+        if(w != null){
+            buka_group(back);
         } else {
-            var back = $(".back").attr('rel');
-            back = parseInt(back);
-            back = back < 1 ? 1 : back;
-
-            limit_audio(audio_limit, back);
-
-            harus_jawab(back + 1);
-
-            $("#soalke").html(back);
-
-            $(".back").attr('rel', (back - 1));
-            $(".next").attr('rel', (back + 1));
-            $(".ragu_ragu").attr('rel', (back));
-            cek_status_ragu(back);
-
-            var w = document.getElementById("group_petunjuk_"+back); 
-
-            if(w != null){
-                buka_group(back);
-            } else {
-                $(".step").hide();
-                $("#widget_" + back).show();
-            }
-
-            simpan();
+            $(".step").hide();
+            $("#widget_" + back).show();
         }
     }
 
@@ -279,8 +172,6 @@
         }
 
         cek_status_ragu(id_step);
-
-        simpan();
     }
 
     function buka_group(urutan){
@@ -302,22 +193,6 @@
 
                 // Display Modal
                 $('#petunjukModal').modal('show');
-            }
-        });
-    }
-
-    function simpan() {
-        simpan_sementara();
-        var form = $("#ujian");
-
-        $.ajax({
-            type: "POST",
-            url: base_url + "website/user/Ujian/simpan_satu",
-            data: form.serialize(),
-            dataType: 'json',
-            success: function (data) {
-                // $('.ajax-loading').show();
-                /* console.log(data); */
             }
         });
     }
@@ -383,70 +258,18 @@
                 }
             } else {
                 if(group_m == 1){
-                    jawab_content = '-';
+                    jawab_content = '';
                 } else {
-                    jawab_content = times;
+                    jawab_content = '';
                 }
 
-                hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-outline-secondary text-secondary btn_soal" onclick="return buka(' + (i) + ');">' + (i) + ". " + jawab_content + "</a>";
+                hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-outline-secondary text-secondary btn_soal" onclick="return buka(' + (i) + ');">' + (i) + " " + jawab_content + "</a>";
             }
 
             var group_before = group;
         }
 
-        if (is_continuous == 1){
-            var cont = document.getElementById('panel-toogle-soal');
-            cont.style.display = 'none';
-            document.getElementById("button-nav").disabled = true;
-            document.getElementById('toogle-navigasi-ico').className = 'fa fa-chevron-circle-up'; //Ganti Icon Navigasi
-            document.getElementById('lembar_soal').className = 'col-sm-12 col-md-12 mb-3'; //Ganti Panjang Desai Lembar Soal
-        } else {
-            $("#tampil_jawaban").html('<div id="yes"></div>' + hasil_jawaban);
-        }
-    }
-
-    function done_soal(){
-        simpan();
-        if (confirm('Yakin ingin mengakhiri tes?')) {
-            selesai();
-                swal({ title: "Good job!",
-                    text: "Anda sudah menyelesaikan pengerjaan soal ini",
-                    button: "Dashboard",
-                    icon: "success"}).then(okay => {
-                    if (okay) {
-                        selesai();
-                        window.location.href = base_url + 'dashboard';
-                    }
-                });
-        }
-    }
-
-    function selesai() {
-        simpan();
-        $.ajax({
-            type: "POST",
-            url: base_url + "website/user/Ujian/simpan_akhir",
-            data: { id: id_tes },
-            beforeSend: function () {
-                simpan();
-                // $('.ajax-loading').show();    
-            },
-            success: function (r) {
-                /* console.log(r); */
-                if (r.status) {
-                    window.location.href = base_url + 'dashboard';
-                }
-            }
-        });
-    }
-
-    function waktuHabis() {
-        swal("Informasi", "Waktu ujian telah habis!", "info");
-        setTimeout(() => { swal("Informasi", "Waktu ujian telah habis!", "info"); }, 500);
-        setTimeout(() => { swal("Informasi", "Sedang menyimpan jawaban. Mohon Tunggu.", "info"); }, 1000);
-        setTimeout(() => { swal("Informasi", "Sedang menyimpan jawaban. Mohon Tunggu.", "info"); }, 1500);
-        setTimeout(() => { swal("Informasi", "Mengalihkan", "info"); }, 2000);
-        setTimeout(() => { selesai(); }, 2500);
+        $("#tampil_jawaban").html('<div id="yes"></div>' + hasil_jawaban);
     }
 </script>
 
@@ -472,39 +295,6 @@
         $('.card-text').css('font-size', '16px')
         $('.huruf_opsi').css('font-size', '16px')
     }
-</script>
-
-<!-- User pindah tab lain atau pindah dari browser aktif sekarang -->
-<script type="text/javascript">
-    /* document.addEventListener("visibilitychange", event => {
-        if(blok_layar != 0){
-            var modal = document.getElementById("alert-away");
-            var timeleft = blok_layar;
-
-            if (document.visibilityState == "visible") {
-                var openBlockTimer = setInterval(function(){
-                timeleft--;
-                document.getElementById("countdownblocktimer").innerHTML = timeleft;
-                if(timeleft == 0){
-                    clearInterval(openBlockTimer);
-                    modal.style.display = "none";
-                } }, 1000);
-            } else {
-                document.getElementById("msg_title_away").innerHTML = "PESAN SISTEM!";
-                document.getElementById("msg_content_away").innerHTML = "Anda terdeteksi meninggalkan halaman ini.";
-                document.getElementById("msg_footer_away").innerHTML = "Tunggu waktu penalti selesai untuk dapat melanjutkan pengerjaan soal kembali.";
-                modal.style.display = "block";
-            }
-        }
-    }) */
-</script>
-
-<!-- Intro JS -->
-<script>
-    /* introJs().setOptions({
-        showProgress: true,
-        showBullets: false
-    }).start() */
 </script>
 
 <!-- NAVIGASI TOOGLE SOAL -->

@@ -18,7 +18,7 @@
                                 <button class="au-btn au-btn-icon au-btn--blue au-btn--small" onclick="add_data_detail()">
                                     <i class="zmdi zmdi-plus"></i>Tambah
                                 </button>
-                                <button class="au-btn au-btn-icon au-btn--green au-btn--small" onclick="return window.history.back();">Kembali</button>
+                                <a href="<?=base_url()?>admin/buku-setting" class="btn btn-md btn-outline-secondary">Kembali</a>
                             </div>
                         </div>
                         <div class="table-responsive table-responsive-data2">

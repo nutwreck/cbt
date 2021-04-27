@@ -7,7 +7,7 @@
                         <div class="row">
                             <div class="col">Tambah Sesi Pelaksanaan</div>
                             <div class="col text-right">
-                                <button class="btn btn-sm btn-outline-secondary" onclick="return window.history.back();">Kembali</button>
+                                <a href="<?=base_url()?>admin/sesi-pelaksana" class="btn btn-sm btn-outline-secondary">Kembali</a>
                             </div>
                         </div>
                     </div>

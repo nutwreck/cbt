@@ -147,6 +147,11 @@
             document.formadd.type_paket.focus();
             return false;
         }
+        if( document.formadd.skala_nilai.value == "-1" ) {
+            document.getElementById('skala_nilai_er').innerHTML = 'Skala Penilaian Wajib Dipilih!';
+            document.formadd.skala_nilai.focus();
+            return false;
+        }
         return( true );
     }
 </script>

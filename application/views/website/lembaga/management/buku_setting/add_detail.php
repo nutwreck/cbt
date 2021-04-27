@@ -9,7 +9,7 @@
                             <div class="row">
                                 <div class="col">Tambah Detail Modul Buku</div>
                                 <div class="col text-right">
-                                    <a href="<?=base_url()?>admin/buku-setting" class="btn btn-sm btn-outline-secondary">Kembali</a>
+                                    <a href="<?=base_url()?>admin/detail-buku/<?=$id_buku?>" class="btn btn-sm btn-outline-secondary">Kembali</a>
                                 </div>
                             </div>
                         </div>

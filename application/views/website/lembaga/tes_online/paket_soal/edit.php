@@ -7,7 +7,7 @@
                         <div class="row">
                             <div class="col">Edit Paket Soal</div>
                             <div class="col text-right">
-                                <button class="btn btn-sm btn-outline-secondary" onclick="return window.history.back();">Kembali</button>
+                                <a href="<?=base_url()?>admin/paket-soal" class="btn btn-sm btn-outline-secondary">Kembali</a>
                             </div>
                         </div>
                     </div>
@@ -174,25 +174,23 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row" style="display:none">
-                                    <div class="col-sm-12 col-lg-3" style="margin-top:1%">
-                                        <h5 class="label-text">Skala Penilaian</h5>
+                                <div class="col-sm-12 col-lg-3" style="margin-top:1%">
+                                    <h5 class="label-text">Skala Penilaian</h5>
+                                </div>
+                                <div class="col-sm-12 col-lg-9">
+                                    <div class="form-group">
+                                        <select class="form-control selectpicker" data-live-search="true" data-width="auto" name="skala_nilai" required>
+                                            <option value="<?=$paket_soal->pengaturan_universal_id?>" selected><?=$paket_soal->nama_pengaturan_universal?></option>
+                                            <?php foreach($get_skala_nilai as $val_skala_nilai){ ?>
+                                                <option data-tokens="<?=$val_skala_nilai->detail?>" value="<?=$val_skala_nilai->id?>"><?=$val_skala_nilai->detail?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <small for="skala_nilai" id="skala_nilai_er" class="bg-danger text-white"></small>
                                     </div>
-                                    <div class="col-sm-12 col-lg-9">
-                                        <div class="form-group">
-                                            <select class="form-control selectpicker" data-live-search="true" data-width="auto" name="skala_nilai" required>
-                                                <option value="<?=$paket_soal->pengaturan_universal_id?>" selected><?=$paket_soal->nama_pengaturan_universal?></option>
-                                                <?php foreach($get_skala_nilai as $val_skala_nilai){ ?>
-                                                    <option data-tokens="<?=$val_skala_nilai->detail?>" value="<?=$val_skala_nilai->id?>"><?=$val_skala_nilai->detail?></option>
-                                                <?php } ?>
-                                            </select>
-                                            <small for="skala_nilai" id="skala_nilai_er" class="bg-danger text-white"></small>
-                                        </div>
-                                        <div class="alert alert-info">
-                                            <p>
-                                                Jika anda memilih skala penilaian <b>sesuai skor total</b>, maka anda perlu menambahkan skor pada jawaban benar. Jika memilih <b>skala 100</b> maka perhitungan skor pada jawaban benar akan otomatis dihitung proporsional dari total jumlah soal.
-                                            </p>
-                                        </div>
+                                    <div class="alert alert-info">
+                                        <p>
+                                            Jika anda memilih skala penilaian <b>sesuai skor total</b>, maka anda perlu menambahkan skor pada jawaban benar. Jika memilih <b>skala 100</b> maka perhitungan skor pada jawaban benar akan otomatis dihitung proporsional dari total jumlah soal. <b>(Total Skor / 3) x 10</b> jika anda memilih untuk tes TOEFL tetapi <b>Penyusunan Group Soal</b> harus diperhatikan.
+                                        </p>
                                     </div>
                                 </div>
                                 <!-- <div class="row">

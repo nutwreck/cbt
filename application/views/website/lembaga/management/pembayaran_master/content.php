@@ -12,11 +12,6 @@
                 <div class="row mt-3">
                     <div class="col-md-12">
                         <!-- DATA TABLE -->
-                        <div class="table-data__tool">
-                            <div class="table-data__tool-right">
-                                <button class="btn btn-sm btn-outline-secondary" onclick="return window.history.back();">Kembali</button>
-                            </div>
-                        </div>
                         <div class="table-responsive table-responsive-data2">
                             <table id="table_pembayaran" class="display text-center">
                                 <thead>

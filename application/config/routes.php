@@ -70,6 +70,7 @@ $route['detail-history'] = 'website/user/Dashboard/detail_history_ujian';
 $route['pre-ujian/(:any)'] = 'website/user/Ujian/mulai_ujian/$1';
 $route['ujian/(:any)/(:any)'] = 'website/user/Ujian/portal_tes/$1/$2';
 $route['ujian-berakhir'] = 'website/user/Ujian/ujian_berakhir';
+$route['pembahasan/(:any)/(:any)/(:any)'] = 'website/user/Ujian/pembahasan/$1/$2/$3';
 /* $route['ujian2'] = 'website/user/Ujian/ujian_page_next_design'; */
 /*
 |
@@ -105,6 +106,11 @@ $route['admin/sesi-pelaksana'] = 'website/lembaga/Tes_online/sesi_pelaksana';
 $route['admin/paket-sesi-pelaksana'] = 'website/lembaga/Tes_online/paket_sesi_pelaksana';
 $route['admin/add-sesi-pelaksana/(:any)'] = 'website/lembaga/Tes_online/add_sesi_pelaksana/$1';
 $route['admin/edit-sesi-pelaksana/(:any)'] = 'website/lembaga/Tes_online/edit_sesi_pelaksana/$1';
+$route['admin/peserta-sesi-pelaksana/(:any)'] = 'website/lembaga/Tes_online/add_peserta_sesi_pelaksana/$1';
+$route['admin/list-peserta-sesi-pelaksana/(:any)'] = 'website/lembaga/Tes_online/list_peserta_sesi_pelaksana/$1';
+$route['admin/export-peserta-sesi-pelaksana/(:any)'] = 'website/lembaga/Tes_online/export_list_peserta_sesi_pelaksana/$1';
+$route['admin/disable-all-list-peserta-sesi/(:any)'] = 'website/lembaga/Tes_online/disable_all_peserta_sesi_pelaksana/$1';
+$route['admin/disable-peserta-sesi/(:any)/(:any)'] = 'website/lembaga/Tes_online/disable_peserta_sesi_pelaksana/$1/$2';
 $route['admin/detail-sesi-pelaksana/(:any)'] = 'website/lembaga/Tes_online/detail_sesi_pelaksana/$1';
 $route['admin/delete-sesi-pelaksana/(:any)'] = 'website/lembaga/Tes_online/disable_sesi_pelaksana/$1';
 $route['admin/user-lembaga'] = 'website/lembaga/User/user_lembaga';

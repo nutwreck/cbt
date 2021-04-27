@@ -26,6 +26,7 @@ class Tes_online extends CI_Controller {
         if (!$this->session->has_userdata('has_login')){
             redirect('admin/login');
         }
+        $this->load->library('encryption');
         $this->load->model('General','general');
         $this->load->model('Tes_online_model','tes');
     }
@@ -1883,6 +1884,55 @@ class Tes_online extends CI_Controller {
         }
     }
 
+    public function add_peserta_sesi_pelaksana($id_sesi_pelaksana){
+        $data['content']['id_sesi_pelaksana'] = $id_sesi_pelaksana;
+        $data['content']['group_peserta'] = $this->tes->get_group_peserta();
+        $data['title_header'] = ['title' => 'Add Peserta Sesi Pelaksanaan'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/sesi_pelaksanaan/add_peserta/css';
+        $view['content'] = 'website/lembaga/tes_online/sesi_pelaksanaan/add_peserta/add_peserta';
+        $view['js_additional'] = 'website/lembaga/tes_online/sesi_pelaksanaan/add_peserta/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_add_peserta_sesi_pelaksana(){
+        $id_sesi_pelaksana = $this->input->post('id_sesi_pelaksana');
+        $sesi_pelaksana_id = base64_decode(urldecode($id_sesi_pelaksana));
+
+        $data_user = [];
+
+        $data_sesi['mode_peserta_id'] = $this->input->post('mode_peserta', TRUE);
+
+        //SESI USER
+        if($mode_peserta == 1){ //1 KELOMPOK 2 MANUAL INPUT
+            $group_peserta_id = $this->input->post('group_peserta_id', TRUE);
+            
+            foreach($group_peserta_id as $val_group_peserta){
+                $insert_user_sesi = $this->insert_group_peserta_komposisi($val_group_peserta, $sesi_pelaksana_id);
+            }
+        } else {
+            $peserta_id = $this->input->post('manual_peserta_id', TRUE);
+            
+            foreach($peserta_id as $val_peserta){
+                $data_user[] = array(
+                    'sesi_pelaksanaan_id' => $sesi_pelaksana_id,
+                    'group_peserta_id' => 0,
+                    'user_id' => $val_peserta,
+                    'created_datetime' => date('Y-m-d H:i:s')
+                );
+            }
+
+            $tbl_sesi_user = $this->tbl_sesi_pelaksanaan_user;
+            $input_user = $this->general->input_batch($tbl_sesi_user, $data_user);
+        }
+
+        $this->session->set_flashdata('success', 'Tambah Peserta pelaksanaan berhasil disimpan!');
+        redirect('admin/sesi-pelaksana');
+    }
+
     private function insert_group_peserta_komposisi($val_group_peserta, $insert_sesi){
         $data_user = [];
 
@@ -1991,6 +2041,105 @@ class Tes_online extends CI_Controller {
         } else {
             $this->session->set_flashdata('error', 'Data sesi pelaksanaan gagal disimpan!');
 		    redirect('admin/edit-sesi-pelaksana/'.$sesi_pelaksana_id_crypt);
+        }
+    }
+
+    public function list_peserta_sesi_pelaksana($id_sesi_pelaksana){
+        $sesi_pelaksana_id = base64_decode(urldecode($id_sesi_pelaksana));
+
+        $name_sesi = $this->tes->get_sesi_pelaksanaan_by_id($sesi_pelaksana_id);
+        $data['content']['list_peserta_sesi'] = $this->tes->get_list_peserta_sesi($sesi_pelaksana_id);
+        $data['content']['name_sesi_pelaksana'] = $name_sesi->sesi_pelaksanaan_name;
+        $data['content']['id_sesi_pelaksana'] = $id_sesi_pelaksana;
+        $data['title_header'] = ['title' => 'List Peserta Sesi Pelaksanaan'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/sesi_pelaksanaan/list_peserta/css';
+        $view['content'] = 'website/lembaga/tes_online/sesi_pelaksanaan/list_peserta/content';
+        $view['js_additional'] = 'website/lembaga/tes_online/sesi_pelaksanaan/list_peserta/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function export_list_peserta_sesi_pelaksana($id_sesi_pelaksana){
+        $sesi_pelaksana_id = base64_decode(urldecode($id_sesi_pelaksana));
+        
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Nomor Peserta');
+        $sheet->setCellValue('C1', 'Nama');
+        $sheet->setCellValue('D1', 'Kelompok');
+        $sheet->setCellValue('E1', 'Username/Email');
+        $sheet->setCellValue('F1', 'Password');
+        
+        $peserta_sesi = $this->tes->get_list_peserta_sesi($sesi_pelaksana_id);
+        $name_sesi = $this->tes->get_sesi_pelaksanaan_by_id($sesi_pelaksana_id);
+        $name_file = $name_sesi->sesi_pelaksanaan_name;
+
+        $no = 1;
+        $x = 2;
+        foreach($peserta_sesi as $row)
+        {
+            $sheet->setCellValue('A'.$x, $no++);
+            $sheet->setCellValue('B'.$x, (int) $row->no_peserta);
+            $sheet->setCellValue('C'.$x, $row->peserta_name);
+            $sheet->setCellValue('D'.$x, $row->group_peserta_name);
+            $sheet->setCellValue('E'.$x, $row->username);
+            $sheet->setCellValue('F'.$x, $this->encryption->decrypt($row->password));
+            $x++;
+        }
+
+        // Column sizing
+        foreach(range('A','F') as $columnID){
+            $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'. $name_file .'.xlsx"'); 
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+    }
+
+    public function disable_all_peserta_sesi_pelaksana($id_sesi_pelaksana){
+        $sesi_pelaksana_id = base64_decode(urldecode($id_sesi_pelaksana));
+
+        $tbl = $this->tbl_sesi_pelaksanaan_user;
+        $delete = $this->tes->disable_peserta_sesi_pelaksanaan($tbl, $sesi_pelaksana_id);
+
+        $urly = 'admin/list-peserta-sesi-pelaksana/'.$id_sesi_pelaksana;
+        $urlx = 'admin/list-peserta-sesi-pelaksana/'.$id_sesi_pelaksana;
+        $this->delete_end($delete, $urly, $urlx);
+    }
+
+    public function disable_peserta_sesi_pelaksana($id_sesi_pelaksana_user, $id_sesi_pelaksanaan){
+        $sesi_pelaksana_user_id = base64_decode(urldecode($id_sesi_pelaksana_user));
+
+        $tbl = $this->tbl_sesi_pelaksanaan_user;
+        $delete = $this->general->delete_data($tbl, $sesi_pelaksana_user_id);
+
+        $urly = 'admin/list-peserta-sesi-pelaksana/'.$id_sesi_pelaksanaan;
+        $urlx = 'admin/list-peserta-sesi-pelaksana/'.$id_sesi_pelaksanaan;
+        $this->delete_end($delete, $urly, $urlx);
+    }
+
+    public function sesi_peserta_multiple_delete(){
+        if($this->input->post('checkbox_value')) {
+            $id = $this->input->post('checkbox_value');
+
+            $data = array(
+                'is_enable' => 0,
+                'updated_datetime' => date('Y-m-d H:i:s')
+            );
+            
+            for($count = 0; $count < count($id); $count++) {
+                $tbl = $this->tbl_sesi_pelaksanaan_user;
+                $this->general->delete_data($tbl, $id[$count]);
+            }
         }
     }
 
