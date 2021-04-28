@@ -6,28 +6,28 @@
 -->
 
 <style>
-    .history-head{
+    .sesi-head{
         font-size: 20px;
         letter-spacing: 0.5px;
     }
 
-    .history-detail{
-        font-size:85%;
+    .sesi-detail{
+        font-size:80%;
     }
 
-    .btn-detail-history {
+    .btn-mulai {
         font-weight: 700;
-        color: rgba(2, 117, 216, 1);
+        color: rgba(103, 192, 103, 1);
         letter-spacing: 1px;
-        border: 2px solid rgba(2, 117, 216, 0.75);
+        border: 2px solid rgba(103, 192, 103, 0.75);
         border-radius: 40px;
         background: transparent;
         transition: all 0.3s ease 0s;
     }
     
-    .btn-detail-history:hover {
+    .btn-mulai:hover {
         color: #FFF;
-        background: rgb(2, 117, 216, 0.75);
-        border: 2px solid rgb(2, 117, 216, 0.75);
+        background: rgb(103, 192, 103, 0.75);
+        border: 2px solid rgb(103, 192, 103, 0.75);
     }
 </style>

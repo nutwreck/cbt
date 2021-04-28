@@ -170,7 +170,26 @@ class Tes_online_model extends CI_Model{
             LEFT OUTER JOIN ujian AS T3 ON T1.sesi_pelaksanaan_id = T3.sesi_pelaksanaan_id
                 AND T3.user_id = '".$user_id."'
                 AND T3.is_enable = 1
-            WHERE T1.batas_pengerjaan >= NOW()");
+            WHERE T1.batas_pengerjaan >= NOW()
+            ORDER BY T1.waktu_mulai ASC");
+        return $query->result();
+    }
+
+    public function get_sesi_pelaksanaan_past($user_id){
+        $query = $this->db->query("
+            SELECT
+                T1.*, T3.id AS check_status_ujian, T3.tgl_selesai AS tgl_selesai_user, T3.status AS status_ujian
+            FROM v_sesi_pelaksanaan AS T1
+            JOIN sesi_pelaksanaan_user AS T2 ON T1.sesi_pelaksanaan_id = T2.sesi_pelaksanaan_id
+                AND T2.is_enable = 1
+                AND T2.user_id = '".$user_id."'
+            JOIN ujian AS T3 ON T1.sesi_pelaksanaan_id = T3.sesi_pelaksanaan_id
+                AND T3.user_id = '".$user_id."'
+                AND T3.is_enable = 1
+                AND T3.status = 1
+            WHERE T1.batas_pengerjaan <= NOW() OR 
+            T3.tgl_selesai >= NOW()
+            ORDER BY T3.id DESC");
         return $query->result();
     }
 

@@ -82,8 +82,13 @@ class Dashboard extends CI_Controller {
     }
 
     public function history_ujian(){
+        $permitted_chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $generate_string = $this->generate_string($permitted_chars, 175);
+
+        $user_id = $this->session->userdata('user_id');
         //for passing data to view
-        $data['content'] = [];
+        $data['content']['sesi_pelaksana'] = $this->tes->get_sesi_pelaksanaan_past($user_id);
+        $data['content']['encrypt'] = $generate_string;
         $data['title_header'] = ['title' => 'Daftar History Ujian'];
 
         //for load view
@@ -94,10 +99,6 @@ class Dashboard extends CI_Controller {
 
         //get function view website
         $this->_generate_view($view, $data);
-    }
-
-    public function detail_history_ujian(){
-        
     }
 
 }
