@@ -218,11 +218,11 @@
             var group = form[gr]; //group soal
 
             if(group_m == 1){ //1 Pilihan Ganda 2 Essay
-                var idx = 'opsi_' + i;
+                var idx = 'key_' + i;
                 var jwb_exp = form[idx];
                 var jawab_pro = jwb_exp == undefined ? '' : jwb_exp.split('|');
                 var jawab = jawab_pro[1];
-
+                var jawab_benar = jawab_pro[2];
             } else {
                 var idx = 'essay_' + i;
                 var jawab = form[idx] == '' ? undefined : form[idx];
@@ -237,33 +237,25 @@
             }
 
             if (jawab != undefined){
-                if(group_m == 1){
-                    jawab_content = number_opsi_text(jawab);
-                } else {
-                    jawab_content = check;
-                }
-                
-                if (ragu == "Y") {
-                    if (jawab == "-") {
-                        hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-outline-secondary text-secondary btn_soal" onclick="return buka(' + (i) + ');">' + (i) + ". " + jawab_content + "</a>";
+                if(jawab_benar == jawab){
+                    if (ragu == "Y") {
+                        if (jawab == "-") {
+                            hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-outline-secondary text-secondary btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
+                        } else {
+                            hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-warning btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
+                        }
                     } else {
-                        hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-warning btn_soal" onclick="return buka(' + (i) + ');">' + (i) + ". " + jawab_content + "</a>";
+                        if (jawab == "-") {
+                            hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-outline-secondary text-secondary btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
+                        } else {
+                            hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-success btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
+                        }
                     }
                 } else {
-                    if (jawab == "-") {
-                        hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-outline-secondary text-secondary btn_soal" onclick="return buka(' + (i) + ');">' + (i) + ". " + jawab_content + "</a>";
-                    } else {
-                        hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-success btn_soal" onclick="return buka(' + (i) + ');">' + (i) + ". " + jawab_content + "</a>";
-                    }
+                    hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-danger btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
                 }
             } else {
-                if(group_m == 1){
-                    jawab_content = '';
-                } else {
-                    jawab_content = '';
-                }
-
-                hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-outline-secondary text-secondary btn_soal" onclick="return buka(' + (i) + ');">' + (i) + " " + jawab_content + "</a>";
+                hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-outline-secondary text-secondary btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
             }
 
             var group_before = group;

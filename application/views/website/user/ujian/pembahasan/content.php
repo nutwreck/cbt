@@ -21,6 +21,9 @@
                                 <tr>
                                     <td>Ranking</td><td>:</td><td><?=$ranking_user?> Dari <?=$total_user?></td>
                                 </tr>
+                                <tr>
+                                    <td>Nilai / Score</td><td>:</td><td><?=ROUND($ujian->skor)?></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -37,18 +40,18 @@
                         <div class="text-center">
                             <h4 class="sisawaktu-title font-poppins">Summary</h4>
                             <div class="row mt-3">
-                                <div class="col" style="outline-style: dotted; margin:5px;">
-                                    <h5>Benar<br /><?=$ujian->jml_benar?></h5>
+                                <div class="col bg-success" style="outline-style: dotted; outline-width: 2px; margin:5px;">
+                                    <h5 class="text-white">Benar<br /><?=$ujian->jml_benar?></h5>
                                 </div>
-                                <div class="col" style="outline-style: dotted; margin:5px;">
-                                    <h5>Salah<br /><?=$ujian->jml_salah?></h5>
+                                <div class="col bg-danger" style="outline-style: dotted; outline-width: 2px; margin:5px;">
+                                    <h5 class="text-white">Salah<br /><?=$ujian->jml_salah?></h5>
                                 </div>
                             </div>
                             <div class="row mt-3">
-                                <div class="col" style="outline-style: dotted; margin:5px;">
-                                    <h5>Ragu<br /><?=$ujian->jml_ragu?></h5>
+                                <div class="col bg-warning" style="outline-style: dotted; outline-width: 2px; margin:5px;">
+                                    <h5 class="text-white">Ragu<br /><?=$ujian->jml_ragu?></h5>
                                 </div>
-                                <div class="col" style="outline-style: dotted; margin:5px;">
+                                <div class="col" style="outline-style: dotted; outline-width: 2px; margin:5px;">
                                     <h5>Tidak Dijawab<br /><?=$ujian->jml_kosong?></h5>
                                 </div>
                             </div>

@@ -280,6 +280,17 @@ class Tes_online_model extends CI_Model{
                     ->get_where('jawaban', array('bank_soal_id' => $bank_soal_id, 'is_enable' => 1))->result();
     }
 
+    public function get_jawaban_by_id_pembahasan($bank_soal_id, $paket_soal_id){
+        return $this->db->select('id, bank_soal_id, order, name, score, is_key')
+                    ->order_by('order ASC, id ASC')
+                    ->get_where('jawaban', array('bank_soal_id' => $bank_soal_id, 'is_enable' => 1))->result();
+    }
+
+    public function get_jawaban_by_id_benar($bank_soal_id, $paket_soal_id){
+        return $this->db->select('order')
+                    ->get_where('jawaban', array('bank_soal_id' => $bank_soal_id, 'is_key' => 1, 'is_enable' => 1))->row()->order;
+    }
+
     public function get_jawaban_detail($bank_soal_id){
         return $this->db->select('id, bank_soal_id, order, name, score, is_key')
                     ->order_by('order ASC, id ASC')
@@ -470,7 +481,7 @@ class Tes_online_model extends CI_Model{
     }
 
     public function get_checking_ujian_by_id($ujian_id){
-        $query = $this->db->select('id, user_id, user_no, user_name, user_email, list_soal, list_jawaban, tgl_mulai, tgl_selesai, status, jml_benar, jml_salah, jml_ragu, jml_kosong')
+        $query = $this->db->select('id, user_id, user_no, user_name, user_email, list_soal, list_jawaban, tgl_mulai, tgl_selesai, status, jml_benar, jml_salah, jml_ragu, jml_kosong, skor')
                         ->get_where('ujian', array('id' => $ujian_id, 'status' => 1, 'is_enable' => 1))->row();
         
         if($query){

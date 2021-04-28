@@ -630,13 +630,15 @@ class Ujian extends CI_Controller {
                             <p><b>Pilih salah satu jawaban!</b></p>
                         </div>
                         <div class="funkyradio text-justify">';
-                    $jawaban = $this->tes->get_jawaban_by_id_user($s->bank_soal_id, $s->paket_soal_id);
+                    $jawaban = $this->tes->get_jawaban_by_id_pembahasan($s->bank_soal_id, $s->paket_soal_id);
+                    $jawaban_benar = $this->tes->get_jawaban_by_id_benar($s->bank_soal_id, $s->paket_soal_id);
                     $opsi = config_item('_def_opsi_jawaban');
                     $jawaban_soal = [];
                     $number_opsi = 1;
                     foreach($jawaban as $key_jawaban => $val_jawaban) {
                         $checked = $arr_jawab[$s->bank_soal_id]["j"] == $val_jawaban->order ? "checked" : "";
                         $html .= '<div class="funkyradio-success" onclick="return simpan_sementara();">
+                                <input type="radio" style="display:none;" id="key_'.$opsi.'_'.$nomor_soal.'" name="key_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'|'.$jawaban_benar.'" '.$checked.'>
                                 <input type="radio" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'" '.$checked.' disabled> 
                                 <label for="opsi_'.$opsi.'_'.$nomor_soal.'">
                                     <div class="huruf_opsi">'.$opsi.'</div> 
@@ -654,6 +656,29 @@ class Ujian extends CI_Controller {
                         <textarea class="form-control" id="essay_'.$nomor_soal.'" name="essay_'.$nomor_soal.'" rows="5">'.$history_jawab.'</textarea>
                     </div>';
                 }
+
+                if($jawaban_benar && $jawaban_benar == 1){
+                    $key_opsi = 'A';
+                } elseif($jawaban_benar && $jawaban_benar == 2){
+                    $key_opsi = 'B';
+                } elseif($jawaban_benar && $jawaban_benar == 3){
+                    $key_opsi = 'C';
+                } elseif($jawaban_benar && $jawaban_benar == 4){
+                    $key_opsi = 'D';
+                } elseif($jawaban_benar && $jawaban_benar == 5){
+                    $key_opsi = 'E';
+                }
+
+                $pembahasan = $this->tes->get_pembahasan($s->bank_soal_id);
+                $url_video = !empty($pembahasan->url) ? '<iframe width="762" height="400" src="'.$pembahasan->url.'" frameborder="0" allowfullscreen></iframe>' : '';
+                $text_pembahasan = !empty($pembahasan->pembahasan) ? '<p>'.$pembahasan->pembahasan.'</p>' : '';
+                $pembahasan = !empty($pembahasan->pembahasan) || !empty($pembahasan->url) ? '<h5>Pembahasan : </h5>' : '';
+
+                $html .= '<div class="row">
+                <h5 class="card-text mt-2 ml-3">Jawaban Benar : '.$key_opsi.'</h5>
+                <div class="text-center m-3">'.$pembahasan.$url_video.'</div>
+                <div class="text-center m-3">'.$text_pembahasan.'</div>
+                </div>';
 
                 $html .= '</div>';
 
