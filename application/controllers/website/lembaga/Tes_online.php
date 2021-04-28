@@ -2181,13 +2181,30 @@ class Tes_online extends CI_Controller {
     }
 
     public function report_ujian(){
-        $data['content']['list_ujian'] = $this->tes->get_sesi_pelaksanaan_all_past();
-        $data['title_header'] = ['title' => 'List All Sesi Pelaksanaan'];
+        $data['content']['list_ujian'] = $this->tes->get_ujian_header();
+        $data['title_header'] = ['title' => 'Report Ujian'];
 
         //for load view
         $view['css_additional'] = 'website/lembaga/tes_online/report_ujian/css';
         $view['content'] = 'website/lembaga/tes_online/report_ujian/content';
         $view['js_additional'] = 'website/lembaga/tes_online/report_ujian/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function detail_report_ujian($id_sesi_pelaksanaan, $id_paket_soal){
+        $sesi_pelaksana_id = base64_decode(urldecode($id_sesi_pelaksanaan));
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+
+        $data['content']['list_ujian_detail'] = $this->tes->get_ujian_detail($sesi_pelaksana_id, $paket_soal_id);
+        $data['content']['list_ujian'] = $this->tes->get_ujian_header_by_id($sesi_pelaksana_id, $paket_soal_id);
+        $data['title_header'] = ['title' => 'Detail Report Ujian'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/report_ujian/detail_report/css';
+        $view['content'] = 'website/lembaga/tes_online/report_ujian/detail_report/content';
+        $view['js_additional'] = 'website/lembaga/tes_online/report_ujian/detail_report/js';
 
         //get function view website
         $this->_generate_view($view, $data);

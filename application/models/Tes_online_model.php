@@ -244,6 +244,21 @@ class Tes_online_model extends CI_Model{
         return $this->db->get_where('v_sesi_pelaksanaan', array('sesi_pelaksanaan_id' => $sesi_pelaksana_id))->row();
     }
 
+    public function get_ujian_header(){
+        $now = date('Y-m-d H:i:s');
+        return $this->db->get_where('v_ujian_header', array('tgl_selesai_sesi <=' => $now))->result();
+    }
+
+    public function get_ujian_header_by_id($sesi_pelaksana_id, $paket_soal_id){
+        $now = date('Y-m-d H:i:s');
+        return $this->db->get_where('v_ujian_header', array('sesi_pelaksanaan_id' => $sesi_pelaksana_id, 'paket_soal_id' => $paket_soal_id, 'tgl_selesai_sesi <=' => $now))->row();
+    }
+
+    public function get_ujian_detail($sesi_pelaksana_id, $paket_soal_id){
+        $now = date('Y-m-d H:i:s');
+        return $this->db->get_where('v_ujian_detail', array('sesi_pelaksanaan_id' => $sesi_pelaksana_id, 'paket_soal_id' => $paket_soal_id, 'tgl_selesai_sesi <=' => $now))->result();
+    }
+
     public function get_komposisi_soal_by_id($sesi_pelaksana_id){
         $query = $this->db->query("SELECT
                 T1.*,

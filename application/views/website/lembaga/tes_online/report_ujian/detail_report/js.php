@@ -3,7 +3,7 @@
 
 <script>
     $(document).ready(function() {
-        $('#table_report').DataTable( {
+        $('#table_detail_report').DataTable( {
             
         } );
     } );
