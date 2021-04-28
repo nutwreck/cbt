@@ -24,6 +24,9 @@
                                 <li>
                                     <a href="<?php echo base_url(); ?>admin/sesi-pelaksana">Sesi Pelaksana</a>
                                 </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>admin/report-ujian">Report Ujian</a>
+                                </li>
                             </ul>
                         </li>
                         <li class="has-sub">

@@ -2180,4 +2180,17 @@ class Tes_online extends CI_Controller {
         $this->delete_end($delete, $urly, $urlx);
     }
 
+    public function report_ujian(){
+        $data['content']['list_ujian'] = $this->tes->get_sesi_pelaksanaan_all_past();
+        $data['title_header'] = ['title' => 'List All Sesi Pelaksanaan'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/report_ujian/css';
+        $view['content'] = 'website/lembaga/tes_online/report_ujian/content';
+        $view['js_additional'] = 'website/lembaga/tes_online/report_ujian/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
 }

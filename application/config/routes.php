@@ -176,6 +176,7 @@ $route['admin/export-all-invoice-success'] = 'website/lembaga/Management/export_
 $route['admin/export-all-invoice-expired'] = 'website/lembaga/Management/export_invoice_all_expired';
 $route['admin/invoice/manual-confirm/(:num)/(:any)'] = 'website/lembaga/Management/manual_confirm_invoice/$1/$2';
 $route['admin/invoice/delete-invoice/(:num)/(:any)'] = 'website/lembaga/Management/disable_invoice/$1/$2';
+$route['admin/report-ujian'] = 'website/lembaga/Tes_online/report_ujian';
 /*
 |
 | START WEBSITE URL FOR LEMBAGA ONLY

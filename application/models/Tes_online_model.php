@@ -193,6 +193,21 @@ class Tes_online_model extends CI_Model{
         return $query->result();
     }
 
+    public function get_sesi_pelaksanaan_all_past(){
+        $query = $this->db->query("
+            SELECT
+                T1.*, T3.id AS check_status_ujian, T3.tgl_selesai AS tgl_selesai_user, T3.status AS status_ujian
+            FROM v_sesi_pelaksanaan AS T1
+            JOIN sesi_pelaksanaan_user AS T2 ON T1.sesi_pelaksanaan_id = T2.sesi_pelaksanaan_id
+                AND T2.is_enable = 1
+            JOIN ujian AS T3 ON T1.sesi_pelaksanaan_id = T3.sesi_pelaksanaan_id
+                AND T3.is_enable = 1
+                AND T3.status = 1
+            WHERE T1.batas_pengerjaan <= NOW()
+            ORDER BY T3.id DESC");
+        return $query->result();
+    }
+
     public function get_sesi_pelaksanaan_selected($sesi_pelaksana_id){
         $now = date('Y-m-d H:i:s');
         return $this->db->order_by('waktu_mulai ASC')
