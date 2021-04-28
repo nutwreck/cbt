@@ -481,7 +481,7 @@ class Tes_online_model extends CI_Model{
     }
 
     public function get_checking_ujian_by_id($ujian_id){
-        $query = $this->db->select('id, user_id, user_no, user_name, user_email, list_soal, list_jawaban, tgl_mulai, tgl_selesai, status, jml_benar, jml_salah, jml_ragu, jml_kosong, skor')
+        $query = $this->db->select('id, sesi_pelaksanaan_id, paket_soal_id, user_id, user_no, user_name, user_email, list_soal, list_jawaban, tgl_mulai, tgl_selesai, status, jml_benar, jml_salah, jml_ragu, jml_kosong, skor')
                         ->get_where('ujian', array('id' => $ujian_id, 'status' => 1, 'is_enable' => 1))->row();
         
         if($query){
@@ -509,6 +509,17 @@ class Tes_online_model extends CI_Model{
     public function get_ranking_ujian_user($ujian_id){
         $query = $this->db->select('ranking')
             ->get_where('v_ujian_ranking', array('id' => $ujian_id))->row();
+
+        if($query){
+            return $query;
+        } else {
+            return null;
+        }
+    }
+
+    public function get_ujian_by_id($ujian_id){
+        $query = $this->db->select('sesi_pelaksanaan_id')
+            ->get_where('ujian', array('id' => $ujian_id))->row();
 
         if($query){
             return $query;

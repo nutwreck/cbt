@@ -1,10 +1,3 @@
-<?php
-$waktu_habis = strtotime($waktu_selesai);
-if(time() >= $waktu_habis)
-{
-    redirect('ujian-berakhir', 'location', 301);
-}
-?>
 <div class="container-fluid mt-100-st">
     <div class="row">
         <div class="col-sm-12 col-md-8 h-100 mb-3">
@@ -25,6 +18,14 @@ if(time() >= $waktu_habis)
                                 <tr>
                                     <td>Materi</td><td>:</td><td><?=ucwords(strtolower($sesi_pelaksana->materi_name))?> - <b><?=$sesi_pelaksana->total_soal?> Butir Soal</b></td>
                                 </tr>
+                                <?php if($is_ranking == 1) { ?>
+                                <tr>
+                                    <td>Ranking</td><td>:</td><td><?=$ranking_user?> Dari <?=$total_user?> <small><i>(Ranking anda sementara, Tunggu setelah <?=format_indo($sesi_pelaksana->batas_pengerjaan)?> untuk melihat ranking yang sebenarnya)</i></small></td>
+                                </tr>
+                                <?php } else { echo ''; } ?>
+                                <tr>
+                                    <td>Nilai / Score</td><td>:</td><td><?=ROUND($ujian->skor)?></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -39,67 +40,27 @@ if(time() >= $waktu_habis)
                 <div class="card">
                     <div class="card-body">
                         <div class="text-center">
-                            <h5 class="sisawaktu-title font-poppins">Sisa Waktu</h5>
-                            <span class="sisawaktu font-arial-bold" data-time="<?=$waktu_selesai?>"></span>
+                            <h4 class="sisawaktu-title font-poppins">Summary</h4>
                             <div class="row mt-3">
-                                <div class="col">
-                                    <button id="button-nav" class="btn btn-md btn-primary" onclick="toggle_soal()"><i id="toogle-navigasi-ico" class="fa fa-chevron-circle-up" aria-hidden="true"></i> Navigasi</button>
+                                <div class="col bg-success" style="outline-style: dotted; outline-width: 2px; margin:5px;">
+                                    <h5 class="text-white">Benar<br /><?=$ujian->jml_benar?></h5>
                                 </div>
-                                <div class="col">
-                                    <button class="btn btn-md btn-success" onclick="done_soal()"><i class="fa fa-check-circle" aria-hidden="true"></i> Selesai</button>
+                                <div class="col bg-danger" style="outline-style: dotted; outline-width: 2px; margin:5px;">
+                                    <h5 class="text-white">Salah<br /><?=$ujian->jml_salah?></h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col bg-warning" style="outline-style: dotted; outline-width: 2px; margin:5px;">
+                                    <h5 class="text-white">Ragu<br /><?=$ujian->jml_ragu?></h5>
+                                </div>
+                                <div class="col" style="outline-style: dotted; outline-width: 2px; margin:5px;">
+                                    <h5>Tidak Dijawab<br /><?=$ujian->jml_kosong?></h5>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div id="lembar_soal" class="col-sm-12 col-md-8 mb-3">
-            <?=form_open('', array('id'=>'ujian'), array('id'=> $ujian_id, 'random_secure' => $random_secure));?>
-                <h3 class="box-title" style="display:none;"><span class="badge bg-blue">Soal #<span id="soalke"></span> </span></h3>
-                <?=$lembar_jawaban?>
-                <input type="hidden" name="jml_soal" id="jml_soal" value="<?=$jumlah_soal; ?>">
-            <?=form_close();?>
-        </div>
-        <div id="panel-toogle-soal" class="col-sm-12 col-md-4 mb-3" style="display:block;">
-            <div class="card text-center font-poppins">
-                <h5 class="m-3">Navigasi Soal</h5>
-                <div id="tampil_jawaban" class="card-body text-white btn-navigasi">
-                
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- The Modal -->
-<div id="alert-away" class="modal">
-
-  <!-- Modal content -->
-  <div class="modal-content text-center bg-warning font-poppins">
-    <p id="msg_title_away" class="text-white"></p>
-    <p id="msg_content_away" class="text-white"></p>
-    <p class="text-white"><span id="countdownblocktimer">0</span> Detik lagi</p>
-    <p id="msg_footer_away" class="text-white"></p>
-  </div>
-
-</div>
-
-<!-- Modal -->
-<div class="modal" id="petunjukModal" data-backdrop="false">
-    <!-- Modal content-->
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4 id="title-group" class="modal-title"></h4>
-        </div>
-        <div id="body-group" class="modal-body">
-
-        </div>
-        <div id="footer-group" class="modal-footer">
-            
         </div>
     </div>
 </div>

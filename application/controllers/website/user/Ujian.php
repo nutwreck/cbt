@@ -391,6 +391,9 @@ class Ujian extends CI_Controller {
         // Decrypt Id
 		$id_tes = $this->input->post('id', true);
         $id_tes = $this->encryption->decrypt($id_tes);
+
+        $get_ujian_sesi = $this->tes->get_ujian_by_id($id_tes);
+        $get_sesi_ujian = $this->tes->get_sesi_pelaksana_by_id($get_ujian_sesi->sesi_pelaksanaan_id);
         
         $get_paket_data = $this->tes->get_paket_soal_by_tes($id_tes);
         $paket_soal = $this->tes->get_paket_soal_sesi_by_id($get_paket_data); //Get Paket Soal
@@ -496,7 +499,10 @@ class Ujian extends CI_Controller {
         $tbl_ujian = $this->tbl_ujian;
         $this->general->update_data($tbl_ujian, $d_update, $id_tes);
 
-		$this->output_json(['status'=>TRUE, 'id'=>$id_tes]);
+        $show_hasil = $get_sesi_ujian->is_hasil;
+        $show_ranking = $get_sesi_ujian->is_ranking;
+
+		$this->output_json(['status'=>TRUE, 'id'=>$id_tes, 'hasil'=>$show_hasil, 'ranking'=>$show_ranking]);
     }
 
     public function ujian_berakhir(){
@@ -514,7 +520,7 @@ class Ujian extends CI_Controller {
         $data = [];
 
         $sesi_detail = $this->tes->get_sesi_pelaksanaan_selected($sesi_pelaksanaan_id);//Get Sesi Pelaksanaan
-        $paket_soal = $this->tes->get_paket_soal_sesi_by_id($paket_soal_id); //Get Paket Soal
+        /* $paket_soal = $this->tes->get_paket_soal_sesi_by_id($paket_soal_id); //Get Paket Soal */
         $ujian_data = $this->tes->get_checking_ujian_by_id($ujian_id); //CEK UJIAN
         $total_user_ujian = $this->tes->get_total_user_ujian($sesi_pelaksanaan_id, $paket_soal_id); //CEK UJIAN
         $ranking_user = $this->tes->get_ranking_ujian_user($ujian_id); //CEK UJIAN
@@ -676,8 +682,8 @@ class Ujian extends CI_Controller {
 
                 $html .= '<div class="row">
                 <h5 class="card-text mt-2 ml-3">Jawaban Benar : '.$key_opsi.'</h5>
-                <div class="text-center m-3">'.$pembahasan.$url_video.'</div>
-                <div class="text-center m-3">'.$text_pembahasan.'</div>
+                <center><div class="m-3">'.$pembahasan.$url_video.'</div>
+                <div class="text-left m-3">'.$text_pembahasan.'</div></center>
                 </div>';
 
                 $html .= '</div>';
@@ -711,6 +717,28 @@ class Ujian extends CI_Controller {
         $view['css_additional'] = 'website/user/ujian/css';
         $view['content'] = 'website/user/ujian/pembahasan/content';
         $view['js_additional'] = 'website/user/ujian/pembahasan/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function hasil_ujian($ujian_id, $show_ranking){
+        $ujian_data = $this->tes->get_checking_ujian_by_id($ujian_id); //CEK UJIAN
+        $sesi_detail = $this->tes->get_sesi_pelaksana_by_id($ujian_data->sesi_pelaksanaan_id);//Get Sesi Pelaksanaan
+        $total_user_ujian = $this->tes->get_total_user_ujian($ujian_data->sesi_pelaksanaan_id, $ujian_data->paket_soal_id); //CEK UJIAN
+        $ranking_user = $this->tes->get_ranking_ujian_user($ujian_id); //CEK UJIAN
+
+        $data['content']['sesi_pelaksana'] = $sesi_detail;
+        $data['content']['is_ranking'] = $show_ranking;
+        $data['content']['ujian'] = $ujian_data;
+        $data['content']['total_user'] = $total_user_ujian->total_user_ujian;
+        $data['content']['ranking_user'] = $ranking_user->ranking;
+        $data['title_header'] = ['title' => 'Hasil Ujian Online'];
+
+        //for load view
+        $view['css_additional'] = 'website/user/ujian/result/css';
+        $view['content'] = 'website/user/ujian/result/content';
+        $view['js_additional'] = 'website/user/ujian/result/js';
 
         //get function view website
         $this->_generate_view($view, $data);
