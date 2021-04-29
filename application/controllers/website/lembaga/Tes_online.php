@@ -2199,6 +2199,8 @@ class Tes_online extends CI_Controller {
 
         $data['content']['list_ujian_detail'] = $this->tes->get_ujian_detail($sesi_pelaksana_id, $paket_soal_id);
         $data['content']['list_ujian'] = $this->tes->get_ujian_header_by_id($sesi_pelaksana_id, $paket_soal_id);
+        $data['content']['id_sesi_pelaksanaan'] = $id_sesi_pelaksanaan;
+        $data['content']['id_paket_soal'] = $id_paket_soal;
         $data['title_header'] = ['title' => 'Detail Report Ujian'];
 
         //for load view
@@ -2208,6 +2210,91 @@ class Tes_online extends CI_Controller {
 
         //get function view website
         $this->_generate_view($view, $data);
+    }
+
+    public function export_detail_report_ujian($id_sesi_pelaksanaan, $id_paket_soal){
+        $sesi_pelaksana_id = base64_decode(urldecode($id_sesi_pelaksanaan));
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+
+        $data = $this->tes->get_ujian_detail($sesi_pelaksana_id, $paket_soal_id);
+        $sesi = $this->tes->get_sesi_pelaksana_by_id($sesi_pelaksana_id);
+
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        foreach($data as $val){
+            $group_soal_name_raw = $val->group_soal_name;
+        }
+
+        $group_soal_name = explode(',', $group_soal_name_raw);
+
+        $column_skor = sizeof($group_soal_name);
+        
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Nomor Peserta');
+        $sheet->setCellValue('C1', 'Nama');
+        $sheet->setCellValue('D1', 'Kelompok');
+        $sheet->setCellValue('E1', 'Waktu Mulai Sesi');
+        $sheet->setCellValue('F1', 'Waktu Mulai Peserta');
+        $sheet->setCellValue('G1', 'Waktu Selesai Sesi');
+        $sheet->setCellValue('H1', 'Waktu Selesai Peserta');
+        $sheet->setCellValue('I1', 'Jumlah Benar');
+        $sheet->setCellValue('J1', 'Jumlah Salah');
+        $sheet->setCellValue('K1', 'Jumlah Ragu');
+        $sheet->setCellValue('L1', 'Jumlah Kosong');
+        $col = 'L';
+        $index = 1;
+        for($i = 0; $i < $column_skor; $i++){
+            $sheet->setCellValue($col++.$index, $group_soal_name[$i]);
+        }
+        $sheet->setCellValue($col++.$index, 'Total Skor');
+        $sheet->setCellValue($col++.$index, 'Nilai');
+        $sheet->setCellValue($col++.$index, 'Skala Penilaian');
+        
+        $no = 1;
+        $x = 2;
+        foreach($data as $row)
+        {
+            $sheet->setCellValue('A'.$x, $no++);
+            $sheet->setCellValue('B'.$x, (int) $row->user_no);
+            $sheet->setCellValue('C'.$x, $row->user_name);
+            $sheet->setCellValue('D'.$x, !empty($row->group_peserta_name) ? $row->group_peserta_name : 'NO_GROUP');
+            $sheet->setCellValue('E'.$x, format_indo($row->tgl_mulai_sesi));
+            $sheet->setCellValue('F'.$x, format_indo($row->tgl_mulai_peserta));
+            $sheet->setCellValue('G'.$x, format_indo($row->tgl_selesai_sesi));
+            $sheet->setCellValue('H'.$x, format_indo($row->tgl_selesai_peserta));
+            $sheet->setCellValue('I'.$x, $row->jml_benar);
+            $sheet->setCellValue('J'.$x, $row->jml_salah);
+            $sheet->setCellValue('K'.$x, $row->jml_ragu);
+            $sheet->setCellValue('L'.$x, $row->jml_kosong);
+
+            $skor_group = explode(',', $row->skor_group);
+            $number_skor = sizeof($skor_group);
+            $rows = 'L';
+            for($j = 0; $j < $number_skor; $j++){
+                $sheet->setCellValue($rows++.$x, $skor_group[$j]);
+            }
+
+            $sheet->setCellValue($rows++.$x, $row->total_skor);
+            $sheet->setCellValue($rows++.$x, $row->nilai);
+            $sheet->setCellValue($rows++.$x, $row->skala_penilaian);
+            $x++;
+        }
+
+        // Column sizing
+        foreach(range('A', $col) as $columnID){
+            $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = $sesi->sesi_pelaksanaan_name.' ('.$sesi->nama_paket_soal.' '.$sesi->materi_name.')';
+        
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"'); 
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
     }
 
 }
