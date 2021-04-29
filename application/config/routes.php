@@ -72,6 +72,9 @@ $route['ujian/(:any)/(:any)'] = 'website/user/Ujian/portal_tes/$1/$2';
 $route['ujian-berakhir'] = 'website/user/Ujian/ujian_berakhir';
 $route['pembahasan/(:any)/(:any)/(:any)'] = 'website/user/Ujian/pembahasan/$1/$2/$3';
 $route['result/(:num)/(:num)'] = 'website/user/Ujian/hasil_ujian/$1/$2';
+$route['buku/sbmptn'] = 'website/user/Buku/sbmptn';
+$route['buku/toefl'] = 'website/user/Buku/toefl';
+$route['buku/cpns'] = 'website/user/Buku/cpns';
 /* $route['ujian2'] = 'website/user/Ujian/ujian_page_next_design'; */
 /*
 |

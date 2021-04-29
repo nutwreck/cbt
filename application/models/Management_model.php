@@ -102,5 +102,13 @@ class Management_model extends CI_Model{
     public function get_invoice_expired(){
         return $this->db->get('v_invoice_expired')->result();
     }
+
+    public function get_user_status_buku($buku_id, $user_id){
+        return $this->db->get_where('user_pembelian_buku', array('buku_id' => $buku_id, 'user_id' => $user_id, 'is_enable' => 1))->row();
+    }
+
+    public function get_config_buku_by_buku($buku_id){
+        return $this->db->get_where('config_buku', array('buku_id' => $buku_id, 'is_enable' => 1))->row();
+    }
     
 }

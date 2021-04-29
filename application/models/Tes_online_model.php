@@ -611,6 +611,19 @@ class Tes_online_model extends CI_Model{
         return $this->db->get()->row();
     }
 
+    public function get_paket_soal_buku($buku_id, $detail_buku_id, $limit){
+        $this->db->from('v_paket_buku');
+        $this->db->where('buku_id', $buku_id);
+        if(!empty($detail_buku_id)){
+            $this->db->where('detail_buku_id', $detail_buku_id);
+        } else {}
+        $this->db->order_by('paket_soal_id ASC');
+        if(!empty($limit)){
+            $this->db->limit($limit);
+        } else {}
+        return $this->db->get()->result();
+    }
+
     public function save_soal($data){
         $this->db->trans_start();
         $query = $this->db->insert('bank_soal', $data);
