@@ -519,7 +519,7 @@ class Ujian extends CI_Controller {
         $bank_soal = [];
         $data = [];
 
-        $sesi_detail = $this->tes->get_sesi_pelaksanaan_selected($sesi_pelaksanaan_id);//Get Sesi Pelaksanaan
+        $sesi_detail = $this->tes->get_sesi_pelaksanaan_pembahasan($sesi_pelaksanaan_id);//Get Sesi Pelaksanaan
         /* $paket_soal = $this->tes->get_paket_soal_sesi_by_id($paket_soal_id); //Get Paket Soal */
         $ujian_data = $this->tes->get_checking_ujian_by_id($ujian_id); //CEK UJIAN
         $total_user_ujian = $this->tes->get_total_user_ujian($sesi_pelaksanaan_id, $paket_soal_id); //CEK UJIAN

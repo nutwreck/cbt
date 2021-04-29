@@ -1,0 +1,7 @@
+@media print {
+    .pagebreak {
+        clear: both;
+        page-break-after: always;
+    }
+    body {-webkit-print-color-adjust: exact;}
+}

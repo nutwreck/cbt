@@ -2297,4 +2297,110 @@ class Tes_online extends CI_Controller {
         $writer->save('php://output');
     }
 
+    public function detail_ujian_peserta($id_ujian, $id_sesi_pelaksanaan, $id_paket_soal){
+        $sesi_pelaksanaan_id = base64_decode(urldecode($id_sesi_pelaksanaan));
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+        $ujian_id = base64_decode(urldecode($id_ujian));
+
+        $data_ujian = [];
+        $bank_soal = [];
+        $data = [];
+        $file_name = '';
+
+        $sesi_detail = $this->tes->get_sesi_pelaksanaan_pembahasan($sesi_pelaksanaan_id);//Get Sesi Pelaksanaan
+        $ujian_data = $this->tes->get_checking_ujian_by_id($ujian_id); //CEK UJIAN
+
+        if(empty($ujian_data)){
+            $this->session->set_flashdata('error', 'Peserta tidak mengikuti ujian!');
+            redirect('admin/detail-report-ujian/'.$id_sesi_pelaksanaan.'/'.$id_paket_soal);
+        }
+
+        //Pengambilan data list jawaban, group soal, soalnya, dan hasil jawabannya
+        $urut_soal 		= explode(",", $ujian_data->list_jawaban);
+        $soal_urut_ok	= array();
+        $jumlah_soal    = sizeof($urut_soal);
+		for ($i = 0; $i < sizeof($urut_soal); $i++) {
+			$pc_urut_soal	    = explode("|",$urut_soal[$i]);//pecah data wadah list jawaban
+			$pc_urut_soal_jwb 	= empty($pc_urut_soal[2]) ? "''" : "'{$pc_urut_soal[2]}'";//List jawaban user
+			$ambil_soal 	    = $this->tes->get_ujian_list_user($pc_urut_soal_jwb, $pc_urut_soal[1], $paket_soal_id);
+			$soal_urut_ok[]     = $ambil_soal;
+        }
+        
+        $soal_urut_ok = $soal_urut_ok;
+        
+        //Pengambilan isi dari data list ujian user
+		$pc_list_jawaban = explode(",", $ujian_data->list_jawaban);
+		$arr_jawab = array();
+		foreach ($pc_list_jawaban as $v) {
+            $pc_v 	= explode("|", $v);
+            $gr     = $pc_v[0];
+			$idx 	= $pc_v[1];
+			$val 	= $pc_v[2];
+			$rg 	= $pc_v[3];
+
+			$arr_jawab[$idx] = array("g"=>$gr,"j"=>$val,"r"=>$rg);
+        }
+
+        $html = '';
+        $group_soal_name_before = '';
+        $no = 1;
+        if (!empty($soal_urut_ok)){
+            foreach ($soal_urut_ok as $s) {
+                $bacaan_soal = $s->isi_bacaan_soal <> 0 || !empty($s->isi_bacaan_soal) ? $s->isi_bacaan_soal.'<br />' : ''; // bacaan soal
+                $bacaan_soal_name = $s->bacaan_soal_name <> 0 || !empty($s->bacaan_soal_name) ? '<b>'.$s->bacaan_soal_name.'</b><br />' : ''; // bacaan soal judul
+                $group_soal_name = $s->group_soal_name <> 0 || !empty($s->group_soal_name) ? 'GROUP '.$s->group_soal_name : '';
+
+                $html .= '<h4 class="group-name">'.$group_soal_name.'</h4>';
+
+                $html .= '<soal><quiz><table class="tbl-soal"><tr><td style="vertical-align:top;">'.$no.'. </td><td>'.$bacaan_soal_name.$bacaan_soal.$s->bank_soal_name.'</td></tr></table>';
+
+                if($s->group_mode_jwb_id == 1){
+                    $jawaban = $this->tes->get_jawaban_by_id_pembahasan($s->bank_soal_id, $s->paket_soal_id);
+                    $jawaban_benar = $this->tes->get_jawaban_by_id_benar($s->bank_soal_id, $s->paket_soal_id);
+                    $opsi = config_item('_def_opsi_jawaban');
+
+                    foreach($jawaban as $key_jawaban => $val_jawaban) {
+                        $checked = $arr_jawab[$s->bank_soal_id]["j"] == $val_jawaban->order ? "jawaban" : "";
+                        $html .= '<table class="tbl-jwb"><tr><td width="5px"><a class="btn '.$checked.'" href="#">'.$opsi.'</a></td><td>'.$val_jawaban->name.'</td></tr>';
+                        $opsi++;
+                    }
+
+                    if($jawaban_benar && $jawaban_benar == 1){
+                        $key_opsi = 'A';
+                    } elseif($jawaban_benar && $jawaban_benar == 2){
+                        $key_opsi = 'B';
+                    } elseif($jawaban_benar && $jawaban_benar == 3){
+                        $key_opsi = 'C';
+                    } elseif($jawaban_benar && $jawaban_benar == 4){
+                        $key_opsi = 'D';
+                    } elseif($jawaban_benar && $jawaban_benar == 5){
+                        $key_opsi = 'E';
+                    }
+
+                    $html .= '<tr><td colspan="2">Kunci Jawaban : '.$key_opsi.'</td></tr>';
+                } else {
+                    $history_jawab = !empty($arr_jawab[$s->bank_soal_id]["j"]) ? $arr_jawab[$s->bank_soal_id]["j"] : "";
+                    $html .= '<tr><td colspan="2">'.$history_jawab.'</td></tr>';
+                }
+                                           
+                $html .= '</table></quiz></soal>';
+
+                $no++;
+                $group_soal_name_before = $group_soal_name; 
+            }
+        }
+
+        $file_name = $sesi_detail->sesi_pelaksanaan_name.' '.$ujian_data->user_name.' ('.$ujian_data->user_no.')';
+        
+        //for passing data to view
+        $data = array(
+            'sesi_pelaksana' => $sesi_detail,
+            'ljk' => $html,
+            'ujian' => $ujian_data,
+            'title' => $file_name
+        );
+        
+        $this->load->view('website/lembaga/tes_online/report_ujian/detail_ujian/content', $data);
+    }
+
 }

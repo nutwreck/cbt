@@ -214,6 +214,11 @@ class Tes_online_model extends CI_Model{
             ->get_where('v_sesi_pelaksanaan', array('sesi_pelaksanaan_id' => $sesi_pelaksana_id, 'batas_pengerjaan >=' => $now))->row();
     }
 
+    public function get_sesi_pelaksanaan_pembahasan($sesi_pelaksana_id){
+        return $this->db->order_by('waktu_mulai ASC')
+            ->get_where('v_sesi_pelaksanaan', array('sesi_pelaksanaan_id' => $sesi_pelaksana_id))->row();
+    }
+
     public function get_paket_soal_sesi(){
         return $this->db->order_by('paket_soal_id DESC')
                     ->get_where('v_paket_soal', array('type_paket_id !=' => 2,  'is_enable' => 1))->result();
