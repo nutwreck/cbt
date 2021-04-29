@@ -2732,7 +2732,17 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_jenis_soal` AS SELECT gr
 				COUNT(T1.group_mode_jwb_id) AS total_mode_jwb
 			FROM bank_soal AS T1
 			JOIN group_mode_jawaban AS T2 ON T1.group_mode_jwb_id = T2.id
-			GROUP BY T1.group_mode_jwb_id) AS a ;
+			GROUP BY T1.group_mode_jwb_id) AS a 
+			
+/*
+SELECT 
+				T1.group_mode_jwb_id,
+				T2.name AS group_mode_jwb, 
+				COUNT(T1.group_mode_jwb_id) AS total_mode_jwb
+			FROM bank_soal AS T1
+			JOIN group_mode_jawaban AS T2 ON T1.group_mode_jwb_id = T2.id
+			GROUP BY T1.group_mode_jwb_id
+*/ ;
 
 -- Dumping structure for view candraaj_cbt.v_kelas
 -- Removing temporary table and create final VIEW structure
@@ -3121,7 +3131,18 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_tipe_kesulitan` AS SELEC
 				COUNT(T1.tipe_kesulitan_id) AS total_kesulitan
 			FROM bank_soal AS T1
 			JOIN tipe_kesulitan AS T2 ON T1.tipe_kesulitan_id = T2.id
-			GROUP BY T1.tipe_kesulitan_id) AS A ;
+			GROUP BY T1.tipe_kesulitan_id) AS A 
+			
+			
+/*
+SELECT 
+				T1.tipe_kesulitan_id, 
+				T2.name AS tipe_kesulitan_name, 
+				COUNT(T1.tipe_kesulitan_id) AS total_kesulitan
+			FROM bank_soal AS T1
+			JOIN tipe_kesulitan AS T2 ON T1.tipe_kesulitan_id = T2.id
+			GROUP BY T1.tipe_kesulitan_id
+*/ ;
 
 -- Dumping structure for view candraaj_cbt.v_total_soal_ujian
 -- Removing temporary table and create final VIEW structure
