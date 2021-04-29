@@ -1846,12 +1846,13 @@ CREATE TABLE IF NOT EXISTS `ujian` (
   KEY `user_ujian` (`user_id`),
   CONSTRAINT `paket_soal_ujian` FOREIGN KEY (`paket_soal_id`) REFERENCES `paket_soal` (`id`),
   CONSTRAINT `user_ujian` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.ujian: ~1 rows (approximately)
+-- Dumping data for table candraaj_cbt.ujian: ~2 rows (approximately)
 /*!40000 ALTER TABLE `ujian` DISABLE KEYS */;
 REPLACE INTO `ujian` (`id`, `sesi_pelaksanaan_id`, `paket_soal_id`, `user_id`, `user_no`, `user_name`, `user_email`, `list_soal`, `list_jawaban`, `jml_benar`, `jml_salah`, `jml_ragu`, `jml_kosong`, `skor`, `tgl_mulai`, `tgl_selesai`, `status`, `created_datetime`, `updated_datetime`, `is_enable`) VALUES
-	(27, 2, 10, 30, '202104190337', 'Temam Murbianto', 'lucknutdev@gmail.com', '6|46,6|44,7|50,7|49,8|53,8|51,10|58,10|57,11|60,11|62,13|66,13|65,14|68,14|69', '5|46|2|N,5|44|1|N,5|50|3|N,5|49|1|N,5|53||N,5|51||N,9|58|4|Y,9|57|3|N,9|60|2|N,9|62||N,12|66||N,12|65|1|N,12|68|3|N,12|69||N', 7, 2, 1, 5, 236.67, '2021-04-26 11:33:44', '2021-04-29 15:52:04', 1, '2021-04-26 11:33:45', '2021-04-29 15:50:13', 1);
+	(27, 2, 10, 30, '202104190337', 'Temam Murbianto', 'lucknutdev@gmail.com', '6|46,6|44,7|50,7|49,8|53,8|51,10|58,10|57,11|60,11|62,13|66,13|65,14|68,14|69', '5|46|2|N,5|44|1|N,5|50|3|N,5|49|1|N,5|53||N,5|51||N,9|58|4|Y,9|57|3|N,9|60|2|N,9|62||N,12|66||N,12|65|1|N,12|68|3|N,12|69||N', 7, 2, 1, 5, 236.67, '2021-04-26 11:33:44', '2021-04-29 15:52:04', 1, '2021-04-26 11:33:45', '2021-04-29 15:50:13', 1),
+	(30, 1, 10, 25, '202104190337', 'Temam Murbianto', 'lucknutdev@gmail.com', '6|46,6|44,7|50,7|49,8|53,8|51,10|58,10|57,11|60,11|62,13|66,13|65,14|68,14|69', '5|46|2|N,5|44|1|N,5|50|3|N,5|49|1|N,5|53||N,5|51||N,9|58|4|Y,9|57|3|N,9|60|2|N,9|62||N,12|66||N,12|65|1|N,12|68|3|N,12|69||N', 7, 2, 1, 5, 100.00, '2021-04-26 11:33:44', '2021-04-29 15:52:04', 1, '2021-04-26 11:33:45', '2021-04-29 15:50:13', 1);
 /*!40000 ALTER TABLE `ujian` ENABLE KEYS */;
 
 -- Dumping structure for table candraaj_cbt.ujian_skor
@@ -3228,7 +3229,22 @@ WHERE
 	is_enable = 1 AND
 	`status` = 1
 GROUP BY sesi_pelaksanaan_id, paket_soal_id, user_id
-ORDER BY sesi_pelaksanaan_id, paket_soal_id, ranking ;
+ORDER BY sesi_pelaksanaan_id, paket_soal_id, ranking 
+
+/*SELECT
+	T1.id,
+	T1.skor,
+    COUNT(*) AS ranking
+FROM
+	ujian AS T1
+    INNER JOIN ujian AS T2 ON T1.sesi_pelaksanaan_id = T2.sesi_pelaksanaan_id
+    AND T1.paket_soal_id = T2.paket_soal_id
+    AND T1.skor <= T2.skor
+WHERE
+	T1.is_enable = 1 AND
+	T1.`status` = 1
+GROUP BY T1.sesi_pelaksanaan_id, T1.paket_soal_id, T1.user_id
+ORDER BY T1.sesi_pelaksanaan_id, T1.paket_soal_id, ranking*/ ;
 
 -- Dumping structure for view candraaj_cbt.v_users
 -- Removing temporary table and create final VIEW structure

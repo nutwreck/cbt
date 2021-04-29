@@ -73,7 +73,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $active_group = 'local';
 $query_builder = TRUE;
 
-$db['local'] = array(
+$db['server'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
 	'username' => 'root',
@@ -100,7 +100,7 @@ $db['server'] = array(
 	'hostname' => 'localhost',
 	'username' => 'candraaj_admin',
 	'password' => 'Pi8$tT{SkT2!',
-	'database' => 'candraaj_cbt',
+	'database' => 'candraaj_tesonline',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
