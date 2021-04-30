@@ -7,7 +7,7 @@
                         <div class="row">
                             <div class="col">Detail Bacaan Soal</div>
                             <div class="col text-right">
-                                <a href="<?=base_url()?>admin/bacaan-soal/<?=$id_paket_soal?>" class="btn btn-sm btn-outline-secondary">Kembali</a>
+                                <a href="<?=base_url()?>admin/bacaan-soal/<?=urlencode(base64_encode($bacaan_soal->paket_soal_id))?>" class="btn btn-sm btn-outline-secondary">Kembali</a>
                             </div>
                         </div>
                     </div>

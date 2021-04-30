@@ -119,7 +119,7 @@ class Buku extends CI_Controller {
         $data['content']['payment_method_detail'] = $this->management->get_pembayaran_master_by_id($pembayaran_master_id);
         $data['content']['user_data'] = $this->user->get_data_user_by_id($user_id);
         $data['content']['buku_data'] = $this->management->get_config_buku_by_buku($buku_id);
-        $data['content']['buku_id'] = $buku_id;
+        $data['content']['id_buku'] = $id_buku;
         $data['title_header'] = ['title' => 'Pembelian Buku'];
 
         //for load view
