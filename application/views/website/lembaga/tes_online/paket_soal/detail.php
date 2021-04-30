@@ -23,6 +23,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <?php if(!empty($paket_soal->buku_name)){?>
                             <div class="row">
                                 <div class="col-sm-12 col-lg-3" style="margin-top:1%">
                                     <h5 class="label-text">Buku</h5>
@@ -35,6 +36,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <?php } else { echo ''; } ?>
                             <div class="row">
                                 <div class="col-sm-12 col-lg-3" style="margin-top:1%">
                                     <h5 class="label-text">Kelas</h5>

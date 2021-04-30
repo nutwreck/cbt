@@ -962,6 +962,7 @@ class Management extends CI_Controller {
 
         $data['free_paket'] = $this->input->post('free_paket', TRUE);
         $data['price'] = $this->input->post('price', TRUE);
+        $data['desc'] = $this->input->post('desc');
         $data['updated_datetime'] = date('Y-m-d H:i:s');
 
         $tbl = $this->tbl_config_buku;

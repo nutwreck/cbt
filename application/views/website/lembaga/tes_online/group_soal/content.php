@@ -32,7 +32,6 @@
                                         <th>Parent Group</th>
                                         <th>Konversi Skor</th>
                                         <th>Kode Group Soal</th>
-                                        <th>Continuous</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -59,7 +58,6 @@
                                         <td><?=$value->name_parent?></td>
                                         <td><?=$value->name_konversi_skor?></td>
                                         <td><?=$value->kode_group?></td>
-                                        <td><?=$value->continuous_name?></td>
                                     </tr>
                                 <?php } ?>
                                 </tbody>

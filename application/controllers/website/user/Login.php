@@ -17,6 +17,8 @@ class Login extends CI_Controller {
     */
 
     private function generate_no_peserta() {
+        $no_peserta = '';
+        
         $min = 0;
         $max = 9999;
         $output = rand($min,$max);

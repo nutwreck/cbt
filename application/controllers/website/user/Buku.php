@@ -17,6 +17,7 @@ class Buku extends CI_Controller {
         $this->load->model('General','general');
         $this->load->model('Tes_online_model','tes');
         $this->load->model('Management_model','management');
+        $this->load->model('User_model','user');
     }
 
     /*
@@ -36,15 +37,33 @@ class Buku extends CI_Controller {
         $this->load->view('website/user/_template/footer');
     }
 
-    private function generate_string($input, $strength = 16) {
-        $input_length = strlen($input);
-        $random_string = '';
-        for($i = 0; $i < $strength; $i++) {
-            $random_character = $input[mt_rand(0, $input_length - 1)];
-            $random_string .= $random_character;
+    private function generate_no_invoice($buku_id) {
+        $no_invoice = '';
+
+        $min = 0;
+        $max = 9999;
+        $output = rand($min,$max);
+
+        $length = strlen($output);
+        $date = date('Y').date('m').date('d');
+
+        if($length == 1){
+            $no_invoice = $date.'000'.$output.'-'.$buku_id;
+        } elseif($length == 2) {
+            $no_invoice = $date.'00'.$output.'-'.$buku_id;
+        } elseif($length == 3) {
+            $no_invoice = $date.'0'.$output.'-'.$buku_id;
+        } elseif($length == 4) {
+            $no_invoice = $date.$output.'-'.$buku_id;
         }
-    
-        return $random_string;
+
+        $check_no_invoice = $this->management->checking_nomor_invoice($no_invoice);
+
+        if($check_no_invoice){
+            $this->generate_no_invoice();
+        } else {
+            return $no_invoice;
+        }
     }
 
     public function output_json($data, $encode = true)
@@ -79,12 +98,34 @@ class Buku extends CI_Controller {
         }
         $data['content']['status_user'] = !empty($get_check_invoice) ? 'purchase' : 'free';
         $data['content']['free_paket'] = $free_paket;
+        $data['content']['sbmptn_id'] = urlencode(base64_encode($sbmptn_id));
         $data['title_header'] = ['title' => 'Lembar Ujian Online'];
 
         //for load view
         $view['css_additional'] = 'website/user/buku/sbmptn/css';
         $view['content'] = 'website/user/buku/sbmptn/content';
         $view['js_additional'] = 'website/user/buku/sbmptn/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function pembelian_buku($id_buku){
+        $user_id = $this->session->userdata('user_id');
+        $buku_id = base64_decode(urldecode($id_buku));
+        $pembayaran_master_id = 1; //Bank
+
+        $data['content']['payment_method'] = $this->management->get_pembayaran_master();
+        $data['content']['payment_method_detail'] = $this->management->get_pembayaran_master_by_id($pembayaran_master_id);
+        $data['content']['user_data'] = $this->user->get_data_user_by_id($user_id);
+        $data['content']['buku_data'] = $this->management->get_config_buku_by_buku($buku_id);
+        $data['content']['buku_id'] = $buku_id;
+        $data['title_header'] = ['title' => 'Pembelian Buku'];
+
+        //for load view
+        $view['css_additional'] = 'website/user/buku/pembelian_buku/css';
+        $view['content'] = 'website/user/buku/pembelian_buku/content';
+        $view['js_additional'] = 'website/user/buku/pembelian_buku/js';
 
         //get function view website
         $this->_generate_view($view, $data);

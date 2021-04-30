@@ -161,3 +161,36 @@
     $('.summernote').summernote('backColor', 'transparent');
     $('.summernote').summernote('foreColor', 'black');
 </script>
+
+<!-- Fokus pada inputan pertama ketika halaman form add di load -->
+<script>
+    $(function(){
+        $('#form-edit-buku').find('input[type=text],textarea').filter(':visible:first').focus();
+    });
+</script>
+
+<!-- Fungsi summernote descripsi buku -->
+<script>
+    $('#summernote-buku').summernote({
+        placeholder: 'Masukkan deskripsi buku, ini akan dimunculkan ketika user membeli produk buku',
+        dialogsInBody: true,
+        dialogsFade: true,
+        tabsize: 2,
+        height: 200,
+        codeviewFilter: false,
+        codeviewIframeFilter: true,
+        maximumImageFileSize:500000,
+        toolbar: [
+          ['style', ['style','fontname', 'fontsize', 'undo', 'redo']],
+          ['font', ['bold', 'italic', 'underline', 'clear']],
+          ['fontstyle', ['strikethrough', 'superscript', 'subscript']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['table', ['table']],
+          ['insert', ['link']],
+        ]
+    });
+    // @param {String} color
+    $('#summernote-buku').summernote('backColor', 'transparent');
+    $('#summernote-buku').summernote('foreColor', 'black');
+</script>

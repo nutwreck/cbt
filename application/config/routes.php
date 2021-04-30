@@ -75,6 +75,7 @@ $route['result/(:num)/(:num)'] = 'website/user/Ujian/hasil_ujian/$1/$2';
 $route['buku/sbmptn'] = 'website/user/Buku/sbmptn';
 $route['buku/toefl'] = 'website/user/Buku/toefl';
 $route['buku/cpns'] = 'website/user/Buku/cpns';
+$route['pembelian-buku/(:any)'] = 'website/user/Buku/pembelian_buku/$1';
 /* $route['ujian2'] = 'website/user/Ujian/ujian_page_next_design'; */
 /*
 |
