@@ -525,8 +525,8 @@ class Management extends CI_Controller {
             }
         }
 
-        $data['bank_name'] = $this->input->post('bank_name', TRUE);
-        $data['bank_account'] = $this->input->post('bank_account', TRUE);
+        $data['bank_name'] = strtoupper($this->input->post('bank_name', TRUE));
+        $data['bank_account'] = ucwords($this->input->post('bank_account', TRUE));
         $data['bank_number'] = $this->input->post('bank_number', TRUE);
         $data['created_datetime'] = date('Y-m-d H:i:s');
 

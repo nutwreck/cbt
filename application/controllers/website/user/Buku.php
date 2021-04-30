@@ -7,6 +7,8 @@ class Buku extends CI_Controller {
     private $sbmptn_id = 2;
     private $toefl_id = 1;
     private $cpns_id = 3;
+    private $tbl_kode_unik = 'kode_unik';
+    private $tbl_invoice = 'invoice';
 
     public function __construct(){
         parent::__construct();
@@ -14,6 +16,7 @@ class Buku extends CI_Controller {
             redirect('login');
         }
         $this->load->library('encryption');
+        $this->load->config('email');
         $this->load->model('General','general');
         $this->load->model('Tes_online_model','tes');
         $this->load->model('Management_model','management');
@@ -129,6 +132,169 @@ class Buku extends CI_Controller {
 
         //get function view website
         $this->_generate_view($view, $data);
+    }
+
+    public function submit_payment(){
+        $data = [];
+        $datas = [];
+
+        $id_buku = $this->input->post('id_buku');
+        $buku_id = base64_decode(urldecode($id_buku));
+
+        if($buku_id == 1){
+            $buku = 'TOEFL';
+        } elseif($buku_id == 2){
+            $buku = 'SBMPTN';
+        } elseif($buku_id == 3){
+            $buku = 'CPNS';
+        }
+
+        $detail_buku_check = $this->input->post('detail_buku_id', TRUE);
+        if($buku_id == 2 && ($detail_buku_check == '' || $detail_buku_check == NULL)){ //2 SBMPTN
+            $this->session->set_flashdata('warning', 'Jurusan wajib dipilih!');
+            redirect('pembelian_buku/'.$id_buku);
+        }
+
+        if($buku_id == 2 && $detail_buku_check == 1){ //2 SBMPTN
+            $detail_buku_name = 'SAINTEK';
+        } elseif($buku_id == 1 && $detail_buku_check == 2){
+            $detail_buku_name = 'SOSHUM';
+        }
+
+        $payment_check = $this->input->post('payment_choosen', TRUE);
+        if($payment_check == 1){ //BANK
+            $payment_method_id = $payment_check;
+            $payment_method_name = 'BANK';
+            $data_bank = $this->input->post('payment_bank', TRUE);
+            $data_bank_exp = explode('|', $data_bank);
+            $payment_method_detail_id = $data_bank_exp[0];
+            $payment_method_detail_name = $data_bank_exp[1].' - '.$data_bank_exp[2].' - '.$data_bank_exp[3];
+        } else{
+            $payment_method_id = $payment_check;
+            $payment_method_name = 'QRIS';
+            $payment_method_detail_id = $this->management->get_id_qris($payment_check);
+            $payment_method_detail_name = 'Qris';
+        }
+        
+        $user_id = $this->input->post('user_id', TRUE);
+        $user_name = $this->input->post('user_name', TRUE);
+        $user_email = $this->input->post('user_email', TRUE);
+        $user_no_telp = $this->input->post('user_no_telp', TRUE);
+        
+        $no_invoice = $this->generate_no_invoice($buku_id);
+        $invoice_number = $no_invoice;
+        $invoice_total_cost_input = $this->input->post('invoice_total_cost', TRUE);
+
+        $kode_unik_data = $this->management->get_kode_unik();
+        if($kode_unik_data == 999){
+            $new_number = 300;
+            $update_kode_unik = array('number' => $new_number);
+            $this->general->update_data($tbl_kode_unik, $update_kode_unik, 1);
+            $kode_unik_data = $this->management->get_kode_unik();
+        } 
+        
+        $invoice_total_cost = $invoice_total_cost_input + $kode_unik_data;
+        $kode_unik = $kode_unik_data;
+
+        $tbl_kode_unik = $this->tbl_kode_unik;
+        $new_number = $kode_unik+1;
+        $update_kode_unik = array('number' => $new_number);
+        $this->general->update_data($tbl_kode_unik, $update_kode_unik, 1); //Update Kode Unik
+
+        $now = date('Y-m-d H:i:s');
+        $invoice_date_create = $now;
+        $invoice_date_expirate = date('Y-m-d H:i:s', strtotime($now. ' + 1 days'));
+        $status = 0; //Submit New
+        $created_datetime = $now;
+
+        $tbl_invoice = $this->tbl_invoice;
+        $data = array(
+            'buku_id' => $buku_id,
+            'detail_buku_id' => $detail_buku_check,
+            'payment_method_id' => $payment_method_id,
+            'payment_method_name' => $payment_method_name,
+            'payment_method_detail_id' => $payment_method_detail_id,
+            'payment_method_detail_name' => $payment_method_detail_name,
+            'user_id' => $user_id,
+            'user_name' => $user_name,
+            'user_email' => $user_email,
+            'user_no_telp' => $user_no_telp,
+            'invoice_number' => $invoice_number,
+            'invoice_total_cost' => $invoice_total_cost,
+            'kode_unik' => $kode_unik,
+            'invoice_date_create' => $invoice_date_create,
+            'invoice_date_expirate' => $invoice_date_expirate,
+            'status' => $status,
+            'created_datetime' => $created_datetime
+        );
+        $insert = $this->general->input_data_id($tbl_invoice, $data);
+
+        $img_qris = $this->management->get_img_qris();
+        $datas = array(
+            'detail_buku_name' => $detail_buku_name,
+            'payment_method_id' => $payment_method_id,
+            'payment_method_name' => $payment_method_name,
+            'bank' => !empty($data_bank_exp[1]) ? $data_bank_exp[1] : '',
+            'bank_account' => !empty($data_bank_exp[2]) ? $data_bank_exp[2] : '',
+            'bank_number' => !empty($data_bank_exp[3]) ? $data_bank_exp[3] : '',
+            'qris' => $img_qris,
+            'user_id' => $user_id,
+            'user_name' => $user_name,
+            'user_email' => $user_email,
+            'user_no_telp' => $user_no_telp,
+            'invoice_number' => $invoice_number,
+            'price' => $invoice_total_cost_input,
+            'invoice_total_cost' => $invoice_total_cost,
+            'kode_unik' => $kode_unik,
+            'invoice_date_create' => $invoice_date_create,
+            'invoice_date_expirate' => $invoice_date_expirate,
+            'status' => $status,
+            'buku_name' => $buku
+        );
+
+        if($insert){
+            $this->email->clear(TRUE);
+
+            $from = $this->config->item('smtp_user');
+            $subject = 'Invoice #'.$no_invoice.' '.format_indo($now);
+            $message = $this->load->view('website/user/buku/pembelian_buku/invoice/content', $datas, TRUE);
+
+            $this->email->set_newline("\r\n");
+            $this->email->from($from, '[NO-REPLY] Zambert');
+            $this->email->to($user_email);
+            $this->email->subject($subject);
+            $this->email->message($message);
+
+            if($this->email->send()){
+                $this->session->set_flashdata('success', 'Email invoice berhasil dikirim ke '.$user_email);
+
+                $message = '';
+                
+                $data['content']['data'] = $datas;
+                $data['title_header'] = ['title' => 'Success Invoice'];
+
+                //for load view
+                $view['css_additional'] = 'website/user/buku/pembelian_buku/css';
+                $view['content'] = 'website/user/buku/pembelian_buku/invoice_send';
+                $view['js_additional'] = 'website/user/buku/pembelian_buku/js';
+
+                //get function view website
+                $this->_generate_view($view, $data);
+            } else { //jika email tidak terkirim invoice dibatalkan / disable
+                $disable = [];
+                $tbl_invoice = $this->tbl_invoice;
+                $disable = array(
+                    'is_enable' => 0,
+                    'updated_datetime' => date('Y-m-d H:i:s')
+                );
+                $this->general->update_data($tbl_invoice, $disable, $insert);
+                $this->session->set_flashdata('error', 'Invoice dibatalkan. Email Invoice tidak terkirim, Mohon hubungi admin lewat Whatsapp dibawah ini.');
+                redirect('pembelian_buku/'.$id_buku);
+            }
+        } else {
+            $this->session->set_flashdata('error', 'Invoice gagal dibuat, Mohon ulangi beberapa saat lagi.');
+            redirect('pembelian_buku/'.$id_buku);
+        }
     }
 
 }

@@ -37,7 +37,14 @@
                                         </div>
                                         <div class="col-sm-12 col-lg-9">
                                             <div class="form-group">
-                                                <input id="bank_name" name="bank_name" type="text" class="form-control" aria-required="true" aria-invalid="false" placeholder="Ex: Mandiri/BCA/BRI/BNI">
+                                                <select class="form-control" id="bank_name" name="bank_name">
+                                                    <option value="bri">BRI</option>
+                                                    <option value="bni">BNI</option>
+                                                    <option value="bca">BCA</option>
+                                                    <option value="mandiri_online">MANDIRI</option>
+                                                    <option value="btpn_jenius">BTPN JENIUS</option>
+                                                </select>
+                                                <small>* Pilih nama bank hanya sesuai yang ada di list.</small>
                                             </div>
                                         </div>
                                     </div>

@@ -37,7 +37,7 @@
                                         </div>
                                         <div class="col-sm-12 col-lg-9">
                                             <div class="form-group">
-                                                <input id="bank_name" name="bank_name" type="text" class="form-control" aria-required="true" aria-invalid="false" placeholder="Ex: Mandiri/BCA/BRI/BNI" value="<?=$detail_pembayaran_master->bank_name?>">
+                                                <input id="bank_name" readonly name="bank_name" type="text" class="form-control" aria-required="true" aria-invalid="false" placeholder="Ex: Mandiri/BCA/BRI/BNI" value="<?=$detail_pembayaran_master->bank_name?>">
                                             </div>
                                         </div>
                                     </div>

@@ -123,5 +123,40 @@ class Management_model extends CI_Model{
             return null;
         }
     }
+
+    public function get_kode_unik(){
+        $query = $this->db->select('number')
+                        ->get('kode_unik')->row();
+                        
+        if($query){
+            return $query->number;
+        } else {
+            return null;
+        }
+    }
+
+    public function get_id_qris($payment_method_id){
+        $query = $this->db->select('id')
+                    ->limit(1)
+                    ->get_where('payment_method_detail', array('payment_method_id' => $payment_method_id))->row();
+                        
+        if($query){
+            return $query->id;
+        } else {
+            return null;
+        }
+    }
+
+    public function get_img_qris(){
+        $query = $this->db->select('image_payment')
+                    ->limit(1)
+                    ->get_where('payment_method_detail', array('payment_method_id' => 2))->row();
+                        
+        if($query){
+            return $query->image_payment;
+        } else {
+            return null;
+        }
+    }
     
 }
