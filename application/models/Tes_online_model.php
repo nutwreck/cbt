@@ -300,9 +300,9 @@ class Tes_online_model extends CI_Model{
         $order = $config_acakan_soal->is_acak_soal == 1 ? "CASE WHEN is_acak_soal = 1 THEN 1 ELSE 0 END, CASE WHEN is_acak_soal = 0 THEN id END, RAND()" : 'id ASC'; */
         //Nanti acakan buat user saja
         //RANK() OVER ( ORDER BY id ASC )
-        //curRank := @curRank + 1 //select
+        //@curRank := @curRank + 1 //select
         //bank_soal p, (SELECT @curRank := 0) r //get
-        return $this->db->select('id, curRank := @curRank + 1 AS no_soal', FALSE)
+        return $this->db->select('id, @curRank := @curRank + 1 AS no_soal', FALSE)
                     ->get_where('bank_soal p, (SELECT @curRank := 0) r', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1), FALSE)->result();
     }
 
