@@ -301,9 +301,9 @@ class Tes_online_model extends CI_Model{
         //Nanti acakan buat user saja
         //RANK() OVER ( ORDER BY id ASC )
         //curRank := @curRank + 1 //select
-        //bank_soal p, SELECT @curRank := 0) r //get
+        //bank_soal p, (SELECT @curRank := 0) r //get
         return $this->db->select('id, curRank := @curRank + 1 AS no_soal', FALSE)
-                    ->get_where('bank_soal p, SELECT @curRank := 0) r', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1), FALSE)->result();
+                    ->get_where('bank_soal p, (SELECT @curRank := 0) r', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1), FALSE)->result();
     }
 
     public function get_soal_by_id($paket_soal_id, $bank_soal_id){
