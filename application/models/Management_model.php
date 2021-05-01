@@ -158,5 +158,14 @@ class Management_model extends CI_Model{
             return null;
         }
     }
+
+    public function get_invoice_by_user_id($user_id){
+        return $this->db->order_by('id_invoice DESC')
+            ->get_where('v_invoice_all', array('user_id' => $user_id))->result();
+    }
+
+    public function get_invoice_by_id($invoice_id){
+        return $this->db->get_where('v_invoice_all', array('id_invoice' => $invoice_id))->row();
+    }
     
 }

@@ -297,4 +297,96 @@ class Buku extends CI_Controller {
         }
     }
 
+    public function invoice_status(){
+        $user_id = $this->session->userdata('user_id');
+        $data['content']['invoice'] = $this->management->get_invoice_by_user_id($user_id);
+        $data['title_header'] = ['title' => 'Status Incoice'];
+
+        //for load view
+        $view['css_additional'] = 'website/user/invoice_data/css';
+        $view['content'] = 'website/user/invoice_data/content';
+        $view['js_additional'] = 'website/user/invoice_data/js';
+      
+        $this->_generate_view($view, $data);
+    }
+
+    public function manual_confirm($id_invoice, $status){
+        if($status == 0 || $status == 4){
+            $invoice_id = base64_decode(urldecode($id_invoice));
+
+            $data['content']['invoice_detail'] = $this->management->get_invoice_by_id($invoice_id);
+            $data['content']['id_invoice'] = $id_invoice;
+            $data['title_header'] = ['title' => 'Konfirmasi Manual'];
+    
+            //for load view
+            $view['css_additional'] = 'website/user/invoice_data/manual_confirm/css';
+            $view['content'] = 'website/user/invoice_data/manual_confirm/content';
+            $view['js_additional'] = 'website/user/invoice_data/manual_confirm/js';
+          
+            $this->_generate_view($view, $data);
+        } else {
+            $this->session->set_flashdata('warning', 'Anda sudah mengajukan upload bukti, tunggu approval / reject dari admin');
+            redirect('purchase');
+        }
+    }
+
+    public function submit_konfirm_invoice(){
+        $data = [];
+
+        $id_invoice =  $this->input->post('id_invoice');
+        $invoice_id = base64_decode(urldecode($id_invoice));
+        $invoice_number = $this->input->post('invoice_number', TRUE);
+        $old_bukti = $this->input->post('old_bukti');
+
+        $dname = explode(".", $_FILES['bukti_pembayaran']['name']);
+        $ext = end($dname);
+        $new_name                   = $invoice_number.'.'.$ext;
+
+        $config['file_name']        = $new_name;
+        $config['upload_path']      = FCPATH.'storage/website/lembaga/grandsbmptn/confirm_payment/';
+        $config['allowed_types']    = 'jpg|jpeg|png';
+        $_upload_path = $config['upload_path'];
+
+        if(!file_exists($_upload_path)){
+            mkdir($_upload_path,0777);
+        }
+        
+        $this->load->library('upload', $config);
+
+        if(!empty($_FILES['bukti_pembayaran']['name'])){
+            if (!$this->upload->do_upload('bukti_pembayaran')){
+               /*  $error = $this->upload->display_errors();
+                show_error($error, 500, 'File Audio Petunjuk Error');
+                exit(); */
+                if($ext != 'png' || $ext != 'jpg' || $ext != 'jpeg'){
+                    $this->session->set_flashdata('warning', 'Jenis gambar tidak sesuai ketentuan, Ulangi kembali');
+                    redirect('manual-confirm/'.$id_invoice);
+                } else {
+                    $this->session->set_flashdata('warning', 'Gambar gagal disimpan, Ulangi kembali');
+                    redirect('manual-confirm/'.$id_invoice);
+                }
+            }else{
+                $data['confirm_image'] = $this->upload->data('file_name');
+            }
+        } else {
+            $data['confirm_image'] = $old_bukti;
+        }
+
+        $now = date('Y-m-d H:i:s');
+        $data['invoice_date_update'] = $now;
+        $data['updated_datetime'] = $now;
+        $data['status'] = 1;
+
+        $tbl_invoice = $this->tbl_invoice;
+        $update = $this->general->update_data($tbl_invoice, $data, $invoice_id);
+
+        if($update){
+            $this->session->set_flashdata('success', 'Upload bukti inv #'.$invoice_number.' berhasil, Mohon tunggu approval admin');
+            redirect('purchase');
+        } else {
+            $this->session->set_flashdata('error', 'Bukti gagal diupload, ulangi beberapa saat lagi atau hubungi admin');
+            redirect('manual-confirm/'.$id_invoice);
+        }
+    }
+
 }

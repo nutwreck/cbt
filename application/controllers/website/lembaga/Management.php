@@ -1109,6 +1109,7 @@ class Management extends CI_Controller {
 		$data = array();
         $no = $_POST['start'];
         $url_manual_confirm = base_url().'admin/invoice/manual-confirm/2/';
+        $url_reject_confirm = base_url().'admin/invoice/reject-confirm/';
         $url_delete = base_url().'admin/invoice/delete-invoice/2/';
 		foreach ($list as $field) {
             $no++;
@@ -1119,12 +1120,15 @@ class Management extends CI_Controller {
                         <a href="'.$url_manual_confirm.urlencode(base64_encode($field->id_invoice)).'" class="item" data-toggle="tooltip" data-placement="top" title="Manual Confirm">
                             <i class="zmdi zmdi-check"></i>
                         </a>
+                        <a href="'.$url_reject_confirm.urlencode(base64_encode($field->id_invoice)).'" class="item" data-toggle="tooltip" data-placement="top" title="Reject Confirm">
+                        <i class="fa fa-times"></i>
+                    </a>
                         <a href="'.$url_delete.urlencode(base64_encode($field->id_invoice)).'" class="item" data-toggle="tooltip" data-placement="top" title="Delete">
                             <i class="zmdi zmdi-delete"></i>
                         </a>
                     </div>';
             $row[] = '<a class="lightbox" href="#'.$field->invoice_number.'" title="Klik untuk memperbesar gambar">
-                        <img src="'.config_item('_dir_website').'lembaga/grandsbmptn/confirm_payment/'.$field->confirm_image.'"/>
+                        <img src="'.config_item('_dir_website').'lembaga/grandsbmptn/confirm_payment/'.$field->confirm_image.'" width="100px;"/>
                     </a>
                     <div class="lightbox-target" id="'.$field->invoice_number.'">
                         <img src="'.config_item('_dir_website').'lembaga/grandsbmptn/confirm_payment/'.$field->confirm_image.'"/>
@@ -1409,6 +1413,39 @@ class Management extends CI_Controller {
         header('Cache-Control: max-age=0');
 
         $writer->save('php://output');
+    }
+
+    public function reject_confirm_invoice($id_invoice){
+        $invoice_id = base64_decode(urldecode($id_invoice));
+        //for passing data to view
+        $data['content']['id_invoice'] = $id_invoice;
+        $data['content']['invoice'] = $this->management->get_invoice_by_id($invoice_id);
+        $data['title_header'] = ['title' => 'Reject Bukti Pembayaran'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/invoice/invoice_confirm/css';
+        $view['content'] = 'website/lembaga/management/invoice/invoice_confirm/reject';
+        $view['js_additional'] = 'website/lembaga/management/invoice/invoice_confirm/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_reject_invoice(){
+        $id_invoice = $this->input->post('id_invoice');
+        $invoice_id = base64_decode(urldecode($id_invoice));
+        $data['reject_desc'] = $this->input->post('reject_desc', TRUE);
+        $now = date('Y-m-d H:i:s');
+        $data['invoice_date_update'] = $now;
+        $data['updated_datetime'] = $now;
+        $data['status'] = 4;
+
+        $tbl = $this->tbl_invoice;
+        $update = $this->general->update_data($tbl, $data, $invoice_id);
+
+        $urly = 'admin/invoice-confirm';
+        $urlx = 'admin/invoice-confirm';
+        $this->update_end($update, $urly, $urlx);
     }
 
     public function manual_confirm_invoice($page, $id_invoice){

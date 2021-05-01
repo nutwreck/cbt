@@ -35,7 +35,7 @@
                             <td colspan="3" style="color:#5C5C5C;">Segera lakukkan pembayaran sebelum tanggal <?=format_indo($invoice_date_expirate)?>, Pastikan nominal bayar sesuai dengan total pembayaran diatas jika tidak maka konfirmasi tidak akan diterima.</td>
                         </tr>
                         <tr>
-                            <td colspan="3">Lakukkan konfirmasi manual melalui menu <a href="" class="btn btn-success">Status Pembelian</a></td>
+                            <td colspan="3">Lakukkan konfirmasi manual melalui menu <a href="<?=base_url()?>purchase" class="btn btn-success">Status Pembelian</a></td>
                         </tr>
                     <?php } else { ?>
                         <tr>
@@ -58,7 +58,7 @@
             </div>
             <div class="m-3">
                 <p>Untuk melakukkan pengecekan status invoice</p>
-                <a href="" class="btn btn-success">Klik Disini</a>
+                <a href="<?=base_url()?>purchase" class="btn btn-success">Klik Disini</a>
             </div>
             <br><br>
         </div>

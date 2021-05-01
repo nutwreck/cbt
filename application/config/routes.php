@@ -76,6 +76,8 @@ $route['buku/sbmptn'] = 'website/user/Buku/sbmptn';
 $route['buku/toefl'] = 'website/user/Buku/toefl';
 $route['buku/cpns'] = 'website/user/Buku/cpns';
 $route['pembelian-buku/(:any)'] = 'website/user/Buku/pembelian_buku/$1';
+$route['purchase'] = 'website/user/Buku/invoice_status';
+$route['manual-confirm/(:any)/(:num)'] = 'website/user/Buku/manual_confirm/$1/$2';
 /* $route['ujian2'] = 'website/user/Ujian/ujian_page_next_design'; */
 /*
 |
@@ -179,6 +181,7 @@ $route['admin/export-all-invoice-confirm'] = 'website/lembaga/Management/export_
 $route['admin/export-all-invoice-success'] = 'website/lembaga/Management/export_invoice_all_success';
 $route['admin/export-all-invoice-expired'] = 'website/lembaga/Management/export_invoice_all_expired';
 $route['admin/invoice/manual-confirm/(:num)/(:any)'] = 'website/lembaga/Management/manual_confirm_invoice/$1/$2';
+$route['admin/invoice/reject-confirm/(:any)'] = 'website/lembaga/Management/reject_confirm_invoice/$1';
 $route['admin/invoice/delete-invoice/(:num)/(:any)'] = 'website/lembaga/Management/disable_invoice/$1/$2';
 $route['admin/report-ujian'] = 'website/lembaga/Tes_online/report_ujian';
 $route['admin/detail-report-ujian/(:any)/(:any)'] = 'website/lembaga/Tes_online/detail_report_ujian/$1/$2';
