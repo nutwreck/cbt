@@ -532,7 +532,7 @@ CREATE TABLE IF NOT EXISTS `invoice` (
   `invoice_date_expirate` datetime NOT NULL,
   `invoice_date_update` datetime DEFAULT NULL,
   `confirm_image` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0 Submit, 1 Upload Confirm, 2 Success, 3 Expired, 4 Reject',
+  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0 Submit, 1 Upload Confirm, 2 Success, 3 Expired, 4 Reject, 5 Revisi',
   `reject_desc` varchar(1000) DEFAULT NULL,
   `created_datetime` datetime NOT NULL,
   `updated_datetime` datetime DEFAULT NULL,
@@ -552,7 +552,7 @@ CREATE TABLE IF NOT EXISTS `invoice` (
 -- Dumping data for table candraaj_cbt.invoice: ~1 rows (approximately)
 /*!40000 ALTER TABLE `invoice` DISABLE KEYS */;
 REPLACE INTO `invoice` (`id`, `invoice_number`, `payment_method_id`, `payment_method_name`, `payment_method_detail_id`, `payment_method_detail_name`, `user_id`, `user_name`, `user_email`, `user_no_telp`, `buku_id`, `detail_buku_id`, `invoice_total_cost`, `kode_unik`, `invoice_date_create`, `invoice_date_expirate`, `invoice_date_update`, `confirm_image`, `status`, `reject_desc`, `created_datetime`, `updated_datetime`, `is_enable`) VALUES
-	(12, '202104306542-2', 2, 'QRIS', 5, 'Qris', 30, 'Temam Murbianto', 'lucknutdev@gmail.com', '085826046070', 2, 1, 60313, 313, '2021-04-30 22:19:48', '2021-05-01 22:19:48', '2021-05-01 12:00:34', '202104306542-2.jpg', 4, 'Kurang banyak', '2021-04-30 22:19:48', '2021-05-01 12:00:34', 1);
+	(12, '202104306542-2', 2, 'QRIS', 5, 'Qris', 30, 'Temam Murbianto', 'lucknutdev@gmail.com', '085826046070', 2, 1, 60313, 313, '2021-04-30 22:19:48', '2021-05-01 22:19:48', '2021-05-01 21:54:35', '202104306542-22.jpg', 2, NULL, '2021-04-30 22:19:48', '2021-05-01 21:54:35', 1);
 /*!40000 ALTER TABLE `invoice` ENABLE KEYS */;
 
 -- Dumping structure for table candraaj_cbt.jawaban
@@ -1480,7 +1480,8 @@ CREATE TABLE IF NOT EXISTS `paket_soal` (
   `pengaturan_universal_id` int(11) DEFAULT NULL,
   `skor_null` int(5) DEFAULT 0 COMMENT '0 Tidak ada skor',
   `is_continuous` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0 Tidak 1 Ya',
-  `is_jawab` tinyint(4) NOT NULL DEFAULT 0 COMMENT '0 Tidak harus jawab 1 Haru jawab',
+  `is_jawab` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0 Tidak harus jawab 1 Haru jawab',
+  `is_free` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0 Tidak Free 1 Free',
   `petunjuk` longtext CHARACTER SET utf8 DEFAULT NULL,
   `visual_limit` int(2) DEFAULT 1 COMMENT 'Batas pemutaran audio / video',
   `file` varchar(255) DEFAULT NULL COMMENT 'Bisa audio bisa video',
@@ -1503,10 +1504,10 @@ CREATE TABLE IF NOT EXISTS `paket_soal` (
 
 -- Dumping data for table candraaj_cbt.paket_soal: ~3 rows (approximately)
 /*!40000 ALTER TABLE `paket_soal` DISABLE KEYS */;
-REPLACE INTO `paket_soal` (`id`, `name`, `type_paket_id`, `type_paket_name`, `buku_id`, `buku_name`, `detail_buku_id`, `detail_buku_name`, `kelas_id`, `kelas_name`, `materi_id`, `materi_name`, `detail_mode_jwb_id`, `is_acak_soal`, `is_acak_jawaban`, `pengaturan_universal_id`, `skor_null`, `is_continuous`, `is_jawab`, `petunjuk`, `visual_limit`, `file`, `tipe_file`, `created_by`, `created_datetime`, `updated_by`, `updated_datetime`, `is_enable`) VALUES
-	(6, 'SOAL GRANDSBMPTN', 1, 'UJIAN', 0, '', 0, '', 2, 'SD KELAS 2', 2, 'PENALARAN UMUM', 3, 1, 1, 2, 0, 0, 0, '<p><span class="note-math"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mrow><mo fence="true">{</mo><mtable rowspacing="0.3600em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>a</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mtext>if&nbsp;</mtext><mi>b</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>c</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mtext>if&nbsp;</mtext><mi>d</mi></mrow></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">x = \\begin{cases}\r\n   a &amp;\\text{if } b \\\\\r\n   c &amp;\\text{if } d\r\n\\end{cases}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 3.00003em; vertical-align: -1.25003em;"></span><span class="minner"><span class="mopen delimcenter" style="top: 0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.69em;"><span class="" style="top: -3.69em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord mathnormal">a</span></span></span><span class="" style="top: -2.25em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord mathnormal">c</span></span></span></span><span class="vlist-s">?</span></span><span class="vlist-r"><span class="vlist" style="height: 1.19em;"><span class=""></span></span></span></span></span><span class="arraycolsep" style="width: 1em;"></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.69em;"><span class="" style="top: -3.69em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">if&nbsp;</span></span><span class="mord mathnormal">b</span></span></span><span class="" style="top: -2.25em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">if&nbsp;</span></span><span class="mord mathnormal">d</span></span></span></span><span class="vlist-s">?</span></span><span class="vlist-r"><span class="vlist" style="height: 1.19em;"><span class=""></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="note-latex" style="display: none;"><br></span></span></p><p><span class="note-math"><span class="note-latex" style="display: none;"><br></span></span></p><p><span class="note-math"><span class="note-latex" style="display: none;"><br></span></span>ORA UMUM</p>', 1, NULL, NULL, 27, '2021-03-21 12:36:01', 27, '2021-04-15 13:11:49', 1),
-	(9, 'Modul Matematika', 2, 'BUKU', 2, 'SBMPTN', 1, 'SAINTEK', 27, 'UMUM', 12, 'SBMPTN', 3, 1, 1, 2, 0, 0, 0, '<p><br></p>', 0, NULL, NULL, 27, '2021-04-15 14:41:56', NULL, NULL, 1),
-	(10, 'Soal TOEFL', 1, 'UJIAN', -1, NULL, -1, NULL, 12, 'SMA KELAS 12', 13, 'BAHASA INGGRIS', 3, 1, 1, 10, 0, 0, 0, '<p>Berisi soal Listening, Structure and Written, Reading</p>', 1, NULL, NULL, 27, '2021-04-24 06:47:15', NULL, NULL, 1);
+REPLACE INTO `paket_soal` (`id`, `name`, `type_paket_id`, `type_paket_name`, `buku_id`, `buku_name`, `detail_buku_id`, `detail_buku_name`, `kelas_id`, `kelas_name`, `materi_id`, `materi_name`, `detail_mode_jwb_id`, `is_acak_soal`, `is_acak_jawaban`, `pengaturan_universal_id`, `skor_null`, `is_continuous`, `is_jawab`, `is_free`, `petunjuk`, `visual_limit`, `file`, `tipe_file`, `created_by`, `created_datetime`, `updated_by`, `updated_datetime`, `is_enable`) VALUES
+	(6, 'SOAL GRANDSBMPTN', 1, 'UJIAN', 0, '', 0, '', 2, 'SD KELAS 2', 2, 'PENALARAN UMUM', 3, 1, 1, 2, 0, 0, 0, 0, '<p><span class="note-math"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mrow><mo fence="true">{</mo><mtable rowspacing="0.3600em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>a</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mtext>if&nbsp;</mtext><mi>b</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>c</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mtext>if&nbsp;</mtext><mi>d</mi></mrow></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">x = \\begin{cases}\r\n   a &amp;\\text{if } b \\\\\r\n   c &amp;\\text{if } d\r\n\\end{cases}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 3.00003em; vertical-align: -1.25003em;"></span><span class="minner"><span class="mopen delimcenter" style="top: 0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.69em;"><span class="" style="top: -3.69em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord mathnormal">a</span></span></span><span class="" style="top: -2.25em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord mathnormal">c</span></span></span></span><span class="vlist-s">?</span></span><span class="vlist-r"><span class="vlist" style="height: 1.19em;"><span class=""></span></span></span></span></span><span class="arraycolsep" style="width: 1em;"></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.69em;"><span class="" style="top: -3.69em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">if&nbsp;</span></span><span class="mord mathnormal">b</span></span></span><span class="" style="top: -2.25em;"><span class="pstrut" style="height: 3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">if&nbsp;</span></span><span class="mord mathnormal">d</span></span></span></span><span class="vlist-s">?</span></span><span class="vlist-r"><span class="vlist" style="height: 1.19em;"><span class=""></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="note-latex" style="display: none;"><br></span></span></p><p><span class="note-math"><span class="note-latex" style="display: none;"><br></span></span></p><p><span class="note-math"><span class="note-latex" style="display: none;"><br></span></span>ORA UMUM</p>', 1, NULL, NULL, 27, '2021-03-21 12:36:01', 27, '2021-04-15 13:11:49', 1),
+	(9, 'Modul Matematika', 2, 'BUKU', 2, 'SBMPTN', 1, 'SAINTEK', 27, 'UMUM', 12, 'SBMPTN', 3, 1, 1, 2, 0, 0, 0, 0, '<p><br></p>', 0, NULL, NULL, 27, '2021-04-15 14:41:56', NULL, NULL, 1),
+	(10, 'Soal TOEFL', 1, 'UJIAN', -1, NULL, -1, NULL, 12, 'SMA KELAS 12', 13, 'BAHASA INGGRIS', 3, 1, 1, 10, 0, 0, 0, 0, '<p>Berisi soal Listening, Structure and Written, Reading</p>', 1, NULL, NULL, 27, '2021-04-24 06:47:15', NULL, NULL, 1);
 /*!40000 ALTER TABLE `paket_soal` ENABLE KEYS */;
 
 -- Dumping structure for table candraaj_cbt.payment_method
@@ -1940,11 +1941,28 @@ CREATE TABLE IF NOT EXISTS `user_pembelian_buku` (
   CONSTRAINT `buku_pembelian_buku` FOREIGN KEY (`buku_id`) REFERENCES `buku` (`id`),
   CONSTRAINT `invoice_pembelian_buku` FOREIGN KEY (`invoice_id`) REFERENCES `invoice` (`id`),
   CONSTRAINT `user_pembelian_buku` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+-- Dumping data for table candraaj_cbt.user_pembelian_buku: ~1 rows (approximately)
+/*!40000 ALTER TABLE `user_pembelian_buku` DISABLE KEYS */;
+REPLACE INTO `user_pembelian_buku` (`id`, `invoice_id`, `invoice_number`, `user_id`, `user_name`, `user_email`, `user_telp`, `buku_id`, `detail_buku_id`, `created_datetime`, `updated_datetime`, `is_enable`) VALUES
+	(1, 12, '202104306542-2', 30, 'Temam Murbianto', 'lucknutdev@gmail.com', '085826046070', 2, 1, '2021-05-01 21:54:35', NULL, 1);
+/*!40000 ALTER TABLE `user_pembelian_buku` ENABLE KEYS */;
+
+-- Dumping structure for table candraaj_cbt.voucher
+CREATE TABLE IF NOT EXISTS `voucher` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(150) NOT NULL DEFAULT '',
+  `potongan` int(8) NOT NULL,
+  `created_datetime` datetime NOT NULL,
+  `updated_datetime` datetime DEFAULT NULL,
+  `is_enable` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.user_pembelian_buku: ~0 rows (approximately)
-/*!40000 ALTER TABLE `user_pembelian_buku` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_pembelian_buku` ENABLE KEYS */;
+-- Dumping data for table candraaj_cbt.voucher: ~0 rows (approximately)
+/*!40000 ALTER TABLE `voucher` DISABLE KEYS */;
+/*!40000 ALTER TABLE `voucher` ENABLE KEYS */;
 
 -- Dumping structure for view candraaj_cbt.v_bank_soal
 -- Creating temporary table to overcome VIEW dependency errors
@@ -2040,7 +2058,7 @@ CREATE TABLE `v_invoice_all` (
 	`invoice_date_update` DATETIME NULL,
 	`confirm_image` VARCHAR(255) NULL COLLATE 'latin1_swedish_ci',
 	`status_invoice` VARCHAR(15) NULL COLLATE 'utf8mb4_general_ci',
-	`status` TINYINT(1) NOT NULL COMMENT '0 Submit, 1 Upload Confirm, 2 Success, 3 Expired, 4 Reject',
+	`status` TINYINT(1) NOT NULL COMMENT '0 Submit, 1 Upload Confirm, 2 Success, 3 Expired, 4 Reject, 5 Revisi',
 	`reject_desc` VARCHAR(1000) NULL COLLATE 'latin1_swedish_ci'
 ) ENGINE=MyISAM;
 
@@ -2072,7 +2090,7 @@ CREATE TABLE `v_invoice_confirm` (
 	`invoice_date_update` DATETIME NULL,
 	`confirm_image` VARCHAR(255) NULL COLLATE 'latin1_swedish_ci',
 	`status_invoice` VARCHAR(15) NULL COLLATE 'utf8mb4_general_ci',
-	`status` TINYINT(1) NOT NULL COMMENT '0 Submit, 1 Upload Confirm, 2 Success, 3 Expired, 4 Reject',
+	`status` TINYINT(1) NOT NULL COMMENT '0 Submit, 1 Upload Confirm, 2 Success, 3 Expired, 4 Reject, 5 Revisi',
 	`reject_desc` VARCHAR(1000) NULL COLLATE 'latin1_swedish_ci'
 ) ENGINE=MyISAM;
 
@@ -2104,7 +2122,7 @@ CREATE TABLE `v_invoice_expired` (
 	`invoice_date_update` DATETIME NULL,
 	`confirm_image` VARCHAR(255) NULL COLLATE 'latin1_swedish_ci',
 	`status_invoice` VARCHAR(15) NULL COLLATE 'utf8mb4_general_ci',
-	`status` TINYINT(1) NOT NULL COMMENT '0 Submit, 1 Upload Confirm, 2 Success, 3 Expired, 4 Reject',
+	`status` TINYINT(1) NOT NULL COMMENT '0 Submit, 1 Upload Confirm, 2 Success, 3 Expired, 4 Reject, 5 Revisi',
 	`reject_desc` VARCHAR(1000) NULL COLLATE 'latin1_swedish_ci'
 ) ENGINE=MyISAM;
 
@@ -2136,7 +2154,7 @@ CREATE TABLE `v_invoice_success` (
 	`invoice_date_update` DATETIME NULL,
 	`confirm_image` VARCHAR(255) NULL COLLATE 'latin1_swedish_ci',
 	`status_invoice` VARCHAR(15) NULL COLLATE 'utf8mb4_general_ci',
-	`status` TINYINT(1) NOT NULL COMMENT '0 Submit, 1 Upload Confirm, 2 Success, 3 Expired, 4 Reject',
+	`status` TINYINT(1) NOT NULL COMMENT '0 Submit, 1 Upload Confirm, 2 Success, 3 Expired, 4 Reject, 5 Revisi',
 	`reject_desc` VARCHAR(1000) NULL COLLATE 'latin1_swedish_ci'
 ) ENGINE=MyISAM;
 
@@ -2300,8 +2318,10 @@ CREATE TABLE `v_paket_soal` (
 	`skor_null` INT(5) NULL COMMENT '0 Tidak ada skor',
 	`is_continuous` TINYINT(1) NOT NULL COMMENT '0 Tidak 1 Ya',
 	`tipe_pengerjaan_soal` VARCHAR(9) NOT NULL COLLATE 'utf8mb4_general_ci',
-	`is_jawab` TINYINT(4) NOT NULL COMMENT '0 Tidak harus jawab 1 Haru jawab',
+	`is_jawab` TINYINT(1) NOT NULL COMMENT '0 Tidak harus jawab 1 Haru jawab',
 	`tipe_pengerjaan_jawaban` VARCHAR(17) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`is_free` TINYINT(1) NOT NULL COMMENT '0 Tidak Free 1 Free',
+	`tipe_buku` VARCHAR(8) NOT NULL COLLATE 'utf8mb4_general_ci',
 	`petunjuk` LONGTEXT NULL COLLATE 'utf8_general_ci',
 	`visual_limit` INT(2) NULL COMMENT 'Batas pemutaran audio / video',
 	`lampiran_petunjuk` VARCHAR(255) NULL COMMENT 'Bisa audio bisa video' COLLATE 'latin1_swedish_ci',
@@ -2646,6 +2666,7 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_invoice_all` AS SELECT
 		WHEN T1.`status` = 2 THEN 'Success Confirm'
 		WHEN T1.`status` = 3 THEN 'Expired'
 		WHEN T1.`status` = 4 THEN 'Reject Bukti'
+		WHEN T1.`status` = 5 THEN 'Revisi Bukti'
 	END AS status_invoice,
 	T1.`status`,
 	T1.reject_desc
@@ -2702,6 +2723,7 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_invoice_confirm` AS SELE
 		WHEN T1.`status` = 2 THEN 'Success Confirm'
 		WHEN T1.`status` = 3 THEN 'Expired'
 		WHEN T1.`status` = 4 THEN 'Reject Bukti'
+		WHEN T1.`status` = 5 THEN 'Revisi Bukti'
 	END AS status_invoice,
 	T1.`status`,
 	T1.reject_desc
@@ -2720,7 +2742,7 @@ JOIN buku AS T6 ON T1.buku_id = T6.id
 LEFT OUTER JOIN detail_buku AS T7 ON T1.detail_buku_id = T7.id
 	AND T7.is_enable = 1
 WHERE T1.is_enable = 1
-AND T1.`status` IN (1,4)
+AND T1.`status` IN (1,4,5)
 AND T1.confirm_image IS NOT NULL ;
 
 -- Dumping structure for view candraaj_cbt.v_invoice_expired
@@ -2760,6 +2782,7 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_invoice_expired` AS SELE
 		WHEN T1.`status` = 2 THEN 'Success Confirm'
 		WHEN T1.`status` = 3 THEN 'Expired'
 		WHEN T1.`status` = 4 THEN 'Reject Bukti'
+		WHEN T1.`status` = 5 THEN 'Revisi Bukti'
 	END AS status_invoice,
 	T1.`status`,
 	T1.reject_desc
@@ -2817,6 +2840,7 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_invoice_success` AS SELE
 		WHEN T1.`status` = 2 THEN 'Success Confirm'
 		WHEN T1.`status` = 3 THEN 'Expired'
 		WHEN T1.`status` = 4 THEN 'Reject Bukti'
+		WHEN T1.`status` = 5 THEN 'Revisi Bukti'
 	END AS status_invoice,
 	T1.`status`,
 	T1.reject_desc
@@ -3099,6 +3123,11 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_paket_soal` AS SELECT
 		WHEN T1.is_jawab = 1 THEN 'Harus Dijawab'
 		ELSE 'Boleh Dikosongkan'
 	END AS tipe_pengerjaan_jawaban,
+	T1.is_free,
+	CASE
+		WHEN T1.is_free = 1 THEN 'Gratis'
+		ELSE 'Berbayar'
+	END AS tipe_buku,
 	T1.petunjuk,
 	T1.visual_limit,
 	T1.`file` AS lampiran_petunjuk,
