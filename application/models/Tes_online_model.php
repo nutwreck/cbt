@@ -431,6 +431,32 @@ class Tes_online_model extends CI_Model{
                     ->get_where('konversi_skor', array('id !=' => $konversi_skor_id, 'is_enable' => 1))->result();
     }
 
+    public function get_buku_count_free($buku_id){
+        $query = $this->db->select('COUNT(id) as count_free', FALSE)
+            ->get_where('paket_soal', array('buku_id' => $buku_id, 'is_free' => 1, 'is_enable' => 1));
+
+        $num = $query->num_rows();
+        if($num > 0){
+            return $query->row()->count_free;
+        }
+        else{
+            return 0;
+        }
+    }
+
+    public function get_buku_config_free($buku_id){
+        $query = $this->db->select('free_paket')
+            ->get_where('config_buku', array('buku_id' => $buku_id, 'is_enable' => 1));
+
+        $num = $query->num_rows();
+        if($num > 0){
+            return $query->row()->free_paket;
+        }
+        else{
+            return 0;
+        }
+    }
+
     public function get_group_soal_ujian($group_soal_id){
         $query = $this->db->select('konversi_skor_id')
             ->get_where('group_soal', array('id' => $group_soal_id, 'is_enable' => 1));

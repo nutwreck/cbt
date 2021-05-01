@@ -257,6 +257,36 @@ class Tes_online extends CI_Controller {
          $this->_generate_view($view, $data);
     }
 
+    public function get_count_free_buku(){
+        $data = [];
+
+        $id_buku = $this->input->post('buku_id');
+        $buku_id_exp = explode("|", $id_buku);
+        $buku_id = $buku_id_exp[0];
+
+        $check_paket = $this->tes->get_buku_count_free($buku_id);
+        $check_config_buku = $this->tes->get_buku_config_free($buku_id);
+
+        $left_free = $check_config_buku-$check_paket;
+
+        if($left_free <= 0){
+            $status = 0;
+            $text = '';
+        } else {
+            $status = 1;
+            $text = 'Sisa '.$left_free.' paket buku yang bisa dijadikan gratis';
+        }
+
+        $data = array(
+            'status' => $status,
+            'text' => $text
+        );
+
+        header("Content-Type: application/json");
+
+        echo json_encode($data);
+    }
+
     public function submit_add_paket_soal(){
         $data['name'] = ucwords($this->input->post('name', TRUE));
         $type_paket  = $this->input->post('type_paket', TRUE);
@@ -283,6 +313,7 @@ class Tes_online extends CI_Controller {
         $data['materi_id'] = $exp_materi[0];
         $data['materi_name'] = $exp_materi[1];
         $data['detail_mode_jwb_id'] = $this->input->post('mode_jawaban', TRUE);
+        $data['is_free'] = $this->input->post('is_free', TRUE);
         $data['is_acak_soal'] = $this->input->post('acak_soal', TRUE);
         $data['is_acak_jawaban'] = $this->input->post('acak_jawaban', TRUE);
         $data['pengaturan_universal_id'] = $this->input->post('skala_nilai', TRUE);
@@ -387,6 +418,7 @@ class Tes_online extends CI_Controller {
         $data['materi_id'] = $exp_materi[0];
         $data['materi_name'] = $exp_materi[1];
         $data['detail_mode_jwb_id'] = $this->input->post('mode_jawaban', TRUE);
+        $data['is_free'] = $this->input->post('is_free', TRUE);
         $data['is_acak_soal'] = $this->input->post('acak_soal', TRUE);
         $data['is_acak_jawaban'] = $this->input->post('acak_jawaban', TRUE);
         $data['pengaturan_universal_id'] = $this->input->post('skala_nilai', TRUE);

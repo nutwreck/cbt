@@ -37,6 +37,40 @@
                                 </div>
                             </div>
                             <?php } else { echo ''; } ?>
+                            <?php if(!empty($paket_soal->buku_name)){?>
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-3" style="margin-top:0.2%">
+                                        <h5 class="label-text">Gratis</h5>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-9">
+                                        <div class="form-group">
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input type="radio" class="custom-control-input" id="is_free_tidak" name="is_free" required value="0" <?=$paket_soal->is_free == 0 ? 'checked' : 'disabled'?>>
+                                                <label class="custom-control-label" for="is_free_tidak">Tidak</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input type="radio" class="custom-control-input" id="is_free_ya" name="is_free" required value="1" <?=$paket_soal->is_free == 1 ? 'checked' : 'disabled'?>>
+                                                <label class="custom-control-label" for="is_free_ya">Ya</label>
+                                            </div>
+                                            <label for="is_free" id="text_free"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } else { echo ''; } ?>
+                            <?php if(!empty($paket_soal->detail_buku_name) && !empty($paket_soal->buku_name)){?>
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-3" style="margin-top:1%">
+                                        <h5 class="label-text">Jurusan</h5>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-9">
+                                        <div class="form-group">
+                                            <select id="detail_buku" class="form-control selectpicker" data-live-search="true" data-width="auto" name="detail_buku">
+                                                <option value = "-1" selected><?=$paket_soal->detail_buku_name?></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } else { echo ''; } ?>
                             <div class="row">
                                 <div class="col-sm-12 col-lg-3" style="margin-top:1%">
                                     <h5 class="label-text">Kelas</h5>

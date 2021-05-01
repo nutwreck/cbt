@@ -174,10 +174,27 @@
     function choosen_buku(){
         var buku = document.getElementById('buku').value;
         var detail_buku_pilih = document.getElementById('detail_buku_pilih');
+        var free_buku = document.getElementById('free_buku');
         if(buku == '2|SBMPTN'){
             detail_buku_pilih.style.display = 'block';
         } else {
             detail_buku_pilih.style.display = 'none';
         }
+        $(document).ready(function() {
+            $.ajax({
+                type: 'POST',
+                data: {buku_id:buku},
+                url: "<?php echo base_url(); ?>website/lembaga/Tes_online/get_count_free_buku",
+                cache: false,
+                success: function(data) {
+                    if(data.status == 1) {
+                        free_buku.style.display = 'block';
+                        document.getElementById('text_free').innerHTML = data.text;
+                    } else {
+                        free_buku.style.display = 'none';
+                    }
+                }
+            });
+        });
     }
 </script>

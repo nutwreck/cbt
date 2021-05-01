@@ -37,7 +37,7 @@
                                                 <?php } ?>
                                             </select>
                                             <small for="type_paket" id="type_paket_er" class="bg-danger text-white"></small>
-                                            <div class="alert alert-info">
+                                            <div class="alert alert-info mt-2">
                                                 <p>
                                                     Jika paket yang akan dibuat untuk <b>keperluan ujian</b>, pilih <b>ujian</b> kemudian nantinya anda perlu setting <b>sesi pelaksanaannya</b>, Jika paket yang dibuat untuk <b>keperluan buku</b> maka pilih buku dan tidak perlu setting <b>sesi pelaksanaan</b>, jika paket yang anda buat untuk <b>ujian dan buku</b> pilih <b>Fleksible</b> dan tetap mengatur sesi pelaksanaannya untuk ujian.
                                                 </p>
@@ -53,11 +53,36 @@
                                         <div class="col-sm-12 col-lg-9">
                                             <div class="form-group">
                                                 <select id="buku" class="form-control selectpicker" data-live-search="true" data-width="auto" name="buku" onchange="choosen_buku()">
-                                                    <option value = "-1" selected>Pilih</option>
+                                                    <option value = "0" selected>Pilih</option>
                                                     <?php foreach($get_buku as $val_buku){ ?>
                                                         <option data-tokens="<?=$val_buku->name?>" value="<?=$val_buku->id?>|<?=$val_buku->name?>"><?=$val_buku->name?></option>
                                                     <?php } ?>
                                                 </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="free_buku" style="display:none;">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-lg-3" style="margin-top:0.2%">
+                                            <h5 class="label-text">Gratis</h5>
+                                        </div>
+                                        <div class="col-sm-12 col-lg-9">
+                                            <div class="form-group">
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" class="custom-control-input" id="is_free_tidak" name="is_free" required value="0" checked>
+                                                    <label class="custom-control-label" for="is_free_tidak">Tidak</label>
+                                                </div>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" class="custom-control-input" id="is_free_ya" name="is_free" required value="1">
+                                                    <label class="custom-control-label" for="is_free_ya">Ya</label>
+                                                </div>
+                                                <label for="is_free" id="text_free"></label>
+                                            </div>
+                                            <div class="alert alert-info">
+                                                <p>
+                                                    Jika memilih Ya, Maka paket ini akan ditampilkan sebagai paket buku gratis dihalaman user.
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -70,7 +95,7 @@
                                         <div class="col-sm-12 col-lg-9">
                                             <div class="form-group">
                                                 <select id="detail_buku" class="form-control selectpicker" data-live-search="true" data-width="auto" name="detail_buku">
-                                                    <option value = "-1" selected>Pilih</option>
+                                                    <option value = "0" selected>Pilih</option>
                                                     <?php foreach($get_detail_buku as $val_detail_buku){ ?>
                                                         <option data-tokens="<?=$val_detail_buku->name?>" value="<?=$val_detail_buku->id?>|<?=$val_detail_buku->name?>"><?=$val_detail_buku->name?></option>
                                                     <?php } ?>
@@ -143,13 +168,15 @@
                                         <h5 class="label-text">Acak Soal</h5>
                                     </div>
                                     <div class="col-sm-12 col-lg-9">
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" class="custom-control-input" id="acak_soal_tidak" name="acak_soal" required value="0" checked>
-                                            <label class="custom-control-label" for="acak_soal_tidak">Tidak</label>
-                                        </div>
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" class="custom-control-input" id="acak_soal_ya" name="acak_soal" required value="1">
-                                            <label class="custom-control-label" for="acak_soal_ya">Ya</label>
+                                        <div class="form-group">
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input type="radio" class="custom-control-input" id="acak_soal_tidak" name="acak_soal" required value="0" checked>
+                                                <label class="custom-control-label" for="acak_soal_tidak">Tidak</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input type="radio" class="custom-control-input" id="acak_soal_ya" name="acak_soal" required value="1">
+                                                <label class="custom-control-label" for="acak_soal_ya">Ya</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -158,18 +185,20 @@
                                         <h5 class="label-text">Acak Jawaban</h5>
                                     </div>
                                     <div class="col-sm-12 col-lg-9">
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" class="custom-control-input" id="acak_jawaban_tidak" name="acak_jawaban" required value="0" checked>
-                                            <label class="custom-control-label" for="acak_jawaban_tidak">Tidak</label>
-                                        </div>
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" class="custom-control-input" id="acak_jawaban_ya" name="acak_jawaban" required value="1">
-                                            <label class="custom-control-label" for="acak_jawaban_ya">Ya</label>
-                                        </div>
-                                        <div class="alert alert-info">
-                                            <p>
-                                                Pemilihan acak soal & jawaban diatas jika ya maka akan <b>dirandom secara default oleh sistem</b>. Anda tetap <b>harus memilih soal / jawaban yang akan diacak</b> saat pembuatan soal nantinya.
-                                            </p>
+                                        <div class="form-group">
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input type="radio" class="custom-control-input" id="acak_jawaban_tidak" name="acak_jawaban" required value="0" checked>
+                                                <label class="custom-control-label" for="acak_jawaban_tidak">Tidak</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input type="radio" class="custom-control-input" id="acak_jawaban_ya" name="acak_jawaban" required value="1">
+                                                <label class="custom-control-label" for="acak_jawaban_ya">Ya</label>
+                                            </div>
+                                            <div class="alert alert-info">
+                                                <p>
+                                                    Pemilihan acak soal & jawaban diatas jika ya maka akan <b>dirandom secara default oleh sistem</b>. Anda tetap <b>harus memilih soal / jawaban yang akan diacak</b> saat pembuatan soal nantinya.
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
