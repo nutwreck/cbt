@@ -337,6 +337,7 @@ class Buku extends CI_Controller {
         $invoice_id = base64_decode(urldecode($id_invoice));
         $invoice_number = $this->input->post('invoice_number', TRUE);
         $old_bukti = $this->input->post('old_bukti');
+        $status = $this->input->post('status');
 
         $dname = explode(".", $_FILES['bukti_pembayaran']['name']);
         $ext = end($dname);
@@ -375,8 +376,14 @@ class Buku extends CI_Controller {
         $now = date('Y-m-d H:i:s');
         $data['invoice_date_update'] = $now;
         $data['updated_datetime'] = $now;
-        $data['status'] = 1;
-
+        if($status == 0) {
+            $data['status'] = 1;
+        } elseif($status == 4){ //Reject
+            $data['status'] = 5; //Revisi Bukti
+        } else {
+            $data['status'] = 1;
+        }
+        
         $tbl_invoice = $this->tbl_invoice;
         $update = $this->general->update_data($tbl_invoice, $data, $invoice_id);
 

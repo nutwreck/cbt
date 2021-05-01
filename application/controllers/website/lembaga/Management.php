@@ -20,12 +20,14 @@ class Management extends CI_Controller {
     private $tbl_config_buku = 'config_buku';
     private $tbl_config_buku_detail = 'config_buku_detail';
     private $tbl_invoice = 'invoice';
+    private $tbl_user_pembelian_buku = 'user_pembelian_buku';
 
     public function __construct(){
         parent::__construct();
         if (!$this->session->has_userdata('has_login')){
             redirect('admin/login');
         }
+        $this->load->config('email');
         $this->load->model('General','general');
         $this->load->model('Management_model','management');
         $this->load->model('Invoice_list_admin_model','invoice_list_admin');
@@ -1449,7 +1451,92 @@ class Management extends CI_Controller {
     }
 
     public function manual_confirm_invoice($page, $id_invoice){
+        $data = [];
+        $datas = [];
+        $list_pembelian = [];
         $invoice_id = base64_decode(urldecode($id_invoice));
+
+        $data_invoice = $this->management->get_invoice_by_id($invoice_id);
+
+        $status_data = $data_invoice->status;
+        $reject_data = $data_invoice->reject_desc;
+
+        $now = date('Y-m-d H:i:s');
+        $data = array(
+            'status' => 2, //Invoice Success
+            'reject_desc' => NULL,
+            'updated_datetime' => $now,
+            'invoice_date_update' => $now
+        );
+
+        $datas['invoice'] = $data_invoice;
+
+        $tbl = $this->tbl_invoice;
+        $update = $this->general->update_data($tbl, $data, $invoice_id);
+
+        if($update){
+            $this->email->clear(TRUE);
+
+            $from = $this->config->item('smtp_user');
+            $subject = 'Invoice #'.$data_invoice->invoice_number.' '.format_indo($now).' '.(Lunas);
+            $message = $this->load->view('website/lembaga/management/invoice/confirm_success/content', $datas, TRUE);
+
+            $this->email->set_newline("\r\n");
+            $this->email->from($from, '[NO-REPLY] Zambert');
+            $this->email->to($data_invoice->user_email);
+            $this->email->subject($subject);
+            $this->email->message($message);
+
+            if($this->email->send()){
+                $this->session->set_flashdata('success', 'Email konfirmasi pembayaran invoice berhasil dikirim ke '.$data_invoice->user_email);
+
+                $message = '';
+
+                $list_pembelian = array(
+                    'invoice_id' => $invoice_id,
+                    'invoice_number' => $data_invoice->invoice_number,
+                    'user_id' => $data_invoice->user_id,
+                    'user_name' => $data_invoice->user_name,
+                    'user_email' => $data_invoice->user_email,
+                    'user_telp' => $data_invoice->user_no_telp,
+                    'buku_id' => $data_invoice->buku_id,
+                    'detail_buku_id' => $data_invoice->detail_buku_id,
+                    'created_datetime' => $now,
+                );
+
+                $tbl_user_pembelian_buku = $this->tbl_user_pembelian_buku;
+                $this->general->input_data($tbl_user_pembelian_buku, $list_pembelian);
+
+                $this->manual_confirm_page($page);
+            } else { //jika email tidak terkirim invoice dibatalkan / disable
+                $rollback = [];
+                $tbl_invoice = $this->tbl_invoice;
+                $rollback = array(
+                    'status' => $status_data,
+                    'reject_desc' => $reject_data,
+                    'updated_datetime' => $now,
+                    'invoice_date_update' => $now
+                );
+                $this->general->update_data($tbl_invoice, $rollback, $invoice_id);
+                $this->session->set_flashdata('error', 'Perubahan Invoice dibatalkan. Email Invoice tidak terkirim, Mohon ulangi kembali.');
+                $this->manual_confirm_page($page);
+            }
+        } else {
+            $this->session->set_flashdata('error', 'Perubahan Invoice dibatalkan. Data tidak terupdate, Mohon ulangi kembali.');
+            $this->manual_confirm_page($page);
+        }
+    }
+
+    public function manual_confirm_page($page){
+        if($page == 1){ //1 Invoice All 2 Confirm 3 Success 4 Expired
+            redirect('admin/invoice');
+        } elseif($page == 2){
+            redirect('admin/invoice-confirm');
+        } elseif($page == 3){
+            redirect('admin/invoice-success');
+        } elseif($page == 4){
+            redirect('admin/invoice-expired');
+        }
     }
 
     public function disable_invoice($page, $id_invoice){

@@ -5,6 +5,7 @@
         <input type="hidden" id="csrf-hash-form" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" style="display: none">
         <input type="hidden" id="id_invoice" name="id_invoice" value="<?=$id_invoice?>" style="display: none">
         <input type="hidden" id="invoice_number" name="invoice_number" value="<?=$invoice_detail->invoice_number?>" style="display: none">
+        <input type="hidden" id="status" name="status" value="<?=$invoice_detail->status?>" style="display: none">
 
         <div class="row mt-1 ml-0 mr-0 mb-0">
             <div class="col-sm-12">
