@@ -208,5 +208,32 @@ class Management_model extends CI_Model{
     public function get_voucher_by_name($voucher){
         return $this->db->get_where('voucher', array('name' => $voucher))->row();
     }
+
+    public function Invoice_nominal() {
+		$start_date = date('Y-m-d 00:00:00');
+		$end_date = date('Y-m-d 23:59:59',strtotime('+1 day'));
+			$this->db->select([
+			'id',
+			'invoice_number',
+			'invoice_total_cost',
+            'invoice_date_expirate',
+            'payment_method_detail_name'
+		]);
+		$this->db->from('invoice');
+		$this->db->where([
+			'status' => 0,
+			'payment_method_id' => 1 //Bank
+		]);
+		$this->db->order_by('id', 'ASC');
+		$this->db->where('invoice_date_expirate >=', $start_date);
+		$this->db->where('invoice_date_expirate <=', $end_date);
+		$this->db->limit(10);
+		$query = $this->db->get();
+		if($query){
+			return $query->result_array();
+		}else{
+			return false;
+		}
+	}
     
 }
