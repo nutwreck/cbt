@@ -19,6 +19,7 @@ class Management extends CI_Controller {
     private $tbl_buku = 'buku';
     private $tbl_config_buku = 'config_buku';
     private $tbl_config_buku_detail = 'config_buku_detail';
+    private $tbl_config_buku_group = 'config_buku_group';
     private $tbl_invoice = 'invoice';
     private $tbl_user_pembelian_buku = 'user_pembelian_buku';
     private $tbl_voucher = 'voucher';
@@ -666,14 +667,106 @@ class Management extends CI_Controller {
         $this->_generate_view($view, $data);
     }
 
-    public function setting_buku_detail($id_buku){
+    public function group_buku_detail($id_buku){
         $buku_id = base64_decode(urldecode($id_buku));
 
         //for passing data to view
         $get_buku = $this->management->get_buku($buku_id);
-        $data['content']['detail_buku'] = $this->management->get_detail_buku_by_buku($buku_id);
+        $config_buku = $this->management->config_buku($buku_id);
+        $data['content']['group_buku'] = $this->management->get_group_buku_by_buku($buku_id);
         $data['content']['id_buku'] = $id_buku;
+        $data['content']['config_buku_id'] = urlencode(base64_encode($config_buku->id));
         $data['content']['buku_name'] = $get_buku->buku_name;
+        $data['title_header'] = ['title' => 'Group Modul'];
+ 
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/buku_setting/css';
+        $view['content'] = 'website/lembaga/management/buku_setting/group';
+        $view['js_additional'] = 'website/lembaga/management/buku_setting/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function add_group_buku_detail($id_buku, $id_config_buku){
+        $data['content']['id_buku'] = $id_buku;
+        $data['content']['id_config_buku'] = $id_config_buku;
+        $data['title_header'] = ['title' => 'Add Group'];
+ 
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/buku_setting/css';
+        $view['content'] = 'website/lembaga/management/buku_setting/add_group';
+        $view['js_additional'] = 'website/lembaga/management/buku_setting/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_add_group_modul(){
+        $id_buku = $this->input->post('id_buku');
+        $id_config_buku = $this->input->post('id_config_buku');
+        $config_buku_id = base64_decode(urldecode($id_config_buku));
+
+        $data['name'] = $this->input->post('name', TRUE);
+        $data['config_buku_id'] = $config_buku_id;
+        $data['created_datetime'] = date('Y-m-d H:i:s');
+
+        $tbl = $this->tbl_config_buku_group;
+        $input = $this->general->input_data($tbl, $data);
+        $urly = 'admin/group-buku/'.$id_buku;
+        $urlx = 'admin/add-group-buku/'.$id_buku.'/'.$id_config_buku;
+        $this->input_end($input, $urly, $urlx);
+    }
+
+    public function edit_group_buku_setting($id_buku, $id_config_group){
+        $config_group_id = base64_decode(urldecode($id_config_group));
+
+        $group = $this->management->get_group_modul_by_id($config_group_id);
+        $data['content']['config_group'] = $group;
+        $data['content']['id_config_group'] = urlencode(base64_encode($group->id));
+        $data['content']['id_config_buku'] = $id_config_group;
+        $data['content']['id_buku'] = $id_buku;
+        $data['title_header'] = ['title' => 'Edit Group'];
+ 
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/buku_setting/css';
+        $view['content'] = 'website/lembaga/management/buku_setting/edit_group';
+        $view['js_additional'] = 'website/lembaga/management/buku_setting/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_edit_group_buku_setting(){
+        $id_buku = $this->input->post('id_buku');
+        $id_config_buku = $this->input->post('id_config_buku');
+        $id_config_group = $this->input->post('id_config_group');
+        $config_group_id = base64_decode(urldecode($id_config_group));
+
+        $data['name'] = $this->input->post('name', TRUE);
+        $data['updated_datetime'] = date('Y-m-d H:i:s');
+
+        $tbl = $this->tbl_config_buku_group;
+        $update = $this->general->update_data($tbl, $data, $config_group_id);
+        $urly = 'admin/group-buku/'.$id_buku;
+        $urlx = 'admin/edit-group-buku/'.$id_buku.'/'.$id_config_buku;
+        $this->update_end($update, $urly, $urlx);
+    }
+
+    public function setting_buku_detail($id_buku, $id_config_buku, $id_config_buku_group){
+        $buku_id = base64_decode(urldecode($id_buku));
+        $config_buku_id = base64_decode(urldecode($id_config_buku));
+        $config_buku_group_id = base64_decode(urldecode($id_config_buku_group));
+
+        //for passing data to view
+        $get_buku = $this->management->get_buku($buku_id);
+        $get_group_buku = $this->management->get_group_buku($config_buku_group_id);
+        $data['content']['detail_buku'] = $this->management->get_detail_buku_by_group($config_buku_group_id);
+        $data['content']['id_buku'] = $id_buku;
+        $data['content']['id_config_buku'] = $id_config_buku;
+        $data['content']['id_config_buku_group'] = $id_config_buku_group;
+        $data['content']['buku_name'] = $get_buku->buku_name;
+        $data['content']['group_buku_name'] = $get_group_buku->group_buku_name;
         $data['title_header'] = ['title' => 'Detail Modul'];
  
         //for load view
@@ -685,8 +778,10 @@ class Management extends CI_Controller {
         $this->_generate_view($view, $data);
     }
 
-    public function add_detail_buku_setting($id_buku){
+    public function add_detail_buku_setting($id_buku, $id_config_buku, $id_config_buku_group){
         $data['content']['id_buku'] = $id_buku;
+        $data['content']['id_config_buku'] = $id_config_buku;
+        $data['content']['id_config_buku_group'] = $id_config_buku_group;
         $data['content']['detail_jurusan'] = $this->management->get_detail_jurusan();
         $data['title_header'] = ['title' => 'Add Detail Modul'];
  
@@ -701,8 +796,12 @@ class Management extends CI_Controller {
 
     public function save_gambar_buku_detail() {
         $buku_id_encrypt = $this->input->post('id_buku');
+        $config_buku_id_encrypt = $this->input->post('id_config_buku');
+        $config_buku_group_id_encrypt = $this->input->post('id_config_buku_group');
             
         $data['buku_id'] = base64_decode(urldecode($buku_id_encrypt));
+        $data['config_buku_id'] = base64_decode(urldecode($config_buku_id_encrypt));
+        $data['config_buku_group_id'] = base64_decode(urldecode($config_buku_group_id_encrypt));
         $data['name'] = ucwords($this->input->post('name', TRUE));
         $detail_buku_id = $this->input->post('detail_buku_id', TRUE);
         if($detail_buku_id == '' || empty($detail_buku_id)){
@@ -734,16 +833,20 @@ class Management extends CI_Controller {
             $data ['created_date'] = date('Y-m-d H:i:s');
             $tbl = $this->tbl_config_buku_detail;
             $input = $this->general->input_data($tbl, $data);
-            $urly = 'admin/detail-buku/'.$buku_id_encrypt;
-            $urlx = 'admin/detail-buku/'.$buku_id_encrypt;
+            $urly = 'admin/detail-buku/'.$buku_id_encrypt.'/'.$config_buku_id_encrypt.'/'.$config_buku_group_id_encrypt;
+            $urlx = 'admin/detail-buku/'.$buku_id_encrypt.'/'.$config_buku_id_encrypt.'/'.$config_buku_group_id_encrypt;
             $this->input_end($input, $urly, $urlx);
         }
     }
 
     public function save_audio_buku_detail() {
         $buku_id_encrypt = $this->input->post('id_buku');
+        $config_buku_id_encrypt = $this->input->post('id_config_buku');
+        $config_buku_group_id_encrypt = $this->input->post('id_config_buku_group');
             
         $data['buku_id'] = base64_decode(urldecode($buku_id_encrypt));
+        $data['config_buku_id'] = base64_decode(urldecode($config_buku_id_encrypt));
+        $data['config_buku_group_id'] = base64_decode(urldecode($config_buku_group_id_encrypt));
         $data['name'] = ucwords($this->input->post('name', TRUE));
         $detail_buku_id = $this->input->post('detail_buku_id', TRUE);
         if($detail_buku_id == '' || empty($detail_buku_id)){
@@ -777,16 +880,20 @@ class Management extends CI_Controller {
             $data ['created_date']= date('Y-m-d H:i:s');
             $tbl = $this->tbl_config_buku_detail;
             $input = $this->general->input_data($tbl, $data);
-            $urly = 'admin/detail-buku/'.$buku_id_encrypt;
-            $urlx = 'admin/detail-buku/'.$buku_id_encrypt;
+            $urly = 'admin/detail-buku/'.$buku_id_encrypt.'/'.$config_buku_id_encrypt.'/'.$config_buku_group_id_encrypt;
+            $urlx = 'admin/detail-buku/'.$buku_id_encrypt.'/'.$config_buku_id_encrypt.'/'.$config_buku_group_id_encrypt;
             $this->input_end($input, $urly, $urlx);
         }
     }
 
     public function save_video_buku_detail(){
         $buku_id_encrypt = $this->input->post('id_buku');
+        $config_buku_id_encrypt = $this->input->post('id_config_buku');
+        $config_buku_group_id_encrypt = $this->input->post('id_config_buku_group');
             
         $data['buku_id'] = base64_decode(urldecode($buku_id_encrypt));
+        $data['config_buku_id'] = base64_decode(urldecode($config_buku_id_encrypt));
+        $data['config_buku_group_id'] = base64_decode(urldecode($config_buku_group_id_encrypt));
         $data['name'] = ucwords($this->input->post('name', TRUE));
         $detail_buku_id = $this->input->post('detail_buku_id', TRUE);
         if($detail_buku_id == '' || empty($detail_buku_id)){
@@ -820,16 +927,20 @@ class Management extends CI_Controller {
             $tbl = $this->tbl_config_buku_detail;
             $input = $this->general->input_data($tbl, $data);
 
-            $urly = 'admin/detail-buku/'.$buku_id_encrypt;
-            $urlx = 'admin/detail-buku/'.$buku_id_encrypt;
+            $urly = 'admin/detail-buku/'.$buku_id_encrypt.'/'.$config_buku_id_encrypt.'/'.$config_buku_group_id_encrypt;
+            $urlx = 'admin/detail-buku/'.$buku_id_encrypt.'/'.$config_buku_id_encrypt.'/'.$config_buku_group_id_encrypt;
             $this->input_end($input, $urly, $urlx);
         }
     }
 
     public function save_text_buku_detail(){
         $buku_id_encrypt = $this->input->post('id_buku');
+        $config_buku_id_encrypt = $this->input->post('id_config_buku');
+        $config_buku_group_id_encrypt = $this->input->post('id_config_buku_group');
         
         $data['buku_id'] = $konversi_id = base64_decode(urldecode($buku_id_encrypt));
+        $data['config_buku_id'] = base64_decode(urldecode($config_buku_id_encrypt));
+        $data['config_buku_group_id'] = base64_decode(urldecode($config_buku_group_id_encrypt));
         $data['name'] = ucwords($this->input->post('name', TRUE));
         $detail_buku_id = $this->input->post('detail_buku_id', TRUE);
         if($detail_buku_id == '' || empty($detail_buku_id)){
@@ -845,15 +956,19 @@ class Management extends CI_Controller {
         $tbl = $this->tbl_config_buku_detail;
         $input = $this->general->input_data($tbl, $data);
 
-        $urly = 'admin/detail-buku/'.$buku_id_encrypt;
-        $urlx = 'admin/detail-buku/'.$buku_id_encrypt;
+        $urly = 'admin/detail-buku/'.$buku_id_encrypt.'/'.$config_buku_id_encrypt.'/'.$config_buku_group_id_encrypt;
+        $urlx = 'admin/detail-buku/'.$buku_id_encrypt.'/'.$config_buku_id_encrypt.'/'.$config_buku_group_id_encrypt;
         $this->input_end($input, $urly, $urlx);
     }
 
     public function save_link_buku_detail(){
         $buku_id_encrypt = $this->input->post('id_buku');
+        $config_buku_id_encrypt = $this->input->post('id_config_buku');
+        $config_buku_group_id_encrypt = $this->input->post('id_config_buku_group');
         
         $data['buku_id'] = $konversi_id = base64_decode(urldecode($buku_id_encrypt));
+        $data['config_buku_id'] = base64_decode(urldecode($config_buku_id_encrypt));
+        $data['config_buku_group_id'] = base64_decode(urldecode($config_buku_group_id_encrypt));
         $data['name'] = ucwords($this->input->post('name', TRUE));
         $detail_buku_id = $this->input->post('detail_buku_id', TRUE);
         if($detail_buku_id == '' || empty($detail_buku_id)){
@@ -869,9 +984,56 @@ class Management extends CI_Controller {
         $tbl = $this->tbl_config_buku_detail;
         $input = $this->general->input_data($tbl, $data);
 
-        $urly = 'admin/detail-buku/'.$buku_id_encrypt;
-        $urlx = 'admin/detail-buku/'.$buku_id_encrypt;
+        $urly = 'admin/detail-buku/'.$buku_id_encrypt.'/'.$config_buku_id_encrypt.'/'.$config_buku_group_id_encrypt;
+        $urlx = 'admin/detail-buku/'.$buku_id_encrypt.'/'.$config_buku_id_encrypt.'/'.$config_buku_group_id_encrypt;
         $this->input_end($input, $urly, $urlx);
+    }
+
+    public function save_file_buku_detail(){
+        $buku_id_encrypt = $this->input->post('id_buku');
+        $config_buku_id_encrypt = $this->input->post('id_config_buku');
+        $config_buku_group_id_encrypt = $this->input->post('id_config_buku_group');
+            
+        $data['buku_id'] = base64_decode(urldecode($buku_id_encrypt));
+        $data['config_buku_id'] = base64_decode(urldecode($config_buku_id_encrypt));
+        $data['config_buku_group_id'] = base64_decode(urldecode($config_buku_group_id_encrypt));
+        $data['name'] = ucwords($this->input->post('name', TRUE));
+        $detail_buku_id = $this->input->post('detail_buku_id', TRUE);
+        if($detail_buku_id == '' || empty($detail_buku_id)){
+            $detail_buku_id_x = 0;
+        } else {
+            $detail_buku_id_x = $detail_buku_id;
+        }
+        $data['detail_buku_id'] = $detail_buku_id_x;
+
+        $config['upload_path']    = './storage/website/lembaga/grandsbmptn/modul';
+        $config['allowed_types']  = 'pdf|xlsx|doc|docx|pptx';
+        $config['encrypt_name']   = TRUE;
+
+        $_upload_path = $config['upload_path'];
+
+        if(!file_exists($_upload_path)){
+            mkdir($_upload_path,0777);
+        }
+        
+        $this->load->library('upload', $config);
+
+        if ( ! $this->upload->do_upload('filedokumen')) {
+            $error = array('error' => $this->upload->display_errors());
+            show_error($error, 500, 'File Dokumen Modul Error');
+            exit();
+        } else {
+            $gambar = $this->upload->data('file_name');
+            $data['nama_file'] = $gambar;
+            $data['type_file'] = '6';//File
+            $data ['created_date']= date('Y-m-d H:i:s');
+            $tbl = $this->tbl_config_buku_detail;
+            $input = $this->general->input_data($tbl, $data);
+
+            $urly = 'admin/detail-buku/'.$buku_id_encrypt.'/'.$config_buku_id_encrypt.'/'.$config_buku_group_id_encrypt;
+            $urlx = 'admin/detail-buku/'.$buku_id_encrypt.'/'.$config_buku_id_encrypt.'/'.$config_buku_group_id_encrypt;
+            $this->input_end($input, $urly, $urlx);
+        }
     }
 
     public function editor_modul(){
@@ -1021,12 +1183,14 @@ class Management extends CI_Controller {
                     </div>';
             $row[] = $field->invoice_number;
             $row[] = $field->status_invoice;
-            $row[] = $field->invoice_total_cost;
+            $row[] = rupiah($field->invoice_total_cost);
             $row[] = $field->payment_method_detail_name;
             $row[] = $field->buku_name;
             $row[] = $field->user_name;
             $row[] = $field->user_email;
             $row[] = $field->user_no_telp;
+            $row[] = $field->voucher_name;
+            $row[] = rupiah($field->voucher_potongan);
             $row[] = format_indo($field->invoice_date_create);
             $row[] = format_indo($field->invoice_date_expirate);
             $row[] = $field->date_left.' Left';
@@ -1058,6 +1222,8 @@ class Management extends CI_Controller {
         $sheet->setCellValue('I1', 'No Telp');
         $sheet->setCellValue('J1', 'Tanggal Invoice Dibuat');
         $sheet->setCellValue('K1', 'Tanggal Invoice Kadaluarsa');
+        $sheet->setCellValue('L1', 'Voucher');
+        $sheet->setCellValue('M1', 'Potongan');
         
         $siswa = $this->management->get_invoice_all();
         $no = 1;
@@ -1075,11 +1241,13 @@ class Management extends CI_Controller {
             $sheet->setCellValue('I'.$x, $row->user_no_telp);
             $sheet->setCellValue('J'.$x, format_indo($row->invoice_date_create));
             $sheet->setCellValue('K'.$x, format_indo($row->invoice_date_expirate));
+            $sheet->setCellValue('L'.$x, $row->voucher_name);
+            $sheet->setCellValue('M'.$x, $row->voucher_potongan);
             $x++;
         }
 
         // Column sizing
-        foreach(range('A','K') as $columnID){
+        foreach(range('A','M') as $columnID){
             $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
         }
 
@@ -1139,12 +1307,14 @@ class Management extends CI_Controller {
                     </div>';
             $row[] = $field->invoice_number;
             $row[] = $status_invoice;
-            $row[] = $field->invoice_total_cost;
+            $row[] = rupiah($field->invoice_total_cost);
             $row[] = $field->payment_method_detail_name;
             $row[] = $field->buku_name;
             $row[] = $field->user_name;
             $row[] = $field->user_email;
             $row[] = $field->user_no_telp;
+            $row[] = $field->voucher_name;
+            $row[] = rupiah($field->voucher_potongan);
             $row[] = format_indo($field->invoice_date_create);
             $row[] = format_indo($field->invoice_date_expirate);
 
@@ -1176,6 +1346,8 @@ class Management extends CI_Controller {
         $sheet->setCellValue('J1', 'Tanggal Invoice Dibuat');
         $sheet->setCellValue('K1', 'Tanggal Invoice Kadaluarsa');
         $sheet->setCellValue('L1', 'Tanggal Invoice Konfirmasi');
+        $sheet->setCellValue('M1', 'voucher');
+        $sheet->setCellValue('N1', 'Potongan');
         
         $siswa = $this->management->get_invoice_confirm();
         $no = 1;
@@ -1194,11 +1366,13 @@ class Management extends CI_Controller {
             $sheet->setCellValue('J'.$x, format_indo($row->invoice_date_create));
             $sheet->setCellValue('K'.$x, format_indo($row->invoice_date_expirate));
             $sheet->setCellValue('L'.$x, format_indo($row->invoice_date_update));
+            $sheet->setCellValue('M'.$x, $row->voucher_name);
+            $sheet->setCellValue('N'.$x, $row->voucher_potongan);
             $x++;
         }
 
         // Column sizing
-        foreach(range('A','K') as $columnID){
+        foreach(range('A','N') as $columnID){
             $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
         }
 
@@ -1240,12 +1414,14 @@ class Management extends CI_Controller {
             $row[] = $no;
             $row[] = $field->invoice_number;
             $row[] = $status_invoice;
-            $row[] = $field->invoice_total_cost;
+            $row[] = rupiah($field->invoice_total_cost);
             $row[] = $field->payment_method_detail_name;
             $row[] = $field->buku_name;
             $row[] = $field->user_name;
             $row[] = $field->user_email;
             $row[] = $field->user_no_telp;
+            $row[] = $field->voucher_name;
+            $row[] = rupiah($field->voucher_potongan);
             $row[] = format_indo($field->invoice_date_create);
             $row[] = format_indo($field->invoice_date_expirate);
 
@@ -1277,6 +1453,8 @@ class Management extends CI_Controller {
         $sheet->setCellValue('J1', 'Tanggal Invoice Dibuat');
         $sheet->setCellValue('K1', 'Tanggal Invoice Kadaluarsa');
         $sheet->setCellValue('L1', 'Tanggal Invoice Terkonfirmasi');
+        $sheet->setCellValue('M1', 'voucher');
+        $sheet->setCellValue('N1', 'Potongan');
         
         $siswa = $this->management->get_invoice_success();
         $no = 1;
@@ -1295,11 +1473,13 @@ class Management extends CI_Controller {
             $sheet->setCellValue('J'.$x, format_indo($row->invoice_date_create));
             $sheet->setCellValue('K'.$x, format_indo($row->invoice_date_expirate));
             $sheet->setCellValue('L'.$x, format_indo($row->invoice_date_update));
+            $sheet->setCellValue('M'.$x, $row->voucher_name);
+            $sheet->setCellValue('N'.$x, $row->voucher_potongan);
             $x++;
         }
 
         // Column sizing
-        foreach(range('A','L') as $columnID){
+        foreach(range('A','N') as $columnID){
             $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
         }
 
@@ -1347,12 +1527,14 @@ class Management extends CI_Controller {
                     </div>';
             $row[] = $field->invoice_number;
             $row[] = $field->status_invoice;
-            $row[] = $field->invoice_total_cost;
+            $row[] = rupiah($field->invoice_total_cost);
             $row[] = $field->payment_method_detail_name;
             $row[] = $field->buku_name;
             $row[] = $field->user_name;
             $row[] = $field->user_email;
             $row[] = $field->user_no_telp;
+            $row[] = $field->voucher_name;
+            $row[] = rupiah($field->voucher_potongan);
             $row[] = format_indo($field->invoice_date_create);
             $row[] = format_indo($field->invoice_date_expirate);
 
@@ -1383,6 +1565,8 @@ class Management extends CI_Controller {
         $sheet->setCellValue('I1', 'No Telp');
         $sheet->setCellValue('J1', 'Tanggal Invoice Dibuat');
         $sheet->setCellValue('K1', 'Tanggal Invoice Kadaluarsa');
+        $sheet->setCellValue('L1', 'voucher');
+        $sheet->setCellValue('M1', 'Potongan');
         
         $siswa = $this->management->get_invoice_expired();
         $no = 1;
@@ -1400,11 +1584,13 @@ class Management extends CI_Controller {
             $sheet->setCellValue('I'.$x, $row->user_no_telp);
             $sheet->setCellValue('J'.$x, format_indo($row->invoice_date_create));
             $sheet->setCellValue('K'.$x, format_indo($row->invoice_date_expirate));
+            $sheet->setCellValue('L'.$x, $row->voucher_name);
+            $sheet->setCellValue('M'.$x, $row->voucher_potongan);
             $x++;
         }
 
         // Column sizing
-        foreach(range('A','K') as $columnID){
+        foreach(range('A','M') as $columnID){
             $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
         }
 

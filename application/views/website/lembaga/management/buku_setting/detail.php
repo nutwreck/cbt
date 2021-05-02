@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="overview-wrap">
-                            <h2 class="title-1">Modul Buku <b><?=$buku_name?></b></h2>
+                            <h2 class="title-1">Modul Buku <b><?=$buku_name?></b> Group <b><?=$group_buku_name?></b></h2>
                         </div>
                     </div>
                 </div>
@@ -18,7 +18,7 @@
                                 <button class="au-btn au-btn-icon au-btn--blue au-btn--small" onclick="add_data_detail()">
                                     <i class="zmdi zmdi-plus"></i>Tambah
                                 </button>
-                                <a href="<?=base_url()?>admin/buku-setting" class="btn btn-md btn-outline-secondary">Kembali</a>
+                                <a href="<?=base_url()?>admin/group-buku/<?=$id_buku?>" class="btn btn-md btn-outline-secondary">Kembali</a>
                             </div>
                         </div>
                         <div class="table-responsive table-responsive-data2">
@@ -50,6 +50,8 @@
                                                 echo 'Text';
                                             } elseif($value->type_file == 5){
                                                 echo 'Link';
+                                            } elseif($value->type_file == 6){
+                                                echo 'File';
                                             }
                                             ?>
                                         </td>

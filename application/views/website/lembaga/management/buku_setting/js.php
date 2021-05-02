@@ -15,7 +15,14 @@
     } );
     function add_data_detail() {
         var data = '<?php if(isset($id_buku)){ echo $id_buku; } else{}?>';
-        window.location.href = "<?php echo base_url(); ?>admin/add-detail-buku/" + data;
+        var data_dua = '<?php if(isset($id_config_buku)){ echo $id_config_buku; } else{}?>';
+        var data_tiga = '<?php if(isset($id_config_buku_group)){ echo $id_config_buku_group; } else{}?>';
+        window.location.href = "<?php echo base_url(); ?>admin/add-detail-buku/" + data + '/' + data_dua + '/' + data_tiga;
+    }
+    function add_group_modul() {
+        var data = '<?php if(isset($id_buku)){ echo $id_buku; } else{}?>';
+        var data_dua = '<?php if(isset($config_buku_id)){ echo $config_buku_id; } else{}?>';
+        window.location.href = "<?php echo base_url(); ?>admin/add-group-buku/" + data + '/' + data_dua;
     }
     function disable_all_form(){
         var upload_gambar = document.getElementById('upload_gambar');
@@ -23,11 +30,13 @@
         var upload_video = document.getElementById('upload_video');
         var upload_text = document.getElementById('upload_text');
         var upload_link = document.getElementById('upload_link');
+        var upload_file = document.getElementById('upload_file');
         upload_gambar.style.display = 'none';
         upload_audio.style.display = 'none';
         upload_video.style.display = 'none';
         upload_text.style.display = 'none';
         upload_link.style.display = 'none';
+        upload_file.style.display = 'none';
     }
 </script>
 
@@ -39,30 +48,35 @@
         var upload_video = document.getElementById('upload_video');
         var upload_text = document.getElementById('upload_text');
         var upload_link = document.getElementById('upload_link');
+        var upload_file = document.getElementById('upload_file');
         if(type == '1'){ 
             upload_gambar.style.display = 'block';
             upload_audio.style.display = 'none';
             upload_video.style.display = 'none';
             upload_text.style.display = 'none';
             upload_link.style.display = 'none';
+            upload_file.style.display = 'none';
         } else if (type == '2') {
             upload_gambar.style.display = 'none';
             upload_audio.style.display = 'block';
             upload_video.style.display = 'none';
             upload_text.style.display = 'none';
             upload_link.style.display = 'none';
+            upload_file.style.display = 'none';
         } else if (type == '3') {
             upload_gambar.style.display = 'none';
             upload_audio.style.display = 'none';
             upload_video.style.display = 'block';
             upload_text.style.display = 'none';
             upload_link.style.display = 'none';
+            upload_file.style.display = 'none';
         } else if (type == '4') {
             upload_gambar.style.display = 'none';
             upload_audio.style.display = 'none';
             upload_video.style.display = 'none';
             upload_text.style.display = 'block';
             upload_link.style.display = 'none';
+            upload_file.style.display = 'none';
         }
         else if (type == '5') {
             upload_gambar.style.display = 'none';
@@ -70,13 +84,23 @@
             upload_video.style.display = 'none';
             upload_text.style.display = 'none';
             upload_link.style.display = 'block';
+            upload_file.style.display = 'none';
         } 
+        else if (type == '6') {
+            upload_gambar.style.display = 'none';
+            upload_audio.style.display = 'none';
+            upload_video.style.display = 'none';
+            upload_text.style.display = 'none';
+            upload_link.style.display = 'none';
+            upload_file.style.display = 'block';
+        }
         else{
             upload_gambar.style.display = 'none';
             upload_audio.style.display = 'none';
             upload_video.style.display = 'none';
             upload_text.style.display = 'none';
             upload_link.style.display = 'none';
+            upload_file.style.display = 'none';
         }
     }
 </script>

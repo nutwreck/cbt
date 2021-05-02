@@ -27,6 +27,8 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>No Telp</th>
+                                <th>Voucher</th>
+                                <th>Potongan</th>
                                 <th>Tanggal Invoice</th>
                                 <th>Tanggal Expired</th>
                             </tr>

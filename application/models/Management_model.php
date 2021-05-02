@@ -67,9 +67,38 @@ class Management_model extends CI_Model{
             ->get_where('config_buku_detail AS T1', array('T1.buku_id' => $buku_id, 'T1.is_enable' => 1, 'T2.is_enable' => 1))->result();
     }  
 
+    public function get_detail_buku_by_group($config_buku_group_id){
+        return $this->db->select('T1.*, T2.name AS buku_name')
+            ->join('buku AS T2', 'T1.buku_id = T2.id')
+            ->order_by('T1.id DESC')
+            ->get_where('config_buku_detail AS T1', array('T1.config_buku_group_id' => $config_buku_group_id, 'T1.is_enable' => 1, 'T2.is_enable' => 1))->result();
+    } 
+
+    public function get_group_buku_by_buku($buku_id){
+        return $this->db->select('T1.*, T3.name AS buku_name, T2.id AS config_buku_id')
+            ->join('config_buku AS T2', 'T1.config_buku_id = T2.id')
+            ->join('buku AS T3', 'T2.buku_id = T3.id')
+            ->order_by('T1.id DESC')
+            ->get_where('config_buku_group AS T1', array('T2.buku_id' => $buku_id, 'T1.is_enable' => 1, 'T2.is_enable' => 1))->result();
+    }  
+
     public function get_buku($buku_id){
         return $this->db->select('name as buku_name')
                     ->get_where('buku', array('id' => $buku_id, 'is_enable' => 1))->row();
+    }
+
+    public function get_group_buku($id_group){
+        return $this->db->select('name as group_buku_name')
+                    ->get_where('config_buku_group', array('id' => $id_group, 'is_enable' => 1))->row();
+    }
+
+    public function config_buku($buku_id){
+        return $this->db->select('id')
+                    ->get_where('config_buku', array('buku_id' => $buku_id, 'is_enable' => 1))->row();
+    }
+
+    public function get_group_modul_by_id($id_config_group){
+        return $this->db->get_where('config_buku_group', array('id' => $id_config_group, 'is_enable' => 1))->row();
     }
     
     public function get_detail_jurusan(){
