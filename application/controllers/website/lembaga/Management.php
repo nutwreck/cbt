@@ -21,6 +21,7 @@ class Management extends CI_Controller {
     private $tbl_config_buku_detail = 'config_buku_detail';
     private $tbl_invoice = 'invoice';
     private $tbl_user_pembelian_buku = 'user_pembelian_buku';
+    private $tbl_voucher = 'voucher';
 
     public function __construct(){
         parent::__construct();
@@ -1560,6 +1561,92 @@ class Management extends CI_Controller {
         }
 
         $this->delete_end($delete, $urly, $urlx);
+    }
+
+    public function voucher(){
+        $data['content']['voucher'] = $this->management->get_voucher();
+        $data['title_header'] = ['title' => 'Kode Voucher'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/voucher/css';
+        $view['content'] = 'website/lembaga/management/voucher/content';
+        $view['js_additional'] = 'website/lembaga/management/voucher/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function add_voucher(){
+        //for passing data to view
+        $data['content'] = [];
+        $data['title_header'] = ['title' => 'Tambah Voucher'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/voucher/css';
+        $view['content'] = 'website/lembaga/management/voucher/add';
+        $view['js_additional'] = 'website/lembaga/management/voucher/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_add_voucher(){
+        $data['name'] = ucwords($this->input->post('voucher', TRUE));
+        $data['potongan'] = ucwords($this->input->post('potongan', TRUE));
+        $data['created_datetime'] = date('Y-m-d H:i:s');
+        $tbl = $this->tbl_voucher;
+        $input = $this->general->input_data($tbl, $data);
+
+        $urly = 'admin/voucher';
+        $urlx = 'admin/add-voucher';
+        $this->input_end($input, $urly, $urlx);
+    }
+
+    public function edit_voucher($id_voucher){
+        //for passing data to view
+        $data['content']['voucher'] = $this->management->get_voucher_by_id($id_voucher);
+        $data['title_header'] = ['title' => 'Edit Voucher'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/management/voucher/css';
+        $view['content'] = 'website/lembaga/management/voucher/edit';
+        $view['js_additional'] = 'website/lembaga/management/voucher/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function submit_edit_voucher(){
+        $id = $this->input->post('id', TRUE);
+        $data['name'] = strtoupper($this->input->post('voucher', TRUE));
+        $data['potongan'] = $this->input->post('potongan', TRUE);
+        $data['updated_datetime'] = date('Y-m-d H:i:s');
+        $tbl = $this->tbl_voucher;
+        $update = $this->general->update_data($tbl, $data, $id);
+
+        $urly = 'admin/voucher';
+        $urlx = 'admin/edit-voucher/'.$id;
+        $this->update_end($update, $urly, $urlx);
+    }
+
+    public function disable_voucher($id)
+	{
+        $tbl = $this->tbl_voucher;
+        $delete = $this->general->delete_data($tbl, $id);
+
+        $urly = 'admin/voucher';
+        $urlx = 'admin/voucher';
+        $this->delete_end($delete, $urly, $urlx);
+    }
+
+    public function active_voucher($id)
+	{
+        $tbl = $this->tbl_voucher;
+        $active = $this->general->active_data($tbl, $id);
+
+        $urly = 'admin/voucher';
+        $urlx = 'admin/voucher';
+        $this->active_end($active, $urly, $urlx);
     }
 
 }

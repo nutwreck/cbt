@@ -187,6 +187,11 @@ $route['admin/report-ujian'] = 'website/lembaga/Tes_online/report_ujian';
 $route['admin/detail-report-ujian/(:any)/(:any)'] = 'website/lembaga/Tes_online/detail_report_ujian/$1/$2';
 $route['admin/export-report-ujian/(:any)/(:any)'] = 'website/lembaga/Tes_online/export_detail_report_ujian/$1/$2';
 $route['admin/detail-ujian-peserta/(:any)/(:any)/(:any)'] = 'website/lembaga/Tes_online/detail_ujian_peserta/$1/$2/$3';
+$route['admin/voucher'] = 'website/lembaga/Management/voucher';
+$route['admin/add-voucher'] = 'website/lembaga/Management/add_voucher';
+$route['admin/edit-voucher/(:num)'] = 'website/lembaga/Management/edit_voucher/$1';
+$route['admin/delete-voucher/(:num)'] = 'website/lembaga/Management/disable_voucher/$1';
+$route['admin/active-voucher/(:num)'] = 'website/lembaga/Management/active_voucher/$1';
 /*
 |
 | START WEBSITE URL FOR LEMBAGA ONLY

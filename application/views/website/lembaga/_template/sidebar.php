@@ -58,6 +58,9 @@
                                 <li>
                                     <a href="<?php echo base_url(); ?>admin/pembayaran-master">Master Pembayaran</a>
                                 </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>admin/voucher">Kode Voucher</a>
+                                </li>
                             </ul>
                         </li>
                         <li class="has-sub">
