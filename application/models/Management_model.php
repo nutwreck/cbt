@@ -175,5 +175,9 @@ class Management_model extends CI_Model{
     public function get_voucher_by_id($id_voucher){
         return $this->db->get_where('voucher', array('id' => $id_voucher))->row();
     }
+
+    public function get_voucher_by_name($voucher){
+        return $this->db->get_where('voucher', array('name' => $voucher))->row();
+    }
     
 }

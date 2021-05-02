@@ -53,6 +53,13 @@
                                     </div>
                                 </div>
                             <?php } else { echo ''; } ?>
+                            <div class="form-group row">
+                                <label for="voucher" class="col-sm-2 col-form-label">Kode Voucher</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="voucher" name="voucher">
+                                    <small>* Punya kode voucher? Masukkan kode voucher anda.</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <hr>

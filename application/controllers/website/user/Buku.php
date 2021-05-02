@@ -141,6 +141,26 @@ class Buku extends CI_Controller {
         $id_buku = $this->input->post('id_buku');
         $buku_id = base64_decode(urldecode($id_buku));
 
+        $voucher = $this->input->post('voucher', TRUE);
+
+        if($voucher != '' || !empty($voucher)){
+            $voucher_str = strtoupper($voucher);
+            $get_voucher = $this->management->get_voucher_by_name($voucher_str);
+
+            if($get_voucher){
+                $voucher_id = $get_voucher->id;
+                $voucher_name = $get_voucher->name;
+                $voucher_potongan = $get_voucher->potongan;
+            } else {
+                $this->session->set_flashdata('warning', 'Kode voucher tidak ditemukan, Info lebih lanjut hubungi admin');
+                redirect('pembelian-buku/'.$id_buku);
+            }
+        } else {
+            $voucher_id = 0;
+            $voucher_name = '';
+            $voucher_potongan = 0;
+        }
+
         if($buku_id == 1){
             $buku = 'TOEFL';
         } elseif($buku_id == 2){
@@ -152,7 +172,7 @@ class Buku extends CI_Controller {
         $detail_buku_check = $this->input->post('detail_buku_id', TRUE);
         if($buku_id == 2 && ($detail_buku_check == '' || $detail_buku_check == NULL)){ //2 SBMPTN
             $this->session->set_flashdata('warning', 'Jurusan wajib dipilih!');
-            redirect('pembelian_buku/'.$id_buku);
+            redirect('pembelian-buku/'.$id_buku);
         }
 
         if($buku_id == 2 && $detail_buku_check == 1){ //2 SBMPTN
@@ -191,9 +211,14 @@ class Buku extends CI_Controller {
             $update_kode_unik = array('number' => $new_number);
             $this->general->update_data($tbl_kode_unik, $update_kode_unik, 1);
             $kode_unik_data = $this->management->get_kode_unik();
-        } 
+        }
         
-        $invoice_total_cost = $invoice_total_cost_input + $kode_unik_data;
+        if(!empty($get_voucher) && $voucher_name != '' && $voucher_potongan != 0){
+            $invoice_total_cost = ($invoice_total_cost_input + $kode_unik_data) - $voucher_potongan;
+        } else {
+            $invoice_total_cost = $invoice_total_cost_input + $kode_unik_data;
+        }
+
         $kode_unik = $kode_unik_data;
 
         $tbl_kode_unik = $this->tbl_kode_unik;
@@ -222,6 +247,9 @@ class Buku extends CI_Controller {
             'invoice_number' => $invoice_number,
             'invoice_total_cost' => $invoice_total_cost,
             'kode_unik' => $kode_unik,
+            'voucher_id' => $voucher_id,
+            'voucher_name' => $voucher_name,
+            'voucher_potongan' => $voucher_potongan,
             'invoice_date_create' => $invoice_date_create,
             'invoice_date_expirate' => $invoice_date_expirate,
             'status' => $status,
@@ -246,6 +274,8 @@ class Buku extends CI_Controller {
             'price' => $invoice_total_cost_input,
             'invoice_total_cost' => $invoice_total_cost,
             'kode_unik' => $kode_unik,
+            'voucher_name' => $voucher_name,
+            'voucher_potongan' => $voucher_potongan,
             'invoice_date_create' => $invoice_date_create,
             'invoice_date_expirate' => $invoice_date_expirate,
             'status' => $status,
@@ -289,11 +319,11 @@ class Buku extends CI_Controller {
                 );
                 $this->general->update_data($tbl_invoice, $disable, $insert);
                 $this->session->set_flashdata('error', 'Invoice dibatalkan. Email Invoice tidak terkirim, Mohon hubungi admin lewat Whatsapp dibawah ini.');
-                redirect('pembelian_buku/'.$id_buku);
+                redirect('pembelian-buku/'.$id_buku);
             }
         } else {
             $this->session->set_flashdata('error', 'Invoice gagal dibuat, Mohon ulangi beberapa saat lagi.');
-            redirect('pembelian_buku/'.$id_buku);
+            redirect('pembelian-buku/'.$id_buku);
         }
     }
 

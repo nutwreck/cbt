@@ -15,6 +15,11 @@
                     <tr>
                         <td>Harga</td><td>:</td><td class="text-left"><?=rupiah($price)?></td>
                     </tr>
+                    <?php if($voucher_name != '' && $voucher_potongan != 0) { ?>
+                    <tr>
+                        <td>Potongan Harga</td><td>:</td><td class="text-left"><?=rupiah($voucher_potongan)?></td>
+                    </tr>
+                    <?php } else { echo ''; }; ?>
                     <tr>
                         <td>Kode Unik</td><td>:</td><td class="text-left"><?=rupiah($kode_unik)?></td>
                     </tr>

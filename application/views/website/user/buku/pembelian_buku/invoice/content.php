@@ -187,10 +187,14 @@
 					<td><?=rupiah($price)?></td>
 				</tr>
 
+				<?php if($voucher_name != '' && $voucher_potongan != 0) { ?>
 				<tr class="item last">
-					<td style="text-align:right;"><b>Kode Unik</b></td>
+					<td style="text-align:right;"><b>Potongan Harga</b></td><td><?=rupiah($voucher_potongan)?></td>
+				</tr>
+				<?php } else { echo ''; }; ?>
 
-					<td><?=rupiah($kode_unik)?></td>
+				<tr class="item last">
+					<td style="text-align:right;"><b>Kode Unik</b></td><td><?=rupiah($kode_unik)?></td>
 				</tr>
 
 				<tr class="total">
