@@ -3,6 +3,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Mutasi_check extends CI_Controller {
 
+    private $tbl_invoice = 'invoice';
+    private $tbl_hit_mutation = 'hit_mutation';
+    private $tbl_user_pembelian_buku = 'user_pembelian_buku';
+
     function __construct(){
         parent::__construct();
         date_default_timezone_set('Asia/Jakarta');
@@ -23,7 +27,7 @@ class Mutasi_check extends CI_Controller {
         if(!empty($get_data)){
             $this->checking_balance($get_data);
         } else {
-            var_dump($get_data);
+            echo 'no data';
         }
     }
 
@@ -51,6 +55,9 @@ class Mutasi_check extends CI_Controller {
     }
 
     public function loop_mutasi($get_data){
+        $get_datas = [];
+        $datas = [];
+
         foreach($get_data as $pass_data) { //CONVERT TO ARRAY
             $get_datas[] = $pass_data;
         }
@@ -97,7 +104,8 @@ class Mutasi_check extends CI_Controller {
             $eror_msg_mutation = $datas['error_message'];
             $status_data_response = $datas['response'];
 
-            //sampai sini boss
+            $data_hit_save = [];
+            $data_mutation = [];
 
             if($status_data_mutation == true && $eror_msg_mutation == '' && !empty($status_data_response)) { //JIKA DATA DITEMUKAN
                 foreach($status_data_response as $value){
@@ -125,79 +133,107 @@ class Mutasi_check extends CI_Controller {
                     "post_date" => $start_date
                 );
 
-                $data_update_invoice = array( //DATA UNTUK UPDATE INVOICE
-                    "invoice_date_update" => date('Y-m-d h:i:s'),
-                    "confirm_status" => 1,
-                    "is_check" => 1,
-                    "date_check" => $start_date,
-                    "status" => 1,
-                );
                 $no_invoice = $clean_data['invoice_number'];
+                $id_invoice = $clean_data['id'];
 
-                $check_id_mutation = $this->Get_nominal_invoice->mutation_bank_list($mutation_id); //CEK ID MUTASI SEBELUMNYA
+                $check_id_mutation = $this->management->mutation_bank_list($mutation_id); //CEK ID MUTASI SEBELUMNYA
 
                 if($check_id_mutation){ //JIKA ID MUTASI SEBELUMNYA SUDAH ADA LANGSUNG UPDATE INVOICENYA
-                    $update_invoice = $this->Get_nominal_invoice->update_invoice($data_update_invoice, $no_invoice);//INSERT DATA MUTATION BANK
-                    //echo 'berhasil hanya update '.$clean_data['invoice_number'].'<br />';
+                    $this->send_email_confirm($id_invoice);
                 } else {
-                    $insert_mutation = $this->Get_nominal_invoice->mutation_bank($data_hit_save);//INSERT DATA MUTATION BANK
+                    $tbl_hit_mutation = $this->tbl_hit_mutation;
+                    $insert_mutation = $this->general->insert_data($tbl_hit_mutation, $data_hit_save);//INSERT DATA MUTATION BANK
 
-                    $update_invoice = $this->Get_nominal_invoice->update_invoice($data_update_invoice, $no_invoice);//INSERT DATA MUTATION BANK
-
-                    if($insert_mutation !== 'Rollback' && $update_invoice !== 'Rollback'){ //JIKA DATA BERHASIL DISIMPAN DAN UPDATE INVOICE
-                        $this->send_email_confirm($no_invoice);
+                    if($insert_mutation){ //JIKA DATA BERHASIL DISIMPAN LANJUT UPDATE INVOICE
+                        $this->send_email_confirm($id_invoice);
                         //echo 'Berhasil simpan '.$clean_data['invoice_number'].'<br />';
                     } else { //JIKA INSERT DATA MUTASI DAN UPDATE INVOICE GAGAL KEMBALI LAGI KE LOOPING
-                        $this->loop_mutasi($get_data);
+                        /* $this->loop_mutasi($get_data); */
                     }
                 }
-            } elseif($status_data_mutation == 1 && $eror_msg_mutation == '' && empty($status_data_response)){ //JIKA TIDAK DITEMUKAN DATA MUTASINYA TIDAK MELAKUKKAN APA-APA
+            } elseif($status_data_mutation == true && $eror_msg_mutation == '' && empty($status_data_response)){ //JIKA TIDAK DITEMUKAN DATA MUTASINYA TIDAK MELAKUKKAN APA-APA
                 /* echo 'tidak ditemukan data '.$clean_data['invoice_number'].'<br />'; */
             } else {
-                die();
+               
             }
         }
     }
 
-    public function send_email_confirm($no_invoice){
-        $item_user = $this->Update_auto_confirm->Get_user_invoice($no_invoice);
+    public function send_email_confirm($id_invoice){
+        $item_user = $this->management->get_invoice_by_id($invoice_id);
 
-        for($i = 0; $i < sizeof($item_user); $i++) {
-            $user_id =  $item_user[$i]['user_id'];
-            $event_id =  $item_user[$i]['event_id'];
-            $invoice_number = $item_user[$i]['invoice_number'];
+        if(!empty($item_user)){
+            $data = [];
+            $datas = [];
+            $list_pembelian = [];
+            $invoice_id = base64_decode(urldecode($id_invoice));
 
-            $this->data['data'] = $this->Update_auto_confirm->send_user_data($user_id,$event_id,$invoice_number);
-            $send_to = $item_user[$i]['email'];
-            
-            /*Confirm*/
-            $invoice_file = $invoice_number."-".$user_id.".pdf";
-            $name_file = $invoice_file;
-            $location = 'assets/confirm/';
-            $mpdf = new \Mpdf\Mpdf();
+            $data_invoice = $this->management->get_invoice_by_id($invoice_id);
 
-            $this->data['invoice_file'] = $invoice_file;
+            $status_data = $data_invoice->status;
+            $reject_data = $data_invoice->reject_desc;
 
-            $data = $this->load->view('website/confirm_invoice/content.php',$this->data, TRUE);
-			$mpdf->WriteHTML($data);
+            $now = date('Y-m-d H:i:s');
+            $data = array(
+                'status' => 2, //Invoice Success
+                'reject_desc' => NULL,
+                'updated_datetime' => $now,
+                'invoice_date_update' => $now
+            );
 
-            //$mpdf->Output();
-            $mpdf->Output($location .$invoice_file, \Mpdf\Output\Destination::FILE);
+            $datas['invoice'] = $data_invoice;
 
-            $this->email->clear(TRUE);
+            $tbl = $this->tbl_invoice;
+            $update = $this->general->update_data($tbl, $data, $invoice_id);
 
-            /*email*/
-            $from = $this->config->item('smtp_user');
-            $subject = 'Zambert Confirm Invoice Success';
-            $message = $this->load->view('website/email/confirm_invoice.php',$this->data,TRUE);
+            if($update){
+                $this->email->clear(TRUE);
 
-            $this->email->set_newline("\r\n");
-            $this->email->from($from, '[NO-REPLY] Zambert System');
-            $this->email->to($send_to);
-            $this->email->subject($subject);
-            $this->email->message($message);
-            $this->email->attach(base_url().'assets/confirm/'.$name_file);
-            $this->email->send();
+                $from = $this->config->item('smtp_user');
+                $subject = 'Invoice #'.$data_invoice->invoice_number.' '.format_indo($now).' '.(Lunas);
+                $message = $this->load->view('website/lembaga/management/invoice/confirm_success/content', $datas, TRUE);
+
+                $this->email->set_newline("\r\n");
+                $this->email->from($from, '[NO-REPLY] Zambert');
+                $this->email->to($data_invoice->user_email);
+                $this->email->subject($subject);
+                $this->email->message($message);
+
+                if($this->email->send()){
+                    $message = '';
+
+                    $list_pembelian = array(
+                        'invoice_id' => $invoice_id,
+                        'invoice_number' => $data_invoice->invoice_number,
+                        'user_id' => $data_invoice->user_id,
+                        'user_name' => $data_invoice->user_name,
+                        'user_email' => $data_invoice->user_email,
+                        'user_telp' => $data_invoice->user_no_telp,
+                        'buku_id' => $data_invoice->buku_id,
+                        'detail_buku_id' => $data_invoice->detail_buku_id,
+                        'created_datetime' => $now,
+                    );
+
+                    $tbl_user_pembelian_buku = $this->tbl_user_pembelian_buku;
+                    $this->general->input_data($tbl_user_pembelian_buku, $list_pembelian);
+
+                    return 'OK';
+                } else { //jika email tidak terkirim invoice dibatalkan / disable
+                    $rollback = [];
+                    $tbl_invoice = $this->tbl_invoice;
+                    $rollback = array(
+                        'status' => $status_data,
+                        'reject_desc' => $reject_data,
+                        'updated_datetime' => $now,
+                        'invoice_date_update' => $now
+                    );
+                    $this->general->update_data($tbl_invoice, $rollback, $invoice_id);
+                    
+                    return 'ROLLBACK';
+                }
+            } else {
+                return 'ERROR';
+            }
         }
     }
 }

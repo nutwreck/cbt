@@ -224,7 +224,7 @@ class Management_model extends CI_Model{
 			'status' => 0,
 			'payment_method_id' => 1 //Bank
 		]);
-		$this->db->order_by('id', 'ASC');
+		$this->db->order_by('RAND()');
 		$this->db->where('invoice_date_expirate >=', $start_date);
 		$this->db->where('invoice_date_expirate <=', $end_date);
 		$this->db->limit(10);
@@ -232,7 +232,41 @@ class Management_model extends CI_Model{
 		if($query){
 			return $query->result_array();
 		}else{
-			return false;
+			return null;
+		}
+    }
+
+    public function list_invoice_expired(){
+        $now = date('Y-m-d H:i:s');
+		$this->db->select([
+			'id'
+		]);
+		$this->db->from('invoice');
+		$this->db->where([
+			'status' => 0
+		]);
+		$this->db->order_by('RAND()');
+		$this->db->where('invoice_date_expirate <=', $now);
+		$this->db->limit(10);
+		$query = $this->db->get();
+		if($query){
+			return $query->result_array();
+		}else{
+			return null;
+		}
+    }
+
+    public function mutation_bank_list($mutation_id) {
+		$this->db->select('mutation_id');
+		$this->db->from('hit_mutation');
+		$this->db->where([
+			'mutation_id' => $mutation_id,
+		]);
+		$query = $this->db->get();
+		if($query){
+			return $query->result_array();
+		}else{
+			return null;
 		}
 	}
     
