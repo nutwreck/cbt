@@ -74,7 +74,7 @@
             upload_gambar.style.display = 'none';
             upload_audio.style.display = 'none';
             upload_video.style.display = 'none';
-            upload_text.style.display = 'block';
+            upload_text.style.display = 'none';
             upload_link.style.display = 'none';
             upload_file.style.display = 'none';
         }

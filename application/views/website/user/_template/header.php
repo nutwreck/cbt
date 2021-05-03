@@ -6,11 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Candra Aji Pamungkas | candraajipamungkas@gmail.com">
-    <meta name="description" content="Aplikasi ujian online &amp; solusi menyelenggarakan ujian online berbasis komputer dengan mudah cepat dan praktis">
+    <meta name="description" content="Aplikasi ujian online &amp; ujian online berbasis komputer Zambert">
     <link rel="shortcut icon" href="<?php echo config_item('_assets_general'); ?>favicon/favicon.ico">
-    <meta property="og:description" content="Aplikasi ujian online &amp; solusi menyelenggarakan ujian online berbasis komputer dengan mudah cepat dan praktis">
+    <meta property="og:description" content="Aplikasi ujian online &amp; ujian online berbasis komputer Zambert">
     <meta property="og:title" content="Aplikasi Ujian Online">
-    <meta name="twitter:description" content="Aplikasi ujian online &amp; solusi menyelenggarakan ujian online berbasis komputer dengan mudah cepat dan praktis">
+    <meta name="twitter:description" content="Aplikasi ujian online &amp; ujian online berbasis komputer Zambert">
     <meta name="twitter:title" content="Aplikasi Ujian Online">
 
     <title><?=$title?></title>

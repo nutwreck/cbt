@@ -142,6 +142,20 @@ class Management_model extends CI_Model{
             ->get_where('config_buku AS T1', array('T1.buku_id' => $buku_id, 'T1.is_enable' => 1))->row();
     }
 
+    public function get_config_buku_group_by_buku($buku_id){
+        return $this->db->select('T1.*')
+            ->join('config_buku AS T2', 'T2.id = T1.config_buku_id')
+            ->get_where('config_buku_group AS T1', array('T2.buku_id' => $buku_id, 'T1.is_enable' => 1, 'T2.is_enable' => 1))->result();
+    }
+
+    public function get_config_buku_detail_by_id($config_buku_group_id){
+        return $this->db->get_where('config_buku_detail', array('config_buku_group_id' => $config_buku_group_id, 'is_enable' => 1))->result();
+    }
+
+    public function get_config_buku_detail_download($id_detail_buku){
+        return $this->db->get_where('config_buku_detail', array('id' => $id_detail_buku, 'is_enable' => 1))->row();
+    }
+
     public function checking_nomor_invoice($no_invoice){
         $query = $this->db->select('id')
                         ->get_where('invoice', array('invoice_number' => $no_invoice, 'is_enable' => 1))->row();

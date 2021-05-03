@@ -25,7 +25,7 @@
                                             <option data-tokens="Gambar" value="1">Gambar</option>
                                             <option data-tokens="Audio" value="2">Audio</option>
                                             <option data-tokens="Video" value="3">Video</option>
-                                            <option data-tokens="Text" value="4">Text</option>
+                                            <!-- <option data-tokens="Text" value="4">Text</option> -->
                                             <option data-tokens="Link" value="5">Link</option>
                                             <option data-tokens="File" value="6">File</option>
                                         </select>

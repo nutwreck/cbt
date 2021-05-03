@@ -16,6 +16,7 @@ class Buku extends CI_Controller {
             redirect('login');
         }
         $this->load->library('encryption');
+        $this->load->helper('download');
         $this->load->config('email');
         $this->load->model('General','general');
         $this->load->model('Tes_online_model','tes');
@@ -81,7 +82,7 @@ class Buku extends CI_Controller {
     |
     */
 
-    public function sbmptn(){
+    public function sbmptn($id_config_buku_group){
         $user_id = $this->session->userdata('user_id');
         $sbmptn_id = $this->sbmptn_id;
 
@@ -101,8 +102,18 @@ class Buku extends CI_Controller {
         }
         $data['content']['status_user'] = !empty($get_check_invoice) ? 'purchase' : 'free';
         $data['content']['free_paket'] = $free_paket;
+
+        if($id_config_buku_group == 'launch'){
+            $data['content']['group_stat'] = 0;
+            $data['content']['buku_group'] = $this->management->get_config_buku_group_by_buku($sbmptn_id);
+        } else {
+            $config_buku_group_id = base64_decode(urldecode($id_config_buku_group));
+            $data['content']['group_stat'] = 1;
+            $data['content']['buku_group'] = $this->management->get_config_buku_detail_by_id($config_buku_group_id);
+        }
+
         $data['content']['sbmptn_id'] = urlencode(base64_encode($sbmptn_id));
-        $data['title_header'] = ['title' => 'Lembar Ujian Online'];
+        $data['title_header'] = ['title' => 'Buku SBMPTN'];
 
         //for load view
         $view['css_additional'] = 'website/user/buku/sbmptn/css';
@@ -111,6 +122,14 @@ class Buku extends CI_Controller {
 
         //get function view website
         $this->_generate_view($view, $data);
+    }
+
+    public function download_buku($id_detail_buku){
+        $get_detail_buku = $this->management->get_config_buku_detail_download($id_detail_buku);
+
+        $nama_file = 'storage/website/lembaga/grandsbmptn/modul/'.$get_detail_buku->nama_file;
+
+        force_download($nama_file, NULL);
     }
 
     public function pembelian_buku($id_buku){
