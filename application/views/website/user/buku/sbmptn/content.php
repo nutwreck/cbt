@@ -7,19 +7,20 @@
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     <span class="glyphicon glyphicon-info-sign"></span><i class="fa fa-info-circle" aria-hidden="true"></i> <strong>Informasi</strong>
                     <hr class="message-inner-separator">
-                        <p>Selamat, Anda berhak mendapatkan <?=$free_paket?> Paket <b>TryOut SBMPTN secara GRATIS</b>. Untuk mendapatkan seluruh paket TryOut silahkan melakukkan <b>pembelian Paket TryOut SBMPTN</b> dengan cara <a href="<?=base_url()?>pembelian-buku/<?=$sbmptn_id?>" class="btn btn-sm btn-success">Klik Disini</a></p>
+                        <p>Selamat, Anda berhak mendapatkan <?=$free_paket?> Paket <b>TryOut SBMPTN secara GRATIS</b>. Untuk mendapatkan seluruh paket TryOut dan Materi silahkan melakukkan <b>pembelian Paket TryOut SBMPTN</b> dengan cara <a href="<?=base_url()?>pembelian-buku/<?=$sbmptn_id?>" class="btn btn-sm btn-success">Klik Disini</a></p>
                 </div>
             <?php } elseif($status_user == 'free') { ?>
                 <div class="alert alert-info">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     <span class="glyphicon glyphicon-info-sign"></span><i class="fa fa-info-circle" aria-hidden="true"></i> <strong>Informasi</strong>
                     <hr class="message-inner-separator">
-                        <p>Untuk mendapatkan seluruh paket TryOut silahkan melakukkan <b>pembelian Paket TryOut SBMPTN</b> dengan cara <a href="<?=base_url()?>pembelian-buku/<?=$sbmptn_id?>" class="btn btn-sm btn-success">Klik Disini</a></p>
+                        <p>Untuk mendapatkan seluruh paket TryOut dan Materi silahkan melakukkan <b>pembelian Paket TryOut SBMPTN</b> dengan cara <a href="<?=base_url()?>pembelian-buku/<?=$sbmptn_id?>" class="btn btn-sm btn-success">Klik Disini</a></p>
                 </div>
-            <?php } else {  ?>
+            <?php } ?>
                 <div id="main">
                     <div class="container">
                         <div class="accordion" id="faq">
+                            <?php if(isset($sbmptn_paket)){ ?>
                             <div class="card">
                                 <div class="card-header" id="faqhead1">
                                     <a href="#" class="btn btn-header-link <?=$group_stat == 1 ? 'collapsed' : ''?>" data-toggle="collapse" data-target="#faq1"
@@ -28,15 +29,49 @@
 
                                 <div id="faq1" class="collapse <?=$group_stat == 1 ? '' : 'show'?>" aria-labelledby="faqhead1" data-parent="#faq">
                                     <div class="card-body">
-                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf
-                                        moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod.
-                                        Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda
-                                        shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea
-                                        proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
-                                        aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                        <div class="row">
+                                            <?php foreach($sbmptn_paket as $val_paket){ ?>
+                                            <div class="col-sm-12 col-md-6 col-lg-4 mt-3 mb-3">
+                                                <div class="p-2 border border-secondary">
+                                                    <div class="text-center sesi-head">
+                                                        <?=ucwords(strtolower($val_paket->nama_paket_soal))?>
+                                                    </div>
+                                                    <hr />
+                                                    <table class="table-responsive mb-0 sesi-detail">
+                                                        <tr>
+                                                            <td>Nama Materi</td><td>:</td><td><?=$val_paket->materi_name?> <?=!empty($val_paket->detail_buku_name) || $val_paket->detail_buku_name != '' ? '('.$val_paket->detail_buku_name.')' : ''?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Jumlah Soal</td><td>:</td><td><?=$val_paket->total_soal?> Butir Soal</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Jenis Paket</td><td>:</td><td><?=$val_paket->is_free == 1 ? 'Free' : 'Berbayar'?></td>
+                                                        </tr>
+                                                    </table>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="col-sm-8 offset-sm-2">
+                                                            <?php if($status_user == 'free') { ?>
+                                                                <?php if($val_paket->is_free == 1) { ?>
+                                                                    <a href="" class="btn btn-block btn-mulai">Mulai</a>
+                                                                <?php } else { ?>
+                                                                    <a href="" class="btn btn-block btn-mulai isDisabled">Mulai</a>
+                                                                <?php } ?>    
+                                                            <?php } else { ?>
+                                                                <a href="" class="btn btn-block btn-mulai">Mulai</a>
+                                                            <?php } ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php } ?>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <?php } else { echo ''; }?>
+
+                            <?php if($status_user == 'purchase' && isset($buku_group)){ ?>
                             <div class="card">
                                 <div class="card-header" id="faqhead2">
                                     <a href="#" class="btn btn-header-link <?=$group_stat == 1 ? '' : 'collapsed'?>" data-toggle="collapse" data-target="#faq2"
@@ -55,6 +90,13 @@
                                                             <p>Klik pada area file untuk mendownload / mengakses file.</p>
                                                     </div>
                                                 </div>
+                                                <?php if($this->uri->segment(3) == 'back' || $this->uri->segment(3) == 'launch'){ echo ''; } else { ?>
+                                                    <div class="col-sm-12 text-left">
+                                                        <a href="<?=base_url()?>buku/sbmptn/back" class="pointer">
+                                                            <i class="fas fa-arrow-left"></i> Kembali
+                                                        </a>
+                                                    </div>
+                                                <?php } ?>
                                             <?php } else { echo ''; } ?>
                                             <?php foreach($buku_group as $val_group) { ?>
                                             <div class="col-sm-12 col-md-6 col-lg-4 mt-3 mb-3">
@@ -117,10 +159,10 @@
                                     </div>
                                 </div>
                             </div>
+                            <?php } else { echo ''; }?>
                         </div>
                     </div>
                 </div>
-            <?php } ?>
         </div>
     </div>
 </div>

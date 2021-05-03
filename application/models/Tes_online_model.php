@@ -637,16 +637,14 @@ class Tes_online_model extends CI_Model{
         return $this->db->get()->row();
     }
 
-    public function get_paket_soal_buku($buku_id, $detail_buku_id, $limit){
+    public function get_paket_soal_buku($buku_id, $detail_buku_id){
         $this->db->from('v_paket_buku');
+        $this->db->where('type_paket_id <>', 1, FALSE);
         $this->db->where('buku_id', $buku_id);
         if(!empty($detail_buku_id)){
             $this->db->where('detail_buku_id', $detail_buku_id);
         } else {}
-        $this->db->order_by('paket_soal_id ASC');
-        if(!empty($limit)){
-            $this->db->limit($limit);
-        } else {}
+        $this->db->order_by('is_free, paket_soal_id ASC');
         return $this->db->get()->result();
     }
 

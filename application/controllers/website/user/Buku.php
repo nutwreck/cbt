@@ -94,17 +94,15 @@ class Buku extends CI_Controller {
         $price = $get_check_paket->price;
 
         //for passing data to view
-        if(!empty($get_check_invoice)){
-            $free_paket = NULL;
-            $data['content']['sbmptn_paket'] = $this->tes->get_paket_soal_buku($sbmptn_id, $jurusan, $free_paket);
-        } else {
-            $data['content']['sbmptn_paket'] = $this->tes->get_paket_soal_buku($sbmptn_id, $jurusan, $free_paket);
-        }
+        $data['content']['sbmptn_paket'] = $this->tes->get_paket_soal_buku($sbmptn_id, $jurusan);
         $data['content']['status_user'] = !empty($get_check_invoice) ? 'purchase' : 'free';
         $data['content']['free_paket'] = $free_paket;
 
         if($id_config_buku_group == 'launch'){
             $data['content']['group_stat'] = 0;
+            $data['content']['buku_group'] = $this->management->get_config_buku_group_by_buku($sbmptn_id);
+        } elseif($id_config_buku_group == 'back'){
+            $data['content']['group_stat'] = 1;
             $data['content']['buku_group'] = $this->management->get_config_buku_group_by_buku($sbmptn_id);
         } else {
             $config_buku_group_id = base64_decode(urldecode($id_config_buku_group));
