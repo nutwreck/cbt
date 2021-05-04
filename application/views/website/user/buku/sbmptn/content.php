@@ -52,13 +52,19 @@
                                                     <div class="row">
                                                         <div class="col-sm-8 offset-sm-2">
                                                             <?php if($status_user == 'free') { ?>
-                                                                <?php if($val_paket->is_free == 1) { ?>
-                                                                    <a href="" class="btn btn-block btn-mulai">Mulai</a>
+                                                                <?php if($val_paket->is_free == 1 && $val_paket->status == 0) { ?>
+                                                                    <a href="<?=base_url()?>buku/tes/mulai/<?=urlencode(base64_encode($val_paket->paket_soal_id))?>" class="btn btn-block btn-mulai">Mulai</a>
+                                                                <?php } elseif($val_paket->is_free == 1 && $val_paket->status == 1) { ?>
+                                                                    <a href="<?=base_url()?>buku/tes/pembahasan/<?=urlencode(base64_encode($val_paket->id_ujian))?>/<?=urlencode(base64_encode($val_paket->paket_soal_id))?>/<?=$this->session->userdata('user_id')?>" class="btn btn-block btn-mulai">Pembahasan</a>
                                                                 <?php } else { ?>
-                                                                    <a href="" class="btn btn-block btn-mulai isDisabled">Mulai</a>
+                                                                    <a href="#" class="btn btn-block btn-mulai isDisabled">Mulai</a>
                                                                 <?php } ?>    
                                                             <?php } else { ?>
-                                                                <a href="" class="btn btn-block btn-mulai">Mulai</a>
+                                                                <?php if($val_paket->status == 0) { ?>
+                                                                    <a href="<?=base_url()?>buku/tes/mulai/<?=urlencode(base64_encode($val_paket->paket_soal_id))?>" class="btn btn-block btn-mulai">Mulai</a>
+                                                                <?php } else { ?>
+                                                                    <a href="<?=base_url()?>buku/tes/pembahasan/<?=urlencode(base64_encode($val_paket->id_ujian))?>/<?=urlencode(base64_encode($val_paket->paket_soal_id))?>/<?=$this->session->userdata('user_id')?>" class="btn btn-block btn-mulai">Pembahasan</a>
+                                                                <?php } ?>
                                                             <?php } ?>
                                                         </div>
                                                     </div>

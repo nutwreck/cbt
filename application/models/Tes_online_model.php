@@ -277,6 +277,19 @@ class Tes_online_model extends CI_Model{
         return $query->result();
     }
 
+    public function get_komposisi_soal_by_paket($paket_soal_id){
+        $query = $this->db->query("SELECT
+            paket_soal_id,
+            group_soal_id AS id_group_soal,
+            group_soal_name
+        FROM v_bank_soal AS T1
+        WHERE paket_soal_id = '".$paket_soal_id."' AND 
+        is_enable = 1
+        GROUP BY paket_soal_id, group_soal_id
+        ORDER BY group_soal_id");
+        return $query->result();
+    }
+
     public function getUsers($searchTerm=""){
 
         // Fetch users
@@ -628,6 +641,25 @@ class Tes_online_model extends CI_Model{
         }
     }
 
+    public function get_bank_soal_ujian_buku($paket_soal_id, $group_soal_id){
+        $config_acakan_soal = $this->get_paket_soal_by_id($paket_soal_id);
+        $order = $config_acakan_soal->is_acak_soal == 1 ? "CASE WHEN is_acak_soal = 1 THEN 1 ELSE 0 END, CASE WHEN is_acak_soal = 0 THEN bank_soal_id END, RAND()" : 'bank_soal_id ASC';
+        $query = $this->db->query("
+                    SELECT `bank_soal_id` 
+                    FROM `v_bank_soal` 
+                    WHERE `paket_soal_id` = '".$paket_soal_id."' 
+                    AND `group_soal_id` = '".$group_soal_id."' 
+                    AND `is_enable` = 1
+                    ORDER BY ".$order."
+                ");
+        $check = $query->result_array();
+        if($check > 0){
+            return $check;
+        } else{
+            return false;
+        }
+    }
+
     public function get_ujian_list_user($pc_urut_soal_jwb, $pc_urut_soal_id, $paket_soal_id){
         $this->db->select("*, {$pc_urut_soal_jwb} AS jawaban");
         $this->db->from('v_bank_soal');
@@ -638,13 +670,12 @@ class Tes_online_model extends CI_Model{
     }
 
     public function get_paket_soal_buku($buku_id, $detail_buku_id){
-        $this->db->from('v_paket_buku');
-        $this->db->where('type_paket_id <>', 1, FALSE);
+        $this->db->select("*");
+        $this->db->from('v_paket_soal_buku');
         $this->db->where('buku_id', $buku_id);
         if(!empty($detail_buku_id)){
             $this->db->where('detail_buku_id', $detail_buku_id);
         } else {}
-        $this->db->order_by('is_free, paket_soal_id ASC');
         return $this->db->get()->result();
     }
 

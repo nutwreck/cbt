@@ -8,14 +8,8 @@
     var audio_limit     = <?=$audio_limit?>;
     var is_jawab        = <?=$is_jawab?>;
     var is_continuous   = <?=$is_continuous?>;
-    var blok_layar      = <?=$blok_layar?>;
 
     $(document).ready(function () {
-        var t = $('.sisawaktu');
-        if (t.length) {
-            sisawaktu(t.data('time'));
-        }
-
         //Sidebar hidden
         $('#sidebar, #content').toggleClass('active');
         $('.collapse.in').toggleClass('in');
@@ -289,7 +283,7 @@
 
         $.ajax({
             type: "POST",
-            url: base_url + "website/user/Ujian/buka_group",
+            url: base_url + "website/user/Buku/buka_group",
             data: 'id_group='+group+'&urutan='+urutan,
             dataType: 'json',
             success: function (data) {
@@ -310,7 +304,7 @@
 
         $.ajax({
             type: "POST",
-            url: base_url + "website/user/Ujian/simpan_satu",
+            url: base_url + "website/user/Buku/simpan_satu",
             data: form.serialize(),
             dataType: 'json',
             success: function (data) {
@@ -414,7 +408,7 @@
         simpan();
         $.ajax({
             type: "POST",
-            url: base_url + "website/user/Ujian/simpan_akhir",
+            url: base_url + "website/user/Buku/simpan_akhir",
             data: { id: id_tes },
             beforeSend: function () {
                 simpan();
@@ -423,22 +417,13 @@
                 /* console.log(r); */
                 if (r.status) {
                     if(r.hasil == 1){
-                        window.location.href = base_url + 'result/' + r.id + '/' + r.ranking;
+                        window.location.href = base_url + 'buku/result/' + r.id;
                     } else {
-                        window.location.href = base_url + 'dashboard';
+                        window.location.href = base_url + 'buku/sbmptn/launch';
                     }
                 }
             }
         });
-    }
-
-    function waktuHabis() {
-        swal("Informasi", "Waktu ujian telah habis!", "info");
-        setTimeout(() => { swal("Informasi", "Waktu ujian telah habis!", "info"); }, 500);
-        setTimeout(() => { swal("Informasi", "Sedang menyimpan jawaban. Mohon Tunggu.", "info"); }, 1000);
-        setTimeout(() => { swal("Informasi", "Sedang menyimpan jawaban. Mohon Tunggu.", "info"); }, 1500);
-        setTimeout(() => { swal("Informasi", "Mengalihkan", "info"); }, 2000);
-        setTimeout(() => { selesai(); }, 2500);
     }
 </script>
 
@@ -464,31 +449,6 @@
         $('.card-text').css('font-size', '16px')
         $('.huruf_opsi').css('font-size', '16px')
     }
-</script>
-
-<!-- User pindah tab lain atau pindah dari browser aktif sekarang -->
-<script type="text/javascript">
-    document.addEventListener("visibilitychange", event => {
-        if(blok_layar != 0){
-            var modal = document.getElementById("alert-away");
-            var timeleft = blok_layar;
-
-            if (document.visibilityState == "visible") {
-                var openBlockTimer = setInterval(function(){
-                timeleft--;
-                document.getElementById("countdownblocktimer").innerHTML = timeleft;
-                if(timeleft == 0){
-                    clearInterval(openBlockTimer);
-                    modal.style.display = "none";
-                } }, 1000);
-            } else {
-                document.getElementById("msg_title_away").innerHTML = "PESAN SISTEM!";
-                document.getElementById("msg_content_away").innerHTML = "Anda terdeteksi meninggalkan halaman ini.";
-                document.getElementById("msg_footer_away").innerHTML = "Tunggu waktu penalti selesai untuk dapat melanjutkan pengerjaan soal kembali.";
-                modal.style.display = "block";
-            }
-        }
-    })
 </script>
 
 <!-- NAVIGASI TOOGLE SOAL -->
