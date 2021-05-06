@@ -12,13 +12,14 @@
         $('.collapse.in').toggleClass('in');
         $('a[aria-expanded=true]').attr('aria-expanded', 'false');
 
-        //disable F5
-        /* $(document).on("keydown", disableF5); */
-
         buka(1);
         simpan_sementara();
 
         $("#widget_1").show();
+
+        $("html, body").animate({ 
+            scrollTop: $('.lembar-pembahasan').offset().top 
+        }, 1000);
     });
 
     function getFormData($form) {
@@ -176,12 +177,16 @@
         var f_asal = $("#ujian");
         var form = getFormData(f_asal);
         var gr = 'id_group_soal_' + urutan;
+        var gr_n = 'group_soal_' + urutan;
         var group = form[gr];
+        var group_name = form[gr_n]; //group soal
+        var group_str_name = group_name.substring(0, 1);
+        var group_str_upper = group_str_name.toUpperCase();
 
         $.ajax({
             type: "POST",
             url: base_url + "website/user/Ujian/buka_group",
-            data: 'id_group='+group+'&urutan='+urutan,
+            data: 'id_group='+group+'&urutan='+urutan+'&group_first='+group_str_upper,
             dataType: 'json',
             success: function (data) {
                 // Add response in Modal body
@@ -211,9 +216,11 @@
             var group_m = form[gr_m];
 
             var gr = 'id_group_soal_' + i;
+            var gr_n = 'group_soal_' + i;
             var idx2 = 'rg_' + i;
             var ragu = form[idx2];
             var group = form[gr]; //group soal
+            var group_name = form[gr_n]; //group soal
 
             if(group_m == 1){ //1 Pilihan Ganda 2 Essay
                 var idx = 'key_' + i;
@@ -230,7 +237,9 @@
             var times = '<i style="margin-left:3px;" class="fa fa-times fa-xs"></i>';
 
             if(group != group_before && group != 0) {
-                hasil_jawaban += '<a id="group_petunjuk_'+(i)+'" class="btn button-round btn-primary text-white btn_group" onclick="return buka_group(' + (i) + ');">G' + (group_number) + "</a>";
+                var group_str_name = group_name.substring(0, 1);
+                var group_str_upper = group_str_name.toUpperCase();
+                hasil_jawaban += '<a id="group_petunjuk_'+(i)+'" class="btn button-round btn-primary text-white btn_group" onclick="return buka_group(' + (i) + ');">' + group_str_upper + (group_number) + "</a>";
                 group_number++;
             }
 
@@ -238,13 +247,13 @@
                 if(jawab_benar == jawab){
                     if (ragu == "Y") {
                         if (jawab == "-") {
-                            hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-outline-secondary text-secondary btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
+                            hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-danger btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
                         } else {
                             hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-warning btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
                         }
                     } else {
                         if (jawab == "-") {
-                            hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-outline-secondary text-secondary btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
+                            hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-danger btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
                         } else {
                             hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-success btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
                         }
@@ -253,7 +262,7 @@
                     hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-danger btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
                 }
             } else {
-                hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-outline-secondary text-secondary btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
+                hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-danger btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
             }
 
             var group_before = group;

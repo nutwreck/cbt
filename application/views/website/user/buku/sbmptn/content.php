@@ -38,30 +38,39 @@
                                                     </div>
                                                     <hr />
                                                     <table class="table-responsive mb-0 sesi-detail">
+                                                    <?php if(empty($val_paket->tgl_selesai) && $val_paket->status == 0){ ?>
                                                         <tr>
-                                                            <td>Nama Materi</td><td>:</td><td><?=$val_paket->materi_name?> <?=!empty($val_paket->detail_buku_name) || $val_paket->detail_buku_name != '' ? '('.$val_paket->detail_buku_name.')' : ''?></td>
+                                                            <td colspan="3"><span class="badge badge-danger">Anda belum selesai mengerjakan paket soal ini!</span></td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                        <tr>
+                                                            <td><i class="fas fa-book"></i> Nama Materi</td><td>:</td><td><?=$val_paket->materi_name?> <?=!empty($val_paket->detail_buku_name) || $val_paket->detail_buku_name != '' ? '('.$val_paket->detail_buku_name.')' : ''?></td>
                                                         </tr>
                                                         <tr>
-                                                            <td>Jumlah Soal</td><td>:</td><td><?=$val_paket->total_soal?> Butir Soal</td>
+                                                            <td><i class="fa fa-braille" aria-hidden="true"></i> Jumlah Soal</td><td>:</td><td><?=$val_paket->total_soal?> Butir Soal</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>Jenis Paket</td><td>:</td><td><?=$val_paket->is_free == 1 ? 'Free' : 'Berbayar'?></td>
+                                                            <td><i class="fas fa-shopping-cart"></i> Jenis Paket</td><td>:</td><td><?=$val_paket->is_free == 1 ? 'Free' : 'Berbayar'?></td>
                                                         </tr>
                                                     </table>
                                                     <hr />
                                                     <div class="row">
                                                         <div class="col-sm-8 offset-sm-2">
                                                             <?php if($status_user == 'free') { ?>
-                                                                <?php if($val_paket->is_free == 1 && $val_paket->status == 0) { ?>
+                                                                <?php if($val_paket->is_free == 1 && $val_paket->status == 0 && empty($val_paket->id_ujian)) { ?>
                                                                     <a href="<?=base_url()?>buku/tes/mulai/<?=urlencode(base64_encode($val_paket->paket_soal_id))?>" class="btn btn-block btn-mulai">Mulai</a>
+                                                                <?php } elseif($val_paket->is_free == 1 && $val_paket->status == 0 && !empty($val_paket->id_ujian)) { ?>
+                                                                    <a href="<?=base_url()?>buku/tes/mulai/<?=urlencode(base64_encode($val_paket->paket_soal_id))?>" class="btn btn-block btn-mulai">Lanjut</a>
                                                                 <?php } elseif($val_paket->is_free == 1 && $val_paket->status == 1) { ?>
                                                                     <a href="<?=base_url()?>buku/tes/pembahasan/<?=urlencode(base64_encode($val_paket->id_ujian))?>/<?=urlencode(base64_encode($val_paket->paket_soal_id))?>/<?=$this->session->userdata('user_id')?>" class="btn btn-block btn-mulai">Pembahasan</a>
                                                                 <?php } else { ?>
-                                                                    <a href="#" class="btn btn-block btn-mulai isDisabled">Mulai</a>
+                                                                    <button class="btn btn-block btn-mulai isDisabled" onclick="return purchase_before()"><i class="fas fa-lock"></i> Mulai</button>
                                                                 <?php } ?>    
                                                             <?php } else { ?>
-                                                                <?php if($val_paket->status == 0) { ?>
+                                                                <?php if($val_paket->status == 0 && empty($val_paket->id_ujian)) { ?>
                                                                     <a href="<?=base_url()?>buku/tes/mulai/<?=urlencode(base64_encode($val_paket->paket_soal_id))?>" class="btn btn-block btn-mulai">Mulai</a>
+                                                                <?php } elseif($val_paket->status == 0 && !empty($val_paket->id_ujian)) { ?>
+                                                                    <a href="<?=base_url()?>buku/tes/mulai/<?=urlencode(base64_encode($val_paket->paket_soal_id))?>" class="btn btn-block btn-mulai">Lanjut</a>
                                                                 <?php } else { ?>
                                                                     <a href="<?=base_url()?>buku/tes/pembahasan/<?=urlencode(base64_encode($val_paket->id_ujian))?>/<?=urlencode(base64_encode($val_paket->paket_soal_id))?>/<?=$this->session->userdata('user_id')?>" class="btn btn-block btn-mulai">Pembahasan</a>
                                                                 <?php } ?>
@@ -76,7 +85,7 @@
                                 </div>
                             </div>
                             <?php } else { echo ''; }?>
-
+                            <!--MATERI-->
                             <?php if($status_user == 'purchase' && isset($buku_group)){ ?>
                             <div class="card">
                                 <div class="card-header" id="faqhead2">
@@ -98,7 +107,7 @@
                                                 </div>
                                                 <?php if($this->uri->segment(3) == 'back' || $this->uri->segment(3) == 'launch'){ echo ''; } else { ?>
                                                     <div class="col-sm-12 text-left">
-                                                        <a href="<?=base_url()?>buku/sbmptn/back" class="pointer">
+                                                        <a href="<?=base_url()?>buku/sbmptn/back#faq2" class="pointer">
                                                             <i class="fas fa-arrow-left"></i> Kembali
                                                         </a>
                                                     </div>

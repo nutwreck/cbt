@@ -20,3 +20,9 @@
     })();
 </script>
 <!-- /GetButton.io widget -->
+
+<script>
+    function purchase_before(){
+        swal("Informasi", "Segera lakukkan pembelian untuk bisa memulai mengerjakan soal ini!", "info");
+    }
+</script>

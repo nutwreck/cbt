@@ -11,6 +11,10 @@
     var blok_layar      = <?=$blok_layar?>;
 
     $(document).ready(function () {
+        window.onbeforeunload = function() {
+            return "Are you sure you want to leave?";
+        }
+        
         var t = $('.sisawaktu');
         if (t.length) {
             sisawaktu(t.data('time'));
@@ -22,7 +26,7 @@
         $('a[aria-expanded=true]').attr('aria-expanded', 'false');
 
         //disable F5
-        /* $(document).on("keydown", disableF5); */
+        $(document).on("keydown", disableF5);
 
         buka(1);
         simpan_sementara();
@@ -30,6 +34,10 @@
         $("#widget_1").show();
 
         limit_audio(audio_limit, 1);
+
+        $("html, body").animate({ 
+            scrollTop: $('.all-exam').offset().top 
+        }, 1000);
     });
 
     function disableF5(e) { if ((e.which || e.keyCode) == 116 || (e.which || e.keyCode) == 82) e.preventDefault(); };
@@ -38,7 +46,7 @@
     function limit_audio(audio_limit, no){
         if (audio_limit != 0 && document.getElementById('loop-limited-' + no) != null) {
             var loopLimit = audio_limit;
-            var loopCounter = 0;
+            var loopCounter = 1;
             document.getElementById('loop-limited-' + no).addEventListener('ended', function(){
                 if (loopCounter < loopLimit){
                     this.currentTime = 0;
@@ -46,6 +54,23 @@
                     loopCounter++;
                 } else {
                     var ply = document.getElementById('loop-limited-' + no);
+                    /* var oldSrc = ply.src; */
+                    /* ply.src = ""; */
+                    ply.style.display = 'none';
+                }
+            }, false);
+        }
+
+        if (audio_limit != 0 && document.getElementById('group-loop-limited-' + no) != null) {
+            var loopLimit = audio_limit;
+            var loopCounter = 1;
+            document.getElementById('group-loop-limited-' + no).addEventListener('ended', function(){
+                if (loopCounter < loopLimit){
+                    this.currentTime = 0;
+                    this.play();
+                    loopCounter++;
+                } else {
+                    var ply = document.getElementById('group-loop-limited-' + no);
                     /* var oldSrc = ply.src; */
                     /* ply.src = ""; */
                     ply.style.display = 'none';

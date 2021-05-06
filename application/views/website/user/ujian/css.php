@@ -200,6 +200,14 @@
         font-size: 1.2em;
     }
 
+    .player {
+        border-radius: 10px;
+        overflow: hidden;
+        z-index: 1;
+        height: 400px;
+        width: 762px;
+    }
+
     /* ***************** */
     /* Responsive device */
     /* ***************** */

@@ -178,7 +178,7 @@ class Ujian extends CI_Controller {
                 $bacaan_soal = $s->isi_bacaan_soal <> 0 || !empty($s->isi_bacaan_soal) ? $s->isi_bacaan_soal.'<br />' : ''; // bacaan soal
                 $bacaan_soal_name = $s->bacaan_soal_name <> 0 || !empty($s->bacaan_soal_name) ? '<b>'.$s->bacaan_soal_name.'</b><br />' : ''; // bacaan soal judul
                 $group_soal_petunjuk = $s->group_soal_petunjuk <> 0 || !empty($s->group_soal_petunjuk) ? $s->group_soal_petunjuk.'<br />' : '';
-                $group_soal_audio = $s->group_soal_audio <> 0 || !empty($s->group_soal_audio) ? '<audio id="loop-limited-'.$nomor_soal.'" controls controlsList="nodownload"><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/group_soal/group_'.$s->paket_soal_id.'/'.$s->group_soal_audio.'" type="'.$s->group_soal_tipe_audio.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
+                $group_soal_audio = $s->group_soal_audio <> 0 || !empty($s->group_soal_audio) ? '<audio id="group-loop-limited-'.$nomor_soal.'" controls controlsList="nodownload"><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/group_soal/group_'.$s->paket_soal_id.'/'.$s->group_soal_audio.'" type="'.$s->group_soal_tipe_audio.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
                 $soal_audio = $s->file <> 0 || !empty($s->file) ? '<audio id="loop-limited-'.$nomor_soal.'" controls controlsList="nodownload"><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/paket_soal/soal_'.$s->paket_soal_id.'/'.$s->file.'" type="'.$s->tipe_file.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
                 
                 $html .= '<div class="step card text-left font-poppins" id="widget_'.$nomor_soal.'">';
@@ -347,11 +347,12 @@ class Ujian extends CI_Controller {
         $data = [];
         $id_group = $this->input->post('id_group', true);
         $urutan = $this->input->post('urutan', true);
+        $group_first = $this->input->post('group_first', true);
 
         $petunjuk = $this->tes->get_petunjuk_by_id($id_group);
 
         $data = array(
-            'judul' => $petunjuk->name.' (G'.$urutan.')',
+            'judul' => $petunjuk->name.' ('.$group_first.')',
             'petunjuk' => $petunjuk->petunjuk,
             'footer' => '<button type="button" class="btn btn-primary" onclick="return buka_non_group('.$urutan.')">Lanjut No '.$urutan.'</button>'
         );
@@ -519,11 +520,11 @@ class Ujian extends CI_Controller {
         $bank_soal = [];
         $data = [];
 
-        $sesi_detail = $this->tes->get_sesi_pelaksanaan_pembahasan($sesi_pelaksanaan_id);//Get Sesi Pelaksanaan
+        /* $sesi_detail = $this->tes->get_sesi_pelaksanaan_pembahasan($sesi_pelaksanaan_id);//Get Sesi Pelaksanaan */
         /* $paket_soal = $this->tes->get_paket_soal_sesi_by_id($paket_soal_id); //Get Paket Soal */
         $ujian_data = $this->tes->get_checking_ujian_by_id($ujian_id); //CEK UJIAN
-        $total_user_ujian = $this->tes->get_total_user_ujian($sesi_pelaksanaan_id, $paket_soal_id); //CEK UJIAN
-        $ranking_user = $this->tes->get_ranking_ujian_user($ujian_id); //CEK UJIAN
+        /* $total_user_ujian = $this->tes->get_total_user_ujian($sesi_pelaksanaan_id, $paket_soal_id); //CEK UJIAN
+        $ranking_user = $this->tes->get_ranking_ujian_user($ujian_id); //CEK UJIAN */
 
         if(empty($ujian_data)){
             $this->session->set_flashdata('error', 'Anda belum diijikan melihat pembahasan!');
@@ -572,18 +573,20 @@ class Ujian extends CI_Controller {
                 $group_soal_next = $s->group_soal_parent != 0 || !empty($s->group_soal_parent) ? $s->group_soal_parent : $s->group_soal_id;
 
                 $id_group_soal_p = $s->group_soal_parent != 0 || !empty($s->group_soal_parent) ? $s->group_soal_parent : $s->group_soal_id;
+                $group_soal_p = $s->group_soal_parent_name != 0 || !empty($s->group_soal_parent_name) ? $s->group_soal_parent_name : $s->group_soal_name;
 
                 $cek_group_mode_jwb = $s->group_mode_jwb_id == 1 ? '' : 'style="display:none;"'; //1 Pilihan ganda 2 essay
                 $bacaan_soal = $s->isi_bacaan_soal <> 0 || !empty($s->isi_bacaan_soal) ? $s->isi_bacaan_soal.'<br />' : ''; // bacaan soal
                 $bacaan_soal_name = $s->bacaan_soal_name <> 0 || !empty($s->bacaan_soal_name) ? '<b>'.$s->bacaan_soal_name.'</b><br />' : ''; // bacaan soal judul
                 $group_soal_petunjuk = $s->group_soal_petunjuk <> 0 || !empty($s->group_soal_petunjuk) ? $s->group_soal_petunjuk.'<br />' : '';
-                $group_soal_audio = $s->group_soal_audio <> 0 || !empty($s->group_soal_audio) ? '<audio id="loop-limited-'.$nomor_soal.'" controls controlsList="nodownload"><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/group_soal/group_'.$s->paket_soal_id.'/'.$s->group_soal_audio.'" type="'.$s->group_soal_tipe_audio.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
-                $soal_audio = $s->file <> 0 || !empty($s->file) ? '<audio id="loop-limited-'.$nomor_soal.'" controls controlsList="nodownload"><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/paket_soal/soal_'.$s->paket_soal_id.'/'.$s->file.'" type="'.$s->tipe_file.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
+                /* $group_soal_audio = $s->group_soal_audio <> 0 || !empty($s->group_soal_audio) ? '<audio id="loop-limited-'.$nomor_soal.'" controls controlsList="nodownload"><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/group_soal/group_'.$s->paket_soal_id.'/'.$s->group_soal_audio.'" type="'.$s->group_soal_tipe_audio.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
+                $soal_audio = $s->file <> 0 || !empty($s->file) ? '<audio id="loop-limited-'.$nomor_soal.'" controls controlsList="nodownload"><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/paket_soal/soal_'.$s->paket_soal_id.'/'.$s->file.'" type="'.$s->tipe_file.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : ''; */
                 
                 $html .= '<div class="step card text-left font-poppins" id="widget_'.$nomor_soal.'">';
                 $vrg = $arr_jawab[$s->bank_soal_id]["r"] == "" ? "N" : $arr_jawab[$s->bank_soal_id]["r"];
                 $html .= '<input type="hidden" name="id_group_mode_jwb'.$nomor_soal.'" value="'.$s->group_mode_jwb_id.'">';
                 $html .= '<input type="hidden" name="id_group_soal_'.$nomor_soal.'" value="'.$id_group_soal_p.'">';
+                $html .= '<input type="hidden" name="group_soal_'.$nomor_soal.'" value="'.$group_soal_p.'">';
 				$html .= '<input type="hidden" name="id_bank_soal_'.$nomor_soal.'" value="'.$s->bank_soal_id.'">';
 				$html .= '<input type="hidden" name="rg_'.$nomor_soal.'" id="rg_'.$nomor_soal.'" value="'.$vrg.'">';
                 
@@ -609,10 +612,11 @@ class Ujian extends CI_Controller {
                     $ragu_ragu = '<div class="col"></div>';
                 }
 
-                $group_soal_name = $s->group_soal_name <> 0 || !empty($s->group_soal_name) ? '<b> GROUP '.$s->group_soal_name.' (G'.$num_group_soal.')</b><br /><br />' : '';
+                $group_first_name = substr($group_soal_p,0,1);
+                $group_soal_name = $s->group_soal_name <> 0 || !empty($s->group_soal_name) ? '<b> GROUP '.$s->group_soal_name.' ('.$group_first_name.$num_group_soal.')</b><br /><br />' : '';
 
                 $html .= '
-                    <div class="card-header bg-primary text-white">
+                    <div class="card-header bg-primary text-white lembar-pembahasan">
                         <div class="row">
                             <div class="col">
                                 <h5><i class="fa fa-braille" aria-hidden="true"></i> Soal No #'.$nomor_soal.' / '.$jumlah_soal.'</h5>
@@ -628,8 +632,19 @@ class Ujian extends CI_Controller {
                         </div>
                     </div>';
 
-                $html .= '<div class="card-body">
-                    <div class="card-text text-justify">'.$group_soal_name.$group_soal_audio.$bacaan_soal_name.$bacaan_soal.$soal_audio.$s->bank_soal_name.'</div><hr>';
+                $html .= '<div class="card-body">';
+
+                $pembahasan = $this->tes->get_pembahasan($s->bank_soal_id);
+                $url_video = !empty($pembahasan->url) ? '<div class="player"><iframe width="762" height="400" src="'.$pembahasan->url.'" frameborder="0" allowfullscreen></iframe></div>' : '';
+                $text_pembahasan = !empty($pembahasan->pembahasan) ? '<p>'.$pembahasan->pembahasan.'</p>' : '';
+                $pembahasan = !empty($pembahasan->pembahasan) || !empty($pembahasan->url) ? '<h5>Pembahasan : </h5>' : '';
+
+                $html .= '<div class="row">
+                <center><div class="m-3">'.$pembahasan.$url_video.'</div>
+                <div class="text-left m-3">'.$text_pembahasan.'</div></center>
+                </div>';
+
+                $html .= '<div class="card-text text-justify">'.$group_soal_name.$bacaan_soal_name.$bacaan_soal.$s->bank_soal_name.'</div><hr>';
 
                 if($s->group_mode_jwb_id == 1){
                     $html .= '<div class="card-text mt-2">
@@ -675,15 +690,8 @@ class Ujian extends CI_Controller {
                     $key_opsi = 'E';
                 }
 
-                $pembahasan = $this->tes->get_pembahasan($s->bank_soal_id);
-                $url_video = !empty($pembahasan->url) ? '<iframe width="762" height="400" src="'.$pembahasan->url.'" frameborder="0" allowfullscreen></iframe>' : '';
-                $text_pembahasan = !empty($pembahasan->pembahasan) ? '<p>'.$pembahasan->pembahasan.'</p>' : '';
-                $pembahasan = !empty($pembahasan->pembahasan) || !empty($pembahasan->url) ? '<h5>Pembahasan : </h5>' : '';
-
                 $html .= '<div class="row">
                 <h5 class="card-text mt-2 ml-3">Jawaban Benar : '.$key_opsi.'</h5>
-                <center><div class="m-3">'.$pembahasan.$url_video.'</div>
-                <div class="text-left m-3">'.$text_pembahasan.'</div></center>
                 </div>';
 
                 $html .= '</div>';
@@ -704,11 +712,11 @@ class Ujian extends CI_Controller {
         }
         
         //for passing data to view
-        $data['content']['sesi_pelaksana'] = $sesi_detail;
+        /* $data['content']['sesi_pelaksana'] = $sesi_detail; */
         $data['content']['lembar_jawaban'] = $html;
         $data['content']['ujian'] = $ujian_data;
-        $data['content']['total_user'] = $total_user_ujian->total_user_ujian;
-        $data['content']['ranking_user'] = $ranking_user->ranking;
+        /* $data['content']['total_user'] = $total_user_ujian->total_user_ujian;
+        $data['content']['ranking_user'] = $ranking_user->ranking; */
         $data['content']['ujian_id'] = $this->encryption->encrypt($ujian_data->id);
         $data['content']['jumlah_soal'] = $nomor_soal;
         $data['title_header'] = ['title' => 'Pembahasan Ujian Online'];

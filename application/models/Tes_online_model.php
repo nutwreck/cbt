@@ -676,6 +676,7 @@ class Tes_online_model extends CI_Model{
         if(!empty($detail_buku_id)){
             $this->db->where('detail_buku_id', $detail_buku_id);
         } else {}
+        $this->db->order_by('is_free DESC');
         return $this->db->get()->result();
     }
 

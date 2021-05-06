@@ -20,7 +20,7 @@
                                 </tr>
                                 <?php if($is_ranking == 1) { ?>
                                 <tr>
-                                    <td>Ranking</td><td>:</td><td><?=$ranking_user?> Dari <?=$total_user?> <small><i>(Ranking anda sementara, Tunggu setelah <?=format_indo($sesi_pelaksana->batas_pengerjaan)?> untuk melihat ranking yang sebenarnya)</i></small></td>
+                                    <td>Ranking</td><td>:</td><td><?=$ranking_user?> Dari <?=$total_user?></td>
                                 </tr>
                                 <?php } else { echo ''; } ?>
                                 <tr>
