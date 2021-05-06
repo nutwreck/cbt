@@ -511,7 +511,7 @@ class Buku extends CI_Controller {
                     $group_soal_key = $key_soal;
                     foreach($val_soal as $val_deep_soal){
                         $list_id_soal .= $group_soal_key."|".$val_deep_soal['bank_soal_id'].",";
-                        $list_jw_soal .= $group_soal_key."|".$val_deep_soal['bank_soal_id']."||N,";
+                        $list_jw_soal .= $group_soal_key."|".$val_deep_soal['bank_soal_id']."||N|0|0,";
                     }
                 }
             }
@@ -551,12 +551,14 @@ class Buku extends CI_Controller {
 		$arr_jawab = array();
 		foreach ($pc_list_jawaban as $v) {
             $pc_v 	= explode("|", $v);
-            $gr     = $pc_v[0];
-			$idx 	= $pc_v[1];
-			$val 	= $pc_v[2];
-			$rg 	= $pc_v[3];
+            $gr     = $pc_v[0]; //Id Group
+			$idx 	= $pc_v[1]; //Id Soal
+			$val 	= $pc_v[2]; //Jawaban
+			$rg 	= $pc_v[3]; //Ragu/Tidak
+			$aud_g 	= $pc_v[4]; //Audio Group
+			$aud_s 	= $pc_v[5]; //Audio Soal
 
-			$arr_jawab[$idx] = array("g"=>$gr,"j"=>$val,"r"=>$rg);
+			$arr_jawab[$idx] = array("g"=>$gr,"j"=>$val,"r"=>$rg,"aud_g"=>$aud_g,"aud_s"=>$aud_s);
         }
 
         $show_soal = [];
@@ -580,15 +582,19 @@ class Buku extends CI_Controller {
                 $bacaan_soal = $s->isi_bacaan_soal <> 0 || !empty($s->isi_bacaan_soal) ? $s->isi_bacaan_soal.'<br />' : ''; // bacaan soal
                 $bacaan_soal_name = $s->bacaan_soal_name <> 0 || !empty($s->bacaan_soal_name) ? '<b>'.$s->bacaan_soal_name.'</b><br />' : ''; // bacaan soal judul
                 $group_soal_petunjuk = $s->group_soal_petunjuk <> 0 || !empty($s->group_soal_petunjuk) ? $s->group_soal_petunjuk.'<br />' : '';
-                $group_soal_audio = $s->group_soal_audio <> 0 || !empty($s->group_soal_audio) ? '<audio id="group-loop-limited-'.$nomor_soal.'" controls controlsList="nodownload"><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/group_soal/group_'.$s->paket_soal_id.'/'.$s->group_soal_audio.'" type="'.$s->group_soal_tipe_audio.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
-                $soal_audio = $s->file <> 0 || !empty($s->file) ? '<audio id="loop-limited-'.$nomor_soal.'" controls controlsList="nodownload"><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/paket_soal/soal_'.$s->paket_soal_id.'/'.$s->file.'" type="'.$s->tipe_file.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
+                $group_soal_audio = ($s->group_soal_audio <> 0 || !empty($s->group_soal_audio)) && $audio_limit > $arr_jawab[$s->bank_soal_id]["aud_g"] ? '<audio id="group-loop-limited-'.$nomor_soal.'" controls controlsList="nodownload"><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/group_soal/group_'.$s->paket_soal_id.'/'.$s->group_soal_audio.'" type="'.$s->group_soal_tipe_audio.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
+                $soal_audio = ($s->file <> 0 || !empty($s->file)) && $audio_limit > $arr_jawab[$s->bank_soal_id]["aud_s"] ? '<audio id="loop-limited-'.$nomor_soal.'" controls controlsList="nodownload"><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/paket_soal/soal_'.$s->paket_soal_id.'/'.$s->file.'" type="'.$s->tipe_file.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
                 
                 $html .= '<div class="step card text-left font-poppins" id="widget_'.$nomor_soal.'">';
                 $vrg = $arr_jawab[$s->bank_soal_id]["r"] == "" ? "N" : $arr_jawab[$s->bank_soal_id]["r"];
+                $ad_g = $arr_jawab[$s->bank_soal_id]["aud_g"] == "0" ? "0" : $arr_jawab[$s->bank_soal_id]["aud_g"];
+                $ad_s = $arr_jawab[$s->bank_soal_id]["aud_s"] == "0" ? "0" : $arr_jawab[$s->bank_soal_id]["aud_s"];
                 $html .= '<input type="hidden" name="id_group_mode_jwb'.$nomor_soal.'" value="'.$s->group_mode_jwb_id.'">';
                 $html .= '<input type="hidden" name="id_group_soal_'.$nomor_soal.'" value="'.$id_group_soal_p.'">';
 				$html .= '<input type="hidden" name="id_bank_soal_'.$nomor_soal.'" value="'.$s->bank_soal_id.'">';
-				$html .= '<input type="hidden" name="rg_'.$nomor_soal.'" id="rg_'.$nomor_soal.'" value="'.$vrg.'">';
+                $html .= '<input type="hidden" name="rg_'.$nomor_soal.'" id="rg_'.$nomor_soal.'" value="'.$vrg.'">';
+                $html .= '<input type="hidden" name="audio_group_'.$nomor_soal.'" id="audio_group_'.$nomor_soal.'" value="'.$ad_g.'">';
+				$html .= '<input type="hidden" name="audio_soal_'.$nomor_soal.'" id="audio_soal_'.$nomor_soal.'" value="'.$ad_s.'">';
                 
                 $no_previous = $nomor_soal-1;
                 $no_next = $nomor_soal+1;
@@ -723,13 +729,26 @@ class Buku extends CI_Controller {
             }
             $_tidgroup	= "id_group_soal_".$i;
 			$_tidsoal 	= "id_bank_soal_".$i;
-			$_ragu 		= "rg_".$i;
+            $_ragu 		= "rg_".$i;
+            $_audio_g 	= "audio_group_".$i;
+            $_audio_s	= "audio_soal_".$i;
+            if($input[$_audio_g] != 0){
+                $audio_g_ = $input[$_audio_g];
+            } else {
+                $audio_g_ = 0;
+            }
+            if($input[$_audio_s] != 0){
+                $audio_s_ = $input[$_audio_s];
+            } else {
+                $audio_s_ = 0;
+            }
+
             if($_imode == 1){ //1 Pilihan ganda 2 Essay
                 $jawaban_ 	= empty($jawab_order) ? "" : $jawab_order;
-                $list_jawaban	.= $input[$_tidgroup]."|".$input[$_tidsoal]."|".$jawaban_."|".$input[$_ragu].",";
+                $list_jawaban	.= $input[$_tidgroup]."|".$input[$_tidsoal]."|".$jawaban_."|".$input[$_ragu]."|".$audio_g_."|".$audio_s_.",";
             } else {
                 $jawaban_ 	= empty($input[$_tjawabes]) ? "" : $input[$_tjawabes];
-                $list_jawaban	.= $input[$_tidgroup]."|".$input[$_tidsoal]."|".$jawaban_."|".$input[$_ragu].",";
+                $list_jawaban	.= $input[$_tidgroup]."|".$input[$_tidsoal]."|".$jawaban_."|".$input[$_ragu]."|".$audio_g_."|".$_audio_s.",";
             }
 		}
 		$list_jawaban	= substr($list_jawaban, 0, -1);
@@ -957,18 +976,20 @@ class Buku extends CI_Controller {
                 $group_soal_next = $s->group_soal_parent != 0 || !empty($s->group_soal_parent) ? $s->group_soal_parent : $s->group_soal_id;
 
                 $id_group_soal_p = $s->group_soal_parent != 0 || !empty($s->group_soal_parent) ? $s->group_soal_parent : $s->group_soal_id;
+                $group_soal_p = $s->group_soal_parent_name != 0 || !empty($s->group_soal_parent_name) ? $s->group_soal_parent_name : $s->group_soal_name;
 
                 $cek_group_mode_jwb = $s->group_mode_jwb_id == 1 ? '' : 'style="display:none;"'; //1 Pilihan ganda 2 essay
                 $bacaan_soal = $s->isi_bacaan_soal <> 0 || !empty($s->isi_bacaan_soal) ? $s->isi_bacaan_soal.'<br />' : ''; // bacaan soal
                 $bacaan_soal_name = $s->bacaan_soal_name <> 0 || !empty($s->bacaan_soal_name) ? '<b>'.$s->bacaan_soal_name.'</b><br />' : ''; // bacaan soal judul
                 $group_soal_petunjuk = $s->group_soal_petunjuk <> 0 || !empty($s->group_soal_petunjuk) ? $s->group_soal_petunjuk.'<br />' : '';
-                $group_soal_audio = $s->group_soal_audio <> 0 || !empty($s->group_soal_audio) ? '<audio id="loop-limited-'.$nomor_soal.'" controls controlsList="nodownload"><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/group_soal/group_'.$s->paket_soal_id.'/'.$s->group_soal_audio.'" type="'.$s->group_soal_tipe_audio.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
-                $soal_audio = $s->file <> 0 || !empty($s->file) ? '<audio id="loop-limited-'.$nomor_soal.'" controls controlsList="nodownload"><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/paket_soal/soal_'.$s->paket_soal_id.'/'.$s->file.'" type="'.$s->tipe_file.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
+                /* $group_soal_audio = $s->group_soal_audio <> 0 || !empty($s->group_soal_audio) ? '<audio id="loop-limited-'.$nomor_soal.'" controls controlsList="nodownload"><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/group_soal/group_'.$s->paket_soal_id.'/'.$s->group_soal_audio.'" type="'.$s->group_soal_tipe_audio.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
+                $soal_audio = $s->file <> 0 || !empty($s->file) ? '<audio id="loop-limited-'.$nomor_soal.'" controls controlsList="nodownload"><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/paket_soal/soal_'.$s->paket_soal_id.'/'.$s->file.'" type="'.$s->tipe_file.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : ''; */
                 
                 $html .= '<div class="step card text-left font-poppins" id="widget_'.$nomor_soal.'">';
                 $vrg = $arr_jawab[$s->bank_soal_id]["r"] == "" ? "N" : $arr_jawab[$s->bank_soal_id]["r"];
                 $html .= '<input type="hidden" name="id_group_mode_jwb'.$nomor_soal.'" value="'.$s->group_mode_jwb_id.'">';
                 $html .= '<input type="hidden" name="id_group_soal_'.$nomor_soal.'" value="'.$id_group_soal_p.'">';
+                $html .= '<input type="hidden" name="group_soal_'.$nomor_soal.'" value="'.$group_soal_p.'">';
 				$html .= '<input type="hidden" name="id_bank_soal_'.$nomor_soal.'" value="'.$s->bank_soal_id.'">';
 				$html .= '<input type="hidden" name="rg_'.$nomor_soal.'" id="rg_'.$nomor_soal.'" value="'.$vrg.'">';
                 
@@ -994,10 +1015,11 @@ class Buku extends CI_Controller {
                     $ragu_ragu = '<div class="col"></div>';
                 }
 
-                $group_soal_name = $s->group_soal_name <> 0 || !empty($s->group_soal_name) ? '<b> GROUP '.$s->group_soal_name.' (G'.$num_group_soal.')</b><br /><br />' : '';
+                $group_first_name = substr($group_soal_p,0,1);
+                $group_soal_name = $s->group_soal_name <> 0 || !empty($s->group_soal_name) ? '<b> GROUP '.$s->group_soal_name.' ('.$group_first_name.$num_group_soal.')</b><br /><br />' : '';
 
                 $html .= '
-                    <div class="card-header bg-primary text-white">
+                    <div class="card-header bg-primary text-white lembar-pembahasan">
                         <div class="row">
                             <div class="col">
                                 <h5><i class="fa fa-braille" aria-hidden="true"></i> Soal No #'.$nomor_soal.' / '.$jumlah_soal.'</h5>
@@ -1013,8 +1035,19 @@ class Buku extends CI_Controller {
                         </div>
                     </div>';
 
-                $html .= '<div class="card-body">
-                    <div class="card-text text-justify">'.$group_soal_name.$group_soal_audio.$bacaan_soal_name.$bacaan_soal.$soal_audio.$s->bank_soal_name.'</div><hr>';
+                $html .= '<div class="card-body">';
+
+                $pembahasan = $this->tes->get_pembahasan($s->bank_soal_id);
+                $url_video = !empty($pembahasan->url) ? '<div class="player"><iframe width="762" height="400" src="'.$pembahasan->url.'" frameborder="0" allowfullscreen></iframe></div>' : '';
+                $text_pembahasan = !empty($pembahasan->pembahasan) ? '<p>'.$pembahasan->pembahasan.'</p>' : '';
+                $pembahasan = !empty($pembahasan->pembahasan) || !empty($pembahasan->url) ? '<h5>Pembahasan : </h5>' : '';
+
+                $html .= '<div class="row">
+                <center><div class="m-3">'.$pembahasan.$url_video.'</div>
+                <div class="text-left m-3">'.$text_pembahasan.'</div></center>
+                </div>';
+
+                $html .= '<div class="card-text text-justify">'.$group_soal_name.$bacaan_soal_name.$bacaan_soal.$s->bank_soal_name.'</div><hr>';
 
                 if($s->group_mode_jwb_id == 1){
                     $html .= '<div class="card-text mt-2">
@@ -1028,14 +1061,43 @@ class Buku extends CI_Controller {
                     $number_opsi = 1;
                     foreach($jawaban as $key_jawaban => $val_jawaban) {
                         $checked = $arr_jawab[$s->bank_soal_id]["j"] == $val_jawaban->order ? "checked" : "";
-                        $html .= '<div class="funkyradio-success" onclick="return simpan_sementara();">
-                                <input type="radio" style="display:none;" id="key_'.$opsi.'_'.$nomor_soal.'" name="key_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'|'.$jawaban_benar.'" '.$checked.'>
-                                <input type="radio" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'" '.$checked.' disabled> 
+                        if($number_opsi != $jawaban_benar && $number_opsi != $arr_jawab[$s->bank_soal_id]["j"]){ //Selain jawaban salah dan benar
+                            $html .= '<div class="funkyradio-default">
+                                <input type="checkbox" style="display:none;" id="key_'.$opsi.'_'.$nomor_soal.'" name="key_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'|'.$jawaban_benar.'">
+                                <input type="checkbox" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'" disabled> 
                                 <label for="opsi_'.$opsi.'_'.$nomor_soal.'">
                                     <div class="huruf_opsi">'.$opsi.'</div> 
                                     <div class="card-text">'.$val_jawaban->name.'</div>
                                 </label>
                             </div>';
+                        } elseif($number_opsi == $jawaban_benar && $number_opsi == $arr_jawab[$s->bank_soal_id]["j"]){ //Jawaban benar dari user
+                            $html .= '<div class="funkyradio-success">
+                                <input type="checkbox" style="display:none;" id="key_'.$opsi.'_'.$nomor_soal.'" name="key_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'|'.$jawaban_benar.'" '.$checked.'>
+                                <input type="checkbox" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'" '.$checked.' disabled> 
+                                <label style="background:#86C186;" for="opsi_'.$opsi.'_'.$nomor_soal.'">
+                                    <div class="huruf_opsi">'.$opsi.'</div> 
+                                    <div class="card-text">'.$val_jawaban->name.'</div>
+                                </label>
+                            </div>';
+                        } elseif($number_opsi == $jawaban_benar){ //Jawaban benar dari sistem
+                            $html .= '<div class="funkyradio-success">
+                                <input type="checkbox" style="display:none;" id="key_'.$opsi.'_'.$nomor_soal.'" name="key_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'|'.$jawaban_benar.'">
+                                <input type="checkbox" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'" disabled>
+                                <label style="background:#86C186;" for="opsi_'.$opsi.'_'.$nomor_soal.'">
+                                    <div class="huruf_opsi">'.$opsi.'</div> 
+                                    <div class="card-text">'.$val_jawaban->name.'</div>
+                                </label>
+                            </div>';
+                        } elseif($jawaban_benar != $arr_jawab[$s->bank_soal_id]["j"]) { //Jawaban salah dari user
+                            $html .= '<div class="funkyradio-danger">
+                                <input type="checkbox" style="display:none;" id="key_'.$opsi.'_'.$nomor_soal.'" name="key_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'|'.$jawaban_benar.'" '.$checked.'>
+                                <input type="checkbox" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'" '.$checked.' disabled> 
+                                <label style="background:#df706d;" for="opsi_'.$opsi.'_'.$nomor_soal.'">
+                                    <div class="huruf_opsi">'.$opsi.'</div> 
+                                    <div class="card-text">'.$val_jawaban->name.'</div>
+                                </label>
+                            </div>';
+                        }
                         $opsi++;
                         $number_opsi++;
                     };
@@ -1060,15 +1122,8 @@ class Buku extends CI_Controller {
                     $key_opsi = 'E';
                 }
 
-                $pembahasan = $this->tes->get_pembahasan($s->bank_soal_id);
-                $url_video = !empty($pembahasan->url) ? '<iframe width="762" height="400" src="'.$pembahasan->url.'" frameborder="0" allowfullscreen></iframe>' : '';
-                $text_pembahasan = !empty($pembahasan->pembahasan) ? '<p>'.$pembahasan->pembahasan.'</p>' : '';
-                $pembahasan = !empty($pembahasan->pembahasan) || !empty($pembahasan->url) ? '<h5>Pembahasan : </h5>' : '';
-
                 $html .= '<div class="row">
                 <h5 class="card-text mt-2 ml-3">Jawaban Benar : '.$key_opsi.'</h5>
-                <center><div class="m-3">'.$pembahasan.$url_video.'</div>
-                <div class="text-left m-3">'.$text_pembahasan.'</div></center>
                 </div>';
 
                 $html .= '</div>';

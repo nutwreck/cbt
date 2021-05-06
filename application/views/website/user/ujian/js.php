@@ -11,10 +11,6 @@
     var blok_layar      = <?=$blok_layar?>;
 
     $(document).ready(function () {
-        window.onbeforeunload = function() {
-            return "Are you sure you want to leave?";
-        }
-        
         var t = $('.sisawaktu');
         if (t.length) {
             sisawaktu(t.data('time'));
@@ -26,7 +22,7 @@
         $('a[aria-expanded=true]').attr('aria-expanded', 'false');
 
         //disable F5
-        $(document).on("keydown", disableF5);
+        /* $(document).on("keydown", disableF5); */
 
         buka(1);
         simpan_sementara();
@@ -41,7 +37,7 @@
     });
 
     function disableF5(e) { if ((e.which || e.keyCode) == 116 || (e.which || e.keyCode) == 82) e.preventDefault(); };
-
+    
     //Visual Limit Audio
     function limit_audio(audio_limit, no){
         if (audio_limit != 0 && document.getElementById('loop-limited-' + no) != null) {
@@ -54,9 +50,11 @@
                     loopCounter++;
                 } else {
                     var ply = document.getElementById('loop-limited-' + no);
+                    document.getElementById('audio_soal_' + no).value = loopCounter;
                     /* var oldSrc = ply.src; */
                     /* ply.src = ""; */
                     ply.style.display = 'none';
+                    simpan();
                 }
             }, false);
         }
@@ -71,9 +69,11 @@
                     loopCounter++;
                 } else {
                     var ply = document.getElementById('group-loop-limited-' + no);
+                    document.getElementById('audio_group_' + no).value = loopCounter;
                     /* var oldSrc = ply.src; */
                     /* ply.src = ""; */
                     ply.style.display = 'none';
+                    simpan();
                 }
             }, false);
         }
@@ -492,7 +492,7 @@
 </script>
 
 <!-- User pindah tab lain atau pindah dari browser aktif sekarang -->
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     document.addEventListener("visibilitychange", event => {
         if(blok_layar != 0){
             var modal = document.getElementById("alert-away");
@@ -514,7 +514,7 @@
             }
         }
     })
-</script>
+</script> -->
 
 <!-- NAVIGASI TOOGLE SOAL -->
 <script>

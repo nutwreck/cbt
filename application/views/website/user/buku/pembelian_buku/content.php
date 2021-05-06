@@ -86,9 +86,9 @@
                                         <div id="banking" class="tab-pane fade show active pt-3">
                                             <div class="form-group "> <label for="Bank">
                                                 <h6>Bank</h6>
-                                                </label> <select class="form-control" id="payment_bank" name="payment_bank">
+                                                </label> <select class="form-control selectpicker" id="payment_bank" name="payment_bank">
                                                     <?php foreach($payment_method_detail as $val_bank){ ?>
-                                                        <option value="<?=$val_bank->id?>|<?=$val_bank->bank_name?>|<?=$val_bank->bank_account?>|<?=$val_bank->bank_number?>"><?=$val_bank->bank_name?></option>
+                                                        <option data-content="<img class='img-thumbnail' src='<?=config_item('_dir_website').'lembaga/grandsbmptn/master_pembayaran/'.$val_bank->logo_payment?>' alt='image_<?=$val_bank->id?>' width='80px' /> <?=$val_bank->bank_name?>" value="<?=$val_bank->id?>|<?=$val_bank->bank_name?>|<?=$val_bank->bank_account?>|<?=$val_bank->bank_number?>"></option>
                                                     <?php } ?>
                                                 </select> </div>
                                             <p class="text-muted">Note: Konfirmasi pembayaran akan dilakukkan otomatis oleh sistem 3-5 Menit setelah melakukkan transfer. Jika lebih dari 2 Jam belum menerima Email Konfirmasi Pembayaran, Silahkan melakukkan konfirmasi manual di menu status pembelian. Harap bukti pembayaran disimpan jika sewaktu-waktu pembayaran terjadi masalah. </p>

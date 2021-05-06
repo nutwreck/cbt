@@ -1,3 +1,5 @@
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
 <script>
 $(function() {
     $('[data-toggle="tooltip"]').tooltip()

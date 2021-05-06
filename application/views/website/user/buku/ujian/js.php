@@ -40,9 +40,11 @@
                     loopCounter++;
                 } else {
                     var ply = document.getElementById('loop-limited-' + no);
+                    document.getElementById('audio_soal_' + no).value = loopCounter;
                     /* var oldSrc = ply.src; */
                     /* ply.src = ""; */
                     ply.style.display = 'none';
+                    simpan();
                 }
             }, false);
         }
@@ -57,9 +59,11 @@
                     loopCounter++;
                 } else {
                     var ply = document.getElementById('group-loop-limited-' + no);
+                    document.getElementById('audio_group_' + no).value = loopCounter;
                     /* var oldSrc = ply.src; */
                     /* ply.src = ""; */
                     ply.style.display = 'none';
+                    simpan();
                 }
             }, false);
         }
