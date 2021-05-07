@@ -5,7 +5,7 @@
             <img class="img-responsive" src="<?=config_item('_assets_general')?>image/email-send.ico" width="95px;" height="85px">
             <h3>Dear, <?=$user_name?></h3>
             <p style="font-size:20px;color:#5C5C5C;">
-                Terimakasih telah melakukkan pembelian Paket Tryout <?=$buku_name?> <?=!empty($detail_buku_name) ? '('.$detail_buku_name.')' : ''?>, Invoice pembayaran kami kirimkan ke email anda <?=$user_email?>, Berikut detail dari pembelian anda :
+                Terimakasih telah melakukkan pembelian Paket Soal <?=$buku_name?> <?=!empty($detail_buku_name) ? '('.$detail_buku_name.')' : ''?>, Invoice pembayaran kami kirimkan ke email anda <?=$user_email?>, Berikut detail dari pembelian anda :
             </p>
             <div class="col-sm-6 offset-sm-3">
                 <table class="table">

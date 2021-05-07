@@ -39,6 +39,9 @@
                                 <li>
                                     <a href="<?php echo base_url(); ?>admin/report-ujian">Report Ujian</a>
                                 </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>admin/report-buku">Report Tes Buku</a>
+                                </li>
                             </ul>
                         </li>
                         <li class="has-sub">

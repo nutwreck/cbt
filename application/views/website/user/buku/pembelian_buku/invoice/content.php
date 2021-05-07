@@ -182,7 +182,7 @@
 				</tr>
 
 				<tr class="item">
-					<td>Pembelian Paket Soal TryOut <?=$buku_name?> <?=!empty($detail_buku_name) ? '('.$detail_buku_name.')' : ''?></td>
+					<td>Pembelian Paket Soal <?=$buku_name?> <?=!empty($detail_buku_name) ? '('.$detail_buku_name.')' : ''?></td>
 
 					<td><?=rupiah($price)?></td>
 				</tr>

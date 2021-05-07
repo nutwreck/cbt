@@ -264,6 +264,18 @@ class Tes_online_model extends CI_Model{
         return $this->db->get_where('v_ujian_detail', array('sesi_pelaksanaan_id' => $sesi_pelaksana_id, 'paket_soal_id' => $paket_soal_id, 'tgl_selesai_sesi <=' => $now))->result();
     }
 
+    public function get_buku_header(){
+        return $this->db->get('v_buku_header')->result();
+    }
+
+    public function get_buku_detail($paket_soal_id, $buku_id){
+        return $this->db->get_where('v_buku_detail', array('paket_soal_id' => $paket_soal_id, 'buku_id' => $buku_id))->result();
+    }
+
+    public function get_buku_header_by_id($paket_soal_id, $buku_id){
+        return $this->db->get_where('v_buku_header', array('paket_soal_id' => $paket_soal_id, 'buku_id' => $buku_id))->row();
+    }
+
     public function get_komposisi_soal_by_id($sesi_pelaksana_id){
         $query = $this->db->query("SELECT
                 T1.*,

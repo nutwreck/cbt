@@ -7,20 +7,20 @@
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     <span class="glyphicon glyphicon-info-sign"></span><i class="fa fa-info-circle" aria-hidden="true"></i> <strong>Informasi</strong>
                     <hr class="message-inner-separator">
-                        <p>Selamat, Anda berhak mendapatkan <?=$free_paket?> Paket <b>TryOut SBMPTN secara GRATIS</b>. Untuk mendapatkan seluruh paket TryOut dan Materi silahkan melakukkan <b>pembelian Paket TryOut SBMPTN</b> dengan cara <a href="<?=base_url()?>pembelian-buku/<?=$sbmptn_id?>" class="btn btn-sm btn-success">Klik Disini</a></p>
+                        <p>Selamat, Anda berhak mendapatkan <?=$free_paket?> Paket <b>Soal TOEFL secara GRATIS</b>. Untuk mendapatkan seluruh paket soal TOEFL dan Materi silahkan melakukkan <b>pembelian Paket Soal TOEFL</b> dengan cara <a href="<?=base_url()?>pembelian-buku/<?=$toefl_id?>" class="btn btn-sm btn-success">Klik Disini</a></p>
                 </div>
             <?php } elseif($status_user == 'free') { ?>
                 <div class="alert alert-info">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     <span class="glyphicon glyphicon-info-sign"></span><i class="fa fa-info-circle" aria-hidden="true"></i> <strong>Informasi</strong>
                     <hr class="message-inner-separator">
-                        <p>Untuk mendapatkan seluruh paket TryOut dan Materi silahkan melakukkan <b>pembelian Paket TryOut SBMPTN</b> dengan cara <a href="<?=base_url()?>pembelian-buku/<?=$sbmptn_id?>" class="btn btn-sm btn-success">Klik Disini</a></p>
+                        <p>Untuk mendapatkan seluruh paket Soal dan Materi silahkan melakukkan <b>pembelian Paket Soal TOEFL</b> dengan cara <a href="<?=base_url()?>pembelian-buku/<?=$toefl_id?>" class="btn btn-sm btn-success">Klik Disini</a></p>
                 </div>
             <?php } ?>
                 <div id="main">
                     <div class="container">
                         <div class="accordion" id="faq">
-                            <?php if(isset($sbmptn_paket)){ ?>
+                            <?php if(isset($toefl_paket)){ ?>
                             <div class="card">
                                 <div class="card-header" id="faqhead1">
                                     <a href="#" class="btn btn-header-link <?=$group_stat == 1 ? 'collapsed' : ''?>" data-toggle="collapse" data-target="#faq1"
@@ -30,7 +30,7 @@
                                 <div id="faq1" class="collapse <?=$group_stat == 1 ? '' : 'show'?>" aria-labelledby="faqhead1" data-parent="#faq">
                                     <div class="card-body">
                                         <div class="row">
-                                            <?php foreach($sbmptn_paket as $val_paket){ ?>
+                                            <?php foreach($toefl_paket as $val_paket){ ?>
                                             <div class="col-sm-12 col-md-6 col-lg-4 mt-3 mb-3">
                                                 <div class="p-2 border border-secondary">
                                                     <div class="text-center sesi-head">
@@ -107,7 +107,7 @@
                                                 </div>
                                                 <?php if($this->uri->segment(3) == 'back' || $this->uri->segment(3) == 'launch'){ echo ''; } else { ?>
                                                     <div class="col-sm-12 text-left">
-                                                        <a href="<?=base_url()?>buku/sbmptn/back#faq2" class="pointer">
+                                                        <a href="<?=base_url()?>buku/toefl/back#faq2" class="pointer">
                                                             <i class="fas fa-arrow-left"></i> Kembali
                                                         </a>
                                                     </div>
@@ -157,7 +157,7 @@
                                                 </div>
                                                 </a>
                                                 <?php } else { ?>
-                                                <a href="<?=base_url()?>buku/sbmptn/<?=urlencode(base64_encode($val_group->id))?>">
+                                                <a href="<?=base_url()?>buku/toefl/<?=urlencode(base64_encode($val_group->id))?>">
                                                 <div class="p-2 border border-secondary pointer">
                                                     <table class="table-responsive mb-0">
                                                         <tr>

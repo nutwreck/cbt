@@ -2435,4 +2435,220 @@ class Tes_online extends CI_Controller {
         $this->load->view('website/lembaga/tes_online/report_ujian/detail_ujian/content', $data);
     }
 
+    public function report_buku(){
+        $data['content']['list_buku'] = $this->tes->get_buku_header();
+        $data['title_header'] = ['title' => 'Report Buku'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/report_buku/css';
+        $view['content'] = 'website/lembaga/tes_online/report_buku/content';
+        $view['js_additional'] = 'website/lembaga/tes_online/report_buku/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function detail_report_buku($id_paket_soal, $id_buku){
+        $buku_id = base64_decode(urldecode($id_buku));
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+
+        $data['content']['list_ujian_detail'] = $this->tes->get_buku_detail($paket_soal_id, $buku_id);
+        $data['content']['list_ujian'] = $this->tes->get_buku_header_by_id($paket_soal_id, $buku_id);
+        $data['content']['id_buku'] = $id_buku;
+        $data['content']['id_paket_soal'] = $id_paket_soal;
+        $data['title_header'] = ['title' => 'Detail Report Buku'];
+
+        //for load view
+        $view['css_additional'] = 'website/lembaga/tes_online/report_buku/detail_report/css';
+        $view['content'] = 'website/lembaga/tes_online/report_buku/detail_report/content';
+        $view['js_additional'] = 'website/lembaga/tes_online/report_buku/detail_report/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function export_detail_report_buku($id_paket_soal, $id_buku){
+        $buku_id = base64_decode(urldecode($id_buku));
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+
+        $data = $this->tes->get_buku_detail($paket_soal_id, $buku_id);
+        $buku = $this->tes->get_buku_header_by_id($paket_soal_id, $buku_id);
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        foreach($data as $val){
+            $group_soal_name_raw = $val->group_soal_name;
+        }
+
+        $group_soal_name = explode(',', $group_soal_name_raw);
+
+        $column_skor = sizeof($group_soal_name);
+        
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Nomor Peserta');
+        $sheet->setCellValue('C1', 'Nama');
+        $sheet->setCellValue('D1', 'Waktu Mulai Peserta');
+        $sheet->setCellValue('E1', 'Waktu Selesai Peserta');
+        $sheet->setCellValue('F1', 'Jumlah Benar');
+        $sheet->setCellValue('G1', 'Jumlah Salah');
+        $sheet->setCellValue('H1', 'Jumlah Ragu');
+        $sheet->setCellValue('I1', 'Jumlah Kosong');
+        $col = 'I';
+        $index = 1;
+        for($i = 0; $i < $column_skor; $i++){
+            $sheet->setCellValue($col++.$index, $group_soal_name[$i]);
+        }
+        $sheet->setCellValue($col++.$index, 'Total Skor');
+        $sheet->setCellValue($col++.$index, 'Nilai');
+        $sheet->setCellValue($col++.$index, 'Skala Penilaian');
+        
+        $no = 1;
+        $x = 2;
+        foreach($data as $row)
+        {
+            $sheet->setCellValue('A'.$x, $no++);
+            $sheet->setCellValue('B'.$x, (int) $row->user_no);
+            $sheet->setCellValue('C'.$x, $row->user_name);
+            $sheet->setCellValue('D'.$x, format_indo($row->tgl_mulai_peserta));
+            $sheet->setCellValue('E'.$x, format_indo($row->tgl_selesai_peserta));
+            $sheet->setCellValue('F'.$x, $row->jml_benar);
+            $sheet->setCellValue('G'.$x, $row->jml_salah);
+            $sheet->setCellValue('H'.$x, $row->jml_ragu);
+            $sheet->setCellValue('I'.$x, $row->jml_kosong);
+
+            $skor_group = explode(',', $row->skor_group);
+            $number_skor = sizeof($skor_group);
+            $rows = 'I';
+            for($j = 0; $j < $number_skor; $j++){
+                $sheet->setCellValue($rows++.$x, $skor_group[$j]);
+            }
+
+            $sheet->setCellValue($rows++.$x, $row->total_skor);
+            $sheet->setCellValue($rows++.$x, $row->nilai);
+            $sheet->setCellValue($rows++.$x, $row->skala_penilaian);
+            $x++;
+        }
+
+        // Column sizing
+        foreach(range('A', $col) as $columnID){
+            $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = $buku->buku_name.' ('.$buku->nama_paket_soal.' '.$buku->materi_name.')';
+        
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"'); 
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+    }
+
+    public function detail_buku_peserta($id_ujian, $id_paket_soal, $id_buku){
+        $buku_id = base64_decode(urldecode($id_buku));
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+        $ujian_id = base64_decode(urldecode($id_ujian));
+
+        $data_ujian = [];
+        $bank_soal = [];
+        $data = [];
+        $file_name = '';
+
+        $buku = $this->tes->get_buku_header_by_id($paket_soal_id, $buku_id);
+        $ujian_data = $this->tes->get_checking_ujian_by_id($ujian_id); //CEK UJIAN
+
+        if(empty($ujian_data)){
+            $this->session->set_flashdata('error', 'Peserta tidak mengikuti ujian!');
+            redirect('admin/detail-report-buku/'.$id_paket_soal.'/'.$id_buku);
+        }
+
+        //Pengambilan data list jawaban, group soal, soalnya, dan hasil jawabannya
+        $urut_soal 		= explode(",", $ujian_data->list_jawaban);
+        $soal_urut_ok	= array();
+        $jumlah_soal    = sizeof($urut_soal);
+		for ($i = 0; $i < sizeof($urut_soal); $i++) {
+			$pc_urut_soal	    = explode("|",$urut_soal[$i]);//pecah data wadah list jawaban
+			$pc_urut_soal_jwb 	= empty($pc_urut_soal[2]) ? "''" : "'{$pc_urut_soal[2]}'";//List jawaban user
+			$ambil_soal 	    = $this->tes->get_ujian_list_user($pc_urut_soal_jwb, $pc_urut_soal[1], $paket_soal_id);
+			$soal_urut_ok[]     = $ambil_soal;
+        }
+        
+        $soal_urut_ok = $soal_urut_ok;
+        
+        //Pengambilan isi dari data list ujian user
+		$pc_list_jawaban = explode(",", $ujian_data->list_jawaban);
+		$arr_jawab = array();
+		foreach ($pc_list_jawaban as $v) {
+            $pc_v 	= explode("|", $v);
+            $gr     = $pc_v[0];
+			$idx 	= $pc_v[1];
+			$val 	= $pc_v[2];
+			$rg 	= $pc_v[3];
+
+			$arr_jawab[$idx] = array("g"=>$gr,"j"=>$val,"r"=>$rg);
+        }
+
+        $html = '';
+        $group_soal_name_before = '';
+        $no = 1;
+        if (!empty($soal_urut_ok)){
+            foreach ($soal_urut_ok as $s) {
+                $bacaan_soal = $s->isi_bacaan_soal <> 0 || !empty($s->isi_bacaan_soal) ? $s->isi_bacaan_soal.'<br />' : ''; // bacaan soal
+                $bacaan_soal_name = $s->bacaan_soal_name <> 0 || !empty($s->bacaan_soal_name) ? '<b>'.$s->bacaan_soal_name.'</b><br />' : ''; // bacaan soal judul
+                $group_soal_name = $s->group_soal_name <> 0 || !empty($s->group_soal_name) ? 'GROUP '.$s->group_soal_name : '';
+
+                $html .= '<h4 class="group-name">'.$group_soal_name.'</h4>';
+
+                $html .= '<soal><quiz><table class="tbl-soal"><tr><td style="vertical-align:top;">'.$no.'. </td><td>'.$bacaan_soal_name.$bacaan_soal.$s->bank_soal_name.'</td></tr></table>';
+
+                if($s->group_mode_jwb_id == 1){
+                    $jawaban = $this->tes->get_jawaban_by_id_pembahasan($s->bank_soal_id, $s->paket_soal_id);
+                    $jawaban_benar = $this->tes->get_jawaban_by_id_benar($s->bank_soal_id, $s->paket_soal_id);
+                    $opsi = config_item('_def_opsi_jawaban');
+
+                    foreach($jawaban as $key_jawaban => $val_jawaban) {
+                        $checked = $arr_jawab[$s->bank_soal_id]["j"] == $val_jawaban->order ? "jawaban" : "";
+                        $html .= '<table class="tbl-jwb"><tr><td width="5px"><a class="btn '.$checked.'" href="#">'.$opsi.'</a></td><td>'.$val_jawaban->name.'</td></tr>';
+                        $opsi++;
+                    }
+
+                    if($jawaban_benar && $jawaban_benar == 1){
+                        $key_opsi = 'A';
+                    } elseif($jawaban_benar && $jawaban_benar == 2){
+                        $key_opsi = 'B';
+                    } elseif($jawaban_benar && $jawaban_benar == 3){
+                        $key_opsi = 'C';
+                    } elseif($jawaban_benar && $jawaban_benar == 4){
+                        $key_opsi = 'D';
+                    } elseif($jawaban_benar && $jawaban_benar == 5){
+                        $key_opsi = 'E';
+                    }
+
+                    $html .= '<tr><td colspan="2">Kunci Jawaban : '.$key_opsi.'</td></tr>';
+                } else {
+                    $history_jawab = !empty($arr_jawab[$s->bank_soal_id]["j"]) ? $arr_jawab[$s->bank_soal_id]["j"] : "";
+                    $html .= '<tr><td colspan="2">'.$history_jawab.'</td></tr>';
+                }
+                                           
+                $html .= '</table></quiz></soal>';
+
+                $no++;
+                $group_soal_name_before = $group_soal_name; 
+            }
+        }
+
+        $file_name = $buku->buku_name.' '.$ujian_data->user_name.' ('.$ujian_data->user_no.')';
+        
+        //for passing data to view
+        $data = array(
+            'buku' => $buku,
+            'ljk' => $html,
+            'ujian' => $ujian_data,
+            'title' => $file_name
+        );
+        
+        $this->load->view('website/lembaga/tes_online/report_buku/detail_ujian/content', $data);
+    }
+
 }

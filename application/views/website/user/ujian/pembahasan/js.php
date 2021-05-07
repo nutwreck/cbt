@@ -239,7 +239,7 @@
             if(group != group_before && group != 0) {
                 var group_str_name = group_name.substring(0, 1);
                 var group_str_upper = group_str_name.toUpperCase();
-                hasil_jawaban += '<a id="group_petunjuk_'+(i)+'" class="btn button-round btn-primary text-white btn_group" onclick="return buka_group(' + (i) + ');">' + group_str_upper + (group_number) + "</a>";
+                hasil_jawaban += '<a id="group_petunjuk_'+(i)+'" class="btn button-round btn-primary text-white btn_group" onclick="return buka_group(' + (i) + ');">' + group_str_upper + "</a>";
                 group_number++;
             }
 

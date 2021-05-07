@@ -19,10 +19,10 @@
                     <a href="<?=base_url()?>buku/sbmptn/launch">SBMPTN</a>
                 </li>
                 <li>
-                    <a href="<?=base_url()?>buku/toefl">TOEFL</a>
+                    <a href="<?=base_url()?>buku/toefl/launch">TOEFL</a>
                 </li>
                 <li>
-                    <a href="<?=base_url()?>buku/cpns">CPNS</a>
+                    <a href="<?=base_url()?>buku/cpns/launch">CPNS</a>
                 </li>
             </ul>
         </li>

@@ -4,7 +4,7 @@
         <div class="row">
             <aside class="col-sm-12">
                 <article class="card-body p-5">
-                    <h3 class="title mb-3">Paket Soal TryOut <?=$buku_data->buku_name?></h3>
+                    <h3 class="title mb-3">Paket Soal <?=$buku_data->buku_name?></h3>
                     <p class="price-detail-wrap"> 
                         <span class="price h3 text-warning"> 
                             <span class="num"><?=rupiah($buku_data->price)?></span>

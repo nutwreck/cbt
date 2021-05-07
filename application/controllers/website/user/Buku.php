@@ -135,6 +135,86 @@ class Buku extends CI_Controller {
         $this->_generate_view($view, $data);
     }
 
+    public function toefl($id_config_buku_group){
+        $user_id = $this->session->userdata('user_id');
+        $toefl_id = $this->toefl_id;
+
+        $get_check_invoice = $this->management->get_user_status_buku($toefl_id, $user_id);
+        $get_check_paket = $this->management->get_config_buku_by_buku($toefl_id);
+
+        $jurusan = !empty($get_check_invoice->detail_buku_id) ? $get_check_invoice->detail_buku_id : NULL ;
+        $free_paket = $get_check_paket->free_paket;
+        $price = $get_check_paket->price;
+
+        //for passing data to view
+        $data['content']['toefl_paket'] = $this->tes->get_paket_soal_buku($toefl_id, $jurusan);
+        $data['content']['status_user'] = !empty($get_check_invoice) ? 'purchase' : 'free';
+        $data['content']['free_paket'] = $free_paket;
+
+        if($id_config_buku_group == 'launch'){
+            $data['content']['group_stat'] = 0;
+            $data['content']['buku_group'] = $this->management->get_config_buku_group_by_buku($toefl_id);
+        } elseif($id_config_buku_group == 'back'){
+            $data['content']['group_stat'] = 1;
+            $data['content']['buku_group'] = $this->management->get_config_buku_group_by_buku($toefl_id);
+        } else {
+            $config_buku_group_id = base64_decode(urldecode($id_config_buku_group));
+            $data['content']['group_stat'] = 1;
+            $data['content']['buku_group'] = $this->management->get_config_buku_detail_by_id($config_buku_group_id);
+        }
+
+        $data['content']['toefl_id'] = urlencode(base64_encode($toefl_id));
+        $data['title_header'] = ['title' => 'Buku TOEFL'];
+
+        //for load view
+        $view['css_additional'] = 'website/user/buku/toefl/css';
+        $view['content'] = 'website/user/buku/toefl/content';
+        $view['js_additional'] = 'website/user/buku/toefl/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function cpns($id_config_buku_group){
+        $user_id = $this->session->userdata('user_id');
+        $cpns_id = $this->cpns_id;
+
+        $get_check_invoice = $this->management->get_user_status_buku($cpns_id, $user_id);
+        $get_check_paket = $this->management->get_config_buku_by_buku($cpns_id);
+
+        $jurusan = !empty($get_check_invoice->detail_buku_id) ? $get_check_invoice->detail_buku_id : NULL ;
+        $free_paket = $get_check_paket->free_paket;
+        $price = $get_check_paket->price;
+
+        //for passing data to view
+        $data['content']['cpns_paket'] = $this->tes->get_paket_soal_buku($cpns_id, $jurusan);
+        $data['content']['status_user'] = !empty($get_check_invoice) ? 'purchase' : 'free';
+        $data['content']['free_paket'] = $free_paket;
+
+        if($id_config_buku_group == 'launch'){
+            $data['content']['group_stat'] = 0;
+            $data['content']['buku_group'] = $this->management->get_config_buku_group_by_buku($cpns_id);
+        } elseif($id_config_buku_group == 'back'){
+            $data['content']['group_stat'] = 1;
+            $data['content']['buku_group'] = $this->management->get_config_buku_group_by_buku($cpns_id);
+        } else {
+            $config_buku_group_id = base64_decode(urldecode($id_config_buku_group));
+            $data['content']['group_stat'] = 1;
+            $data['content']['buku_group'] = $this->management->get_config_buku_detail_by_id($config_buku_group_id);
+        }
+
+        $data['content']['cpns_id'] = urlencode(base64_encode($cpns_id));
+        $data['title_header'] = ['title' => 'Buku CPNS'];
+
+        //for load view
+        $view['css_additional'] = 'website/user/buku/cpns/css';
+        $view['content'] = 'website/user/buku/cpns/content';
+        $view['js_additional'] = 'website/user/buku/cpns/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
     public function download_buku($id_detail_buku){
         $get_detail_buku = $this->management->get_config_buku_detail_download($id_detail_buku);
 
@@ -486,6 +566,7 @@ class Buku extends CI_Controller {
 
         $paket_soal = $this->tes->get_paket_soal_sesi_by_id($paket_soal_id); //Get Paket Soal
         $ujian_data = $this->tes->get_checking_ujian($paket_soal_id, $this->session->userdata('user_id')); //CEK SEBELUMNYA UDH PERNAH TES ATAU BELUM
+        $audio_limit = $paket_soal->visual_limit;
 
         if(empty($ujian_data)){ //jika wadah untuk pemilihan soal dan jawaban belum ada
             $komposisi_soal = $this->tes->get_komposisi_soal_by_paket($paket_soal_id);//Ambil bank soal
@@ -577,6 +658,7 @@ class Buku extends CI_Controller {
                 $group_soal_next = $s->group_soal_parent != 0 || !empty($s->group_soal_parent) ? $s->group_soal_parent : $s->group_soal_id;
 
                 $id_group_soal_p = $s->group_soal_parent != 0 || !empty($s->group_soal_parent) ? $s->group_soal_parent : $s->group_soal_id;
+                $group_soal_p = $s->group_soal_parent_name != 0 || !empty($s->group_soal_parent_name) ? $s->group_soal_parent_name : $s->group_soal_name;
 
                 $cek_group_mode_jwb = $s->group_mode_jwb_id == 1 ? '' : 'style="display:none;"'; //1 Pilihan ganda 2 essay
                 $bacaan_soal = $s->isi_bacaan_soal <> 0 || !empty($s->isi_bacaan_soal) ? $s->isi_bacaan_soal.'<br />' : ''; // bacaan soal
@@ -591,7 +673,8 @@ class Buku extends CI_Controller {
                 $ad_s = $arr_jawab[$s->bank_soal_id]["aud_s"] == "0" ? "0" : $arr_jawab[$s->bank_soal_id]["aud_s"];
                 $html .= '<input type="hidden" name="id_group_mode_jwb'.$nomor_soal.'" value="'.$s->group_mode_jwb_id.'">';
                 $html .= '<input type="hidden" name="id_group_soal_'.$nomor_soal.'" value="'.$id_group_soal_p.'">';
-				$html .= '<input type="hidden" name="id_bank_soal_'.$nomor_soal.'" value="'.$s->bank_soal_id.'">';
+                $html .= '<input type="hidden" name="id_bank_soal_'.$nomor_soal.'" value="'.$s->bank_soal_id.'">';
+                $html .= '<input type="hidden" name="group_soal_'.$nomor_soal.'" value="'.$group_soal_p.'">';
                 $html .= '<input type="hidden" name="rg_'.$nomor_soal.'" id="rg_'.$nomor_soal.'" value="'.$vrg.'">';
                 $html .= '<input type="hidden" name="audio_group_'.$nomor_soal.'" id="audio_group_'.$nomor_soal.'" value="'.$ad_g.'">';
 				$html .= '<input type="hidden" name="audio_soal_'.$nomor_soal.'" id="audio_soal_'.$nomor_soal.'" value="'.$ad_s.'">';
@@ -618,7 +701,8 @@ class Buku extends CI_Controller {
                     $ragu_ragu = '<div class="col" data-position="up"><a rel="1" class="ragu_ragu btn btn-md btn-warning text-white" onclick="return tidak_jawab();">Ragu</a></div>';
                 }
 
-                $group_soal_name = $s->group_soal_name <> 0 || !empty($s->group_soal_name) ? '<b> GROUP '.$s->group_soal_name.' (G'.$num_group_soal.')</b><br /><br />' : '';
+                $group_first_name = substr($group_soal_p,0,1);
+                $group_soal_name = $s->group_soal_name <> 0 || !empty($s->group_soal_name) ? '<b> GROUP '.$s->group_soal_name.' ('.$group_first_name.')</b><br /><br />' : '';
 
                 $html .= '
                     <div class="card-header bg-primary text-white">
@@ -766,11 +850,12 @@ class Buku extends CI_Controller {
         $data = [];
         $id_group = $this->input->post('id_group', true);
         $urutan = $this->input->post('urutan', true);
+        $group_first = $this->input->post('group_first', true);
 
         $petunjuk = $this->tes->get_petunjuk_by_id($id_group);
 
         $data = array(
-            'judul' => $petunjuk->name.' (G'.$urutan.')',
+            'judul' => $petunjuk->name.' ('.$group_first.')',
             'petunjuk' => $petunjuk->petunjuk,
             'footer' => '<button type="button" class="btn btn-primary" onclick="return buka_non_group('.$urutan.')">Lanjut No '.$urutan.'</button>'
         );
@@ -910,9 +995,9 @@ class Buku extends CI_Controller {
         $data['title_header'] = ['title' => 'Hasil Ujian Online'];
 
         //for load view
-        $view['css_additional'] = 'website/user/ujian/result/css';
-        $view['content'] = 'website/user/ujian/result/content';
-        $view['js_additional'] = 'website/user/ujian/result/js';
+        $view['css_additional'] = 'website/user/buku/ujian/result/css';
+        $view['content'] = 'website/user/buku/ujian/result/content';
+        $view['js_additional'] = 'website/user/buku/ujian/result/js';
 
         //get function view website
         $this->_generate_view($view, $data);
@@ -1016,7 +1101,7 @@ class Buku extends CI_Controller {
                 }
 
                 $group_first_name = substr($group_soal_p,0,1);
-                $group_soal_name = $s->group_soal_name <> 0 || !empty($s->group_soal_name) ? '<b> GROUP '.$s->group_soal_name.' ('.$group_first_name.$num_group_soal.')</b><br /><br />' : '';
+                $group_soal_name = $s->group_soal_name <> 0 || !empty($s->group_soal_name) ? '<b> GROUP '.$s->group_soal_name.' ('.$group_first_name.')</b><br /><br />' : '';
 
                 $html .= '
                     <div class="card-header bg-primary text-white lembar-pembahasan">
