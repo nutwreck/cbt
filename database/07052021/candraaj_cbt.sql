@@ -178,9 +178,9 @@ CREATE TABLE IF NOT EXISTS `config_buku` (
 -- Dumping data for table candraaj_cbt.config_buku: ~3 rows (approximately)
 /*!40000 ALTER TABLE `config_buku` DISABLE KEYS */;
 REPLACE INTO `config_buku` (`id`, `buku_id`, `free_paket`, `price`, `desc`, `created_datetime`, `updated_datetime`, `is_enable`) VALUES
-	(1, 1, 2, 50000, '', '2021-04-17 12:48:01', NULL, 1),
+	(1, 1, 1, 50000, '', '2021-04-17 12:48:01', NULL, 1),
 	(2, 2, 2, 60000, '<p><font color="#000000"><span style="\\&quot;background-color:">Dalam paket ini, nantinya anda akan mendapatkan <b>50 Paket Soal Latihan</b> yang berkaitan dengan <b>SBMPTN</b>, Tidak hanya mendapatkan Paket Soal yang bisa anda kerjakan, tetapi mendapatkan modul pembelajaran dalam bentuk <b>Softfile, Video, DLL</b> Dijamin bikin makin siap dalam <b>menghadapi Tes SBMPTN nantinya</b>.</span></font></p>', '2021-04-17 12:48:11', '2021-04-30 11:40:39', 1),
-	(3, 3, 2, 50000, '', '2021-04-17 12:48:22', NULL, 1);
+	(3, 3, 3, 55000, '', '2021-04-17 12:48:22', NULL, 1);
 /*!40000 ALTER TABLE `config_buku` ENABLE KEYS */;
 
 -- Dumping structure for table candraaj_cbt.config_buku_detail
@@ -1571,7 +1571,7 @@ CREATE TABLE IF NOT EXISTS `paket_soal` (
   CONSTRAINT `kelas_id_paket` FOREIGN KEY (`kelas_id`) REFERENCES `kelas` (`id`),
   CONSTRAINT `materi_id_paket` FOREIGN KEY (`materi_id`) REFERENCES `materi` (`id`),
   CONSTRAINT `type_paket_soal` FOREIGN KEY (`type_paket_id`) REFERENCES `type_paket` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table candraaj_cbt.paket_soal: ~3 rows (approximately)
 /*!40000 ALTER TABLE `paket_soal` DISABLE KEYS */;
@@ -1794,7 +1794,7 @@ CREATE TABLE IF NOT EXISTS `sesi_pelaksanaan` (
 /*!40000 ALTER TABLE `sesi_pelaksanaan` DISABLE KEYS */;
 REPLACE INTO `sesi_pelaksanaan` (`id`, `paket_soal_id`, `name`, `mode_peserta_id`, `waktu_mulai`, `lama_pengerjaan`, `batas_pengerjaan`, `blok_layar`, `is_fleksible`, `is_hasil`, `is_ranking`, `is_pembahasan`, `is_komposisi_soal`, `created_datetime`, `updated_datetime`, `is_enable`) VALUES
 	(1, 6, 'Sesi Ujian Grandsbmptn 2021', 1, '2021-04-26 05:00:00', 360, '2021-04-27 10:28:00', 1, 1, 1, 1, 1, 1, '2021-04-16 16:37:53', '2021-04-16 23:07:41', 1),
-	(2, 10, 'Sesi Ujian Tes TOEFL', 2, '2021-05-06 21:00:00', 360, '2021-05-07 21:00:00', 1, 1, 1, 1, 1, 1, '2021-04-24 08:31:06', NULL, 1);
+	(2, 10, 'Sesi Ujian Tes TOEFL', 2, '2021-05-06 21:00:00', 360, '2021-05-07 18:00:00', 1, 1, 1, 1, 1, 1, '2021-04-24 08:31:06', NULL, 1);
 /*!40000 ALTER TABLE `sesi_pelaksanaan` ENABLE KEYS */;
 
 -- Dumping structure for table candraaj_cbt.sesi_pelaksanaan_komposisi
@@ -1927,13 +1927,13 @@ CREATE TABLE IF NOT EXISTS `ujian` (
   KEY `user_ujian` (`user_id`),
   CONSTRAINT `paket_soal_ujian` FOREIGN KEY (`paket_soal_id`) REFERENCES `paket_soal` (`id`),
   CONSTRAINT `user_ujian` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.ujian: ~1 rows (approximately)
+-- Dumping data for table candraaj_cbt.ujian: ~2 rows (approximately)
 /*!40000 ALTER TABLE `ujian` DISABLE KEYS */;
 REPLACE INTO `ujian` (`id`, `sesi_pelaksanaan_id`, `paket_soal_id`, `user_id`, `user_no`, `user_name`, `user_email`, `list_soal`, `list_jawaban`, `jml_benar`, `jml_salah`, `jml_ragu`, `jml_kosong`, `skor`, `tgl_mulai`, `tgl_selesai`, `status`, `created_datetime`, `updated_datetime`, `is_enable`) VALUES
-	(34, 0, 9, 30, '202104190337', 'Temam Murbianto', 'lucknutdev@gmail.com', '0|73,0|74,0|75,0|76,22|77', '0|73|4|N,0|74||N,0|75||N,0|76||N,22|77||N', 0, 0, 0, 0, 0.00, '2021-05-04 15:04:34', NULL, 0, '2021-05-04 15:04:34', NULL, 1),
-	(49, 2, 10, 30, '202104190337', 'Temam Murbianto', 'lucknutdev@gmail.com', '6|45,6|43,7|50,7|49,8|51,8|52,10|56,10|58,11|60,11|59,13|66,13|64,14|67,14|68', '5|45||N|1|0,5|43||N|0|0,5|50||N|0|0,5|49||N|0|0,5|51||N|0|0,5|52||N|0|0,9|56||N|0|0,9|58||N|0|0,9|60||N|0|0,9|59||N|0|0,12|66||N|0|0,12|64||N|0|0,12|67||N|0|0,12|68||N|0|0', 0, 0, 0, 0, 0.00, '2021-05-06 23:59:48', '2021-05-07 05:59:48', 0, '2021-05-06 23:59:48', NULL, 1);
+	(50, 2, 10, 30, '202104190337', 'Temam Murbianto', 'lucknutdev@gmail.com', '6|46,6|44,7|47,7|49,8|54,8|52,10|58,10|56,11|60,11|62,13|66,13|65,14|70,14|67', '5|46|3|N|1|1,5|44|1|N|1|0,5|47|3|N|0|0,5|49|1|N|0|0,5|54|2|N|0|0,5|52|3|N|0|0,9|58|3|N|0|0,9|56|1|N|0|0,9|60|2|N|0|0,9|62||N|0|0,12|66|3|N|0|0,12|65|3|N|0|0,12|70|1|N|0|0,12|67||N|0|0', 8, 4, 0, 2, 240.00, '2021-05-07 10:43:06', '2021-05-07 16:43:06', 1, '2021-05-07 10:43:06', '2021-05-07 11:24:40', 1),
+	(51, 0, 9, 30, '202104190337', 'Temam Murbianto', 'lucknutdev@gmail.com', '0|73,0|74,0|75,0|76,22|77', '0|73|4|N|0|0,0|74|1|N|0|0,0|75|1|N|0|0,0|76|1|N|0|0,22|77|2|N|0|0', 4, 1, 0, 0, 4.00, '2021-05-07 11:39:00', '2021-05-07 11:42:31', 1, '2021-05-07 11:39:00', '2021-05-07 11:42:31', 1);
 /*!40000 ALTER TABLE `ujian` ENABLE KEYS */;
 
 -- Dumping structure for table candraaj_cbt.ujian_skor
@@ -1948,10 +1948,16 @@ CREATE TABLE IF NOT EXISTS `ujian_skor` (
   PRIMARY KEY (`id`),
   KEY `ujian_konversi` (`ujian_id`),
   CONSTRAINT `ujian_konversi` FOREIGN KEY (`ujian_id`) REFERENCES `ujian` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=latin1;
 
--- Dumping data for table candraaj_cbt.ujian_skor: ~1 rows (approximately)
+-- Dumping data for table candraaj_cbt.ujian_skor: ~5 rows (approximately)
 /*!40000 ALTER TABLE `ujian_skor` DISABLE KEYS */;
+REPLACE INTO `ujian_skor` (`id`, `ujian_id`, `group_soal_id`, `skor_original`, `skor_konversi`, `is_enable`, `created_datetime`) VALUES
+	(83, 50, 5, 5, 29, 1, '2021-05-07 11:24:40'),
+	(84, 50, 9, 2, 21, 1, '2021-05-07 11:24:40'),
+	(85, 50, 12, 1, 22, 1, '2021-05-07 11:24:40'),
+	(86, 51, 0, 3, 3, 1, '2021-05-07 11:42:31'),
+	(87, 51, 22, 1, 1, 1, '2021-05-07 11:42:31');
 /*!40000 ALTER TABLE `ujian_skor` ENABLE KEYS */;
 
 -- Dumping structure for table candraaj_cbt.user
@@ -2072,6 +2078,58 @@ CREATE TABLE `v_bank_soal` (
 	`pembahasan` LONGTEXT NULL COLLATE 'latin1_swedish_ci',
 	`created_datetime` DATETIME NOT NULL,
 	`updated_datetime` DATETIME NULL
+) ENGINE=MyISAM;
+
+-- Dumping structure for view candraaj_cbt.v_buku_detail
+-- Creating temporary table to overcome VIEW dependency errors
+CREATE TABLE `v_buku_detail` (
+	`id_ujian` INT(11) NULL,
+	`paket_soal_id` INT(11) NULL,
+	`paket_soal_name` VARCHAR(255) NULL COLLATE 'latin1_swedish_ci',
+	`buku_id` INT(11) NULL,
+	`buku_name` VARCHAR(150) NULL COLLATE 'latin1_swedish_ci',
+	`user_id` INT(11) NULL,
+	`user_no` VARCHAR(75) NULL COLLATE 'latin1_swedish_ci',
+	`user_name` VARCHAR(150) NULL COLLATE 'latin1_swedish_ci',
+	`user_email` VARCHAR(150) NULL COLLATE 'latin1_swedish_ci',
+	`list_soal` LONGTEXT NULL COLLATE 'latin1_swedish_ci',
+	`list_jawaban` LONGTEXT NULL COLLATE 'latin1_swedish_ci',
+	`jml_benar` INT(5) NULL,
+	`jml_salah` INT(5) NULL,
+	`jml_ragu` INT(5) NULL,
+	`jml_kosong` INT(5) NULL,
+	`group_soal_id` MEDIUMTEXT NULL COLLATE 'utf8mb4_general_ci',
+	`group_soal_name` MEDIUMTEXT NULL COLLATE 'latin1_swedish_ci',
+	`skor_group` MEDIUMTEXT NULL COLLATE 'utf8mb4_general_ci',
+	`total_skor` DECIMAL(32,0) NULL,
+	`nilai` DECIMAL(9,0) NULL,
+	`tgl_mulai_peserta` DATETIME NULL,
+	`tgl_selesai_peserta` DATETIME NULL,
+	`materi_name` VARCHAR(255) NULL COLLATE 'latin1_swedish_ci',
+	`status` TINYINT(1) NULL COMMENT '0 Mulai 1 Selesai',
+	`skala_penilaian` VARCHAR(100) NULL COLLATE 'latin1_swedish_ci'
+) ENGINE=MyISAM;
+
+-- Dumping structure for view candraaj_cbt.v_buku_header
+-- Creating temporary table to overcome VIEW dependency errors
+CREATE TABLE `v_buku_header` (
+	`paket_soal_id` INT(11) NOT NULL,
+	`nama_paket_soal` VARCHAR(255) NOT NULL COLLATE 'latin1_swedish_ci',
+	`buku_id` INT(11) NULL,
+	`buku_name` VARCHAR(150) NULL COLLATE 'latin1_swedish_ci',
+	`detail_buku_id` INT(11) NULL,
+	`detail_buku_name` VARCHAR(50) NULL COLLATE 'latin1_swedish_ci',
+	`is_free` TINYINT(1) NOT NULL COMMENT '0 Tidak Free 1 Free',
+	`tipe_buku` VARCHAR(8) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`materi_name` VARCHAR(255) NOT NULL COLLATE 'latin1_swedish_ci',
+	`total_skor` DECIMAL(32,0) NULL,
+	`nilai_tertinggi` DECIMAL(9,0) NULL,
+	`nilai_rata` DECIMAL(11,2) NULL,
+	`nilai_terendah` DECIMAL(9,0) NULL,
+	`tgl_mulai` DATETIME NULL,
+	`tgl_selesai` DATETIME NULL,
+	`total_soal` BIGINT(21) NOT NULL,
+	`total_user_ujian` BIGINT(21) NOT NULL
 ) ENGINE=MyISAM;
 
 -- Dumping structure for view candraaj_cbt.v_group_peserta
@@ -2462,9 +2520,20 @@ CREATE TABLE `v_paket_soal_buku` (
 	`is_enable` TINYINT(1) NOT NULL,
 	`status_paket_soal` VARCHAR(11) NOT NULL COLLATE 'utf8mb4_general_ci',
 	`id_ujian` INT(11) NULL,
+	`tgl_mulai` DATETIME NULL,
 	`tgl_selesai` DATETIME NULL,
 	`user_id` INT(11) NULL,
-	`status` TINYINT(1) NULL COMMENT '0 Mulai 1 Selesai'
+	`user_no` VARCHAR(75) NULL COLLATE 'latin1_swedish_ci',
+	`user_name` VARCHAR(150) NULL COLLATE 'latin1_swedish_ci',
+	`user_email` VARCHAR(150) NULL COLLATE 'latin1_swedish_ci',
+	`list_soal` LONGTEXT NULL COLLATE 'latin1_swedish_ci',
+	`list_jawaban` LONGTEXT NULL COLLATE 'latin1_swedish_ci',
+	`jml_benar` INT(5) NULL,
+	`jml_salah` INT(5) NULL,
+	`jml_ragu` INT(5) NULL,
+	`jml_kosong` INT(5) NULL,
+	`status` TINYINT(1) NULL COMMENT '0 Mulai 1 Selesai',
+	`skor` DECIMAL(10,2) NULL
 ) ENGINE=MyISAM;
 
 -- Dumping structure for view candraaj_cbt.v_peserta
@@ -2719,6 +2788,76 @@ LEFT OUTER JOIN pembahasan AS T7 ON T1.id = T7.bank_soal_id
 	AND T7.is_enable = 1 
 LEFT OUTER JOIN group_soal AS T8 ON T6.parent_id = T8.id
 	AND T8.is_enable = 1 ;
+
+-- Dumping structure for view candraaj_cbt.v_buku_detail
+-- Removing temporary table and create final VIEW structure
+DROP TABLE IF EXISTS `v_buku_detail`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_buku_detail` AS SELECT
+	T1.id_ujian,
+	T1.paket_soal_id,
+	T1.nama_paket_soal AS paket_soal_name,
+	T1.buku_id,
+	T1.buku_name,
+	T1.user_id,
+	T1.user_no,
+	T1.user_name,
+	T1.user_email,
+	T1.list_soal,
+	T1.list_jawaban,
+	T1.jml_benar,
+	T1.jml_salah,
+	T1.jml_ragu,
+	T1.jml_kosong,
+	GROUP_CONCAT(DISTINCT T4.group_soal_id SEPARATOR ', ') AS group_soal_id,
+	GROUP_CONCAT(DISTINCT 
+		CASE 
+			WHEN T5.name IS NULL THEN 'NO_GROUP'
+			ELSE T5.name
+		END SEPARATOR ', ') AS group_soal_name,
+	GROUP_CONCAT(DISTINCT T4.skor_konversi SEPARATOR ', ') AS skor_group,
+	SUM(T4.skor_konversi) AS total_skor,
+	ROUND(T1.skor) AS nilai,
+	T1.tgl_mulai AS tgl_mulai_peserta,
+	T1.tgl_selesai AS tgl_selesai_peserta,
+	T1.materi_name,
+	T1.`status`,
+	T1.detail_nama_pengaturan_universal AS skala_penilaian
+FROM v_paket_soal_buku AS T1
+LEFT OUTER JOIN ujian_skor AS T4 ON T1.id_ujian = T4.ujian_id
+LEFT OUTER JOIN group_soal AS T5 ON T4.group_soal_id = T5.id
+WHERE T1.tgl_selesai IS NOT NULL AND
+T1.`status` = 1 ;
+
+-- Dumping structure for view candraaj_cbt.v_buku_header
+-- Removing temporary table and create final VIEW structure
+DROP TABLE IF EXISTS `v_buku_header`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_buku_header` AS SELECT
+	T1.paket_soal_id,
+	T1.nama_paket_soal,
+	T1.buku_id,
+	T1.buku_name,
+	T1.detail_buku_id,
+	T1.detail_buku_name,
+	T1.is_free,
+	CASE
+		WHEN T1.is_free = 1 THEN 'Gratis'
+		ELSE 'Berbayar'
+	END AS tipe_buku,
+	T1.materi_name,
+	SUM(T3.skor_konversi) AS total_skor,
+	MAX(ROUND(T1.skor)) AS nilai_tertinggi,
+	ROUND(AVG(T1.skor), 2) AS nilai_rata,
+	MIN(ROUND(T1.skor)) AS nilai_terendah,
+	T1.tgl_mulai,
+	T1.tgl_selesai,
+	T1.total_soal,
+	COUNT(DISTINCT(T1.user_id)) AS total_user_ujian
+FROM v_paket_soal_buku AS T1
+LEFT OUTER JOIN ujian_skor AS T3 ON T1.id_ujian = T3.ujian_id
+WHERE T1.tgl_selesai IS NOT NULL AND
+T1.`status` = 1
+GROUP BY T1.paket_soal_id, T1.buku_id
+ORDER BY T1.id_ujian DESC ;
 
 -- Dumping structure for view candraaj_cbt.v_group_peserta
 -- Removing temporary table and create final VIEW structure
@@ -3338,7 +3477,22 @@ GROUP BY T1.id,
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `v_paket_soal_buku`;
 CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_paket_soal_buku` AS SELECT
-	T1.*, T2.id AS id_ujian, T2.tgl_selesai, T2.user_id, T2.`status`
+	T1.*, 
+	T2.id AS id_ujian, 
+	T2.tgl_mulai,
+	T2.tgl_selesai, 
+	T2.user_id,
+	T2.user_no,
+	T2.user_name,
+	T2.user_email,
+	T2.list_soal,
+	T2.list_jawaban,
+	T2.jml_benar,
+	T2.jml_salah,
+	T2.jml_ragu,
+	T2.jml_kosong,
+	T2.`status`, 
+	T2.skor
 FROM v_paket_buku AS T1
 LEFT OUTER JOIN ujian AS T2 ON T1.paket_soal_id = T2.paket_soal_id
 	AND T2.is_enable = 1
@@ -3544,7 +3698,11 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_ujian_detail` AS SELECT
 	T1.jml_ragu,
 	T1.jml_kosong,
 	GROUP_CONCAT(DISTINCT T4.group_soal_id SEPARATOR ', ') AS group_soal_id,
-	GROUP_CONCAT(DISTINCT T5.name SEPARATOR ', ') AS group_soal_name,
+	GROUP_CONCAT(DISTINCT 
+		CASE 
+			WHEN T5.name IS NULL THEN 'NO_GROUP'
+			ELSE T5.name
+		END SEPARATOR ', ') AS group_soal_name,
 	GROUP_CONCAT(DISTINCT T4.skor_konversi SEPARATOR ', ') AS skor_group,
 	SUM(T4.skor_konversi) AS total_skor,
 	ROUND(T1.skor) AS nilai,
