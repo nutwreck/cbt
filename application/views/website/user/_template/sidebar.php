@@ -1,5 +1,5 @@
 <!-- Sidebar  -->
-<nav id="sidebar mobile">
+<nav id="sidebar">
     <div class="sidebar-header">
         <img src="<?=config_item('_assets_general')?>header_logo/header_logo_user_center.png" alt="logo" width="150">
     </div>
