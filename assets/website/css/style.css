@@ -174,6 +174,22 @@ ul.CTAs a {
     MEDIAQUERIES
 ----------------------------------------------------- */
 
+@media (max-width: 468px) {
+    #content{
+        width: 100%;
+        padding: 10px;
+    }
+    .isi-content{
+        width: 100%;
+    }
+    audio{
+        width: 90%;
+    }
+    .card-body {
+        font-size: 100%;
+    }
+}
+
 @media (max-width: 768px) {
     #sidebar {
         margin-left: -250px;
