@@ -70,7 +70,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | The $query_builder variables lets you determine whether or not to load
 | the query builder class.
 */
-$active_group = 'local';
+$active_group = 'server';
 $query_builder = TRUE;
 
 $db['local'] = array(
@@ -98,9 +98,9 @@ $db['local'] = array(
 $db['server'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => 'candraaj_admin',
-	'password' => 'Pi8$tT{SkT2!',
-	'database' => 'candraaj_tesonline', //candraaj_cbt
+	'username' => 'zambertc_admin', //candraaj_admin
+	'password' => '!5K$PC&F~cCA', //Pi8$tT{SkT2!
+	'database' => 'zambertc_tes', //candraaj_tesonline //candraaj_cbt
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
