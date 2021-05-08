@@ -38,7 +38,7 @@ if($env_type == 'Local'){
     */
     $config['base_url'] = $root;
 } else {
-    $root = 'http://'. $_SERVER['HTTP_HOST'] .'/';
+    $root = 'https://'. $_SERVER['HTTP_HOST'] .'/';
     /*
     |--------------------------------------------------------------------------
     | Base URL
