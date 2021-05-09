@@ -16,10 +16,14 @@
             sisawaktu(t.data('time'));
         }
 
-        //Sidebar hidden
-        $('#sidebar, #content').toggleClass('active');
-        $('.collapse.in').toggleClass('in');
-        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        var width = screen.width;
+
+        if(width >= 768){
+            //Sidebar hidden
+            $('#sidebar, #content').toggleClass('active');
+            $('.collapse.in').toggleClass('in');
+            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        }
 
         //disable F5
         $(document).on("keydown", disableF5);

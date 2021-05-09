@@ -213,12 +213,12 @@
     /* ***************** */
     @media only screen and (max-width: 420px) {
         .base-timer {left: 33%; margin-right: -33%;}
-        .modal-content {margin: 50% auto;}
+        .modal-content {margin: 20% auto;height: 100%;}
         .btn-nxt-brf-hrd {display: none;}
     }
     @media (min-width: 420px)  and (max-width: 780px) {
         .base-timer {left: 38%; margin-right: -38%;}
-        .modal-content {margin: 30% auto;}
+        .modal-content {margin: 30% auto;height: 100%;}
         .btn-nxt-brf-hrd {display: none;}
     }
     @media (min-width: 780px) and (max-width: 920px) {

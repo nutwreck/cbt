@@ -27,7 +27,7 @@ setlocale(LC_ALL, 'IND');
 | Choose Environment Type 'Local' or 'Server'.
 |
 */
-$env_type = 'Local';
+$env_type = 'Server';
 
 if($env_type == 'Local'){
     $root = "http://localhost/cbt/";
