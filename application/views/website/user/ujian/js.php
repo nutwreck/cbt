@@ -504,7 +504,7 @@
 </script>
 
 <!-- User pindah tab lain atau pindah dari browser aktif sekarang -->
-<!-- <script type="text/javascript">
+<script type="text/javascript">
     document.addEventListener("visibilitychange", event => {
         if(blok_layar != 0){
             var modal = document.getElementById("alert-away");
@@ -526,7 +526,7 @@
             }
         }
     })
-</script> -->
+</script>
 
 <!-- NAVIGASI TOOGLE SOAL -->
 <script>
