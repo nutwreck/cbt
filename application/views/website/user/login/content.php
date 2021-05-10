@@ -117,7 +117,7 @@
                                     <i class="fa fa-envelope text-muted"></i>
                                 </span>
                             </div>
-                            <input id="username" type="text" name="username" placeholder="Masukkan Email" class="form-control bg-white border-left-0 border-md" required>
+                            <input id="username" type="email" name="username" placeholder="Masukkan Email" class="form-control bg-white border-left-0 border-md" required>
                         </div>
 
                         <!-- Password -->
