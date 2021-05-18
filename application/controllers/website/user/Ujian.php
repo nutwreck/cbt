@@ -535,10 +535,11 @@ class Ujian extends CI_Controller {
         redirect('dashboard');
     }
 
-    public function pembahasan($id_sesi_pelaksanaan, $id_paket_soal, $id_ujian){
+    public function pembahasan($id_sesi_pelaksanaan, $id_paket_soal, $id_ujian, $pembahasan_kunci){
         $sesi_pelaksanaan_id = base64_decode(urldecode($id_sesi_pelaksanaan));
         $paket_soal_id = base64_decode(urldecode($id_paket_soal));
         $ujian_id = base64_decode(urldecode($id_ujian));
+        $kunci_pembahasan = base64_decode(urldecode($pembahasan_kunci));
 
         $data_ujian = [];
         $bank_soal = [];
@@ -680,48 +681,93 @@ class Ujian extends CI_Controller {
                     $opsi = config_item('_def_opsi_jawaban');
                     $jawaban_soal = [];
                     $number_opsi = 1;
-                    foreach($jawaban as $key_jawaban => $val_jawaban) {
-                        $checked = $arr_jawab[$s->bank_soal_id]["j"] == $val_jawaban->order ? "checked" : "";
-                        if($number_opsi != $jawaban_benar && $number_opsi != $arr_jawab[$s->bank_soal_id]["j"]){ //Selain jawaban salah dan benar
-                            $html .= '<div class="funkyradio-default">
-                                <input type="checkbox" style="display:none;" id="key_'.$opsi.'_'.$nomor_soal.'" name="key_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'|'.$jawaban_benar.'">
-                                <input type="checkbox" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'" disabled> 
-                                <label for="opsi_'.$opsi.'_'.$nomor_soal.'">
-                                    <div class="huruf_opsi">'.$opsi.'</div> 
-                                    <div class="card-text">'.$val_jawaban->name.'</div>
-                                </label>
-                            </div>';
-                        } elseif($number_opsi == $jawaban_benar && $number_opsi == $arr_jawab[$s->bank_soal_id]["j"]){ //Jawaban benar dari user
-                            $html .= '<div class="funkyradio-success">
-                                <input type="checkbox" style="display:none;" id="key_'.$opsi.'_'.$nomor_soal.'" name="key_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'|'.$jawaban_benar.'" '.$checked.'>
-                                <input type="checkbox" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'" '.$checked.' disabled> 
-                                <label style="background:#86C186;" for="opsi_'.$opsi.'_'.$nomor_soal.'">
-                                    <div class="huruf_opsi">'.$opsi.'</div> 
-                                    <div class="card-text">'.$val_jawaban->name.'</div>
-                                </label>
-                            </div>';
-                        } elseif($number_opsi == $jawaban_benar){ //Jawaban benar dari sistem
-                            $html .= '<div class="funkyradio-success">
-                                <input type="checkbox" style="display:none;" id="key_'.$opsi.'_'.$nomor_soal.'" name="key_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'|'.$jawaban_benar.'">
-                                <input type="checkbox" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'" disabled>
-                                <label style="background:#86C186;" for="opsi_'.$opsi.'_'.$nomor_soal.'">
-                                    <div class="huruf_opsi">'.$opsi.'</div> 
-                                    <div class="card-text">'.$val_jawaban->name.'</div>
-                                </label>
-                            </div>';
-                        } elseif($jawaban_benar != $arr_jawab[$s->bank_soal_id]["j"]) { //Jawaban salah dari user
-                            $html .= '<div class="funkyradio-danger">
-                                <input type="checkbox" style="display:none;" id="key_'.$opsi.'_'.$nomor_soal.'" name="key_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'|'.$jawaban_benar.'" '.$checked.'>
-                                <input type="checkbox" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'" '.$checked.' disabled> 
-                                <label style="background:#df706d;" for="opsi_'.$opsi.'_'.$nomor_soal.'">
-                                    <div class="huruf_opsi">'.$opsi.'</div> 
-                                    <div class="card-text">'.$val_jawaban->name.'</div>
-                                </label>
-                            </div>';
-                        }
-                        $opsi++;
-                        $number_opsi++;
-                    };
+                    if($kunci_pembahasan == 1){
+                        foreach($jawaban as $key_jawaban => $val_jawaban) {
+                            $checked = $arr_jawab[$s->bank_soal_id]["j"] == $val_jawaban->order ? "checked" : "";
+                            if($number_opsi != $jawaban_benar && $number_opsi != $arr_jawab[$s->bank_soal_id]["j"]){ //Selain jawaban salah dan benar
+                                $html .= '<div class="funkyradio-default">
+                                    <input type="checkbox" style="display:none;" id="key_'.$opsi.'_'.$nomor_soal.'" name="key_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'|'.$jawaban_benar.'">
+                                    <input type="checkbox" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'" disabled> 
+                                    <label for="opsi_'.$opsi.'_'.$nomor_soal.'">
+                                        <div class="huruf_opsi">'.$opsi.'</div> 
+                                        <div class="card-text">'.$val_jawaban->name.'</div>
+                                    </label>
+                                </div>';
+                            } elseif($number_opsi == $jawaban_benar && $number_opsi == $arr_jawab[$s->bank_soal_id]["j"]){ //Jawaban benar dari user
+                                $html .= '<div class="funkyradio-success">
+                                    <input type="checkbox" style="display:none;" id="key_'.$opsi.'_'.$nomor_soal.'" name="key_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'|'.$jawaban_benar.'" '.$checked.'>
+                                    <input type="checkbox" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'" '.$checked.' disabled> 
+                                    <label style="background:#86C186;" for="opsi_'.$opsi.'_'.$nomor_soal.'">
+                                        <div class="huruf_opsi">'.$opsi.'</div> 
+                                        <div class="card-text">'.$val_jawaban->name.'</div>
+                                    </label>
+                                </div>';
+                            } elseif($number_opsi == $jawaban_benar){ //Jawaban benar dari sistem
+                                $html .= '<div class="funkyradio-success">
+                                    <input type="checkbox" style="display:none;" id="key_'.$opsi.'_'.$nomor_soal.'" name="key_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'|'.$jawaban_benar.'">
+                                    <input type="checkbox" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'" disabled>
+                                    <label style="background:#86C186;" for="opsi_'.$opsi.'_'.$nomor_soal.'">
+                                        <div class="huruf_opsi">'.$opsi.'</div> 
+                                        <div class="card-text">'.$val_jawaban->name.'</div>
+                                    </label>
+                                </div>';
+                            } elseif($jawaban_benar != $arr_jawab[$s->bank_soal_id]["j"]) { //Jawaban salah dari user
+                                $html .= '<div class="funkyradio-danger">
+                                    <input type="checkbox" style="display:none;" id="key_'.$opsi.'_'.$nomor_soal.'" name="key_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'|'.$jawaban_benar.'" '.$checked.'>
+                                    <input type="checkbox" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'" '.$checked.' disabled> 
+                                    <label style="background:#df706d;" for="opsi_'.$opsi.'_'.$nomor_soal.'">
+                                        <div class="huruf_opsi">'.$opsi.'</div> 
+                                        <div class="card-text">'.$val_jawaban->name.'</div>
+                                    </label>
+                                </div>';
+                            }
+                            $opsi++;
+                            $number_opsi++;
+                        };
+                    } else {
+                        foreach($jawaban as $key_jawaban => $val_jawaban) {
+                            $checked = $arr_jawab[$s->bank_soal_id]["j"] == $val_jawaban->order ? "checked" : "";
+                            if($number_opsi != $jawaban_benar && $number_opsi != $arr_jawab[$s->bank_soal_id]["j"]){ //Selain jawaban salah dan benar
+                                $html .= '<div class="funkyradio-default">
+                                    <input type="checkbox" style="display:none;" id="key_'.$opsi.'_'.$nomor_soal.'" name="key_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'|'.$jawaban_benar.'">
+                                    <input type="checkbox" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'" disabled> 
+                                    <label for="opsi_'.$opsi.'_'.$nomor_soal.'">
+                                        <div class="huruf_opsi">'.$opsi.'</div> 
+                                        <div class="card-text">'.$val_jawaban->name.'</div>
+                                    </label>
+                                </div>';
+                            } elseif($number_opsi == $jawaban_benar && $number_opsi == $arr_jawab[$s->bank_soal_id]["j"]){ //Jawaban benar dari user
+                                $html .= '<div class="funkyradio-success">
+                                    <input type="checkbox" style="display:none;" id="key_'.$opsi.'_'.$nomor_soal.'" name="key_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'|'.$jawaban_benar.'" '.$checked.'>
+                                    <input type="checkbox" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'" '.$checked.' disabled> 
+                                    <label style="background:#86C186;" for="opsi_'.$opsi.'_'.$nomor_soal.'">
+                                        <div class="huruf_opsi">'.$opsi.'</div> 
+                                        <div class="card-text">'.$val_jawaban->name.'</div>
+                                    </label>
+                                </div>';
+                            } elseif($number_opsi == $jawaban_benar){ //Jawaban benar dari sistem
+                                $html .= '<div class="funkyradio-default">
+                                    <input type="checkbox" style="display:none;" id="key_'.$opsi.'_'.$nomor_soal.'" name="key_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'|'.$jawaban_benar.'">
+                                    <input type="checkbox" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'" disabled> 
+                                    <label for="opsi_'.$opsi.'_'.$nomor_soal.'">
+                                        <div class="huruf_opsi">'.$opsi.'</div> 
+                                        <div class="card-text">'.$val_jawaban->name.'</div>
+                                    </label>
+                                </div>';
+                            } elseif($jawaban_benar != $arr_jawab[$s->bank_soal_id]["j"]) { //Jawaban salah dari user
+                                $html .= '<div class="funkyradio-danger">
+                                    <input type="checkbox" style="display:none;" id="key_'.$opsi.'_'.$nomor_soal.'" name="key_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'|'.$jawaban_benar.'" '.$checked.'>
+                                    <input type="checkbox" id="opsi_'.$opsi.'_'.$nomor_soal.'" name="opsi_'.$nomor_soal.'" value="'.$val_jawaban->order.'|'.$number_opsi.'" '.$checked.' disabled> 
+                                    <label style="background:#df706d;" for="opsi_'.$opsi.'_'.$nomor_soal.'">
+                                        <div class="huruf_opsi">'.$opsi.'</div> 
+                                        <div class="card-text">'.$val_jawaban->name.'</div>
+                                    </label>
+                                </div>';
+                            }
+                            $opsi++;
+                            $number_opsi++;
+                        };
+                    }
                     $html .= '</div>';
                 } else{
                     $history_jawab = !empty($arr_jawab[$s->bank_soal_id]["j"]) ? $arr_jawab[$s->bank_soal_id]["j"] : "";
@@ -743,9 +789,11 @@ class Ujian extends CI_Controller {
                     $key_opsi = 'E';
                 }
 
-                $html .= '<div class="row">
-                <h5 class="card-text mt-2 ml-3">Jawaban Benar : '.$key_opsi.'</h5>
-                </div>';
+                if($kunci_pembahasan == 1){
+                    $html .= '<div class="row">
+                    <h5 class="card-text mt-2 ml-3">Jawaban Benar : '.$key_opsi.'</h5>
+                    </div>';
+                } else {}
 
                 $html .= '</div>';
 

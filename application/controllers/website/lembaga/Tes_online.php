@@ -1859,6 +1859,7 @@ class Tes_online extends CI_Controller {
         $data_sesi['is_hasil'] = $this->input->post('is_hasil', TRUE);
         $data_sesi['is_ranking'] = $this->input->post('is_ranking', TRUE);
         $data_sesi['is_pembahasan'] = $this->input->post('is_pembahasan', TRUE);
+        $data_sesi['is_kunci_pembahasan'] = $this->input->post('is_kunci_pembahasan', TRUE);
         $data_sesi['is_komposisi_soal'] = $this->input->post('komposisi_soal', TRUE);
         $data_sesi['created_datetime'] = date('Y-m-d H:i:s');
 
@@ -2035,6 +2036,7 @@ class Tes_online extends CI_Controller {
         $data_sesi['is_hasil'] = $this->input->post('is_hasil', TRUE);
         $data_sesi['is_ranking'] = $this->input->post('is_ranking', TRUE);
         $data_sesi['is_pembahasan'] = $this->input->post('is_pembahasan', TRUE);
+        $data_sesi['is_kunci_pembahasan'] = $this->input->post('is_kunci_pembahasan', TRUE);
         $data_sesi['is_komposisi_soal'] = $this->input->post('komposisi_soal', TRUE);
         $data_sesi['updated_datetime'] = date('Y-m-d H:i:s');
 

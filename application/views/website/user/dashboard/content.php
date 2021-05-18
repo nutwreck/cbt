@@ -40,11 +40,11 @@
                                 <?php if($val_sesi->waktu_mulai >= $now){ ?>
                                     <a href="#" class="btn btn-block btn-mulai isDisabled" onclick="return swal('Informasi', 'Waktu ujian belum dimulai!', 'info')">Mulai</a>
                                 <?php } elseif($val_sesi->status_ujian == 1 && $val_sesi->is_pembahasan == 1) { ?>
-                                    <a href="<?php echo base_url(); ?>pembahasan/<?=urlencode(base64_encode($val_sesi->sesi_pelaksanaan_id))?>/<?=urlencode(base64_encode($val_sesi->paket_soal_id))?>/<?=urlencode(base64_encode($val_sesi->check_status_ujian))?>" class="btn btn-block btn-mulai">Pembahasan</a>
+                                    <a href="<?php echo base_url(); ?>pembahasan/<?=urlencode(base64_encode($val_sesi->sesi_pelaksanaan_id))?>/<?=urlencode(base64_encode($val_sesi->paket_soal_id))?>/<?=urlencode(base64_encode($val_sesi->check_status_ujian))?>/<?=urlencode(base64_encode($val_sesi->is_kunci_pembahasan))?>" class="btn btn-block btn-mulai">Pembahasan</a>
                                 <?php } elseif(!empty($val_sesi->tgl_selesai_user) && $val_sesi->tgl_selesai_user <= $now && $val_sesi->is_pembahasan == 0) { ?>
                                     <a href="#" class="btn btn-block btn-mulai isDisabled">Selesai</a>
                                 <?php } elseif(!empty($val_sesi->tgl_selesai_user) && $val_sesi->tgl_selesai_user <= $now && $val_sesi->is_pembahasan == 1) { ?>
-                                    <a href="<?php echo base_url(); ?>pembahasan/<?=urlencode(base64_encode($val_sesi->sesi_pelaksanaan_id))?>/<?=urlencode(base64_encode($val_sesi->paket_soal_id))?>/<?=urlencode(base64_encode($val_sesi->check_status_ujian))?>" class="btn btn-block btn-mulai">Pembahasan</a>
+                                    <a href="<?php echo base_url(); ?>pembahasan/<?=urlencode(base64_encode($val_sesi->sesi_pelaksanaan_id))?>/<?=urlencode(base64_encode($val_sesi->paket_soal_id))?>/<?=urlencode(base64_encode($val_sesi->check_status_ujian))?>/<?=urlencode(base64_encode($val_sesi->is_kunci_pembahasan))?>" class="btn btn-block btn-mulai">Pembahasan</a>
                                 <?php } elseif($val_sesi->batas_pengerjaan <= $now) { ?>
                                     <a href="#" class="btn btn-block btn-mulai isDisabled">Selesai</a>
                                 <?php } elseif(!empty($val_sesi->check_status_ujian) && !empty($val_sesi->tgl_selesai_user) && $val_sesi->tgl_selesai_user >= $now && $val_sesi->status_ujian == 0){ ?>

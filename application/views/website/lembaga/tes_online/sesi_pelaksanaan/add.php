@@ -213,6 +213,23 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12 col-lg-3" style="margin-top:0.3%">
+                                        <h5 class="label-text">Tampilkan Kunci</h5>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-9">
+                                        <div class="form-group">
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input type="radio" class="custom-control-input" id="is_kunci_pembahasan_tidak" name="is_kunci_pembahasan" required value="0" checked>
+                                                <label class="custom-control-label" for="is_kunci_pembahasan_tidak">Tidak</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input type="radio" class="custom-control-input" id="is_kunci_pembahasan_ya" name="is_kunci_pembahasan" required value="1">
+                                                <label class="custom-control-label" for="is_kunci_pembahasan_ya">Ya</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-3" style="margin-top:0.3%">
                                         <h5 class="label-text">Komposisi Soal</h5>
                                     </div>
                                     <div class="col-sm-12 col-lg-9">
