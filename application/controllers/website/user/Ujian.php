@@ -219,9 +219,6 @@ class Ujian extends CI_Controller {
                     $ragu_ragu = '<div class="col" data-position="up"><a rel="1" class="ragu_ragu btn btn-md btn-warning text-white" onclick="return tidak_jawab();">Ragu</a></div>';
                 }
 
-                $group_first_name = substr($group_soal_p,0,1);
-                $group_soal_name = $s->group_soal_name <> 0 || !empty($s->group_soal_name) ? '<b> GROUP '.$s->group_soal_name.' ('.$group_first_name.')</b><br /><br />' : '';
-
                 $html .= '
                     <div class="card-header bg-primary text-white">
                         <div class="row">
@@ -240,7 +237,7 @@ class Ujian extends CI_Controller {
                     </div>';
 
                 $html .= '<div class="card-body">
-                    <div class="card-text text-justify">'.$group_soal_name.$group_soal_audio.$bacaan_soal_name.$bacaan_soal.$soal_audio.$s->bank_soal_name.'</div><hr>';
+                    <div class="card-text text-justify">'.$group_soal_audio.$bacaan_soal_name.$bacaan_soal.$soal_audio.$s->bank_soal_name.'</div><hr>';
 
                 if($s->group_mode_jwb_id == 1){
                     $html .= '<div class="card-text mt-2">
@@ -629,16 +626,13 @@ class Ujian extends CI_Controller {
                 } else { // Parent Group
                     $num_group_soal++;
                     $arrow_back = $nomor_soal == 1 ? '<a id="group_petunjuk_'.$nomor_soal.'" rel="0" onclick="return back();" class="back btn btn-sm text-primary bg-white btn-nxt-brf-hrd disabled"><i class="fa fa-arrow-left"></i></a>' : '<a id="group_petunjuk_'.$nomor_soal.'" rel="0" onclick="return back();" class="back btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-left"></i></a>';
-                    $arrow_next = $nomor_soal == $jumlah_soal ? '<a class="btn btn-sm text-primary bg-white btn-nxt-brf-hrd disabled"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>' : '<a rel="2" onclick="return next();" class="next btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>';;
+                    $arrow_next = $nomor_soal == $jumlah_soal ? '<a class="btn btn-sm text-primary bg-white btn-nxt-brf-hrd disabled"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>' : '<a rel="2" onclick="return next();" class="next btn btn-sm text-primary bg-white btn-nxt-brf-hrd"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>';
 
                     $previous_number = $nomor_soal == 1 ? '<div class="col"></div>' : '<div class="col"><a id="group_petunjuk_'.$nomor_soal.'" rel="0" onclick="return back();" onclick="return back_group();" class="back btn btn-md btn-primary text-white">No '.$no_previous.'</a></div>';
                     $next_number = $nomor_soal == $jumlah_soal ? '<div class="col"></div>' : '<div class="col"><a rel="2" onclick="return next();" class="next btn btn-md btn-primary text-white">No '.$no_next.'</a></div>';
                     
                     $ragu_ragu = '<div class="col"></div>';
                 }
-
-                $group_first_name = substr($group_soal_p,0,1);
-                $group_soal_name = $s->group_soal_name <> 0 || !empty($s->group_soal_name) ? '<b> GROUP '.$s->group_soal_name.' ('.$group_first_name.')</b><br /><br />' : '';
 
                 $html .= '
                     <div class="card-header bg-primary text-white lembar-pembahasan">
@@ -669,7 +663,7 @@ class Ujian extends CI_Controller {
                 <div class="text-left m-3">'.$text_pembahasan.'</div></center>
                 </div>';
 
-                $html .= '<div class="card-text text-justify">'.$group_soal_name.$bacaan_soal_name.$bacaan_soal.$s->bank_soal_name.'</div><hr>';
+                $html .= '<div class="card-text text-justify">'.$bacaan_soal_name.$bacaan_soal.$s->bank_soal_name.'</div><hr>';
 
                 if($s->group_mode_jwb_id == 1){
                     $html .= '<div class="card-text mt-2">
