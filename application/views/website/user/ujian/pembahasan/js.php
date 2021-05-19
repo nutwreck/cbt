@@ -7,10 +7,14 @@
     var total_widget    = widget.length;
 
     $(document).ready(function () {
-        //Sidebar hidden
-        $('#sidebar, #content').toggleClass('active');
-        $('.collapse.in').toggleClass('in');
-        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        var width = screen.width;
+
+        if(width >= 768){
+            //Sidebar hidden
+            $('#sidebar, #content').toggleClass('active');
+            $('.collapse.in').toggleClass('in');
+            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        }
 
         buka(1);
         simpan_sementara();
@@ -18,7 +22,7 @@
         $("#widget_1").show();
 
         $("html, body").animate({ 
-            scrollTop: $('.lembar-pembahasan').offset().top 
+            scrollTop: $('.lembar_pembahasan').offset().top 
         }, 1000);
     });
 
@@ -63,6 +67,10 @@
             $(".step").hide();
             $("#widget_" + id_widget).show();
         }
+
+        $("html, body").animate({ 
+            scrollTop: $('.lembar_pembahasan').offset().top 
+        }, 1000);
     }
 
     function buka(id_widget) {
@@ -83,6 +91,10 @@
         }
 
         before_widget = id_widget;
+
+        $("html, body").animate({ 
+            scrollTop: $('.lembar_pembahasan').offset().top 
+        }, 1000);
     }
 
     function buka_non_group(id_widget) {
@@ -99,6 +111,10 @@
         $("#widget_" + id_widget).show();
         
         before_widget = id_widget;
+
+        $("html, body").animate({ 
+            scrollTop: $('.lembar_pembahasan').offset().top 
+        }, 1000);
     }
 
     function cek_status_ragu(id_soal) {
@@ -179,14 +195,11 @@
         var gr = 'id_group_soal_' + urutan;
         var gr_n = 'group_soal_' + urutan;
         var group = form[gr];
-        var group_name = form[gr_n]; //group soal
-        var group_str_name = group_name.substring(0, 1);
-        var group_str_upper = group_str_name.toUpperCase();
 
         $.ajax({
             type: "POST",
             url: base_url + "website/user/Ujian/buka_group",
-            data: 'id_group='+group+'&urutan='+urutan+'&group_first='+group_str_upper,
+            data: 'id_group='+group+'&urutan='+urutan,
             dataType: 'json',
             success: function (data) {
                 // Add response in Modal body
@@ -196,6 +209,10 @@
 
                 // Display Modal
                 $('#petunjukModal').modal('show');
+
+                $("html, body").animate({ 
+                    scrollTop: $('.lembar_pembahasan').offset().top 
+                }, 1000);
             }
         });
     }
@@ -209,6 +226,7 @@
 
         var hasil_jawaban = "";
         var group_number = 1;
+        var sub_group_before = "";
         
         for (var i = 1; i < jml_soal; i++) {
             //iniatial group mode jawaban
@@ -216,11 +234,17 @@
             var group_m = form[gr_m];
 
             var gr = 'id_group_soal_' + i;
+            var gr_s = 'group_soal_sub_' + i;
             var gr_n = 'group_soal_' + i;
             var idx2 = 'rg_' + i;
             var ragu = form[idx2];
             var group = form[gr]; //group soal
             var group_name = form[gr_n]; //group soal
+            var sub_group_name = form[gr_s]; //group soal sub
+            var sub_group_name_split = sub_group_name.split(" ");
+            var sub_group_after = sub_group_name_split[0];
+            var group_name_split = group_name.split(" ");
+            var group_name_first = group_name_split[0];
 
             if(group_m == 1){ //1 Pilihan Ganda 2 Essay
                 var idx = 'key_' + i;
@@ -236,11 +260,15 @@
             var check = '<i style="margin-left:3px;" class="fa fa-check fa-xs"></i>';
             var times = '<i style="margin-left:3px;" class="fa fa-times fa-xs"></i>';
 
+            //Parent group jika ada
             if(group != group_before && group != 0) {
-                var group_str_name = group_name.substring(0, 1);
-                var group_str_upper = group_str_name.toUpperCase();
-                hasil_jawaban += '<a id="group_petunjuk_'+(i)+'" class="btn button-round btn-primary text-white btn_group" onclick="return buka_group(' + (i) + ');">' + group_str_upper + "</a>";
+                hasil_jawaban += '<a id="group_petunjuk_'+(i)+'" class="btn btn-primary btn-block text-white btn_group" onclick="return buka_group(' + (i) + ');">' + group_name + "</a>";
                 group_number++;
+            }
+
+            //Sub group
+            if(sub_group_after != sub_group_before && sub_group_after != group_name_first) {
+                hasil_jawaban += '<div class="d-flex justify-content-center"><a id="sub_group_petunjuk_'+(i)+'" class="btn btn-secondary btn-block text-white disabled btn_sub_group">' + sub_group_after + "</a></div>";
             }
 
             if (jawab != undefined){
@@ -266,6 +294,7 @@
             }
 
             var group_before = group;
+            var sub_group_before = sub_group_after;
         }
 
         $("#tampil_jawaban").html('<div id="yes"></div>' + hasil_jawaban);

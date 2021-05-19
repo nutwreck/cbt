@@ -192,6 +192,7 @@ class Ujian extends CI_Controller {
                 $html .= '<input type="hidden" name="id_group_mode_jwb'.$nomor_soal.'" value="'.$s->group_mode_jwb_id.'">';
                 $html .= '<input type="hidden" name="id_group_soal_'.$nomor_soal.'" value="'.$id_group_soal_p.'">';
                 $html .= '<input type="hidden" name="group_soal_'.$nomor_soal.'" value="'.$group_soal_p.'">';
+                $html .= '<input type="hidden" name="group_soal_sub_'.$nomor_soal.'" value="'.$s->group_soal_name.'">';
 				$html .= '<input type="hidden" name="id_bank_soal_'.$nomor_soal.'" value="'.$s->bank_soal_id.'">';
 				$html .= '<input type="hidden" name="rg_'.$nomor_soal.'" id="rg_'.$nomor_soal.'" value="'.$vrg.'">';
 				$html .= '<input type="hidden" name="audio_group_'.$nomor_soal.'" id="audio_group_'.$nomor_soal.'" value="'.$ad_g.'">';
@@ -368,12 +369,11 @@ class Ujian extends CI_Controller {
         $data = [];
         $id_group = $this->input->post('id_group', true);
         $urutan = $this->input->post('urutan', true);
-        $group_first = $this->input->post('group_first', true);
 
         $petunjuk = $this->tes->get_petunjuk_by_id($id_group);
 
         $data = array(
-            'judul' => $petunjuk->name.' ('.$group_first.')',
+            'judul' => $petunjuk->name,
             'petunjuk' => $petunjuk->petunjuk,
             'footer' => '<button type="button" class="btn btn-primary" onclick="return buka_non_group('.$urutan.')">Lanjut No '.$urutan.'</button>'
         );
@@ -609,6 +609,7 @@ class Ujian extends CI_Controller {
                 $html .= '<input type="hidden" name="id_group_mode_jwb'.$nomor_soal.'" value="'.$s->group_mode_jwb_id.'">';
                 $html .= '<input type="hidden" name="id_group_soal_'.$nomor_soal.'" value="'.$id_group_soal_p.'">';
                 $html .= '<input type="hidden" name="group_soal_'.$nomor_soal.'" value="'.$group_soal_p.'">';
+                $html .= '<input type="hidden" name="group_soal_sub_'.$nomor_soal.'" value="'.$s->group_soal_name.'">';
 				$html .= '<input type="hidden" name="id_bank_soal_'.$nomor_soal.'" value="'.$s->bank_soal_id.'">';
 				$html .= '<input type="hidden" name="rg_'.$nomor_soal.'" id="rg_'.$nomor_soal.'" value="'.$vrg.'">';
                 
@@ -635,7 +636,7 @@ class Ujian extends CI_Controller {
                 }
 
                 $html .= '
-                    <div class="card-header bg-primary text-white lembar-pembahasan">
+                    <div class="card-header bg-primary text-white">
                         <div class="row">
                             <div class="col">
                                 <h5><i class="fa fa-braille" aria-hidden="true"></i> Soal No #'.$nomor_soal.' / '.$jumlah_soal.'</h5>

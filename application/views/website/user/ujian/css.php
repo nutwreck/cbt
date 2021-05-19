@@ -158,10 +158,20 @@
         text-align: center;
         align-items: center;
         justify-content: center;
+        cursor: pointer; cursor: hand;
     }
 
     .button-round span{
         height: 100px;
+    }
+
+    .btn_group {
+        margin-bottom: 2%;
+        margin-top: 2%;
+    }
+
+    .btn_sub_group {
+        width: 80%;
     }
 
     .sisawaktu-title{

@@ -1,5 +1,5 @@
 <div class="container-fluid mt-100-st">
-    <div class="row">
+    <div class="row lembar_pembahasan">
         <div id="lembar_soal" class="col-sm-12 col-md-8 mb-3">
             <?=form_open('', array('id'=>'ujian'), array('id'=> $ujian_id));?>
                 <h3 class="box-title" style="display:none;"><span class="badge bg-blue">Soal #<span id="soalke"></span> </span></h3>

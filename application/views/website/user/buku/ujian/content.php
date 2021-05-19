@@ -1,5 +1,5 @@
 <div class="container-fluid mt-100-st">
-    <div class="row">
+    <div class="row all-exam">
         <div class="col-sm-12 col-md-8 h-100 mb-3">
             <a data-toggle="collapse" href="#collapseInformasi" role="button" aria-expanded="true" aria-controls="collapseInformasi" class="btn btn-info btn-block py-2 shadow-sm with-chevron">
                 <p class="d-flex align-items-center justify-content-between mb-0 px-3 py-2 text-white"><strong class="text-card-header"><i class="fa fa-info-circle" aria-hidden="true"></i> Informasi</strong><i class="fa fa-chevron-down"></i></p>
@@ -47,7 +47,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row tampilan_soal_jwb">
         <div id="lembar_soal" class="col-sm-12 col-md-8 mb-3">
             <?=form_open('', array('id'=>'ujian'), array('id'=> $ujian_id, 'random_secure' => $random_secure));?>
                 <h3 class="box-title" style="display:none;"><span class="badge bg-blue">Soal #<span id="soalke"></span> </span></h3>
