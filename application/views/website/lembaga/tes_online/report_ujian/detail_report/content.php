@@ -31,7 +31,10 @@
                         <div class="table-data__tool">
                             <div class="table-data__tool-right">
                                 <button class="au-btn au-btn-icon au-btn--green au-btn--small" onclick="export_excel()">
-                                    <i class="zmdi zmdi-plus"></i>Export Excel
+                                    <i class="fa fa-file-excel-o"></i>Export Excel Nilai
+                                </button>
+                                <button class="au-btn au-btn-icon au-btn--blue au-btn--small" onclick="export_excel_statistik()">
+                                    <i class="fa fa-area-chart"></i>Export Excel Statistik
                                 </button>
                             </div>
                         </div>

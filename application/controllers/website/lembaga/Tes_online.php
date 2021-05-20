@@ -534,7 +534,7 @@ class Tes_online extends CI_Controller {
                     'link' => '',
                     'csrf' => $this->security->get_csrf_hash()
                 );
-               /*  $error = array('error' => $this->upload->display_errors());
+                /* $error = array('error' => $this->upload->display_errors());
                 var_dump($error); */
             }
             else {
@@ -2253,6 +2253,7 @@ class Tes_online extends CI_Controller {
         $data = $this->tes->get_ujian_detail($sesi_pelaksana_id, $paket_soal_id);
         $sesi = $this->tes->get_sesi_pelaksana_by_id($sesi_pelaksana_id);
 
+        $total_soal = $this->tes->get_total_soal($paket_soal_id);
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -2285,6 +2286,14 @@ class Tes_online extends CI_Controller {
         $sheet->setCellValue($col++.$index, 'Total Skor');
         $sheet->setCellValue($col++.$index, 'Nilai');
         $sheet->setCellValue($col++.$index, 'Skala Penilaian');
+        $sheet->setCellValue($col.$index, '');
+        $last_col = $col++;
+        $count_soal = $total_soal->total_soal;
+        $no_soal = 1;
+        for($h = 0; $h < $count_soal; $h++){
+            $sheet->setCellValue($col++.$index, $no_soal);
+            $no_soal++;
+        }
         
         $no = 1;
         $x = 2;
@@ -2313,16 +2322,135 @@ class Tes_online extends CI_Controller {
             $sheet->setCellValue($rows++.$x, $row->total_skor);
             $sheet->setCellValue($rows++.$x, $row->nilai);
             $sheet->setCellValue($rows++.$x, $row->skala_penilaian);
+            $sheet->setCellValue($rows++.$x, '');
+
+            $get_ujian_report = $this->tes->report_ujian_by_user($sesi_pelaksana_id, $paket_soal_id, $row->user_id);
+            foreach($get_ujian_report as $val_report_ujian){
+                $sheet->setCellValue($rows++.$x, $val_report_ujian->hasil_jawaban);
+            }
+
             $x++;
         }
 
         // Column sizing
-        foreach(range('A', $col) as $columnID){
+        foreach(range('A', $last_col) as $columnID){
             $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
         }
 
         $writer = new Xlsx($spreadsheet);
         $filename = $sesi->sesi_pelaksanaan_name.' ('.$sesi->nama_paket_soal.' '.$sesi->materi_name.')';
+        
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"'); 
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+    }
+
+    public function export_detail_report_ujian_st($id_sesi_pelaksanaan, $id_paket_soal){ //excel report statistik
+        $sesi_pelaksana_id = base64_decode(urldecode($id_sesi_pelaksanaan));
+        $paket_soal_id = base64_decode(urldecode($id_paket_soal));
+
+        $data = $this->tes->get_ujian_detail($sesi_pelaksana_id, $paket_soal_id);
+        $sesi = $this->tes->get_sesi_pelaksana_by_id($sesi_pelaksana_id);
+
+        $total_soal = $this->tes->get_total_soal($paket_soal_id);
+
+        $spreadsheet = new Spreadsheet();
+
+        //DETAIL UJIAN
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(0);
+        $spreadsheet->getActiveSheet()->setTitle('Data Jawaban Peserta');
+        $sheet = $spreadsheet->getActiveSheet();
+        
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Nomor Peserta');
+        $sheet->setCellValue('C1', 'Nama');
+        $sheet->setCellValue('D1', 'Kelompok');
+        $sheet->setCellValue('E1', '');
+        $col = 'F';
+        $index = 1;
+        $count_soal = $total_soal->total_soal;
+        $no_soal = 1;
+        for($h = 0; $h < $count_soal; $h++){
+            $sheet->setCellValue($col++.$index, $no_soal);
+            $no_soal++;
+        }
+        
+        $no = 1;
+        $x = 2;
+        foreach($data as $row)
+        {
+            $sheet->setCellValue('A'.$x, $no++);
+            $sheet->setCellValue('B'.$x, (int) $row->user_no);
+            $sheet->setCellValue('C'.$x, $row->user_name);
+            $sheet->setCellValue('D'.$x, !empty($row->group_peserta_name) ? $row->group_peserta_name : 'NO_GROUP');
+            $sheet->setCellValue('E'.$x, '');
+            $rows = 'F';
+            $get_ujian_report = $this->tes->report_ujian_by_user($sesi_pelaksana_id, $paket_soal_id, $row->user_id);
+            foreach($get_ujian_report as $val_report_ujian){
+                $sheet->setCellValue($rows++.$x, $val_report_ujian->str_jawaban);
+            }
+
+            $x++;
+        }
+
+        // Column sizing
+        foreach(range('A', 'E') as $columnID){
+            $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        //STATISTIK SHEET
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(1);
+        $spreadsheet->getActiveSheet()->setTitle('Data Statistik');
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $data_mode_jwb = $this->tes->get_paket_soal_by_id($paket_soal_id);
+        $mode_jw_ct = $data_mode_jwb->count_pilgan;
+        $column_take = '';
+        $opsi = config_item('_def_opsi_jawaban');
+        for($u = 0; $u < $mode_jw_ct; $u++){
+            $column_take .= $opsi.',';
+            $opsi++;
+        }
+        
+        $statistik_report = $this->tes->report_ujian_by_st($sesi_pelaksana_id, $paket_soal_id, $column_take);
+
+        $sheet->setCellValue('A1', 'Nomor Soal');
+        $col = 'B';
+        $index = 1;
+        $opsi = config_item('_def_opsi_jawaban');
+        for($w = 0; $w < $mode_jw_ct; $w++){
+            $sheet->setCellValue($col++.$index, $opsi);
+            $opsi++;
+        }
+
+        $row = 2;
+        $no_sm = 1;
+        $xsm = 2;
+        foreach($statistik_report as $val_st)
+        {
+            $sheet->setCellValue('A'.$xsm, $val_st->no_soal);
+            $rows = 'B';
+            $opsi = config_item('_def_opsi_jawaban');
+            for($d = 0; $d < $mode_jw_ct; $d++){
+                $sheet->setCellValue($rows++.$xsm, $val_st->$opsi);
+                $opsi++;
+            }
+
+            $xsm++;
+        }
+
+        // Column sizing
+        $spreadsheet->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+
+        //Sheet aktif diawal
+        $spreadsheet->setActiveSheetIndex(0);
+        
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'Statistik '.$sesi->sesi_pelaksanaan_name.' ('.$sesi->nama_paket_soal.' '.$sesi->materi_name.')';
         
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"'); 

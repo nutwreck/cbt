@@ -11,4 +11,8 @@
     function export_excel(){
         window.location.href = "<?php echo base_url(); ?>admin/export-report-ujian/<?=$id_sesi_pelaksanaan?>/<?=$id_paket_soal?>";
     }
+
+    function export_excel_statistik(){
+        window.location.href = "<?php echo base_url(); ?>admin/export-report-ujian-statistik/<?=$id_sesi_pelaksanaan?>/<?=$id_paket_soal?>";
+    }
 </script>

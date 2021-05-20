@@ -6,6 +6,7 @@ class Ujian extends CI_Controller {
     private $length_pass = 15;
     private $tbl_ujian = 'ujian';
     private $tbl_ujian_skor = 'ujian_skor';
+    private $tbl_ujian_report = 'ujian_report';
 
     public function __construct(){
         parent::__construct();
@@ -409,6 +410,10 @@ class Ujian extends CI_Controller {
         $data_group_skor = array();
         $ujian_skor = [];
         $data_ujian_skor = [];
+        $data_report_ujian = [];
+        $data_bank_soal = [];
+        $data_combine_report = [];
+        $data_ujian_report_user = [];
 
         // Decrypt Id
 		$id_tes = $this->input->post('id', true);
@@ -419,6 +424,10 @@ class Ujian extends CI_Controller {
         
         $get_paket_data = $this->tes->get_paket_soal_by_tes($id_tes);
         $paket_soal = $this->tes->get_paket_soal_sesi_by_id($get_paket_data); //Get Paket Soal
+
+        $get_user_id = $this->tes->get_user_id_by_tes($id_tes); //get user id tes
+
+        $bank_soal = $this->tes->get_all_soal_by_paketid($get_paket_data);
 		
 		// Get Jawaban
 		$list_jawaban = $this->tes->get_jawaban_ujian($id_tes);
@@ -439,8 +448,43 @@ class Ujian extends CI_Controller {
 			$id_soal 	= (int) $pc_dt[1];
 			$jawaban 	= $pc_dt[2];
             $ragu 		= $pc_dt[3];
+            $data_report_ujian[$id_soal] = array('group_soal_id' => $group_soal, 'jawaban' => $jawaban); //untuk kebutuhan ujian report
             $data_group[$group_soal][] = array('id_soal' => $id_soal, 'jawaban' => $jawaban, 'ragu' => $ragu);
         }
+
+        foreach($bank_soal as $val_bank_soal){ //all bank soal
+            $data_bank_soal[$val_bank_soal->id] = array(
+                'group_soal_id' => 0, 
+                'jawaban' => '', 
+                'no_soal' => $val_bank_soal->no_soal
+            );
+        }
+
+        $data_combine_report = array_replace_recursive($data_bank_soal, $data_report_ujian); //combine bank soal dengan jawaban peserta
+
+        $check_report = $this->tes->check_report_ujian($get_ujian_sesi->sesi_pelaksanaan_id, $get_paket_data, $get_user_id); //cek report jika sebelumnya ada didisable
+
+        if($check_report){ //disable report ujian
+            $deactive_report_data = array(
+                'is_enable' => 0
+            );
+            $deactive_report = $this->tes->disable_report_ujian($get_ujian_sesi->sesi_pelaksanaan_id, $get_paket_data, $get_user_id, $deactive_report_data);
+        }
+
+        foreach($data_combine_report as $key_combine_r => $val_combine_r){ //data report ujian fix
+            $data_ujian_report_user[] = array(
+                'sesi_pelaksanaan_id' => $get_ujian_sesi->sesi_pelaksanaan_id,
+                'paket_soal_id' => $get_paket_data,
+                'user_id' => $get_user_id,
+                'no_soal' => $val_combine_r['no_soal'],
+                'group_soal_id' => $val_combine_r['group_soal_id'],
+                'bank_soal_id' => $key_combine_r,
+                'order_jawaban' => $val_combine_r['jawaban']
+            );
+        }
+
+        $tbl_ujian_report = $this->tbl_ujian_report;
+        $save_report_ujian = $this->general->input_batch($tbl_ujian_report, $data_ujian_report_user);
 
         $skor_total = [];
         foreach($data_group as $key_group => $val_group){ //Grouping Skor
