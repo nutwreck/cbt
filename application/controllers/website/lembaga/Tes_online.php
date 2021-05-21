@@ -2278,7 +2278,7 @@ class Tes_online extends CI_Controller {
         $sheet->setCellValue('J1', 'Jumlah Salah');
         $sheet->setCellValue('K1', 'Jumlah Ragu');
         $sheet->setCellValue('L1', 'Jumlah Kosong');
-        $col = 'L';
+        $col = 'M';
         $index = 1;
         for($i = 0; $i < $column_skor; $i++){
             $sheet->setCellValue($col++.$index, $group_soal_name[$i]);
@@ -2314,7 +2314,7 @@ class Tes_online extends CI_Controller {
 
             $skor_group = explode(',', $row->skor_group);
             $number_skor = sizeof($skor_group);
-            $rows = 'L';
+            $rows = 'M';
             for($j = 0; $j < $number_skor; $j++){
                 $sheet->setCellValue($rows++.$x, $skor_group[$j]);
             }
@@ -2624,7 +2624,7 @@ class Tes_online extends CI_Controller {
         $sheet->setCellValue('G1', 'Jumlah Salah');
         $sheet->setCellValue('H1', 'Jumlah Ragu');
         $sheet->setCellValue('I1', 'Jumlah Kosong');
-        $col = 'I';
+        $col = 'J';
         $index = 1;
         for($i = 0; $i < $column_skor; $i++){
             $sheet->setCellValue($col++.$index, $group_soal_name[$i]);
@@ -2649,7 +2649,7 @@ class Tes_online extends CI_Controller {
 
             $skor_group = explode(',', $row->skor_group);
             $number_skor = sizeof($skor_group);
-            $rows = 'I';
+            $rows = 'J';
             for($j = 0; $j < $number_skor; $j++){
                 $sheet->setCellValue($rows++.$x, $skor_group[$j]);
             }
