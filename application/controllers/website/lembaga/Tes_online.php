@@ -779,8 +779,10 @@ class Tes_online extends CI_Controller {
 
                 $save_jawaban = $this->tes->save_jawaban($datas);
 
+                //Pembahasan
                 $pembahasan['bank_soal_id'] = $save_soal;
-                $pembahasan['url'] = $this->input->post('url');
+                $url = $this->input->post('url');
+                $pembahasan['url'] = str_replace("watch?v=", "embed/", $url);
                 $pembahasan['pembahasan'] = $this->input->post('pembahasan');
                 $pembahasan['created_datetime'] = date('Y-m-d H:i:s');
 
@@ -790,8 +792,10 @@ class Tes_online extends CI_Controller {
                 $urlx = 'admin/add-soal/'.$paket_soal_id;
                 $this->input_end($save_jawaban, $urly, $urlx);
             } else { //tipe essay tidak perlu jawaban
+                //Pembahasan
                 $pembahasan['bank_soal_id'] = $save_soal;
-                $pembahasan['url'] = $this->input->post('url');
+                $url = $this->input->post('url');
+                $pembahasan['url'] = str_replace("watch?v=", "embed/", $url);
                 $pembahasan['pembahasan'] = $this->input->post('pembahasan');
                 $pembahasan['created_datetime'] = date('Y-m-d H:i:s');
 
@@ -1253,7 +1257,7 @@ class Tes_online extends CI_Controller {
                 $order = 1;
                 $datas = array();
                 foreach($jawaban as $key=>$value) {
-                    $datas[]  = array(
+                    $datas[] = array(
                             'id' => $id_jawaban[$key],
                             'bank_soal_id' => $id_bank_soal,
                             'order' => $order,
@@ -1267,10 +1271,26 @@ class Tes_online extends CI_Controller {
 
                 $update_jawaban = $this->tes->update_jawaban($datas);
 
+                //Update pembahasan
+                $url = $this->input->post('url');
+                $pembahasan['url'] = str_replace("watch?v=", "embed/", $url);
+                $pembahasan['pembahasan'] = $this->input->post('pembahasan');
+                $pembahasan['updated_datetime'] = date('Y-m-d H:i:s');
+
+                $update_pembahasan = $this->tes->update_pembahasan($id_bank_soal, $pembahasan);
+
                 $urly = 'admin/list-soal/'.$paket_soal_id;
                 $urlx = 'admin/edit-soal/'.$paket_soal_id.'/'.$bank_soal_id.'/'.$nomor_soal;
                 $this->update_end($update_jawaban, $urly, $urlx);
             } else { //tipe essay tidak perlu jawaban
+                //Update pembahasan
+                $url = $this->input->post('url');
+                $pembahasan['url'] = str_replace("watch?v=", "embed/", $url);
+                $pembahasan['pembahasan'] = $this->input->post('pembahasan');
+                $pembahasan['updated_datetime'] = date('Y-m-d H:i:s');
+
+                $update_pembahasan = $this->tes->update_pembahasan($id_bank_soal, $pembahasan);
+
                 $this->session->set_flashdata('success', 'Soal no '.$nomor_soal.' berhasil diubah');
 		        redirect('admin/list-soal/'.$paket_soal_id);
             }

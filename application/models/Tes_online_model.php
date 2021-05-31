@@ -778,6 +778,18 @@ class Tes_online_model extends CI_Model{
 			return $query;
 		}
     }
+    public function update_pembahasan($bank_soal_id, $datas){
+        $this->db->trans_start();
+        $this->db->where('bank_soal_id', $bank_soal_id);
+        $query = $this->db->update('pembahasan', $datas);
+        if ($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return null;
+		} else{
+			$this->db->trans_commit();
+			return $query;
+		}
+    }
 
     public function update_soal($id, $data){
         $this->db->trans_start();
