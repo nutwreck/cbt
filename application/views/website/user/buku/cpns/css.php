@@ -102,4 +102,13 @@
     .pointer{
         cursor: pointer;
     }
+
+    .table-responsive3 {
+        display: table;
+        width: 100%;
+    }
+
+    .borderless td, .borderless th {
+        border: none;
+    }
 </style>

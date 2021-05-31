@@ -903,8 +903,9 @@ class Management extends CI_Controller {
         }
         $data['detail_buku_id'] = $detail_buku_id_x;
 
+        //Video
         $config['upload_path']    = './storage/website/lembaga/grandsbmptn/modul';
-        $config['allowed_types']  = 'avi|flv|wmv|mp3|mp4';
+        $config['allowed_types']  = 'avi|flv|wmv|mp3|mp4|gif|jpg|png';
         $config['encrypt_name']   = TRUE;
 
         $_upload_path = $config['upload_path'];
@@ -920,16 +921,29 @@ class Management extends CI_Controller {
             show_error($error, 500, 'File Video Modul Error');
             exit();
         } else {
-            $gambar = $this->upload->data('file_name');
-            $data['nama_file'] = $gambar;
-            $data['type_file'] = '3';//video
-            $data ['created_date']= date('Y-m-d H:i:s');
-            $tbl = $this->tbl_config_buku_detail;
-            $input = $this->general->input_data($tbl, $data);
+            $video = $this->upload->data('file_name');
 
-            $urly = 'admin/detail-buku/'.$buku_id_encrypt.'/'.$config_buku_id_encrypt.'/'.$config_buku_group_id_encrypt;
-            $urlx = 'admin/detail-buku/'.$buku_id_encrypt.'/'.$config_buku_id_encrypt.'/'.$config_buku_group_id_encrypt;
-            $this->input_end($input, $urly, $urlx);
+            //Thumbnail
+            $config['encrypt_name']   = TRUE;
+
+            $this->load->library('upload', $config);
+
+            if ( ! $this->upload->do_upload('thumbnail')) {
+                $error = array('error' => $this->upload->display_errors());
+                show_error($error, 500, 'File Thumbnail Video Modul Error');
+                exit();
+            } else {
+                $data['nama_file'] = $video;
+                $data['thumbnail'] = $this->upload->data('file_name');
+                $data['type_file'] = '3';//video
+                $data ['created_date']= date('Y-m-d H:i:s');
+                $tbl = $this->tbl_config_buku_detail;
+                $input = $this->general->input_data($tbl, $data);
+
+                $urly = 'admin/detail-buku/'.$buku_id_encrypt.'/'.$config_buku_id_encrypt.'/'.$config_buku_group_id_encrypt;
+                $urlx = 'admin/detail-buku/'.$buku_id_encrypt.'/'.$config_buku_id_encrypt.'/'.$config_buku_group_id_encrypt;
+                $this->input_end($input, $urly, $urlx);
+            }
         }
     }
 

@@ -119,16 +119,27 @@
                                                     $type_file = $val_group->type_file;
                                                     $nama_file = $val_group->nama_file;
                                                     if($type_file == 1){
-                                                        $icon_folder = 'fas fa-image';
+                                                        $icon_folder = '<i class="fas fa-image fa-3x"></i>';
                                                         $access = base_url().'buku/download/'.$val_group->id;
                                                     } elseif($type_file == 2){
-                                                        $icon_folder = 'fas fa-file-audio';
+                                                        $icon_folder = '<i class="fas fa-file-audio fa-3x"></i>';
                                                         $access = base_url().'buku/download/'.$val_group->id;
                                                     } elseif($type_file == 3){
-                                                        $icon_folder = 'fas fa-video';
+                                                        if($val_group->thumbnail){
+                                                            $icon_folder = '<img src="'.config_item('_dir_website').'lembaga/grandsbmptn/modul/'.$val_group->thumbnail.'" style="width:100%;">';
+                                                        } else {
+                                                            $icon_folder = '<i class="fas fa-video fa-3x"></i>';
+                                                        }
                                                         $access = base_url().'buku/download/'.$val_group->id;
                                                     } elseif($type_file == 5){
-                                                        $icon_folder = 'fas fa-link';
+                                                        $pattern_yt = "/youtube/";
+                                                        $preg_url = preg_match($pattern_yt, $nama_file);
+                                                        if($preg_url == 1){
+                                                            $get_id_yt = substr(str_replace("https://www.youtube.com/watch?v=", "", $nama_file), 0, 11);
+                                                            $icon_folder = '<img src="https://img.youtube.com/vi/'.$get_id_yt.'/mqdefault.jpg" style="width:100%;">';
+                                                        } else {
+                                                            $icon_folder = '<i class="fas fa-link fa-3x"></i>';
+                                                        }
                                                         $access = $nama_file;
                                                     } elseif($type_file == 6){
                                                         $exp_file = explode(".", $nama_file);
@@ -136,22 +147,24 @@
                                                         $access = base_url().'buku/download/'.$val_group->id;
 
                                                         if($jenis_file == 'pdf'){
-                                                            $icon_folder = 'fas fa-file-pdf';
+                                                            $icon_folder = '<i class="fas fa-file-pdf fa-3x"></i>';
                                                         } elseif($jenis_file == 'pptx'){
-                                                            $icon_folder = 'fas fa-file-powerpoint';
+                                                            $icon_folder = '<i class="fas fa-file-powerpoint fa-3x"></i>';
                                                         } elseif($jenis_file == 'xlsx' || $jenis_file == 'xls'){
-                                                            $icon_folder = 'fas fa-file-excel';
+                                                            $icon_folder = '<i class="fas fa-file-excel fa-3x"></i>';
                                                         } elseif($jenis_file == 'docx' || $jenis_file == 'doc'){
-                                                            $icon_folder = 'fas fa-file-word';
+                                                            $icon_folder = '<i class="fas fa-file-word fa-3x"></i>';
                                                         }
                                                     }
                                                 ?>
                                                 <a target="_blank" href="<?=$access?>">
-                                                <div class="p-2 border border-secondary pointer">
-                                                    <table class="table-responsive mb-0">
+                                                <div class="p-2 border border-secondary pointer text-center table-responsive3 h-100">
+                                                    <table class="table borderless mb-0">
+                                                        <tr style="height:180px;">
+                                                            <td><?=$icon_folder?></td>
+                                                        </tr>
                                                         <tr>
-                                                            <td><i class="<?=$icon_folder?> mr-2"></i></td>
-                                                            <td><h6 style="margin-top:5px;"><?=$val_group->name?></h6></td>
+                                                            <td><h6 style="margin-top:1px;"><?=$val_group->name?></h6></td>
                                                         </tr>
                                                     </table>
                                                 </div>

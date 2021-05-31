@@ -148,8 +148,16 @@ class Management_model extends CI_Model{
             ->get_where('config_buku_group AS T1', array('T2.buku_id' => $buku_id, 'T1.is_enable' => 1, 'T2.is_enable' => 1))->result();
     }
 
-    public function get_config_buku_detail_by_id($config_buku_group_id){
-        return $this->db->get_where('config_buku_detail', array('config_buku_group_id' => $config_buku_group_id, 'is_enable' => 1))->result();
+    public function get_config_buku_detail_by_id($config_buku_group_id, $jurusan){
+        $this->db->select("*");
+        $this->db->from('config_buku_detail');
+        $this->db->where('config_buku_group_id', $config_buku_group_id);
+        $this->db->where('is_enable', 1);
+        if(!empty($jurusan)){
+            $this->db->where('detail_buku_id', $jurusan);
+        } else {}
+        $this->db->order_by('id DESC');
+        return $this->db->get()->result();
     }
 
     public function get_config_buku_detail_download($id_detail_buku){

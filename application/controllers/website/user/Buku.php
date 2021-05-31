@@ -120,7 +120,7 @@ class Buku extends CI_Controller {
         } else {
             $config_buku_group_id = base64_decode(urldecode($id_config_buku_group));
             $data['content']['group_stat'] = 1;
-            $data['content']['buku_group'] = $this->management->get_config_buku_detail_by_id($config_buku_group_id);
+            $data['content']['buku_group'] = $this->management->get_config_buku_detail_by_id($config_buku_group_id, $jurusan);
         }
 
         $data['content']['sbmptn_id'] = urlencode(base64_encode($sbmptn_id));
@@ -160,7 +160,7 @@ class Buku extends CI_Controller {
         } else {
             $config_buku_group_id = base64_decode(urldecode($id_config_buku_group));
             $data['content']['group_stat'] = 1;
-            $data['content']['buku_group'] = $this->management->get_config_buku_detail_by_id($config_buku_group_id);
+            $data['content']['buku_group'] = $this->management->get_config_buku_detail_by_id($config_buku_group_id, $jurusan);
         }
 
         $data['content']['toefl_id'] = urlencode(base64_encode($toefl_id));
@@ -200,7 +200,7 @@ class Buku extends CI_Controller {
         } else {
             $config_buku_group_id = base64_decode(urldecode($id_config_buku_group));
             $data['content']['group_stat'] = 1;
-            $data['content']['buku_group'] = $this->management->get_config_buku_detail_by_id($config_buku_group_id);
+            $data['content']['buku_group'] = $this->management->get_config_buku_detail_by_id($config_buku_group_id, $jurusan);
         }
 
         $data['content']['cpns_id'] = urlencode(base64_encode($cpns_id));

@@ -162,6 +162,16 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12 col-lg-3" style="margin-top:1%">
+                                        <h5 class="label-text">Thumbnail <br> <small>Maksimal (320x180) 75kb</small></h5>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-9">
+                                        <div class="form-group">
+                                            <input type="file" id="thumbnail" name="thumbnail" >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-3" style="margin-top:1%">
                                         <h5 class="label-text">Video</h5>
                                     </div>
                                     <div class="col-sm-12 col-lg-9">
