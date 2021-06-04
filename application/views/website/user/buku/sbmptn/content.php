@@ -24,7 +24,7 @@
                             <div class="card">
                                 <div class="card-header" id="faqhead1">
                                     <a href="#" class="btn btn-header-link <?=$group_stat == 1 ? 'collapsed' : ''?>" data-toggle="collapse" data-target="#faq1"
-                                    aria-expanded="true" aria-controls="faq1">Paket Soal</a>
+                                    aria-expanded="true" aria-controls="faq1" style="font-size:18px;">Paket Soal</a>
                                 </div>
 
                                 <div id="faq1" class="collapse <?=$group_stat == 1 ? '' : 'show'?>" aria-labelledby="faqhead1" data-parent="#faq">
@@ -90,7 +90,7 @@
                             <div class="card">
                                 <div class="card-header" id="faqhead2">
                                     <a href="#" class="btn btn-header-link <?=$group_stat == 1 ? '' : 'collapsed'?>" data-toggle="collapse" data-target="#faq2"
-                                    aria-expanded="true" aria-controls="faq2">Materi</a>
+                                    aria-expanded="true" aria-controls="faq2" style="font-size:18px;">Materi</a>
                                 </div>
 
                                 <div id="faq2" class="collapse <?=$group_stat == 1 ? 'show' : ''?>" aria-labelledby="faqhead2" data-parent="#faq">

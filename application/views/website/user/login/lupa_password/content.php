@@ -35,7 +35,11 @@
     <!-- POP UP FROM PHP TO JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
+     <!-- FONT -->
+     <link href="https://fonts.cdnfonts.com/css/arial-rounded-mt-bold" rel="stylesheet">
+
     <style>
+        @import url('https://fonts.cdnfonts.com/css/kg-happy');
         .border-md {
             border-width: 2px;
         }
@@ -75,10 +79,29 @@
         .form-control::placeholder {
             color: #ccc;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 1.1rem;
         }
         .form-control:focus {
             box-shadow: none;
+        }
+        .form-rounded {
+            border-radius: 1rem;
+        }
+        .fs-20 {
+            font-size:20px;
+        }
+        .fs-18 {
+            font-size:18px;
+        }
+        .fs-16 {
+            font-size:16px;
+        }
+        .font-arial-bold{
+            font-family: 'Arial Rounded MT Bold', sans-serif;
+            font-weight: bold;
+        }
+        .font-kg-happy{
+            font-family: 'KG HAPPY', sans-serif;
         }
     </style>
 </head>
@@ -99,9 +122,9 @@
         <div class="row py-5 mt-4 align-items-center">
             <!-- For Demo Purpose -->
             <div class="col-md-5 pr-lg-5 mb-5 mb-md-0">
-                <img src="https://res.cloudinary.com/mhmd/image/upload/v1569543678/form_d9sh6m.svg" alt="" class="img-fluid mb-3 d-none d-md-block">
-                <h1>Tes Online Zambert</h1>
-                <p class="font-italic text-muted mb-0">Tes online dan pembelian buku.</p>
+                <img src="<?=config_item('_assets_general')?>image/bg-home.png" alt="" class="img-fluid mb-3 d-none d-md-block">
+                <h2 class="font-kg-happy">Tes Online Zambert</h2>
+                <p class="text-primary mb-0 font-arial-bold fs-20">Tes online dan pembelian buku.</p>
             </div>
 
             <!-- Registeration Form -->
@@ -114,23 +137,23 @@
                             <small for="username" id="username_er" class="bg-danger text-white"></small>
                         </div>
                         <div class="input-group col-lg-12 mb-4">
-                            <div class="input-group-prepend">
+                            <!-- <div class="input-group-prepend">
                                 <span class="input-group-text bg-white px-4 border-md border-right-0">
                                     <i class="fa fa-envelope text-muted"></i>
                                 </span>
-                            </div>
-                            <input id="username" type="email" name="username" placeholder="Masukkan Email" class="form-control bg-white border-left-0 border-md" required>
+                            </div> border-left-0-->
+                            <input id="username" type="email" name="username" placeholder="Masukkan Email" class="form-control bg-white border-md form-rounded shadow" required>
                         </div>
                         <!-- Password -->
                         <!-- Submit Button -->
                         <div class="form-group col-lg-12 mx-auto mb-0">
-                            <button type="submit" class="btn btn-primary btn-block py-2">
+                            <button type="submit" class="btn btn-primary btn-block py-2 form-rounded">
                                 <span class="font-weight-bold">Submit</span>
                             </button>
                         </div>
                 </form>
                         <!-- Divider Text -->
-                        <div class="form-group col-lg-12 mx-auto d-flex align-items-center my-4">
+                        <div class="form-group col-lg-12 mx-auto d-flex align-items-center my-2">
                             <div class="border-bottom w-100 ml-5"></div>
                             <span class="px-2 small text-muted font-weight-bold text-muted">Atau</span>
                             <div class="border-bottom w-100 mr-5"></div>
@@ -138,7 +161,7 @@
 
                         <!-- Already Registered -->
                         <div class="text-center w-100">
-                            <p class="text-muted font-weight-bold">Belum Punya Akun? <a href="<?=base_url()?>register" class="text-primary ml-2">Daftar</a></p>
+                            <p class="text-muted font-weight-bold fs-18">Belum Punya Akun? <a href="<?=base_url()?>register" class="text-primary ml-2">Daftar</a></p>
                         </div>
 
                     </div>

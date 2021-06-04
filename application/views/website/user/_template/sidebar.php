@@ -1,7 +1,11 @@
 <!-- Sidebar  -->
 <nav id="sidebar">
     <div class="sidebar-header">
-        <img src="<?=config_item('_assets_general')?>header_logo/header_logo_user_center.png" alt="logo" width="150">
+        <div class="row">
+            <div class="container">
+                <img src="<?=config_item('_assets_general')?>header_logo/header_logo_only.png" alt="logo" width="200">
+            </div>
+        </div>
     </div>
 
     <ul class="list-unstyled components">
