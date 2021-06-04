@@ -3,7 +3,7 @@
     <div class="sidebar-header">
         <div class="row">
             <div class="container">
-                <img src="<?=config_item('_assets_general')?>header_logo/header_logo_only.png" alt="logo" width="200">
+                <img src="<?=config_item('_assets_general')?>header_logo/header_logo_menu.png" alt="logo" width="220">
             </div>
         </div>
     </div>
@@ -14,7 +14,7 @@
             <a href="<?=base_url()?>dashboard"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
         </li>
         <li>
-            <a href="<?=base_url()?>history"><i class="fa fa-database" aria-hidden="true"></i> History & Pembahasan</a>
+            <a href="<?=base_url()?>history"><i class="fa fa-list-alt" aria-hidden="true"></i> History & Pembahasan</a>
         </li>
         <li>
             <a href="#simulasimateri" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-book" aria-hidden="true"></i> Buku</a>
@@ -34,7 +34,7 @@
             <a href="<?=base_url()?>account"><i class="fa fa-user" aria-hidden="true"></i> Akun</a>
         </li>
         <li>
-            <a href="<?=base_url()?>purchase"><i class="fa fa-list" aria-hidden="true"></i> Status Pembelian</a>
+            <a href="<?=base_url()?>purchase"><i class="fas fa-shopping-cart" aria-hidden="true"></i> Status Pembelian</a>
         </li>
         <li>
             <a href="<?=base_url()?>logout"><i class="fa fa-power-off" aria-hidden="true"></i> Logout</a>

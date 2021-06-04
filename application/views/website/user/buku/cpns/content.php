@@ -7,14 +7,46 @@
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     <span class="glyphicon glyphicon-info-sign"></span><i class="fa fa-info-circle" aria-hidden="true"></i> <strong>Informasi</strong>
                     <hr class="message-inner-separator">
-                        <p>Selamat, Anda berhak mendapatkan <?=$free_paket?> Paket <b>Soal CPNS secara GRATIS</b>. Untuk mendapatkan seluruh paket soal CPNS dan Materi silahkan melakukkan <b>pembelian Paket Soal CPNS</b> dengan cara <a href="<?=base_url()?>pembelian-buku/<?=$cpns_id?>" class="btn btn-sm btn-success">Klik Disini</a></p>
+                        <p>Selamat, Anda berhak mendapatkan <?=$free_paket?> Paket <b>Soal CPNS secara GRATIS</b>. Untuk mendapatkan seluruh paket soal CPNS dan Materi silahkan melakukkan <b>pembelian Paket Soal CPNS</b> dengan cara klik beli dibawah ini <!-- <a href="<?=base_url()?>pembelian-buku/<?=$cpns_id?>" class="btn btn-sm btn-success">Klik Disini</a> --></p>
                 </div>
             <?php } elseif($status_user == 'free') { ?>
                 <div class="alert alert-info">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     <span class="glyphicon glyphicon-info-sign"></span><i class="fa fa-info-circle" aria-hidden="true"></i> <strong>Informasi</strong>
                     <hr class="message-inner-separator">
-                        <p>Untuk mendapatkan seluruh paket Soal dan Materi silahkan melakukkan <b>pembelian Paket Soal CPNS</b> dengan cara <a href="<?=base_url()?>pembelian-buku/<?=$cpns_id?>" class="btn btn-sm btn-success">Klik Disini</a></p>
+                        <p>Untuk mendapatkan seluruh paket Soal dan Materi silahkan melakukkan <b>pembelian Paket Soal CPNS</b> dengan cara klik beli dibawah ini <!-- <a href="<?=base_url()?>pembelian-buku/<?=$cpns_id?>" class="btn btn-sm btn-success">Klik Disini</a> --></p>
+                </div>
+            <?php } ?>
+            <?php if($status_user == 'free') { ?>
+                <div class="bg-book">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-5">
+                            <img src="<?=config_item('_assets_general')?>image/book/cpns.png" class="img-fluid mb-3" width="300">
+                            <h4 class="font-arial-bold text-center text-secondary">Lolos CPNS <br />Instansi Terbaik !!</h4>
+                            <div class="text-center">
+                                <a href="<?=base_url()?>pembelian-buku/<?=$cpns_id?>"><img src="<?=config_item('_assets_general')?>image/book/beli-cpns.png" class="img-fluid mb-3" width="200"></a>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-7">
+                            <div class="bg-book-desc-1 font-arial-bold">
+                                <ul>
+                                    <li>Buku hardfile sebanyak <b class="bg-secondary text-white">200 halaman</b></li>
+                                    <li>Dilengkapi <b class="bg-secondary text-white">ebook ribuan halaman</b></li>
+                                    <li><b class="bg-secondary text-white">Video pembelajaran</b> hingga <b class="bg-secondary text-white">50jam</b></li>
+                                    <li><b class="bg-secondary text-white">9000 video pembelajaran</b></li>
+                                    <li>Bank soal <b class="bg-secondary text-white">9000 soal + pembahasan</b></li>
+                                    <li><b class="bg-secondary text-white">Kiat</b> pasti lolos <b class="bg-secondary text-white">CPNS</b></li>
+                                    <li><b class="bg-secondary text-white">Grup diskusi</b> TOEFL</li>
+                                    <li>Setara dengan kursus <b class="bg-secondary text-white">6 bulan</b></li>
+                                    <li>Roadmap cara belajar efektif</li>
+                                    <li><b class="bg-secondary text-white">50x tryout</b></li>
+                                    <li><b class="bg-secondary text-white">Mentoring</b> online <b class="bg-secondary text-white">setiap minggu</b></li>
+                                    <li><b class="bg-secondary text-white">Trik cepat</b> mengerjakan soal CPNS</li>
+                                    <li><b class="bg-secondary text-white">100% garansi kepuasan</b> uang kembali</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             <?php } ?>
                 <div id="main">
@@ -32,8 +64,8 @@
                                         <div class="row">
                                             <?php foreach($cpns_paket as $val_paket){ ?>
                                             <div class="col-sm-12 col-md-6 col-lg-4 mt-3 mb-3">
-                                                <div class="p-2 border border-secondary">
-                                                    <div class="text-center sesi-head">
+                                                <div class="p-2 bg-paket-soal">
+                                                    <div class="font-arial-bold text-center text-secondary sesi-head">
                                                         <?=ucwords(strtolower($val_paket->nama_paket_soal))?>
                                                     </div>
                                                     <hr />
@@ -41,6 +73,15 @@
                                                     <?php if(empty($val_paket->tgl_selesai) && $val_paket->status == 0 && !empty($val_paket->id_ujian)){ ?>
                                                         <tr>
                                                             <td colspan="3"><span class="badge badge-danger">Anda belum selesai mengerjakan paket soal ini! <?=$val_paket->tgl_selesai?> <?=$val_paket->status?></span></td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                    <?php if($val_paket->is_free == 1) { ?>
+                                                        <tr>
+                                                            <td colspan="3"><img src="<?=config_item('_assets_website')?>image/book/cpns_free.png" class="img-fluid border border-secondary" width="300"></td>
+                                                        </tr>
+                                                    <?php } else { ?>
+                                                        <tr>
+                                                            <td colspan="3"><img src="<?=config_item('_assets_website')?>image/book/cpns_purchase.png" class="img-fluid border border-secondary" width="300"></td>
                                                         </tr>
                                                     <?php } ?>
                                                         <tr>

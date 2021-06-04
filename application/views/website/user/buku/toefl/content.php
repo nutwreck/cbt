@@ -7,14 +7,43 @@
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     <span class="glyphicon glyphicon-info-sign"></span><i class="fa fa-info-circle" aria-hidden="true"></i> <strong>Informasi</strong>
                     <hr class="message-inner-separator">
-                        <p>Selamat, Anda berhak mendapatkan <?=$free_paket?> Paket <b>Soal TOEFL secara GRATIS</b>. Untuk mendapatkan seluruh paket soal TOEFL dan Materi silahkan melakukkan <b>pembelian Paket Soal TOEFL</b> dengan cara <a href="<?=base_url()?>pembelian-buku/<?=$toefl_id?>" class="btn btn-sm btn-success">Klik Disini</a></p>
+                        <p>Selamat, Anda berhak mendapatkan <?=$free_paket?> Paket <b>Soal TOEFL secara GRATIS</b>. Untuk mendapatkan seluruh paket soal TOEFL dan Materi silahkan melakukkan <b>pembelian Paket Soal TOEFL</b> dengan cara klik beli dibawah ini <!-- <a href="<?=base_url()?>pembelian-buku/<?=$toefl_id?>" class="btn btn-sm btn-success">Klik Disini</a> --></p>
                 </div>
             <?php } elseif($status_user == 'free') { ?>
                 <div class="alert alert-info">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     <span class="glyphicon glyphicon-info-sign"></span><i class="fa fa-info-circle" aria-hidden="true"></i> <strong>Informasi</strong>
                     <hr class="message-inner-separator">
-                        <p>Untuk mendapatkan seluruh paket Soal dan Materi silahkan melakukkan <b>pembelian Paket Soal TOEFL</b> dengan cara <a href="<?=base_url()?>pembelian-buku/<?=$toefl_id?>" class="btn btn-sm btn-success">Klik Disini</a></p>
+                        <p>Untuk mendapatkan seluruh paket Soal dan Materi silahkan melakukkan <b>pembelian Paket Soal TOEFL</b> dengan cara klik beli dibawah ini <!-- <a href="<?=base_url()?>pembelian-buku/<?=$toefl_id?>" class="btn btn-sm btn-success">Klik Disini</a> --></p>
+                </div>
+            <?php } ?>
+            <?php if($status_user == 'free') { ?>
+                <div class="bg-book">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-5">
+                            <img src="<?=config_item('_assets_general')?>image/book/toefl.png" class="img-fluid mb-3" width="300">
+                            <h4 class="font-arial-bold text-center text-danger">Trik jitu dapatkan <br />skor 620 !!</h4>
+                            <div class="text-center">
+                                <a href="<?=base_url()?>pembelian-buku/<?=$toefl_id?>"><img src="<?=config_item('_assets_general')?>image/book/beli-toefl.png" class="img-fluid mb-3" width="200"></a>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-7">
+                            <div class="bg-book-desc-1 font-arial-bold">
+                                <ul>
+                                    <li>Buku hardfile sebanyak <b class="bg-danger text-white">200 halaman</b></li>
+                                    <li>Dilengkapi <b class="bg-danger text-white">ebook ribuan halaman</b></li>
+                                    <li><b class="bg-danger text-white">Video pembelajaran</b> hingga <b class="bg-danger text-white">50jam</b></li>
+                                    <li>Bank soal <b class="bg-danger text-white">1500++ soal</b> TOEFL & pembahasan</li>
+                                    <li><b class="bg-danger text-white">Kiat</b> pasti dapatkan skor <b class="bg-danger text-white">620</b></li>
+                                    <li>Grup diskusi TOEFL</li>
+                                    <li>Setara dengan kursus <b class="bg-danger text-white">6 bulan</b></li>
+                                    <li>Roadmap cara belajar efektif</li>
+                                    <li><b class="bg-danger text-white">Mentoring</b> online <b class="bg-danger text-white">setiap minggu</b></li>
+                                    <li><b class="bg-danger text-white">100% garansi</b> kepuasan <b class="bg-danger text-white">uang</b> kembali</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             <?php } ?>
                 <div id="main">
@@ -24,7 +53,7 @@
                             <div class="card">
                                 <div class="card-header" id="faqhead1">
                                     <a href="#" class="btn btn-header-link <?=$group_stat == 1 ? 'collapsed' : ''?>" data-toggle="collapse" data-target="#faq1"
-                                    aria-expanded="true" aria-controls="faq1">Paket Soal</a>
+                                    aria-expanded="true" aria-controls="faq1" style="font-size:18px;">Paket Soal</a>
                                 </div>
 
                                 <div id="faq1" class="collapse <?=$group_stat == 1 ? '' : 'show'?>" aria-labelledby="faqhead1" data-parent="#faq">
@@ -32,15 +61,24 @@
                                         <div class="row">
                                             <?php foreach($toefl_paket as $val_paket){ ?>
                                             <div class="col-sm-12 col-md-6 col-lg-4 mt-3 mb-3">
-                                                <div class="p-2 border border-secondary">
-                                                    <div class="text-center sesi-head">
+                                                <div class="p-2 bg-paket-soal">
+                                                    <div class="font-arial-bold text-center text-danger sesi-head">
                                                         <?=ucwords(strtolower($val_paket->nama_paket_soal))?>
                                                     </div>
                                                     <hr />
                                                     <table class="table-responsive mb-0 sesi-detail">
                                                     <?php if(empty($val_paket->tgl_selesai) && $val_paket->status == 0 && !empty($val_paket->id_ujian)){ ?>
                                                         <tr>
-                                                            <td colspan="3"><span class="badge badge-danger">Anda belum selesai mengerjakan paket soal ini! <?=$val_paket->tgl_selesai?> <?=$val_paket->status?></span></td>
+                                                            <td colspan="3"><span class="badge badge-danger">Lanjut Kerjakan! <?=$val_paket->tgl_selesai?> <?=$val_paket->status?></span></td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                    <?php if($val_paket->is_free == 1) { ?>
+                                                        <tr>
+                                                            <td colspan="3"><img src="<?=config_item('_assets_website')?>image/book/toefl_free.png" class="img-fluid border border-secondary" width="300"></td>
+                                                        </tr>
+                                                    <?php } else { ?>
+                                                        <tr>
+                                                            <td colspan="3"><img src="<?=config_item('_assets_website')?>image/book/toefl_purchase.png" class="img-fluid border border-secondary" width="300"></td>
                                                         </tr>
                                                     <?php } ?>
                                                         <tr>
@@ -90,7 +128,7 @@
                             <div class="card">
                                 <div class="card-header" id="faqhead2">
                                     <a href="#" class="btn btn-header-link <?=$group_stat == 1 ? '' : 'collapsed'?>" data-toggle="collapse" data-target="#faq2"
-                                    aria-expanded="true" aria-controls="faq2">Materi</a>
+                                    aria-expanded="true" aria-controls="faq2" style="font-size:18px;">Materi</a>
                                 </div>
 
                                 <div id="faq2" class="collapse <?=$group_stat == 1 ? 'show' : ''?>" aria-labelledby="faqhead2" data-parent="#faq">

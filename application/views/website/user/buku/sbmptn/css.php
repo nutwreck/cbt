@@ -19,18 +19,20 @@
 
     .btn-mulai {
         font-weight: 700;
-        color: rgba(103, 192, 103, 1);
+        /* color: rgba(103, 192, 103, 1); */
+        color: #FFF;
+        background: rgb(103, 192, 103, 0.75);
+        border: 2px solid rgb(103, 192, 103, 0.75);
         letter-spacing: 1px;
-        border: 2px solid rgba(103, 192, 103, 0.75);
         border-radius: 40px;
-        background: transparent;
+        /* background: transparent; */
         transition: all 0.3s ease 0s;
     }
     
     .btn-mulai:hover {
         color: #FFF;
-        background: rgb(103, 192, 103, 0.75);
-        border: 2px solid rgb(103, 192, 103, 0.75);
+        background: rgb(0, 153, 68, 0.75);
+        border: 2px solid rgb(0, 153, 68, 0.75);
     }
 
     #main {
@@ -95,7 +97,7 @@
     }
 
     #main #faq .card .collapsing {
-        background: #E8FFFE;
+        background: #9ed8f6;
         line-height: 30px;
     }
 
@@ -104,7 +106,7 @@
     }
 
     #main #faq .card .collapse.show {
-        background: #E8FFFE;
+        background: #9ed8f6;
         line-height: 30px;
         color: #222;
     }
@@ -120,5 +122,26 @@
 
     .borderless td, .borderless th {
         border: none;
+    }
+
+    .bg-book {
+        background: #eeefef;
+        border-radius: 25px;
+        padding: 20px;
+        width: 100%;
+    }
+
+    .bg-book-desc-1 {
+        background: #FFFFFF;
+        border-radius: 25px;
+        padding: 20px;
+        width: 100%;
+    }
+
+    .bg-paket-soal {
+        background: #FFFFFF;
+        border-radius: 25px;
+        padding: 5px;
+        width: 100%;
     }
 </style>

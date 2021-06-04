@@ -7,16 +7,49 @@
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     <span class="glyphicon glyphicon-info-sign"></span><i class="fa fa-info-circle" aria-hidden="true"></i> <strong>Informasi</strong>
                     <hr class="message-inner-separator">
-                        <p>Selamat, Anda berhak mendapatkan <?=$free_paket?> Paket <b>TryOut SBMPTN secara GRATIS</b>. Untuk mendapatkan seluruh paket TryOut dan Materi silahkan melakukkan <b>pembelian Paket TryOut SBMPTN</b> dengan cara <a href="<?=base_url()?>pembelian-buku/<?=$sbmptn_id?>" class="btn btn-sm btn-success">Klik Disini</a></p>
+                        <p>Selamat, Anda berhak mendapatkan <?=$free_paket?> Paket <b>TryOut SBMPTN secara GRATIS</b>. Untuk mendapatkan seluruh paket TryOut dan Materi silahkan melakukkan <b>pembelian Paket TryOut SBMPTN</b> dengan cara klik beli dibawah ini <!-- <a href="<?=base_url()?>pembelian-buku/<?=$sbmptn_id?>" class="btn btn-sm btn-success">Klik Disini</a> --></p>
                 </div>
             <?php } elseif($status_user == 'free') { ?>
                 <div class="alert alert-info">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     <span class="glyphicon glyphicon-info-sign"></span><i class="fa fa-info-circle" aria-hidden="true"></i> <strong>Informasi</strong>
                     <hr class="message-inner-separator">
-                        <p>Untuk mendapatkan seluruh paket TryOut dan Materi silahkan melakukkan <b>pembelian Paket TryOut SBMPTN</b> dengan cara <a href="<?=base_url()?>pembelian-buku/<?=$sbmptn_id?>" class="btn btn-sm btn-success">Klik Disini</a></p>
+                        <p>Untuk mendapatkan seluruh paket TryOut dan Materi silahkan melakukkan <b>pembelian Paket TryOut SBMPTN</b> dengan cara klik beli dibawah ini <!-- <a href="<?=base_url()?>pembelian-buku/<?=$sbmptn_id?>" class="btn btn-sm btn-success">Klik Disini</a> --></p>
                 </div>
             <?php } ?>
+            <?php if($status_user == 'free') { ?>
+                <div class="bg-book">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-5">
+                            <img src="<?=config_item('_assets_general')?>image/book/sbmptn.png" class="img-fluid mb-3" width="300">
+                            <h4 class="font-arial-bold text-center text-primary">Lolos UTBK <br />Di PTN Terbaik !!</h4>
+                            <div class="text-center">
+                                <a href="<?=base_url()?>pembelian-buku/<?=$sbmptn_id?>"><img src="<?=config_item('_assets_general')?>image/book/beli-sbmptn.png" class="img-fluid mb-3" width="200"></a>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-7">
+                            <div class="bg-book-desc-1 font-arial-bold">
+                                <ul>
+                                    <li>Buku hardfile sebanyak <b class="bg-primary text-white">250 halaman</b></li>
+                                    <li>Dilengkapi <b class="bg-primary text-white">ebook ribuan halaman</b></li>
+                                    <li><b class="bg-primary text-white">Video pembelajaran</b> hingga <b class="bg-primary text-white">50jam ++</b></li>
+                                    <li><b class="bg-primary text-white">9000 video pembahasan</b></li>
+                                    <li>Bank soal <b class="bg-primary text-white">(9000++, soal + pembahasan)</b></li>
+                                    <li>Kiat pasti <b class="bg-primary text-white">lolos UTBK</b></li>
+                                    <li><b class="bg-primary text-white">Grup diskusi</b> sesama pejuang PTN</li>
+                                    <li>Setara dengan <b class="bg-primary text-white">kursus 6 bulan</b></li>
+                                    <li>Roadmap cara belajar efektif</li>
+                                    <li><b class="bg-primary text-white">50x tryout</b></li>
+                                    <li><b class="bg-primary text-white">Mentoring</b> online <b class="bg-primary text-white">setiap minggu</b></li>
+                                    <li><b class="bg-primary text-white">Trik cepat</b> mengerjakan soal UTBK</li>
+                                    <li><b class="bg-primary text-white">Ratusan rumus</b> SAINTEK & SOSHUM</li>
+                                    <li><b class="bg-primary text-white">100% garansi kepuasan</b> uang kembali</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php } ?>
                 <div id="main">
                     <div class="container">
                         <div class="accordion" id="faq">
@@ -32,15 +65,24 @@
                                         <div class="row">
                                             <?php foreach($sbmptn_paket as $val_paket){ ?>
                                             <div class="col-sm-12 col-md-6 col-lg-4 mt-3 mb-3">
-                                                <div class="p-2 border border-secondary">
-                                                    <div class="text-center sesi-head">
+                                                <div class="p-2 bg-paket-soal">
+                                                    <div class="font-arial-bold text-center text-primary sesi-head">
                                                         <?=ucwords(strtolower($val_paket->nama_paket_soal))?>
                                                     </div>
                                                     <hr />
                                                     <table class="table-responsive mb-0 sesi-detail">
                                                     <?php if(empty($val_paket->tgl_selesai) && $val_paket->status == 0 && !empty($val_paket->id_ujian)){ ?>
                                                         <tr>
-                                                            <td colspan="3"><span class="badge badge-danger">Anda belum selesai mengerjakan paket soal ini! <?=$val_paket->tgl_selesai?> <?=$val_paket->status?></span></td>
+                                                            <td colspan="3"><span class="badge badge-danger">Lanjut Kerjakan! <?=$val_paket->tgl_selesai?> <?=$val_paket->status?></span></td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                    <?php if($val_paket->is_free == 1) { ?>
+                                                        <tr>
+                                                            <td colspan="3"><img src="<?=config_item('_assets_website')?>image/book/sbmptn_free.png" class="img-fluid border border-secondary" width="300"></td>
+                                                        </tr>
+                                                    <?php } else { ?>
+                                                        <tr>
+                                                            <td colspan="3"><img src="<?=config_item('_assets_website')?>image/book/sbmptn_purchase.png" class="img-fluid border border-secondary" width="300"></td>
                                                         </tr>
                                                     <?php } ?>
                                                         <tr>

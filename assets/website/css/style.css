@@ -9,9 +9,17 @@
     DEMO STYLE
 */
 
+
+@import url('https://fonts.cdnfonts.com/css/arial-rounded-mt-bold');
+
 body {
     font-family: 'Poppins', sans-serif;
     background: #fafafa;
+}
+
+.font-arial-bold{
+    font-family: 'Arial Rounded MT Bold', sans-serif;
+    font-weight: bold;
 }
 
 a,
