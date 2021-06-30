@@ -114,9 +114,9 @@
 
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ml-auto font-arial-bold fs-20">
-                        <a href="#" class="nav-item nav-link text-primary">Home</a>
-                        <a href="#" class="nav-item nav-link text-primary">Keunggulan</a>
-                        <a href="#" class="nav-item nav-link text-primary">Testimoni</a>
+                        <a href="<?=base_url()?>" class="nav-item nav-link text-primary">Home</a>
+                        <a href="<?=base_url()?>#features" class="nav-item nav-link text-primary">Keunggulan</a>
+                        <a href="<?=base_url()?>#details" class="nav-item nav-link text-primary">Testimoni</a>
                     </div>
                 </div>
             </div>
@@ -127,7 +127,7 @@
         <div class="row py-3 mt-4 align-items-center">
             <!-- For Demo Purpose -->
             <div class="col-md-5 pr-lg-5 mb-5 mb-md-0">
-                <img src="<?=config_item('_assets_general')?>image/bg-home.png" alt="" class="img-fluid mb-3 d-none d-md-block">
+                <img src="<?=config_item('_assets_general')?>image/bg-home.png" alt="daftarimages" class="img-fluid mb-3"> <!--d-none d-md-block-->
                 <h2 class="font-kg-happy">Tes Online Zambert</h2>
                 <p class="text-primary mb-0 font-arial-bold fs-20">Tes online dan pembelian buku.</p>
             </div>

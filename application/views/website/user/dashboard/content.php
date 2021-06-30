@@ -49,6 +49,8 @@
                                     <a href="#" class="btn btn-block btn-mulai isDisabled">Selesai</a>
                                 <?php } elseif(!empty($val_sesi->check_status_ujian) && !empty($val_sesi->tgl_selesai_user) && $val_sesi->tgl_selesai_user >= $now && $val_sesi->status_ujian == 0){ ?>
                                     <a href="<?php echo base_url(); ?>ujian/<?=urlencode(base64_encode($val_sesi->sesi_pelaksanaan_id))?>/<?=$encrypt?>" class="btn btn-block btn-mulai">Lanjut</a>
+                                <?php } elseif($val_sesi->status_ujian == 1 && $val_sesi->is_pembahasan == 0) { ?>
+                                    <a href="#" class="btn btn-block btn-mulai isDisabled">Selesai</a>
                                 <?php } else { ?>
                                     <a href="<?php echo base_url(); ?>pre-ujian/<?=urlencode(base64_encode($val_sesi->sesi_pelaksanaan_id))?>" class="btn btn-block btn-mulai">Mulai</a>
                                 <?php } ?>

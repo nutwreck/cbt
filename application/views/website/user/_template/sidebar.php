@@ -20,13 +20,13 @@
             <a href="#simulasimateri" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-book" aria-hidden="true"></i> Buku</a>
             <ul class="collapse list-unstyled" id="simulasimateri">
                 <li>
-                    <a href="<?=base_url()?>buku/sbmptn/launch">SBMPTN</a>
+                    <a href="#">SBMPTN <small><i>(Coming Soon)</i></small></a> <!--<?=base_url()?>buku/sbmptn/launch-->
                 </li>
                 <li>
                     <a href="<?=base_url()?>buku/toefl/launch">TOEFL</a>
                 </li>
                 <li>
-                    <a href="<?=base_url()?>buku/cpns/launch">CPNS</a>
+                    <a href="#">CPNS <small><i>(Coming Soon)</i></small></a> <!--<?=base_url()?>buku/cpns/launch-->
                 </li>
             </ul>
         </li>

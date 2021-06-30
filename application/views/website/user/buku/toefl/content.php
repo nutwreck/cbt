@@ -27,7 +27,7 @@
                                 <a href="<?=base_url()?>pembelian-buku/<?=$toefl_id?>"><img src="<?=config_item('_assets_general')?>image/book/beli-toefl.png" class="img-fluid mb-3" width="200"></a>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-6 col-lg-7">
+                        <div class="col-sm-12 col-md-6 col-lg-7 mt-4">
                             <div class="bg-book-desc-1 font-arial-bold">
                                 <ul>
                                     <li>Buku hardfile sebanyak <b class="bg-danger text-white">200 halaman</b></li>

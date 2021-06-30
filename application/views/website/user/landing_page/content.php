@@ -84,7 +84,7 @@
               </span>
             </h1>
             <h2 class="font-poppins"><span class="text-white">Sebuah<span> <span class="yellow-text-deep">buku hardfile</span> & <span class="yellow-text-deep">program belajar</span> <span class="text-white">online yang dirancang dari</span> <span class="yellow-text-deep">mentor - mentor terbaik</span> <span class="text-white">di bidangnya. Di lengkapi</span> <span class="yellow-text-deep">Garansi Uang Kembali</span><span class="text-white">.</span></h2>
-            <img src="<?php echo config_item('_assets_website'); ?>landing/img/button-coba-gratis.png" alt="coba-gratis" class="img-fluid">
+            <a href="<?=base_url()?>register"><img src="<?php echo config_item('_assets_website'); ?>landing/img/button-coba-gratis.png" alt="coba-gratis" class="img-fluid"></a>
           </div>
         </div>
         <div class="col-lg-6 d-lg-flex flex-lg-column align-items-stretch order-1 order-lg-2 hero-img" data-aos="fade-up">
@@ -112,34 +112,49 @@
                 <div class="col-md-4 icon-box" data-aos="fade-up">
                   <div class="keunggulan">
                     <div class="keunggulan-right">
+                      <div class="row keunggulan-img">
+                        <div class="col-md-12">
+                          <img src="<?php echo config_item('_assets_website'); ?>landing/img/features/1.png" alt="1-info">
+                        </div>
+                      </div>
                       <div class="row">
                         <div class="col-md-10">
                           <h3 class="font-arial-bold">100% garansi <br />uang kembali</h3>
                           <h5>Kami menggaransi 100% <br />uang kamu kembali, jika <br />kamu GAGAL dalam ujian</h5>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 right-img">
                           <img src="<?php echo config_item('_assets_website'); ?>landing/img/features/1.png" alt="1-info">
                         </div>
                       </div>
                     </div>
                     <div class="keunggulan-right">
+                      <div class="row keunggulan-img">
+                        <div class="col-md-12">
+                          <img src="<?php echo config_item('_assets_website'); ?>landing/img/features/2.png" alt="2-info">
+                        </div>
+                      </div>
                       <div class="row">
                         <div class="col-md-10">
                           <h3 class="font-arial-bold">Ratusan Video <br />pembahasan</h3>
                           <h5>Terdapat ratusan video <br />pembahasan dengan durasi <br />ratusan jam untuk <br />melengkapi pembelajaran <br />kamu.</h5>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 right-img">
                           <img src="<?php echo config_item('_assets_website'); ?>landing/img/features/2.png" alt="2-info">
                         </div>
                       </div>
                     </div>
                     <div class="keunggulan-right">
+                      <div class="row keunggulan-img">
+                        <div class="col-md-12">
+                          <img src="<?php echo config_item('_assets_website'); ?>landing/img/features/3.png" alt="3-info">
+                        </div>
+                      </div>
                       <div class="row">
                         <div class="col-md-10">
                           <h3 class="font-arial-bold">Tutor Ahli</h3>
                           <h5>Kami memberikan <br />tutor terbaik untuk kamu <br />dalam pembuatan <br />soal dan pembahasan soal.</h5>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 right-img">
                           <img src="<?php echo config_item('_assets_website'); ?>landing/img/features/3.png" alt="3-info">
                         </div>
                       </div>
@@ -154,8 +169,13 @@
                 <div class="col-md-4 icon-box" data-aos="fade-up" data-aos-delay="200">
                   <div class="keunggulan">
                       <div class="keunggulan-left">
+                        <div class="row keunggulan-img">
+                          <div class="col-md-12">
+                            <img src="<?php echo config_item('_assets_website'); ?>landing/img/features/4.png" alt="4-info">
+                          </div>
+                        </div>
                         <div class="row">
-                            <div class="col-md-2">
+                            <div class="col-md-2 left-img">
                               <img src="<?php echo config_item('_assets_website'); ?>landing/img/features/4.png" alt="4-info">
                             </div>
                             <div class="col-md-10">
@@ -165,8 +185,13 @@
                         </div>
                       </div>
                       <div class="keunggulan-left">
+                        <div class="row keunggulan-img">
+                          <div class="col-md-12">
+                            <img src="<?php echo config_item('_assets_website'); ?>landing/img/features/5.png" alt="5-info">
+                          </div>
+                        </div>
                         <div class="row">
-                          <div class="col-md-2">
+                          <div class="col-md-2 left-img">
                             <img src="<?php echo config_item('_assets_website'); ?>landing/img/features/5.png" alt="5-info">
                           </div>
                           <div class="col-md-10">
@@ -176,8 +201,13 @@
                         </div>
                       </div>
                       <div class="keunggulan-left">
+                        <div class="row keunggulan-img">
+                          <div class="col-md-12">
+                            <img src="<?php echo config_item('_assets_website'); ?>landing/img/features/6.png" alt="6-info">
+                          </div>
+                        </div>
                         <div class="row">
-                          <div class="col-md-2">
+                          <div class="col-md-2 left-img">
                             <img src="<?php echo config_item('_assets_website'); ?>landing/img/features/6.png" alt="6-info">
                           </div>
                           <div class="col-md-10">
@@ -361,7 +391,7 @@
         <div class="row">
           <div class="col-md-4 produk-line">
             <div class="text-center">
-              <div class="mb-2">
+              <div class="mb-2 img-buku">
                 <img src="<?=config_item('_assets_general')?>image/book/toefl.png" alt="toefl" class="img-fluid p-2">
               </div>
               <div class="mb-2">

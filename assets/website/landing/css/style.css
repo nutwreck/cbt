@@ -770,6 +770,10 @@ section {
   .produk-line {
     border-right: transparent;
   }
+
+  .img-buku {
+    width: 300px;
+  }
 }
 
 /*--------------------------------------------------------------
@@ -844,11 +848,22 @@ section {
   }
 }
 
+@media (max-width: 767px) {
+  .tam-text {
+    font-size: 40px;
+  }
+
+  .mobile-tam-carousel {
+    width: 100%;
+  }
+}
+
 /*--------------------------------------------------------------
 # Testimonials
 --------------------------------------------------------------*/
 .testimonials {
-  padding-left: 50px;
+  margin-top: 5%;
+  padding: 5px;
 }
 
 .testimonials .content {
@@ -938,13 +953,6 @@ section {
   color: #47536e;
 }
 
-#footer .credits {
-  float: right;
-  text-align: center;
-  font-size: 13px;
-  color: #47536e;
-}
-
 .url-footer {
   list-style-type: none;
   text-align: center;
@@ -976,16 +984,22 @@ section {
 }
 
 @media (max-width: 768px) {
-  #footer .copyright, #footer .credits {
+  #footer .copyright, #footer {
     float: none;
     text-align: center;
     padding: 5px 0;
+  }
+  #footer .footer-top {
+    padding: 0;
   }
   .desc-footer {
     margin-top: 30px;
   }
   .url-footer li {
     font-size: 100%;
+  }
+  .footer-login a {
+    display: none;
   }
 }
 
@@ -1020,6 +1034,10 @@ section {
   margin: -20px 2px 0 2px;
 }
 
+.keunggulan-img {
+  display: none;
+}
+
 @media (max-width: 991px) {
   .keunggulan-right {
     font-size: 32px;
@@ -1043,11 +1061,16 @@ section {
     text-align: center;
   }
 
-  .keunggulan-right img{
+  .keunggulan-img {
+    display: inline-block;
+    width: 300px;
+  }
+
+  .keunggulan-right .right-img{
     display: none;
   }
 
-  .keunggulan-left img{
+  .keunggulan-left .left-img{
     display: none;
   }
 
