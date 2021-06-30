@@ -678,7 +678,7 @@
   <script type="text/javascript">
       (function () {
           var options = {
-              whatsapp: "+6285826046069",
+              whatsapp: "+6281286364461",
               call_to_action: "Hubungi kami!",
               position: "right",
           };

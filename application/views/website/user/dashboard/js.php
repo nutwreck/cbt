@@ -9,7 +9,7 @@
 <script type="text/javascript">
     (function () {
         var options = {
-            whatsapp: "+6285826046069", // WhatsApp number
+            whatsapp: "+6281286364461", // WhatsApp number
             call_to_action: "Hubungi kami!", // Call to action
             position: "right", // Position may be 'right' or 'left'
         };
