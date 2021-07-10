@@ -2327,21 +2327,21 @@ class Tes_online extends CI_Controller {
             $sheet->setCellValue('F'.$x, format_indo($row->tgl_mulai_peserta));
             $sheet->setCellValue('G'.$x, format_indo($row->tgl_selesai_sesi));
             $sheet->setCellValue('H'.$x, format_indo($row->tgl_selesai_peserta));
-            $sheet->setCellValue('I'.$x, $row->jml_benar);
-            $sheet->setCellValue('J'.$x, $row->jml_salah);
-            $sheet->setCellValue('K'.$x, $row->jml_ragu);
-            $sheet->setCellValue('L'.$x, $row->jml_kosong);
+            $sheet->setCellValue('I'.$x, $row->jml_benar ? $row->jml_benar : 0);
+            $sheet->setCellValue('J'.$x, $row->jml_salah ? $row->jml_salah : 0);
+            $sheet->setCellValue('K'.$x, $row->jml_ragu ? $row->jml_ragu : 0);
+            $sheet->setCellValue('L'.$x, $row->jml_kosong ? $row->jml_kosong : 0);
 
             $skor_group = explode(',', $row->skor_group);
             $number_skor = sizeof($skor_group);
             $rows = 'M';
             for($j = 0; $j < $number_skor; $j++){
-                $sheet->setCellValue($rows++.$x, $skor_group[$j]);
+                $sheet->setCellValue($rows++.$x, $skor_group[$j] ? $skor_group[$j] : 0);
             }
 
-            $sheet->setCellValue($rows++.$x, $row->total_skor);
-            $sheet->setCellValue($rows++.$x, $row->nilai);
-            $sheet->setCellValue($rows++.$x, $row->skala_penilaian);
+            $sheet->setCellValue($rows++.$x, $row->total_skor ? $row->total_skor : 0);
+            $sheet->setCellValue($rows++.$x, $row->nilai ? $row->nilai : 0);
+            $sheet->setCellValue($rows++.$x, $row->skala_penilaian ? $row->skala_penilaian : 0);
             $sheet->setCellValue($rows++.$x, '');
 
             $get_ujian_report = $this->tes->report_ujian_by_user($sesi_pelaksana_id, $paket_soal_id, $row->user_id);
