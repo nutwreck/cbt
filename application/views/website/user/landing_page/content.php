@@ -88,7 +88,7 @@
           </div>
         </div>
         <div class="col-lg-6 d-lg-flex flex-lg-column align-items-stretch order-1 order-lg-2 hero-img" data-aos="fade-up">
-          <img src="<?php echo config_item('_assets_website'); ?>landing/img/comp.png" class="img-fluid" alt="comp">
+          <img src="<?php echo config_item('_assets_website'); ?>landing/img/home-comp3.png" class="img-fluid" alt="comp">
         </div>
       </div>
     </div>
@@ -239,7 +239,7 @@
           <div class="col-md-6" data-aos="fade-right">
               <div class="row margin-testi-bg">
                 <div class="col-md-4 testi-left-bg text-center">
-                  <img src="<?php echo config_item('_assets_website'); ?>landing/img/testi-user.png" alt="testi-user" class="img-fluid" width="65">
+                  <img src="<?php echo config_item('_assets_website'); ?>landing/img/testimonials/muhammad.png" alt="testi-user-muhammad" class="img-fluid" width="65">
                   <h5 class="font-arial-bold mt-2 ls-1">Muhammad <br />Zainal Abidin</h5>
                 </div>
                 <div class="col-md-8 testi-right-bg">
@@ -264,7 +264,7 @@
           <div class="col-md-6" data-aos="fade-right">
               <div class="row margin-testi-bg">
                 <div class="col-md-4 testi-left-bg text-center">
-                  <img src="<?php echo config_item('_assets_website'); ?>landing/img/testi-user.png" alt="testi-user" class="img-fluid" width="65">
+                  <img src="<?php echo config_item('_assets_website'); ?>landing/img/testimonials/brigita.png" alt="testi-user-brigita" class="img-fluid" width="65">
                   <h5 class="font-arial-bold mt-2 ls-1">Brigita <br />Aprilia</h5>
                 </div>
                 <div class="col-md-8 testi-right-bg">
@@ -319,7 +319,7 @@
           <div class="col-md-6" data-aos="fade-right">
             <div class="row margin-testi-bg">
               <div class="col-md-4 testi-left-bg text-center">
-                <img src="<?php echo config_item('_assets_website'); ?>landing/img/testi-user.png" alt="testi-user" class="img-fluid" width="65">
+                <img src="<?php echo config_item('_assets_website'); ?>landing/img/testimonials/josep.png" alt="testi-user-josep" class="img-fluid" width="65">
                 <h5 class="font-arial-bold mt-2 ls-1">Joseph <br />Pratama Ginting</h5>
               </div>
               <div class="col-md-8 testi-right-bg">
@@ -351,7 +351,7 @@
           <div class="col-md-6" data-aos="fade-right">
               <div class="row margin-testi-bg">
                 <div class="col-md-4 testi-left-bg text-center">
-                  <img src="<?php echo config_item('_assets_website'); ?>landing/img/testi-user.png" alt="testi-user" class="img-fluid" width="65">
+                  <img src="<?php echo config_item('_assets_website'); ?>landing/img/testimonials/nabila.png" alt="testi-user-nabila" class="img-fluid" width="65">
                   <h5 class="font-arial-bold mt-2 ls-1">Nabila <br />Putri</h5>
                 </div>
                 <div class="col-md-8 testi-right-bg">
@@ -552,13 +552,28 @@
           </ol>
           <div class="carousel-inner border-carousel-desktop">
             <div class="carousel-item active">
-              <img src="<?=config_item('_assets_website')?>landing/img/slider/desktop/Capture.JPG" class="d-block w-100" alt="s1">
+              <img src="<?=config_item('_assets_website')?>landing/img/slider/desktop/gambar-1.png" class="d-block w-100" alt="s1">
             </div>
             <div class="carousel-item">
-              <img src="<?=config_item('_assets_website')?>landing/img/slider/desktop/Capture.JPG" class="d-block w-100" alt="s2">
+              <img src="<?=config_item('_assets_website')?>landing/img/slider/desktop/gambar-2.png" class="d-block w-100" alt="s2">
             </div>
             <div class="carousel-item">
-              <img src="<?=config_item('_assets_website')?>landing/img/slider/desktop/Capture.JPG" class="d-block w-100" alt="s3">
+              <img src="<?=config_item('_assets_website')?>landing/img/slider/desktop/gambar-3.png" class="d-block w-100" alt="s3">
+            </div>
+            <div class="carousel-item">
+              <img src="<?=config_item('_assets_website')?>landing/img/slider/desktop/gambar-4.png" class="d-block w-100" alt="s4">
+            </div>
+            <div class="carousel-item">
+              <img src="<?=config_item('_assets_website')?>landing/img/slider/desktop/gambar-5.png" class="d-block w-100" alt="s5">
+            </div>
+            <div class="carousel-item">
+              <img src="<?=config_item('_assets_website')?>landing/img/slider/desktop/gambar-6.png" class="d-block w-100" alt="s6">
+            </div>
+            <div class="carousel-item">
+              <img src="<?=config_item('_assets_website')?>landing/img/slider/desktop/gambar-7.png" class="d-block w-100" alt="s7">
+            </div>
+            <div class="carousel-item">
+              <img src="<?=config_item('_assets_website')?>landing/img/slider/desktop/gambar-8.png" class="d-block w-100" alt="s8">
             </div>
           </div>
           <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -576,18 +591,11 @@
         </div>
 
         <div class="owl-carousel mobile-tam-carousel" data-aos="fade-up">
-          <a href="<?=config_item('_assets_website')?>landing/img/gallery/gallery-1.png" class="venobox" data-gall="mobile-tam-carousel"><img src="<?=config_item('_assets_website')?>landing/img/gallery/gallery-1.png" alt=""></a>
-          <a href="<?=config_item('_assets_website')?>landing/img/gallery/gallery-2.png" class="venobox" data-gall="mobile-tam-carousel"><img src="<?=config_item('_assets_website')?>landing/img/gallery/gallery-2.png" alt=""></a>
-          <a href="<?=config_item('_assets_website')?>landing/img/gallery/gallery-3.png" class="venobox" data-gall="mobile-tam-carousel"><img src="<?=config_item('_assets_website')?>landing/img/gallery/gallery-3.png" alt=""></a>
-          <a href="<?=config_item('_assets_website')?>landing/img/gallery/gallery-4.png" class="venobox" data-gall="mobile-tam-carousel"><img src="<?=config_item('_assets_website')?>landing/img/gallery/gallery-4.png" alt=""></a>
-          <a href="<?=config_item('_assets_website')?>landing/img/gallery/gallery-5.png" class="venobox" data-gall="mobile-tam-carousel"><img src="<?=config_item('_assets_website')?>landing/img/gallery/gallery-5.png" alt=""></a>
-          <a href="<?=config_item('_assets_website')?>landing/img/gallery/gallery-6.png" class="venobox" data-gall="mobile-tam-carousel"><img src="<?=config_item('_assets_website')?>landing/img/gallery/gallery-6.png" alt=""></a>
-          <a href="<?=config_item('_assets_website')?>landing/img/gallery/gallery-7.png" class="venobox" data-gall="mobile-tam-carousel"><img src="<?=config_item('_assets_website')?>landing/img/gallery/gallery-7.png" alt=""></a>
-          <a href="<?=config_item('_assets_website')?>landing/img/gallery/gallery-8.png" class="venobox" data-gall="mobile-tam-carousel"><img src="<?=config_item('_assets_website')?>landing/img/gallery/gallery-8.png" alt=""></a>
-          <a href="<?=config_item('_assets_website')?>landing/img/gallery/gallery-9.png" class="venobox" data-gall="mobile-tam-carousel"><img src="<?=config_item('_assets_website')?>landing/img/gallery/gallery-9.png" alt=""></a>
-          <a href="<?=config_item('_assets_website')?>landing/img/gallery/gallery-10.png" class="venobox" data-gall="mobile-tam-carousel"><img src="<?=config_item('_assets_website')?>landing/img/gallery/gallery-10.png" alt=""></a>
-          <a href="<?=config_item('_assets_website')?>landing/img/gallery/gallery-11.png" class="venobox" data-gall="mobile-tam-carousel"><img src="<?=config_item('_assets_website')?>landing/img/gallery/gallery-11.png" alt=""></a>
-          <a href="<?=config_item('_assets_website')?>landing/img/gallery/gallery-12.png" class="venobox" data-gall="mobile-tam-carousel"><img src="<?=config_item('_assets_website')?>landing/img/gallery/gallery-12.png" alt=""></a>
+          <a href="<?=config_item('_assets_website')?>landing/img/slider/mobile/gambar-1.png" class="venobox" data-gall="mobile-tam-carousel"><img src="<?=config_item('_assets_website')?>landing/img/slider/mobile/gambar-1.png" alt="sm1"></a>
+          <a href="<?=config_item('_assets_website')?>landing/img/slider/mobile/gambar-2.png" class="venobox" data-gall="mobile-tam-carousel"><img src="<?=config_item('_assets_website')?>landing/img/slider/mobile/gambar-2.png" alt="sm2"></a>
+          <a href="<?=config_item('_assets_website')?>landing/img/slider/mobile/gambar-3.png" class="venobox" data-gall="mobile-tam-carousel"><img src="<?=config_item('_assets_website')?>landing/img/slider/mobile/gambar-3.png" alt="sm3"></a>
+          <a href="<?=config_item('_assets_website')?>landing/img/slider/mobile/gambar-4.png" class="venobox" data-gall="mobile-tam-carousel"><img src="<?=config_item('_assets_website')?>landing/img/slider/mobile/gambar-4.png" alt="sm4"></a>
+          <a href="<?=config_item('_assets_website')?>landing/img/slider/mobile/gambar-5.png" class="venobox" data-gall="mobile-tam-carousel"><img src="<?=config_item('_assets_website')?>landing/img/slider/mobile/gambar-5.png" alt="sm5"></a>
         </div>
 
       </div>
