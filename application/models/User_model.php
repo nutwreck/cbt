@@ -42,6 +42,17 @@ class User_model extends CI_Model{
                     ->get_where('group_peserta', array('id !=' => $participants_group_id, 'is_enable' => 1))->result();
     }
 
+    public function get_peserta_by_username($username){
+        $query = $this->db->select('*')
+                    ->get_where('v_peserta', array('username' => $username))->row();
+
+        if($query){
+            return $query;
+        } else {
+            return null;
+        }
+    }
+
     public function get_user_by_email($email){
         return $this->db->select('email')
                     ->get_where('lembaga_user', array('email' => $email))->result();

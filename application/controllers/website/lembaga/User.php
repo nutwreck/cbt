@@ -462,6 +462,28 @@ class User extends CI_Controller {
         $username = $this->input->post('email_peserta', TRUE);
         $password = $this->input->post('password', TRUE);
 
+        //cek email user
+        $cek_email_user = $this->user->get_peserta_by_username($username);
+
+        if($cek_email_user){ //jika email peserta sudah pernah kedaftar
+            $peserta_id = $cek_email_user->peserta_id;
+            $user_id = $cek_email_user->user_id;
+            $email = $cek_email_user->username;
+            $no_peserta = $this->input->post('no_peserta', TRUE);
+            $group_peserta = $this->input->post('group_peserta', TRUE);
+            $nama_peserta = $this->input->post('nama_peserta', TRUE);
+
+            $update_data_user = $this->submit_edit_peserta_new($peserta_id, $user_id, $email, $password, $no_peserta, $group_peserta, $nama_peserta);
+
+            if(!empty($update_data_user)){
+                $this->session->set_flashdata('success', 'User sudah terdaftar! Data berhasil diperbaharui');
+                redirect('admin/participants');
+            } else { //Jika insert gagal hentikan proses upload
+                $this->session->set_flashdata('error', 'Data gagal disimpan! Kesalahan saat menyimpan data peserta. Ulangi kembali');
+                redirect('admin/add-participants');
+            }
+        }
+
         if($username == '' || $username == NULL || empty($username)){ //Jika email dikosongkan
             $username_input = $this->generate_username();
         } else {
@@ -651,6 +673,7 @@ class User extends CI_Controller {
 
     private function insert_data_user_peserta($role_user_id, $username, $password){
         $data_user = [];
+        $tbl = $this->tbl_user;
 
         //Cek user didatabase
         $cek_user = $this->user->checking_user_peserta($role_user_id, $username);
@@ -667,11 +690,21 @@ class User extends CI_Controller {
             } else {
                 $pass_input = $this->encryption->encrypt($password);
             }
-        } else { //Jika data email tersebut sudah terdaftar, pakai data lama
+        } else { //Jika data email tersebut sudah terdaftar, perbaharui password jika diisi baru / kosong
+            if($password == '' || $password == NULL || empty($password)){ //Jika password kosong /tidak diisi
+                $pass_input = $this->encryption->encrypt($this->secure_random_string($this->length_pass));
+            } else {
+                $pass_input = $this->encryption->encrypt($password);
+            }
+
+            $id_peserta = $cek_user->id;
+            $datas = array(
+                'password' => $pass_input
+            );
+            
+            $this->general->update_data($tbl, $datas, $id_peserta);
             return $cek_user->id;
         }
-
-        $tbl = $this->tbl_user;
 
         $data_user = array(
             'role_user_id' => $role_user_id,
@@ -801,6 +834,34 @@ class User extends CI_Controller {
         $urly = 'admin/participants';
         $urlx = 'admin/edit-participants/'.$peserta_id.'/'.$user_id;
         $this->update_end($update, $urly, $urlx);
+    }
+
+    public function submit_edit_peserta_new($peserta_id, $user_id, $email, $password, $no_peserta, $group_peserta, $nama_peserta){
+        $data_user = [];
+        $data_peserta = [];
+
+        if($password == '' || $password == NULL || empty($password)){
+            $pass_input = $this->secure_random_string($this->length_pass);
+        } else {
+            $pass_input = $password;
+        }
+
+        //Data User
+        $id_user = $user_id;
+        $data_user['username'] = $email;
+        $data_user['password'] = $this->encryption->encrypt($pass_input);
+        $data_user['updated_datetime'] = date('Y-m-d H:i:s');
+
+        //Data Peserta
+        $id_peserta = $peserta_id;
+        $data_peserta['no_peserta'] = $no_peserta;
+        $data_peserta['group_peserta_id'] = $group_peserta;
+        $data_peserta['name'] = ucwords($nama_peserta);
+        $data_peserta['updated_datetime'] = date('Y-m-d H:i:s');
+
+        $update = $this->user->update_peserta_tes($data_user, $id_user, $data_peserta, $id_peserta);
+
+        return $update;
     }
 
     public function disable_participants($id_peserta, $id_user){
