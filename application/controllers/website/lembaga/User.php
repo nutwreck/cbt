@@ -735,12 +735,10 @@ class User extends CI_Controller {
         $cek_peserta = $this->user->checking_peserta($lembaga_id, $user);
 
         if(!empty($cek_peserta)){
-            $tbl = $this->tbl_peserta;
-            $id_peserta = $cek_peserta->id;
             $datas = array(
                 'is_lock' => 1
             );
-            $this->general->update_data($tbl, $datas, $id_peserta);
+            $this->user->update_data_peserta_excel($datas, $user);
         } 
 
         $data_peserta = array(

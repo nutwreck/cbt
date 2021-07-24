@@ -52,6 +52,19 @@ class User_model extends CI_Model{
             return null;
         }
     }
+    
+    public function update_data_peserta_excel($data, $user_id){
+        $this->db->trans_start();
+        $this->db->where('user_id', $user_id);
+        $query = $this->db->update('peserta', $data);
+        if ($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			return null;
+		} else{
+			$this->db->trans_commit();
+			return $query;
+		}
+    }
 
     public function get_user_by_email($email){
         return $this->db->select('email')
