@@ -52,6 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'Landing_page'; //Home
 $route['404_override'] = 'My404';
 $route['javascript-not-available'] = 'JS_detect';
+$route['location-checking'] = 'VPN_check';
 $route['translate_uri_dashes'] = FALSE;
 
 /*
