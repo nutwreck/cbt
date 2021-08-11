@@ -8,9 +8,6 @@
     <script src="<?php echo config_item('_assets_general'); ?>offline/offline.min.js"></script>
     <link rel="stylesheet" href="<?php echo config_item('_assets_general'); ?>offline/themes/offline-theme-default.css">
     <link rel="stylesheet" href="<?php echo config_item('_assets_general'); ?>offline/themes/offline-language-english.css">
-    
-    <!-- Moment JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.0/moment.min.js" integrity="sha512-ls52wG0HG5y4APAupGDjukiKRHQN6wyBhbVqRSwfrIbbM0lYVby+T5tOSVtG6xtR+SOYQcCacuU/moJAyAe7hQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- POP UP FROM PHP TO JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
@@ -53,26 +50,26 @@
     <script type="text/javascript">
 
         var base_url = '<?=base_url()?>'; //GLOBAL CONFIG UNTUK BASE URL SEMUA YANG DIPAKAI DI JS
-        
+
         //SISA WAKTU UJIAN / TIMER
         function sisawaktu(t) {
-            const end = moment(t);
-            const today = moment();
-            const diff_ms = end.diff(today, 'miliseconds');
-            //var ms = moment(end,"DD/MM/YYYY HH:mm:ss").diff(moment(now,"DD/MM/YYYY HH:mm:ss"));
+            var time = new Date(t);
+            var n = new Date();
             var x = setInterval(function() {
-                var now = moment();
-                var ms = end.diff(now, 'miliseconds');
-                var d = moment.duration(ms);
-                var s = Math.floor(d.asHours()) + moment.utc(ms).format(":mm:ss");
-                $('.sisawaktu').html(s);
-            }, 1000);
-            setTimeout(function() {
-                clearInterval(x);
-                var cd = "00:00:00";
+                var now = new Date().getTime();
+                var dis = time.getTime() - now;
+                var h = Math.floor((dis % (1000 * 60 * 60 * 60)) / (1000 * 60 * 60));
+                var m = Math.floor((dis % (1000 * 60 * 60)) / (1000 * 60));
+                var s = Math.floor((dis % (1000 * 60)) / (1000));
+                h = ("0" + h).slice(-2);
+                m = ("0" + m).slice(-2);
+                s = ("0" + s).slice(-2);
+                var cd = h + ":" + m + ":" + s;
                 $('.sisawaktu').html(cd);
+            }, 100);
+            setTimeout(function() {
                 waktuHabis();
-            }, (diff_ms));
+            }, (time.getTime() - n.getTime()));
         }
 
         //KONFIGURASI UNTUK REQUEST POST DATA KE CONTROLLER

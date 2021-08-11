@@ -21,13 +21,13 @@
                             <h5 class="card-title"><?=ucwords(strtolower($val_sesi->materi_name))?></h5>
                             <table class="table-responsive mb-0 sesi-detail">
                                 <tr>
-                                    <td><i class="fa fa-hourglass-start" aria-hidden="true"></i> <b>Mulai</b></td><td>:</td><td><?=format_indo($val_sesi->waktu_mulai)?></td>
+                                    <td><i class="fa fa-hourglass-start" aria-hidden="true"></i> <b>Mulai</b></td><td>:</td><td><?=format_indo($val_sesi->waktu_mulai)?> <b>WIB</b></td>
                                 </tr>
                                 <tr>
                                     <td><i class="fa fa-hourglass-half" aria-hidden="true"></i> <b>Durasi</b></td><td>:</td><td><?=$val_sesi->lama_pengerjaan?> Menit</td>
                                 </tr>
                                 <tr>
-                                    <td><i class="fa fa-hourglass-end" aria-hidden="true"></i> <b>Batas</b></td><td>:</td><td><?=format_indo($val_sesi->batas_pengerjaan)?></td>
+                                    <td><i class="fa fa-hourglass-end" aria-hidden="true"></i> <b>Batas</b></td><td>:</td><td><?=format_indo($val_sesi->batas_pengerjaan)?> <b>WIB</b></td>
                                 </tr>
                                 <tr>
                                     <td><i class="fa fa-cogs" aria-hidden="true"></i> <b>Sifat</b></td><td>:</td><td><?=$val_sesi->fleksible_name?></td>

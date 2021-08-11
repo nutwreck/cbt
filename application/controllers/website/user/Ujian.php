@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Ujian extends CI_Controller {
 
-    private $length_pass = 15;
+    //private $length_pass = 15;
     private $tbl_ujian = 'ujian';
     private $tbl_ujian_skor = 'ujian_skor';
     private $tbl_ujian_report = 'ujian_report';
@@ -68,6 +68,63 @@ class Ujian extends CI_Controller {
         $this->output->set_content_type('application/json')->set_output($data);
 	}
 
+    private function get_ip_address(){
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) { //whether ip is from share internet
+            $ip_address = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) { //whether ip is from proxy
+            $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else { //whether ip is from remote address
+            $ip_address = $_SERVER['REMOTE_ADDR'];
+        }
+
+        return $ip_address;
+    }
+
+    private function get_timezone($ip_address){
+        //Jika ip yang didapat tidak sesuai kembalikan Asia Jakarta
+        if(is_null($ip_address) || $ip_address == "" || $ip_address == "::1"){
+            $timezone = 'Asia/Jakarta';
+            return $timezone;
+        }
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://freegeoip.app/json/".$ip_address,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => array(
+            "accept: application/json",
+            "content-type: application/json"
+        ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) { //Jika eror dari GeoIP langsung dibikin Asia/Jakarta
+            $timezone = 'Asia/Jakarta';
+            return $timezone;
+        } else {
+            $obj = json_decode($response);
+            $timezone = $obj->{'time_zone'};
+            $countrycode = $obj->{'country_code'};
+
+            //return result
+            if ($countrycode != 'ID') {
+                redirect('location-checking');
+            } else {
+                return $timezone;
+            }
+        }
+    }
+
     /*
     |
     | END FUNCTION IN THIS CONTROLLER
@@ -75,6 +132,11 @@ class Ujian extends CI_Controller {
     */
 
     public function portal_tes($id_sesi_pelaksana, $random_secure){
+        //Cheking IP
+        $ip_address = $this->get_ip_address();
+        //Checking Timezone
+        $timezone = $this->get_timezone($ip_address);
+        
         $data_ujian = [];
         $bank_soal = [];
         $data = [];
@@ -96,7 +158,9 @@ class Ujian extends CI_Controller {
             $data_ujian['user_no'] = $this->session->userdata('no_peserta');
             $data_ujian['user_name'] = $this->session->userdata('peserta_name');
             $data_ujian['user_email'] = $this->session->userdata('username');
-            $now = date('Y-m-d H:i:s');
+
+            //Get Current time
+            $now = date("Y-m-d H:i:s");
             $data_ujian['tgl_mulai'] = $now;
             $data_ujian['tgl_selesai'] = date("Y-m-d H:i:s", strtotime($now. ' + '.$sesi_detail->lama_pengerjaan.' minutes'));
 
@@ -161,7 +225,7 @@ class Ujian extends CI_Controller {
 			$arr_jawab[$idx] = array("g"=>$gr,"j"=>$val,"r"=>$rg,"aud_g"=>$aud_g,"aud_s"=>$aud_s);
         }
 
-        $show_soal = [];
+        //$show_soal = [];
         $html = '';
         $previous_number = '';
         $next_number = '';
@@ -179,10 +243,10 @@ class Ujian extends CI_Controller {
                 $id_group_soal_p = $s->group_soal_parent != 0 || !empty($s->group_soal_parent) ? $s->group_soal_parent : $s->group_soal_id;
                 $group_soal_p = $s->group_soal_parent_name != 0 || !empty($s->group_soal_parent_name) ? $s->group_soal_parent_name : $s->group_soal_name;
 
-                $cek_group_mode_jwb = $s->group_mode_jwb_id == 1 ? '' : 'style="display:none;"'; //1 Pilihan ganda 2 essay
+                //$cek_group_mode_jwb = $s->group_mode_jwb_id == 1 ? '' : 'style="display:none;"'; //1 Pilihan ganda 2 essay
                 $bacaan_soal = $s->isi_bacaan_soal <> 0 || !empty($s->isi_bacaan_soal) ? $s->isi_bacaan_soal.'<br />' : ''; // bacaan soal
                 $bacaan_soal_name = $s->bacaan_soal_name <> 0 || !empty($s->bacaan_soal_name) ? '<b>'.$s->bacaan_soal_name.'</b><br />' : ''; // bacaan soal judul
-                $group_soal_petunjuk = $s->group_soal_petunjuk <> 0 || !empty($s->group_soal_petunjuk) ? $s->group_soal_petunjuk.'<br />' : '';
+                //$group_soal_petunjuk = $s->group_soal_petunjuk <> 0 || !empty($s->group_soal_petunjuk) ? $s->group_soal_petunjuk.'<br />' : '';
                 $group_soal_audio = ($s->group_soal_audio <> 0 || !empty($s->group_soal_audio)) && $audio_limit > $arr_jawab[$s->bank_soal_id]["aud_g"] ? '<audio id="group-loop-limited-'.$nomor_soal.'" controls controlsList="nodownload"><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/group_soal/group_'.$s->paket_soal_id.'/'.$s->group_soal_audio.'" type="'.$s->group_soal_tipe_audio.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
                 $soal_audio = ($s->file <> 0 || !empty($s->file)) && $audio_limit > $arr_jawab[$s->bank_soal_id]["aud_s"] ? '<audio id="loop-limited-'.$nomor_soal.'" controls controlsList="nodownload"><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/paket_soal/soal_'.$s->paket_soal_id.'/'.$s->file.'" type="'.$s->tipe_file.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
                 
@@ -248,7 +312,7 @@ class Ujian extends CI_Controller {
                         <div class="funkyradio text-justify">';
                     $jawaban = $this->tes->get_jawaban_by_id_user($s->bank_soal_id, $s->paket_soal_id);
                     $opsi = config_item('_def_opsi_jawaban');
-                    $jawaban_soal = [];
+                    //$jawaban_soal = [];
                     $number_opsi = 1;
                     foreach($jawaban as $key_jawaban => $val_jawaban) {
                         $checked = $arr_jawab[$s->bank_soal_id]["j"] == $val_jawaban->order ? "checked" : "";
@@ -287,6 +351,15 @@ class Ujian extends CI_Controller {
                 $group_soal_before = $group_soal_next;
             }
         }
+
+        //Cheking IP
+        $ip_address = $this->get_ip_address();
+        //Checking Timezone
+        $timezone = $this->get_timezone($ip_address);
+        //Set format waktu selesai ujian + timezone
+        $datetime = new DateTime($ujian_data->tgl_selesai);
+        $timezone = $datetime->setTimezone(new DateTimeZone($timezone));
+        $waktu_selesai_ujian = $timezone->format(DateTime::ATOM); //ISO8601
         
         //for passing data to view
         $data['content']['sesi_pelaksana'] = $sesi_detail;
@@ -294,7 +367,7 @@ class Ujian extends CI_Controller {
         $data['content']['ujian_id'] = $this->encryption->encrypt($ujian_data->id);
         $data['content']['random_secure'] = $random_secure;
         $data['content']['jumlah_soal'] = $nomor_soal;
-        $data['content']['waktu_selesai'] = $ujian_data->tgl_selesai;
+        $data['content']['waktu_selesai'] = $waktu_selesai_ujian;
         $data['content']['audio_limit'] = $audio_limit;
         $data['content']['is_jawab'] = $paket_soal->is_jawab;
         $data['content']['is_continuous'] = $paket_soal->is_continuous;
@@ -409,7 +482,7 @@ class Ujian extends CI_Controller {
         $data_group = array();
         $data_group_skor = array();
         $ujian_skor = [];
-        $data_ujian_skor = [];
+        //$data_ujian_skor = [];
         $data_report_ujian = [];
         $data_bank_soal = [];
         $data_combine_report = [];
@@ -468,7 +541,7 @@ class Ujian extends CI_Controller {
             $deactive_report_data = array(
                 'is_enable' => 0
             );
-            $deactive_report = $this->tes->disable_report_ujian($get_ujian_sesi->sesi_pelaksanaan_id, $get_paket_data, $get_user_id, $deactive_report_data);
+            $this->tes->disable_report_ujian($get_ujian_sesi->sesi_pelaksanaan_id, $get_paket_data, $get_user_id, $deactive_report_data);
         }
 
         foreach($data_combine_report as $key_combine_r => $val_combine_r){ //data report ujian fix
@@ -484,7 +557,7 @@ class Ujian extends CI_Controller {
         }
 
         $tbl_ujian_report = $this->tbl_ujian_report;
-        $save_report_ujian = $this->general->input_batch($tbl_ujian_report, $data_ujian_report_user);
+        $this->general->input_batch($tbl_ujian_report, $data_ujian_report_user);
 
         $skor_total = [];
         foreach($data_group as $key_group => $val_group){ //Grouping Skor
@@ -577,13 +650,13 @@ class Ujian extends CI_Controller {
     }
 
     public function pembahasan($id_sesi_pelaksanaan, $id_paket_soal, $id_ujian, $pembahasan_kunci){
-        $sesi_pelaksanaan_id = base64_decode(urldecode($id_sesi_pelaksanaan));
+        //$sesi_pelaksanaan_id = base64_decode(urldecode($id_sesi_pelaksanaan));
         $paket_soal_id = base64_decode(urldecode($id_paket_soal));
         $ujian_id = base64_decode(urldecode($id_ujian));
         $kunci_pembahasan = base64_decode(urldecode($pembahasan_kunci));
 
-        $data_ujian = [];
-        $bank_soal = [];
+        //$data_ujian = [];
+        //$bank_soal = [];
         $data = [];
 
         /* $sesi_detail = $this->tes->get_sesi_pelaksanaan_pembahasan($sesi_pelaksanaan_id);//Get Sesi Pelaksanaan */
@@ -641,10 +714,10 @@ class Ujian extends CI_Controller {
                 $id_group_soal_p = $s->group_soal_parent != 0 || !empty($s->group_soal_parent) ? $s->group_soal_parent : $s->group_soal_id;
                 $group_soal_p = $s->group_soal_parent_name != 0 || !empty($s->group_soal_parent_name) ? $s->group_soal_parent_name : $s->group_soal_name;
 
-                $cek_group_mode_jwb = $s->group_mode_jwb_id == 1 ? '' : 'style="display:none;"'; //1 Pilihan ganda 2 essay
+                //$cek_group_mode_jwb = $s->group_mode_jwb_id == 1 ? '' : 'style="display:none;"'; //1 Pilihan ganda 2 essay
                 $bacaan_soal = $s->isi_bacaan_soal <> 0 || !empty($s->isi_bacaan_soal) ? $s->isi_bacaan_soal.'<br />' : ''; // bacaan soal
                 $bacaan_soal_name = $s->bacaan_soal_name <> 0 || !empty($s->bacaan_soal_name) ? '<b>'.$s->bacaan_soal_name.'</b><br />' : ''; // bacaan soal judul
-                $group_soal_petunjuk = $s->group_soal_petunjuk <> 0 || !empty($s->group_soal_petunjuk) ? $s->group_soal_petunjuk.'<br />' : '';
+                //$group_soal_petunjuk = $s->group_soal_petunjuk <> 0 || !empty($s->group_soal_petunjuk) ? $s->group_soal_petunjuk.'<br />' : '';
                 /* $group_soal_audio = $s->group_soal_audio <> 0 || !empty($s->group_soal_audio) ? '<audio id="loop-limited-'.$nomor_soal.'" controls controlsList="nodownload"><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/group_soal/group_'.$s->paket_soal_id.'/'.$s->group_soal_audio.'" type="'.$s->group_soal_tipe_audio.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : '';
                 $soal_audio = $s->file <> 0 || !empty($s->file) ? '<audio id="loop-limited-'.$nomor_soal.'" controls controlsList="nodownload"><source src="'.config_item('_dir_website').'/lembaga/grandsbmptn/paket_soal/soal_'.$s->paket_soal_id.'/'.$s->file.'" type="'.$s->tipe_file.'">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br /><br />' : ''; */
                 
@@ -718,7 +791,7 @@ class Ujian extends CI_Controller {
                     $jawaban = $this->tes->get_jawaban_by_id_pembahasan($s->bank_soal_id, $s->paket_soal_id);
                     $jawaban_benar = $this->tes->get_jawaban_by_id_benar($s->bank_soal_id, $s->paket_soal_id);
                     $opsi = config_item('_def_opsi_jawaban');
-                    $jawaban_soal = [];
+                    //$jawaban_soal = [];
                     $number_opsi = 1;
                     if($kunci_pembahasan == 1){
                         foreach($jawaban as $key_jawaban => $val_jawaban) {

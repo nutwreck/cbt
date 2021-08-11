@@ -163,7 +163,7 @@
                 </div>
                 <div class="col-md-4 icon-box" data-aos="fade-up" data-aos-delay="100">
                   <div class="keunggulan-phone">
-                    <img src="<?php echo config_item('_assets_website'); ?>landing/img/features/phone.png" alt="3-info" class="img-fluid">
+                    <img src="<?php echo config_item('_assets_website'); ?>landing/img/features/phone-fix.png" alt="3-info" class="img-fluid">
                   </div>
                 </div>
                 <div class="col-md-4 icon-box" data-aos="fade-up" data-aos-delay="200">
