@@ -1958,13 +1958,14 @@ class Tes_online extends CI_Controller {
         $data_user = [];
 
         $data_sesi['mode_peserta_id'] = $this->input->post('mode_peserta', TRUE);
+        $mode_peserta = $this->input->post('mode_peserta', TRUE);
 
         //SESI USER
         if($mode_peserta == 1){ //1 KELOMPOK 2 MANUAL INPUT
             $group_peserta_id = $this->input->post('group_peserta_id', TRUE);
             
             foreach($group_peserta_id as $val_group_peserta){
-                $insert_user_sesi = $this->insert_group_peserta_komposisi($val_group_peserta, $sesi_pelaksana_id);
+                $this->insert_group_peserta_komposisi($val_group_peserta, $sesi_pelaksana_id);
             }
         } else {
             $peserta_id = $this->input->post('manual_peserta_id', TRUE);
@@ -1979,7 +1980,7 @@ class Tes_online extends CI_Controller {
             }
 
             $tbl_sesi_user = $this->tbl_sesi_pelaksanaan_user;
-            $input_user = $this->general->input_batch($tbl_sesi_user, $data_user);
+            $this->general->input_batch($tbl_sesi_user, $data_user);
         }
 
         $this->session->set_flashdata('success', 'Tambah Peserta pelaksanaan berhasil disimpan!');
