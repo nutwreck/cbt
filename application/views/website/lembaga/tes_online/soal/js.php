@@ -19,6 +19,19 @@
     }
 </script>
 
+<!-- NAVIGASI TOOGLE SEARCH -->
+<script>
+    function toogle_search() {
+        var cont = document.getElementById('panel-toogle-search');
+        if (cont.style.display == 'block') { //Jika panel ditampilkan dihide
+            cont.style.display = 'none';
+        }
+        else { //jika panel dihide ditampilkan
+            cont.style.display = 'block';
+        }
+    }
+</script>
+
 <!-- Amnil id soal pertama yang muncul berdasarkan sistem -->
 <script>
     $( document ).ready(function() {
@@ -69,6 +82,21 @@
             content_jawaban.style.display = 'none';
             content_acak_jawaban_head.style.display = 'none';
             content_acak_jawaban_body.style.display = 'none';
+        }
+    }
+</script>
+
+<!-- JIKA USER MEMILIH ALL DI SEARCH SOAL -->
+<script>
+    function prevent_form(){
+        var type_group_soal = document.getElementById('group_soal_idx').value;
+        var kata_kunci_soal = document.getElementById('kata_kunci_soalx');
+        if(type_group_soal == 'all_soal'){ //PILIH ALL SOAL KOSONGKAN DAN DISABLE FIELD KATA KUNCI SOAL
+            kata_kunci_soal.disabled = true;
+            kata_kunci_soal.value = "";
+        } else {
+            kata_kunci_soal.disabled = false;
+            kata_kunci_soal.value = "";
         }
     }
 </script>

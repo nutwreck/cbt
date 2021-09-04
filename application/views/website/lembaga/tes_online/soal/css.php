@@ -11,6 +11,15 @@
         width: 100%;
         height: auto;
     }
+
+    .box-search {
+        border-radius: 25px;
+        background: #ededed;
+        opacity: 1;
+        padding: 0.5%;
+        width: 100%;
+        height: auto;
+    }
     .button-round {
         display: inline-block;
         position: relative;
@@ -41,5 +50,4 @@
             font-size:100%;
         }
     }
-}
 </style>

@@ -132,6 +132,11 @@ class Tes_online_model extends CI_Model{
                     ->get_where('v_paket_soal', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->row();
     }
 
+    public function get_all_group_by_paketid($paket_soal_id){
+        return $this->db->select('id_group_soal, name_group_soal')
+            ->get_where('v_group_soal', array('paket_soal_id' => $paket_soal_id))->result();
+    }
+
     public function get_total_soal($paket_soal_id){
         return $this->db->select('total_soal')
                     ->get_where('v_paket_soal', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1))->row();
@@ -331,6 +336,43 @@ class Tes_online_model extends CI_Model{
                     ->order_by('group_soal_id ASC, id ASC')
                     ->get_where('bank_soal p, (SELECT @curRank := 0) r', array('paket_soal_id' => $paket_soal_id, 'is_enable' => 1), FALSE)->result();
     }
+
+    public function get_all_soal_by_search($paket_soal_id, $group_soal_id, $kata_kunci_soal){
+        /*  $config_acakan_soal = $this->get_paket_soal_by_id($paket_soal_id);
+        $order = $config_acakan_soal->is_acak_soal == 1 ? "CASE WHEN is_acak_soal = 1 THEN 1 ELSE 0 END, CASE WHEN is_acak_soal = 0 THEN id END, RAND()" : 'id ASC'; */
+        //Nanti acakan buat user saja
+        //RANK() OVER ( ORDER BY id ASC )
+        //@curRank := @curRank + 1 //select
+        //bank_soal p, (SELECT @curRank := 0) r //get
+        if (($group_soal_id && $kata_kunci_soal) || ($group_soal_id !== "" && $kata_kunci_soal !== "")) { //jika keduanya ada
+            return $this->db->select('id, @curRank := @curRank + 1 AS no_soal', FALSE)
+                    ->order_by('group_soal_id ASC, id ASC')
+                    ->where('paket_soal_id', $paket_soal_id)
+                    ->where('is_enable', 1)
+                    ->where('group_soal_id', $group_soal_id === "no_group" ? 0 : $group_soal_id)
+                    ->like('name', $kata_kunci_soal)
+                    ->get('bank_soal p, (SELECT @curRank := 0) r', FALSE)
+                    ->result();
+        } elseif ($group_soal_id || $group_soal_id !== "") {
+            return $this->db->select('id, @curRank := @curRank + 1 AS no_soal', FALSE)
+                    ->order_by('group_soal_id ASC, id ASC')
+                    ->where('paket_soal_id', $paket_soal_id)
+                    ->where('is_enable', 1)
+                    ->where('group_soal_id', $group_soal_id === "no_group" ? 0 : $group_soal_id)
+                    ->get('bank_soal p, (SELECT @curRank := 0) r', FALSE)
+                    ->result();
+        } elseif ($kata_kunci_soal || $kata_kunci_soal !== "") {
+            return $this->db->select('id, @curRank := @curRank + 1 AS no_soal', FALSE)
+                    ->order_by('group_soal_id ASC, id ASC')
+                    ->where('paket_soal_id', $paket_soal_id)
+                    ->where('is_enable', 1)
+                    ->like('name', $kata_kunci_soal)
+                    ->get('bank_soal p, (SELECT @curRank := 0) r', FALSE)
+                    ->result();
+        } else {//jika tidak ada keduanya
+            $this->get_all_soal_by_paketid($paket_soal_id);
+        }
+     }
 
     public function get_soal_by_id($paket_soal_id, $bank_soal_id){
         return $this->db->select('bank_soal_id, paket_soal_id, group_mode_jwb_id, group_mode_jwb_name, is_acak_soal, acak_soal

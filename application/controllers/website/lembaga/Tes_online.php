@@ -575,15 +575,29 @@ class Tes_online extends CI_Controller {
         }
     }
 
-    public function list_soal($id_paket_soal){
+    public function list_soal($id_paket_soal, $search = null, $search_data = []){
         //for passing data to view
         $paket_soal_id = base64_decode(urldecode($id_paket_soal));
         $data['content']['id_paket_soal'] = $id_paket_soal;
+
         $data['content']['paket_soal'] = $this->tes->get_paket_soal_by_id($paket_soal_id);
-        $data['content']['id_soal_list'] = $this->tes->get_all_soal_by_paketid($paket_soal_id);
-        $first_exam = $data['content']['id_soal_list'] != NULL ? $data['content']['id_soal_list'][0] : NULL; //Ambil Id Pertama soal yang muncul
-        $data['content']['soal_first_list'] = $first_exam != NULL ? $first_exam->id : NULL;
+
+        if ($search) { //Search Aktif
+            $data['content']['id_soal_list'] = $this->tes->get_all_soal_by_search($paket_soal_id, $search_data['group_soal_id'], $search_data['kata_kunci_soal']);
+            $first_exam = $data['content']['id_soal_list'] != NULL ? $data['content']['id_soal_list'][0] : NULL; //Ambil Id Pertama soal yang muncul
+            $data['content']['soal_first_list'] = $first_exam != NULL ? $first_exam->id : NULL;
+        } else { //Search tidak aktif
+            $data['content']['id_soal_list'] = $this->tes->get_all_soal_by_paketid($paket_soal_id);
+            $first_exam = $data['content']['id_soal_list'] != NULL ? $data['content']['id_soal_list'][0] : NULL; //Ambil Id Pertama soal yang muncul
+            $data['content']['soal_first_list'] = $first_exam != NULL ? $first_exam->id : NULL;
+        }
+
+        $data['content']['list_group_soal'] = $this->tes->get_all_group_by_paketid($paket_soal_id);
         $data['title_header'] = ['title' => 'Daftar Soal'];
+
+        if (empty($data['content']['id_soal_list'])) { //Jika soal kosong
+            $this->session->set_flashdata('error', 'Tidak ada soal!');
+        }
 
         //for load view
         $view['css_additional'] = 'website/lembaga/tes_online/soal/css';
@@ -592,6 +606,19 @@ class Tes_online extends CI_Controller {
 
         //get function view website
         $this->_generate_view($view, $data);
+    }
+
+    public function submit_search_soal(){
+        $id_paket_soal = $this->input->post('id_paket_soal');
+        $search_data['group_soal_id']  = $this->input->post('group_soal_id');
+        $search_data['kata_kunci_soal']  = $this->input->post('kata_kunci_soal', TRUE);
+        $search = 1;
+
+        if ($search_data['group_soal_id'] === "" && $search_data['kata_kunci_soal'] === "") { //jika group soal yang di pilih all maka keluar semua data
+            redirect('admin/list-soal/'.$id_paket_soal);
+        } else {
+            $this->list_soal($id_paket_soal, $search, $search_data);
+        }
     }
 
     public function get_detail_exam(){ //PENGAMBILAN SOAL 1 PER SATU
