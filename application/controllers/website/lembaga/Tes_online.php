@@ -616,6 +616,8 @@ class Tes_online extends CI_Controller {
 
         if ($search_data['group_soal_id'] === "" && $search_data['kata_kunci_soal'] === "") { //jika group soal yang di pilih all maka keluar semua data
             redirect('admin/list-soal/'.$id_paket_soal);
+        } elseif ($search_data['group_soal_id'] === "all_soal") {
+            redirect('admin/list-soal/'.$id_paket_soal);
         } else {
             $this->list_soal($id_paket_soal, $search, $search_data);
         }
