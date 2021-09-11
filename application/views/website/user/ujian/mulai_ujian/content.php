@@ -44,7 +44,10 @@
                 </div>
                 <ul>
                     <li>Disarankan mengerjakan dilaptop/komputer anda untuk tampilan yang lebih lebar</li>
-                    <li>Untuk menghindari hal-hal yang tidak diinginkan disarankan memakai browser (contoh : Chrome, Firefox, Edge) versi terbaru</li>
+                    <li>Untuk menghindari hal-hal yang tidak diinginkan disarankan memakai browser (contoh : Chrome, Firefox, Edge) versi terbaru. (Rekomendasi Chrome)</li>
+                    <li>Kecepatan memuat halaman portal ujian tergantung oleh kecepatan internet anda</li>
+                    <li>Ketika halaman portal ujian sedang dimuat nantinya, anda diharuskan untuk menunggu dan tidak diperbolehkan untuk refresh halaman sampai halaman benar-benar dimuat dengan sempurna</li>
+                    <li>Matikan VPN anda jika anda sedang menyalakan VPN</li>
                     <li>Setelah klik mulai, selama proses tes berlangsung anda tidak diijinkan untuk : 
                         <ul>
                             <li>Refresh browser</li>

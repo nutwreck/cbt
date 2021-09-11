@@ -13,7 +13,7 @@
     $(document).ready(function () {
         var t = $('.sisawaktu');
         if (t.length) {
-            sisawaktu(t.data('time'));
+            sisawaktu(t.data('time'), id_tes);
         }
 
         var width = screen.width;
@@ -584,4 +584,11 @@
 
         });
     });
+</script>
+
+<!-- LOADING HALAMAN -->
+<script>
+  $(window).on('load', function () {
+    $('#loading').hide();
+  }) 
 </script>

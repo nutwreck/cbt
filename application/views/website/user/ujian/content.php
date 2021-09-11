@@ -1,10 +1,14 @@
 <?php
-$waktu_habis = strtotime($waktu_selesai);
-if(time() >= $waktu_habis)
-{
-    redirect('ujian-berakhir', 'location', 301);
-}
+    $waktu_habis = strtotime($waktu_selesai);
+    if(time() >= $waktu_habis)
+    {
+        redirect('ujian-berakhir', 'location', 301);
+    }
 ?>
+<div id="loading">
+    <img id="loading-image" src="<?php echo config_item('_assets_website'); ?>loading/BeanEater-1s-100px.gif" alt="Loading..." /><br />
+    <h5>Portal ujian sedang disiapkan. Mohon tunggu dan jangan direfresh.</h5>
+</div>
 <div class="container-fluid mt-100-st">
     <div class="row all-exam">
         <div class="col-sm-12 col-md-8 h-100 mb-3">

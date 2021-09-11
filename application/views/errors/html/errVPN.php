@@ -99,7 +99,7 @@
             <h1 class="title-text-empty-4-7"
             style="color: #FFFFFF;">Opss! Something Missing</h1>
             <p class="lg-show-empty-4-7 title-caption-empty-4-7"
-            style="color: #707092;">Lokasi anda terdeteksi tidak berada diwilayah Indonesia. Silahkan matikan VPN jika anda memakai VPN.</p>
+            style="color: #707092;">Lokasi anda terdeteksi tidak berada diwilayah Indonesia. Silahkan matikan VPN jika anda memakai VPN dan Restart koneksi anda.</p>
             <div class="d-flex justify-content-center">
                 <button class="btn btn-empty-4-7 d-inline-flex"
                 style="background: #524EEE;" onclick="goBack()">Kembali</button>

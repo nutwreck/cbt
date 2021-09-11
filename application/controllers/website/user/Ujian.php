@@ -82,7 +82,7 @@ class Ujian extends CI_Controller {
 
     private function get_timezone($ip_address){
         //Jika ip yang didapat tidak sesuai kembalikan Asia Jakarta
-        if(is_null($ip_address) || $ip_address == "" || $ip_address == "::1"){
+        if(is_null($ip_address) || $ip_address == "" || $ip_address == "::1" || $ip_address == "127.0.0.1"){
             $timezone = 'Asia/Jakarta';
             return $timezone;
         }
@@ -381,6 +381,17 @@ class Ujian extends CI_Controller {
 
         //get function view website
         $this->_generate_view($view, $data);
+    }
+
+    public function disable_ujian(){
+        // Decrypt Id
+		$id_tes = $this->input->post('id', true);
+        $id_tes = $this->encryption->decrypt($id_tes);
+
+        // Simpan jawaban
+        $tbl_ujian = $this->tbl_ujian;
+		$this->general->delete_data($tbl_ujian, $id_tes);
+		$this->output_json(['status'=>true]);
     }
 
     public function simpan_satu(){

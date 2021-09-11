@@ -55,24 +55,63 @@
         var base_url = '<?=base_url()?>'; //GLOBAL CONFIG UNTUK BASE URL SEMUA YANG DIPAKAI DI JS
         
         //SISA WAKTU UJIAN / TIMER
-        function sisawaktu(t) {
+        function sisawaktu(t, id_tes) {
             const end = moment(t);
             const today = moment();
             const diff_ms = end.diff(today, 'miliseconds');
             //var ms = moment(end,"DD/MM/YYYY HH:mm:ss").diff(moment(now,"DD/MM/YYYY HH:mm:ss"));
-            var x = setInterval(function() {
-                var now = moment();
-                var ms = end.diff(now, 'miliseconds');
-                var d = moment.duration(ms);
-                var s = Math.floor(d.asHours()) + moment.utc(ms).format(":mm:ss");
-                $('.sisawaktu').html(s);
-            }, 1000);
-            setTimeout(function() {
-                clearInterval(x);
-                var cd = "00:00:00";
-                $('.sisawaktu').html(cd);
-                waktuHabis();
-            }, (diff_ms));
+            if (diff_ms > 0) {
+                try {
+                    const end = moment(t);
+                    var x = setInterval(function() {
+                        var now = moment();
+                        var ms = end.diff(now, 'miliseconds');
+                        var d = moment.duration(ms);
+                        var s = Math.floor(d.asHours()) + moment.utc(ms).format(":mm:ss");
+                        $('.sisawaktu').html(s);
+                    }, 1000);
+                    setTimeout(function() {
+                        clearInterval(x);
+                        var cd = "00:00:00";
+                        $('.sisawaktu').html(cd);
+                        waktuHabis();
+                    }, (diff_ms));
+                } catch(e) {
+                    $.ajax({
+                        type: "POST",
+                        url: base_url + "website/user/Ujian/disable_ujian",
+                        data: { id: id_tes },
+                        dataType: 'json',
+                        success: function (data) {
+                            swal({ title: "Informasi",
+                                text: "Browser anda tidak support untuk mengerjakan ujian!",
+                                button: "Kembali",
+                                icon: "info"}).then(okay => {
+                                if (okay) {
+                                    window.location.href = base_url + 'dashboard';
+                                }
+                            });
+                        }
+                    });
+                }
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: base_url + "website/user/Ujian/disable_ujian",
+                    data: { id: id_tes },
+                    dataType: 'json',
+                    success: function (data) {
+                        swal({ title: "Informasi",
+                            text: "Browser anda tidak support untuk mengerjakan ujian!",
+                            button: "Kembali",
+                            icon: "info"}).then(okay => {
+                            if (okay) {
+                                window.location.href = base_url + 'dashboard';
+                            }
+                        });
+                    }
+                });
+            }
         }
 
         //KONFIGURASI UNTUK REQUEST POST DATA KE CONTROLLER

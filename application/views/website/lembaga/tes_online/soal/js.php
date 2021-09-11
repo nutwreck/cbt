@@ -227,6 +227,10 @@
                 document.getElementById("content-soal").innerHTML = obj.content_soal;
                 //JAWABAN SOAL SHOW
                 document.getElementById("jawaban-soal").innerHTML = obj.jawaban_soal;
+                //
+                $("html, body").animate({ 
+                    scrollTop: $('.soal-content').offset().top 
+                }, 1000);
             }
         });
     }
