@@ -654,6 +654,17 @@ class Tes_online_model extends CI_Model{
                         ->get('v_peserta', array('is_enable' => 1))->row();
     }
 
+    public function get_checking_ujian_non_buku($sesi_pelaksana_id, $paket_soal_id, $user_id){
+        $query = $this->db->select('id, user_id, user_no, user_name, user_email, list_soal, list_jawaban, tgl_mulai, tgl_selesai, status')
+                        ->get_where('ujian', array('sesi_pelaksanaan_id' => $sesi_pelaksana_id, 'paket_soal_id' => $paket_soal_id, 'user_id' => $user_id, 'status' => 0, 'is_enable' => 1))->row();
+        
+        if($query){
+            return $query;
+        } else {
+            return null;
+        }
+    }
+
     public function get_checking_ujian($paket_soal_id, $user_id){
         $query = $this->db->select('id, user_id, user_no, user_name, user_email, list_soal, list_jawaban, tgl_mulai, tgl_selesai, status')
                         ->get_where('ujian', array('paket_soal_id' => $paket_soal_id, 'user_id' => $user_id, 'status' => 0, 'is_enable' => 1))->row();

@@ -66,7 +66,7 @@ class Buku extends CI_Controller {
         $check_no_invoice = $this->management->checking_nomor_invoice($no_invoice);
 
         if($check_no_invoice){
-            $this->generate_no_invoice();
+            $this->generate_no_invoice($buku_id);
         } else {
             return $no_invoice;
         }
@@ -315,6 +315,8 @@ class Buku extends CI_Controller {
         $invoice_number = $no_invoice;
         $invoice_total_cost_input = $this->input->post('invoice_total_cost', TRUE);
 
+        $tbl_kode_unik = $this->tbl_kode_unik;
+
         $kode_unik_data = $this->management->get_kode_unik();
         if($kode_unik_data == 999){
             $new_number = 300;
@@ -330,8 +332,7 @@ class Buku extends CI_Controller {
         }
 
         $kode_unik = $kode_unik_data;
-
-        $tbl_kode_unik = $this->tbl_kode_unik;
+        
         $new_number = $kode_unik+1;
         $update_kode_unik = array('number' => $new_number);
         $this->general->update_data($tbl_kode_unik, $update_kode_unik, 1); //Update Kode Unik

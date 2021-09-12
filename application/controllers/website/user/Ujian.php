@@ -146,7 +146,7 @@ class Ujian extends CI_Controller {
         $sesi_detail = $this->tes->get_sesi_pelaksanaan_selected($sesi_pelaksana_id);//Get Sesi Pelaksanaan
         $paket_soal_id = $sesi_detail->paket_soal_id;
         $paket_soal = $this->tes->get_paket_soal_sesi_by_id($paket_soal_id); //Get Paket Soal
-        $ujian_data = $this->tes->get_checking_ujian($paket_soal_id, $this->session->userdata('user_id')); //CEK SEBELUMNYA UDH PERNAH TES ATAU BELUM
+        $ujian_data = $this->tes->get_checking_ujian_non_buku($sesi_pelaksana_id, $paket_soal_id, $this->session->userdata('user_id')); //CEK SEBELUMNYA UDH PERNAH TES ATAU BELUM
         $audio_limit = $paket_soal->visual_limit;
 
         if(empty($ujian_data)){ //jika wadah untuk pemilihan soal dan jawaban belum ada
