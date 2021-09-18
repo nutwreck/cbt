@@ -181,7 +181,8 @@
                                                         } else {
                                                             $icon_folder = '<i class="fas fa-link fa-3x"></i>';
                                                         }
-                                                        $access = $nama_file;
+                                                        // $access = $nama_file;
+                                                        $access = base_url().'buku/tonton/'.$val_group->id;
                                                     } elseif($type_file == 6){
                                                         $exp_file = explode(".", $nama_file);
                                                         $jenis_file = $exp_file[1];

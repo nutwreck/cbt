@@ -84,6 +84,7 @@ $route['buku/download/(:num)'] = 'website/user/Buku/download_buku/$1';
 $route['pembelian-buku/(:any)'] = 'website/user/Buku/pembelian_buku/$1';
 $route['purchase'] = 'website/user/Buku/invoice_status';
 $route['manual-confirm/(:any)/(:num)'] = 'website/user/Buku/manual_confirm/$1/$2';
+$route['buku/tonton/(:any)'] = 'website/user/Buku/tonton/$1';
 /* $route['ujian2'] = 'website/user/Ujian/ujian_page_next_design'; */
 /*
 |

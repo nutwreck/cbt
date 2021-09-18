@@ -287,8 +287,10 @@ class Buku extends CI_Controller {
 
         if($buku_id == 2 && $detail_buku_check == 1){ //2 SBMPTN
             $detail_buku_name = 'SAINTEK';
-        } elseif($buku_id == 1 && $detail_buku_check == 2){
+        } elseif($buku_id == 2 && $detail_buku_check == 2){
             $detail_buku_name = 'SOSHUM';
+        } else {
+            $detail_buku_name = null;
         }
 
         $payment_check = $this->input->post('payment_choosen', TRUE);
@@ -1237,6 +1239,23 @@ class Buku extends CI_Controller {
         $view['css_additional'] = 'website/user/buku/ujian/css';
         $view['content'] = 'website/user/buku/ujian/pembahasan/content';
         $view['js_additional'] = 'website/user/buku/ujian/pembahasan/js';
+
+        //get function view website
+        $this->_generate_view($view, $data);
+    }
+
+    public function tonton($id_config_detail){
+        $url_past = $_SERVER['HTTP_REFERER'];
+
+        //for passing data to view
+        $data['content']['data'] = $this->management->get_config_buku_detail_download($id_config_detail);
+        $data['content']['url_back'] = $url_past;
+        $data['title_header'] = ['title' => 'Video Materi'];
+
+        //for load view
+        $view['css_additional'] = 'website/user/buku/tonton/css';
+        $view['content'] = 'website/user/buku/tonton/content';
+        $view['js_additional'] = 'website/user/buku/tonton/js';
 
         //get function view website
         $this->_generate_view($view, $data);

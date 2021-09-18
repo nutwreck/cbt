@@ -1,6 +1,6 @@
 <?php
 
-$config = [
+/* $config = [
 	'useragent' => 'Zambert Testing Ujian Online',
 	'protocol' => 'smtp',
 	'mailtype'  => 'html',
@@ -16,7 +16,16 @@ $config = [
 	'crlf'    => "\r\n",
 	'wordwrap' => TRUE
 ];
-
+ */
+$config = Array(
+	'protocol' => 'smtp',
+	'smtp_host' => 'smtp.mailtrap.io',
+	'smtp_port' => 2525,
+	'smtp_user' => '6827108f70ce57',
+	'smtp_pass' => '75b535b086d81d',
+	'crlf' => "\r\n",
+	'newline' => "\r\n"
+);
 /* How To Use
     1. Tambah e $this->load->config('email'); //SET CONFIG EMAIL ning function __construct class
     2. Kode email
