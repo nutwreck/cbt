@@ -114,14 +114,14 @@ class Ujian extends CI_Controller {
         } else {
             $obj = json_decode($response);
             $timezone = $obj->{'time_zone'};
-            $countrycode = $obj->{'country_code'};
+           /*  $countrycode = $obj->{'country_code'}; */
 
             //return result
-            if ($countrycode != 'ID') {
+            /* if ($countrycode != 'ID') {
                 redirect('location-checking');
-            } else {
+            } else { */
                 return $timezone;
-            }
+            /* } */
         }
     }
 
