@@ -78,7 +78,7 @@ $db['local'] = array(
 	'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => '',
-	'database' => 'candraaj_cbt',
+	'database' => 'local_cbt',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -101,6 +101,28 @@ $db['server'] = array(
 	'username' => 'zambertc_admin', //candraaj_admin
 	'password' => '!5K$PC&F~cCA', //Pi8$tT{SkT2!
 	'database' => 'zambertc_tes', //candraaj_tesonline //candraaj_cbt
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);
+
+$db['vps'] = array(
+	'dsn'	=> '',
+	'hostname' => 'localhost',
+	'username' => 'admin_root',
+	'password' => '3fh5EvXUET',
+	'database' => 'admin_tes',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

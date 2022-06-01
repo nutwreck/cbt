@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 date_default_timezone_set('Asia/Jakarta');
 setlocale(LC_ALL, 'IND');
 
@@ -29,39 +29,39 @@ setlocale(LC_ALL, 'IND');
 */
 $env_type = 'Local';
 
-if($env_type == 'Local'){
-    $root = "http://localhost/cbt/";
-    /*
+if ($env_type == 'Local') {
+	$root = "http://localhost/cbt/";
+	/*
     |--------------------------------------------------------------------------
     | Base URL
     |--------------------------------------------------------------------------
     */
-    $config['base_url'] = $root;
+	$config['base_url'] = $root;
 } else {
-    $root = 'https://'. $_SERVER['HTTP_HOST'] .'/';
-    /*
+	$root = 'https://' . $_SERVER['HTTP_HOST'] . '/';
+	/*
     |--------------------------------------------------------------------------
     | Base URL
     |--------------------------------------------------------------------------
     */
-    $config['base_url'] = $root;
+	$config['base_url'] = $root;
 }
 /*
     |--------------------------------------------------------------------------
     | Assets Base URL
     |--------------------------------------------------------------------------
     */
-    $config['_assets_website'] = $root."assets/website/";
-    $config['_assets_admin'] = $root."assets/admin/";
-    $config['_assets_general'] = $root."assets/general/";
-    /*
+$config['_assets_website'] = $root . "assets/website/";
+$config['_assets_admin'] = $root . "assets/admin/";
+$config['_assets_general'] = $root . "assets/general/";
+/*
     |--------------------------------------------------------------------------
     | Other Base URL (Type Below Here)
     |--------------------------------------------------------------------------
     */
-    $config['_dir_website'] = $root."storage/website/";
-    $config['_dir_admin'] = $root."storage/admin/";
-    $config['_dir_general'] = $root."storage/general/";
+$config['_dir_website'] = $root . "storage/website/";
+$config['_dir_admin'] = $root . "storage/admin/";
+$config['_dir_general'] = $root . "storage/general/";
 
 /*
 |--------------------------------------------------------------------------
@@ -491,7 +491,7 @@ $config['csrf_token_name'] = 'csrf_token_nutwreck';
 $config['csrf_cookie_name'] = 'csrf_cookie_nutwreck';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = TRUE;
-$config['csrf_exclude_uris'] = array('website/lembaga/Tes_online/get_peserta_by_select', 'website/user/Ujian/simpan_satu', 'website/user/Ujian/open_group_soal', 'website/lembaga/User/user_multiple_delete_all', 'admin/invoice-all', 'admin/invoice-confirm-all', 'admin/invoice-success-all', 'admin/invoice-expired-all', 'website/user/Ujian/buka_group', 'website/user/Ujian/simpan_akhir', 'website/lembaga/Tes_online/sesi_peserta_multiple_delete', 'website/lembaga/Tes_online/get_count_free_buku', 'website/user/Buku/buka_group', 'website/user/Buku/simpan_satu', 'website/user/Buku/simpan_akhir', 'website/lembaga/Tes_online/submit_search_soal', 'website/user/Ujian/disable_ujian'); /* website/lembaga/Tes_online/editor_paket_soal */
+$config['csrf_exclude_uris'] = array('website/lembaga/Tes_online/get_peserta_by_select', 'website/user/Ujian/simpan_satu', 'website/user/Ujian/open_group_soal', 'website/lembaga/User/user_multiple_delete_all', 'admin/invoice-all', 'admin/invoice-confirm-all', 'admin/invoice-success-all', 'admin/invoice-expired-all', 'website/user/Ujian/buka_group', 'website/user/Ujian/simpan_akhir', 'website/lembaga/Tes_online/sesi_peserta_multiple_delete', 'website/lembaga/Tes_online/get_count_free_buku', 'website/user/Buku/buka_group', 'website/user/Buku/simpan_satu', 'website/user/Buku/simpan_akhir', 'website/lembaga/Tes_online/submit_search_soal', 'website/user/Ujian/disable_ujian', 'website/lembaga/Management/event_check_prefix', 'admin/participants', 'admin/report-ujian'); /* website/lembaga/Tes_online/editor_paket_soal */
 
 /*
 |--------------------------------------------------------------------------
@@ -584,3 +584,10 @@ $config['_token_modul'] = '586b4cca03255330f4da77001ebbfd67'; //modul-soal
 */
 $config['_def_opsi_jawaban'] = 'A';
 $config['_def_opsi_urutan'] = '1';
+/*
+|---------------------------------------------------------------------------
+| EVENT URL
+|---------------------------------------------------------------------------
+|
+*/
+$config['_base_url_event'] = 'https://zambertclass.com/event/';

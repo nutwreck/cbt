@@ -258,15 +258,19 @@
             "escapeHtml": "true"
         }
 
-        <?php if($this->session->flashdata('success')){ ?>
-            toastr.success("<?php echo $this->session->flashdata('success'); ?>");
-        <?php }else if($this->session->flashdata('error')){  ?>
-            toastr.error("<?php echo $this->session->flashdata('error'); ?>");
-        <?php }else if($this->session->flashdata('warning')){  ?>
-            toastr.warning("<?php echo $this->session->flashdata('warning'); ?>");
-        <?php }else if($this->session->flashdata('info')){  ?>
-            toastr.info("<?php echo $this->session->flashdata('info'); ?>");
-        <?php } ?>
+        <?php if ($this->session->flashdata('success')) { ?>
+			toastr.success("<?php echo $this->session->flashdata('success'); ?>");
+			<?php $this->session->unset_userdata('success'); ?>
+		<?php } else if ($this->session->flashdata('error')) {  ?>
+			toastr.error("<?php echo $this->session->flashdata('error'); ?>");
+			<?php $this->session->unset_userdata('error'); ?>
+		<?php } else if ($this->session->flashdata('warning')) {  ?>
+			toastr.warning("<?php echo $this->session->flashdata('warning'); ?>");
+			<?php $this->session->unset_userdata('warning'); ?>
+		<?php } else if ($this->session->flashdata('info')) {  ?>
+			toastr.info("<?php echo $this->session->flashdata('info'); ?>");
+			<?php $this->session->unset_userdata('info'); ?>
+		<?php } ?>
     </script>
 </body>
 </html>

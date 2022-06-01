@@ -259,6 +259,32 @@ class Tes_online_model extends CI_Model{
         return $this->db->get_where('v_ujian_header', array('tgl_selesai_sesi <=' => $now))->result();
     }
 
+	public function get_ujian_header_filter_data($group_kelompok_peserta, $sesi_pelaksanaan, $paket_soal){
+		$now = date('Y-m-d H:i:s');
+
+		$this->db->select("*");
+		$this->db->from('v_ujian_header');
+		$this->db->where('tgl_selesai_sesi <=', $now);
+
+		if ($group_kelompok_peserta != 'all_group') {
+			if ($group_kelompok_peserta == 'manual_input') {
+				$this->db->where('group_peserta_name', NULL);
+			} else {
+				$this->db->where("group_peserta_name like '%".$group_kelompok_peserta."%' ");
+			}
+		}
+
+		if ($sesi_pelaksanaan != '') {
+			$this->db->where("sesi_pelaksanaan_name like '%".$sesi_pelaksanaan."%' ");
+		}
+
+		if ($paket_soal != '') {
+			$this->db->where("paket_soal_name like '%".$paket_soal."%' ");
+		}
+		
+		return $this->db->get()->result();
+    }
+
     public function get_ujian_header_by_id($sesi_pelaksana_id, $paket_soal_id){
         $now = date('Y-m-d H:i:s');
         return $this->db->get_where('v_ujian_header', array('sesi_pelaksanaan_id' => $sesi_pelaksana_id, 'paket_soal_id' => $paket_soal_id, 'tgl_selesai_sesi <=' => $now))->row();

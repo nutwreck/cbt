@@ -64,6 +64,7 @@ $route['login'] = 'website/user/Login/login';
 $route['register'] = 'website/user/Login';
 $route['account'] = 'website/user/User_account/user_account';
 $route['lupa-password'] = 'website/user/Lupa_password/lupa_password';
+$route['lupa-password/(:any)'] = 'website/user/Lupa_password/lupa_password/$1';
 $route['logout'] = 'website/user/Login/logout';
 $route['dashboard'] = 'website/user/Dashboard';
 $route['history'] = 'website/user/Dashboard/history_ujian';
@@ -85,6 +86,11 @@ $route['pembelian-buku/(:any)'] = 'website/user/Buku/pembelian_buku/$1';
 $route['purchase'] = 'website/user/Buku/invoice_status';
 $route['manual-confirm/(:any)/(:num)'] = 'website/user/Buku/manual_confirm/$1/$2';
 $route['buku/tonton/(:any)'] = 'website/user/Buku/tonton/$1';
+$route['event'] = 'website/user/Event/url_prefix';
+$route['event/(:any)'] = 'website/user/Event/url_prefix/$1';
+$route['event/login'] = 'website/user/Event/login';
+$route['event/login/(:any)'] = 'website/user/Event/login/$1';
+$route['event/logout/(:any)'] = 'website/user/Event/logout/$1';
 /* $route['ujian2'] = 'website/user/Ujian/ujian_page_next_design'; */
 /*
 |
@@ -207,6 +213,11 @@ $route['admin/add-voucher'] = 'website/lembaga/Management/add_voucher';
 $route['admin/edit-voucher/(:num)'] = 'website/lembaga/Management/edit_voucher/$1';
 $route['admin/delete-voucher/(:num)'] = 'website/lembaga/Management/disable_voucher/$1';
 $route['admin/active-voucher/(:num)'] = 'website/lembaga/Management/active_voucher/$1';
+$route['admin/event'] = 'website/lembaga/Management/event_all';
+$route['admin/event-add'] = 'website/lembaga/Management/event_add';
+$route['admin/event-edit/(:any)'] = 'website/lembaga/Management/event_edit/$1';
+$route['admin/event-detail/(:any)'] = 'website/lembaga/Management/event_detail/$1';
+$route['admin/event-delete/(:any)'] = 'website/lembaga/Management/event_delete/$1';
 /*
 |
 | START WEBSITE URL FOR LEMBAGA ONLY

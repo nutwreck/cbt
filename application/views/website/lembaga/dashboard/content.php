@@ -15,7 +15,7 @@
                             <div class="overview__inner">
                                 <div class="overview-box clearfix">
                                     <div class="icon">
-                                        <i class="zmdi zmdi-account-o"></i>
+                                        <i class="zmdi zmdi-book-image"></i>
                                     </div>
                                     <div class="text">
                                         <h2><?php echo $total_paket_soal->total_paket_soal; ?></h2>
@@ -35,6 +35,21 @@
                                     <div class="text">
                                         <h2><?php echo $total_peserta->total_peserta; ?></h2>
                                         <span>Peserta</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					<div class="col-sm-6 col-lg-3">
+                        <div class="overview-item overview-item--c4">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="zmdi zmdi-flag"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2><?php echo $total_event->total_event; ?></h2>
+                                        <span>Event</span>
                                     </div>
                                 </div>
                             </div>

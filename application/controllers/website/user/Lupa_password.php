@@ -37,11 +37,22 @@ class Lupa_password extends CI_Controller {
     */
 
     public function lupa_password(){
-        $this->load->view('website/user/login/lupa_password/content');
+		$event_prefix = $this->uri->segment(2);
+
+		if ($event_prefix != "" || $event_prefix != null) {
+			$data['event_prefix'] = $event_prefix;
+			$data['event_url'] = 'event/'.$event_prefix;
+		} else {
+			$data['event_prefix'] = "";
+			$data['event_url'] = "register";
+		}
+
+        $this->load->view('website/user/login/lupa_password/content', $data);
     }
 
     public function submit_lupa_password(){
         $username = $this->input->post('username', TRUE);
+        $prefix_url = $this->input->post('prefix_url', TRUE);
         $check_username = $this->user->get_checking_username($username);
         $usernameid = $this->user->get_id_by_username($username);
       
@@ -67,11 +78,20 @@ class Lupa_password extends CI_Controller {
             $update = $this->general->update_data($tbl, $data, $userid);
 
             $this->session->set_flashdata('success', 'Password baru sudah di kirim via email, silahkan cek email!');
-      
-            redirect("login");
+			
+			if ($prefix_url != "") {
+				redirect("event/login/".$prefix_url);
+			} else {
+				redirect("login");
+			}
         } else {
             $this->session->set_flashdata('error', 'Email yang anda masukkan tidak terdaftar!');
-            redirect("lupa-password");
+
+			if ($prefix_url != "") {
+				redirect("lupa-password/".$prefix_url);
+			} else {
+				redirect("lupa-password");
+			}
         }
     }
 }

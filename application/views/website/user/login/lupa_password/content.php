@@ -131,6 +131,7 @@
             <div class="col-md-7 col-lg-6 ml-auto">
                 <form id="lupa_form" name="lupa_form" action="<?php echo base_url(); ?>website/user/Lupa_password/submit_lupa_password" class="form-register" method="POST" enctype="multipart/form-data" onsubmit="return(validate_register());">
                     <input type="hidden" id="csrf-hash-form" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" style="display: none">
+                    <input type="hidden" id="prefix_url" name="prefix_url" value="<?=@$event_prefix;?>" style="display: none">
                     <div class="row">
                         <!-- Email Address -->
                         <div class="col-lg-12">
@@ -161,7 +162,7 @@
 
                         <!-- Already Registered -->
                         <div class="text-center w-100">
-                            <p class="text-muted font-weight-bold fs-18">Belum Punya Akun? <a href="<?=base_url()?>register" class="text-primary ml-2">Daftar</a></p>
+                            <p class="text-muted font-weight-bold fs-18">Belum Punya Akun? <a href="<?=base_url()?><?= $event_url ?>" class="text-primary ml-2">Daftar</a></p>
                         </div>
 
                     </div>
@@ -216,15 +217,19 @@
             "escapeHtml": "true"
         }
 
-        <?php if($this->session->flashdata('success')){ ?>
-            toastr.success("<?php echo $this->session->flashdata('success'); ?>");
-        <?php }else if($this->session->flashdata('error')){  ?>
-            toastr.error("<?php echo $this->session->flashdata('error'); ?>");
-        <?php }else if($this->session->flashdata('warning')){  ?>
-            toastr.warning("<?php echo $this->session->flashdata('warning'); ?>");
-        <?php }else if($this->session->flashdata('info')){  ?>
-            toastr.info("<?php echo $this->session->flashdata('info'); ?>");
-        <?php } ?>
+        <?php if ($this->session->flashdata('success')) { ?>
+			toastr.success("<?php echo $this->session->flashdata('success'); ?>");
+			<?php $this->session->unset_userdata('success'); ?>
+		<?php } else if ($this->session->flashdata('error')) {  ?>
+			toastr.error("<?php echo $this->session->flashdata('error'); ?>");
+			<?php $this->session->unset_userdata('error'); ?>
+		<?php } else if ($this->session->flashdata('warning')) {  ?>
+			toastr.warning("<?php echo $this->session->flashdata('warning'); ?>");
+			<?php $this->session->unset_userdata('warning'); ?>
+		<?php } else if ($this->session->flashdata('info')) {  ?>
+			toastr.info("<?php echo $this->session->flashdata('info'); ?>");
+			<?php $this->session->unset_userdata('info'); ?>
+		<?php } ?>
     </script>
 </body>
 </html>
