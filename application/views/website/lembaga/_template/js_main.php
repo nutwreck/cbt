@@ -21,8 +21,9 @@
     <!-- pop up -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
-    <script> /* Universal Config */
-        var base_url = '<?=base_url()?>';
+    <script>
+        /* Universal Config */
+        var base_url = '<?= base_url() ?>';
         var csrfname = '<?= $this->security->get_csrf_token_name() ?>';
     </script>
 
@@ -45,18 +46,18 @@
             "hideMethod": "fadeOut"
         }
 
-        <?php if($this->session->flashdata('success')){ ?>
+        <?php if ($this->session->flashdata('success')) { ?>
             toastr.success("<?php echo $this->session->flashdata('success'); ?>");
-			<?php $this->session->unset_userdata('success'); ?>
-        <?php }else if($this->session->flashdata('error')){  ?>
+            <?php $this->session->unset_userdata('success'); ?>
+        <?php } else if ($this->session->flashdata('error')) {  ?>
             toastr.error("<?php echo $this->session->flashdata('error'); ?>");
-			<?php $this->session->unset_userdata('error'); ?>
-        <?php }else if($this->session->flashdata('warning')){  ?>
+            <?php $this->session->unset_userdata('error'); ?>
+        <?php } else if ($this->session->flashdata('warning')) {  ?>
             toastr.warning("<?php echo $this->session->flashdata('warning'); ?>");
-			<?php $this->session->unset_userdata('warning'); ?>
-        <?php }else if($this->session->flashdata('info')){  ?>
+            <?php $this->session->unset_userdata('warning'); ?>
+        <?php } else if ($this->session->flashdata('info')) {  ?>
             toastr.info("<?php echo $this->session->flashdata('info'); ?>");
-			<?php $this->session->unset_userdata('info'); ?>
+            <?php $this->session->unset_userdata('info'); ?>
         <?php } ?>
     </script>
 

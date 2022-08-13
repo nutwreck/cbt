@@ -45,6 +45,7 @@
                         <div class="text-center">
                             <h5 class="sisawaktu-title font-poppins">Sisa Waktu</h5>
                             <span class="sisawaktu font-arial-bold" data-time="<?=$waktu_selesai?>"></span>
+                            <input type="hidden" id="waktusekarang" value="<?=$waktu_sekarang?>">
                             <div class="row mt-3">
                                 <div class="col">
                                     <button id="button-nav" class="btn btn-md btn-primary" onclick="toggle_soal()"><i id="toogle-navigasi-ico" class="fa fa-chevron-circle-up" aria-hidden="true"></i> Navigasi</button>

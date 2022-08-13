@@ -158,7 +158,7 @@
                                         </div>
                                         <div class="alert alert-info">
                                             <p>
-                                                Konfigurasi <b>mode jawaban</b> yang perlu disetting jika nantinya memerlukan soal tipe <b>pilihan ganda</b>.
+                                                Konfigurasi <b>mode jawaban</b> yang perlu disetting jika nantinya memerlukan soal tipe <b>pilihan ganda</b>. Jika memilih <b>FLEXIBLE</b> pilihan jawaban bisa diatur sendiri maksimal sampai pilihan jawaban <b>"J"</b>
                                             </p>
                                         </div>
                                     </div>

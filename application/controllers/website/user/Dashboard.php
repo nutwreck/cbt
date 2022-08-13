@@ -1,15 +1,18 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Dashboard extends CI_Controller {
+class Dashboard extends CI_Controller
+{
 
-    public function __construct(){
+    public function __construct()
+    {
         parent::__construct();
-        if (!$this->session->has_userdata('has_login_user')){
+        if (!$this->session->has_userdata('has_login_user')) {
             redirect('login');
         }
-        $this->load->model('General','general');
-        $this->load->model('Tes_online_model','tes');
+
+        $this->load->model('General', 'general');
+        $this->load->model('Tes_online_model', 'tes');
     }
 
     /*
@@ -34,7 +37,8 @@ class Dashboard extends CI_Controller {
     |
     */
 
-    private function _generate_view($view, $data){
+    private function _generate_view($view, $data)
+    {
         $this->load->view('website/user/_template/header', $data['title_header']);
         $this->load->view($view['css_additional']);
         $this->load->view('website/user/_template/content');
@@ -45,14 +49,15 @@ class Dashboard extends CI_Controller {
         $this->load->view('website/user/_template/footer');
     }
 
-    private function generate_string($input, $strength = 16) {
+    private function generate_string($input, $strength = 16)
+    {
         $input_length = strlen($input);
         $random_string = '';
-        for($i = 0; $i < $strength; $i++) {
+        for ($i = 0; $i < $strength; $i++) {
             $random_character = $input[mt_rand(0, $input_length - 1)];
             $random_string .= $random_character;
         }
-    
+
         return $random_string;
     }
 
@@ -62,7 +67,8 @@ class Dashboard extends CI_Controller {
     |
     */
 
-    public function index(){ //
+    public function index()
+    {
         $permitted_chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         $generate_string = $this->generate_string($permitted_chars, 175);
 
@@ -81,7 +87,8 @@ class Dashboard extends CI_Controller {
         $this->_generate_view($view, $data);
     }
 
-    public function history_ujian(){
+    public function history_ujian()
+    {
         $permitted_chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         $generate_string = $this->generate_string($permitted_chars, 175);
 
@@ -100,5 +107,4 @@ class Dashboard extends CI_Controller {
         //get function view website
         $this->_generate_view($view, $data);
     }
-
 }

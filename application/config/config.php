@@ -1,7 +1,5 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-date_default_timezone_set('Asia/Jakarta');
-setlocale(LC_ALL, 'IND');
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +25,7 @@ setlocale(LC_ALL, 'IND');
 | Choose Environment Type 'Local' or 'Server'.
 |
 */
-$env_type = 'Local';
+$env_type = 'Server';
 
 if ($env_type == 'Local') {
 	$root = "http://localhost/cbt/";
@@ -491,7 +489,7 @@ $config['csrf_token_name'] = 'csrf_token_nutwreck';
 $config['csrf_cookie_name'] = 'csrf_cookie_nutwreck';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = TRUE;
-$config['csrf_exclude_uris'] = array('website/lembaga/Tes_online/get_peserta_by_select', 'website/user/Ujian/simpan_satu', 'website/user/Ujian/open_group_soal', 'website/lembaga/User/user_multiple_delete_all', 'admin/invoice-all', 'admin/invoice-confirm-all', 'admin/invoice-success-all', 'admin/invoice-expired-all', 'website/user/Ujian/buka_group', 'website/user/Ujian/simpan_akhir', 'website/lembaga/Tes_online/sesi_peserta_multiple_delete', 'website/lembaga/Tes_online/get_count_free_buku', 'website/user/Buku/buka_group', 'website/user/Buku/simpan_satu', 'website/user/Buku/simpan_akhir', 'website/lembaga/Tes_online/submit_search_soal', 'website/user/Ujian/disable_ujian', 'website/lembaga/Management/event_check_prefix', 'admin/participants', 'admin/report-ujian'); /* website/lembaga/Tes_online/editor_paket_soal */
+$config['csrf_exclude_uris'] = array('website/lembaga/Tes_online/get_peserta_by_select', 'website/user/Ujian/simpan_satu', 'website/user/Ujian/open_group_soal', 'website/lembaga/User/user_multiple_delete_all', 'admin/invoice-all', 'admin/invoice-confirm-all', 'admin/invoice-success-all', 'admin/invoice-expired-all', 'website/user/Ujian/buka_group', 'website/user/Ujian/simpan_akhir', 'website/lembaga/Tes_online/sesi_peserta_multiple_delete', 'website/lembaga/Tes_online/get_count_free_buku', 'website/user/Buku/buka_group', 'website/user/Buku/simpan_satu', 'website/user/Buku/simpan_akhir', 'website/lembaga/Tes_online/submit_search_soal', 'website/user/Ujian/disable_ujian', 'website/lembaga/Management/event_check_prefix', 'admin/participants', 'admin/report-ujian', 'website/lembaga/Tes_online/tambahan_waktu_peserta_ujian'); /* website/lembaga/Tes_online/editor_paket_soal */
 
 /*
 |--------------------------------------------------------------------------
@@ -514,19 +512,6 @@ $config['csrf_exclude_uris'] = array('website/lembaga/Tes_online/get_peserta_by_
 |
 */
 $config['compress_output'] = FALSE;
-
-/*
-|--------------------------------------------------------------------------
-| Master Time Reference
-|--------------------------------------------------------------------------
-|
-| Options are 'local' or any PHP supported timezone. This preference tells
-| the system whether to use your server's local time as the master 'now'
-| reference, or convert it to the configured one timezone. See the 'date
-| helper' page of the user guide for information regarding date handling.
-|
-*/
-$config['time_reference'] = 'local';
 
 /*
 |--------------------------------------------------------------------------

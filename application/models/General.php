@@ -10,7 +10,11 @@ class General extends CI_Model
 	}
 	public function get_data_by_id($tbl, $id)
 	{
-		return $this->db->get_where($tbl, array('id' => $id))->result();
+		return $this->db->get_where($tbl, array('id' => $id))->row();
+	}
+	public function get_data_by_id_multi($tbl, $ids)
+	{
+		return $this->db->get_where($tbl, $ids)->row();
 	}
 	public function input_data($tbl, $datas)
 	{

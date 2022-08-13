@@ -3,6 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Login extends CI_Controller
 {
+	private $tbl_user = 'user';
 
 	public function __construct()
 	{
@@ -48,6 +49,20 @@ class Login extends CI_Controller
 		}
 	}
 
+	private function saved_login($timezone, $user_id)
+	{
+		$datetime_login = new DateTime(date('Y-m-d H:i:s'));
+		$timezones = $datetime_login->setTimezone(new DateTimeZone($timezone));
+		$datetime_logins = $timezones->format(DateTime::ATOM); //ISO8601
+		$login_datas = array(
+			'timezone' => $timezone,
+			'last_login' => $datetime_logins
+		);
+		$this->general->update_data($this->tbl_user, $login_datas, $user_id);
+
+		return true;
+	}
+
 	/*
     |
     | END FUNCTION IN THIS CONTROLLER
@@ -74,6 +89,7 @@ class Login extends CI_Controller
 
 		$username = $this->input->post('email', TRUE);
 		$password = $this->input->post('password', TRUE);
+		$timezone = $this->input->post('timezone', TRUE);
 
 		$check_username = $this->user->get_checking_username($username);
 
@@ -105,6 +121,8 @@ class Login extends CI_Controller
 		if ($input) {
 			$data['login_user'] = $this->general->login_user($data);
 
+			$this->saved_login($timezone, $data['login_user'][0]['user_id']);
+
 			$user_datas = array(
 				'user_id' => $data['login_user'][0]['user_id'],
 				'username' => $data['login_user'][0]['username'],
@@ -134,12 +152,15 @@ class Login extends CI_Controller
 	{
 		$data['username'] = $this->input->post('username', TRUE);
 		$data['password'] = $this->input->post('password', TRUE);
+		$timezone = $this->input->post('timezone', TRUE);
 
 		$data['login_user'] = $this->general->login_user($data);
 
 		$decode = $this->encryption->decrypt($data['login_user'][0]['password']);
 
 		if ($data['login_user'] && $decode == $data['password']) {
+			$this->saved_login($timezone, $data['login_user'][0]['user_id']);
+
 			$user_datas = array(
 				'user_id' => $data['login_user'][0]['user_id'],
 				'username' => $data['login_user'][0]['username'],

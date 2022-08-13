@@ -3,12 +3,12 @@
     <div class="section__content section__content--p30">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-4">
                     <div class="overview-wrap">
                         <h2 class="title-1">Daftar Soal</h2>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-6 button-config">
+                <div class="col-sm-12 col-md-8 button-config">
                     <p id="paket_soal_id" style="display:none;"><?=$id_paket_soal?></p>
                     <p id="bank_soal_first_id" style="display:none;"><?=!empty($soal_first_list) ? $soal_first_list : ''?></p>
                     <button class="btn btn-sm btn-outline-secondary m-1" onclick="return toogle_search()">Search</button>
@@ -71,6 +71,9 @@
                             </tr>
                             <tr>
                                 <td width="20%"><p>Jumlah Soal</p></td><td width="2%"><p>:</p></td><td><?=$paket_soal->total_soal == 0 ? '<p class="text-danger">Belum ada soal</p>' : $paket_soal->total_soal?></td>
+                            </tr>
+                            <tr>
+                                <td width="20%"><p><b>Noted</b></p></td><td width="2%"><p>:</p></td><td><b>Jika paket soal ini digunakan dalam sesi pelaksanaan dan sedang berlangsung, Harap tidak melakukkan delete atau edit jawaban. Lakukkan edit atau delete jawaban jika report ujian sudah diunduh.</b></td>
                             </tr>
                         </table>
                     </div>

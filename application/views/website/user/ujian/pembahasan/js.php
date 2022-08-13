@@ -1,15 +1,16 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js" integrity="sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js" integrity="sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
 
-<script> //DOCUMENT SET ROOT & FUNGSI2 LEMBAR UJIAN
-    var id_tes          = "<?=$ujian_id; ?>";
-    var widget          = $(".step");
-    var total_widget    = widget.length;
+<script>
+    //DOCUMENT SET ROOT & FUNGSI2 LEMBAR UJIAN
+    var id_tes = "<?= $ujian_id; ?>";
+    var widget = $(".step");
+    var total_widget = widget.length;
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         var width = screen.width;
 
-        if(width >= 768){
+        if (width >= 768) {
             //Sidebar hidden
             $('#sidebar, #content').toggleClass('active');
             $('.collapse.in').toggleClass('in');
@@ -21,31 +22,41 @@
 
         $("#widget_1").show();
 
-        $("html, body").animate({ 
-            scrollTop: $('.lembar_pembahasan').offset().top 
+        $("html, body").animate({
+            scrollTop: $('.lembar_pembahasan').offset().top
         }, 1000);
     });
 
     function getFormData($form) {
         var unindexed_array = $form.serializeArray();
         var indexed_array = {};
-        $.map(unindexed_array, function (n, i) {
+        $.map(unindexed_array, function(n, i) {
             indexed_array[n['name']] = n['value'];
         });
         return indexed_array;
     }
 
-    function number_opsi_text(jawab){
-        if(jawab == 1){
+    function number_opsi_text(jawab) {
+        if (jawab == 1) {
             var jawab_text = 'A';
-        }else if(jawab == 2){
+        } else if (jawab == 2) {
             var jawab_text = 'B';
-        }else if(jawab == 3){
+        } else if (jawab == 3) {
             var jawab_text = 'C';
-        }else if(jawab == 4){
+        } else if (jawab == 4) {
             var jawab_text = 'D';
-        }else if(jawab == 5){
+        } else if (jawab == 5) {
             var jawab_text = 'E';
+        } else if (jawab == 5) {
+            var jawab_text = 'F';
+        } else if (jawab == 7) {
+            var jawab_text = 'G';
+        } else if (jawab == 8) {
+            var jawab_text = 'H';
+        } else if (jawab == 9) {
+            var jawab_text = 'I';
+        } else if (jawab == 10) {
+            var jawab_text = 'J';
         }
 
         return jawab_text;
@@ -59,17 +70,17 @@
 
         $("#soalke").html(id_widget);
 
-        var w = document.getElementById("group_petunjuk_"+id_widget); 
+        var w = document.getElementById("group_petunjuk_" + id_widget);
 
-        if(w != null){
+        if (w != null) {
             buka_group(id_widget);
         } else {
             $(".step").hide();
             $("#widget_" + id_widget).show();
         }
 
-        $("html, body").animate({ 
-            scrollTop: $('.lembar_pembahasan').offset().top 
+        $("html, body").animate({
+            scrollTop: $('.lembar_pembahasan').offset().top
         }, 1000);
     }
 
@@ -81,9 +92,9 @@
 
         $("#soalke").html(id_widget);
 
-        var w = document.getElementById("group_petunjuk_"+id_widget); 
+        var w = document.getElementById("group_petunjuk_" + id_widget);
 
-        if(w != null){
+        if (w != null) {
             buka_group(id_widget);
         } else {
             $(".step").hide();
@@ -92,8 +103,8 @@
 
         before_widget = id_widget;
 
-        $("html, body").animate({ 
-            scrollTop: $('.lembar_pembahasan').offset().top 
+        $("html, body").animate({
+            scrollTop: $('.lembar_pembahasan').offset().top
         }, 1000);
     }
 
@@ -109,11 +120,11 @@
 
         $(".step").hide();
         $("#widget_" + id_widget).show();
-        
+
         before_widget = id_widget;
 
-        $("html, body").animate({ 
-            scrollTop: $('.lembar_pembahasan').offset().top 
+        $("html, body").animate({
+            scrollTop: $('.lembar_pembahasan').offset().top
         }, 1000);
     }
 
@@ -139,9 +150,9 @@
         $(".ragu_ragu").attr('rel', (berikutnya));
         cek_status_ragu(berikutnya);
 
-        var w = document.getElementById("group_petunjuk_"+berikutnya); 
+        var w = document.getElementById("group_petunjuk_" + berikutnya);
 
-        if(w != null){
+        if (w != null) {
             buka_group(berikutnya);
         } else {
             $(".step").hide();
@@ -161,9 +172,9 @@
         $(".ragu_ragu").attr('rel', (back));
         cek_status_ragu(back);
 
-        var w = document.getElementById("group_petunjuk_"+back); 
+        var w = document.getElementById("group_petunjuk_" + back);
 
-        if(w != null){
+        if (w != null) {
             buka_group(back);
         } else {
             $(".step").hide();
@@ -189,7 +200,7 @@
         cek_status_ragu(id_step);
     }
 
-    function buka_group(urutan){
+    function buka_group(urutan) {
         var f_asal = $("#ujian");
         var form = getFormData(f_asal);
         var gr = 'id_group_soal_' + urutan;
@@ -199,9 +210,9 @@
         $.ajax({
             type: "POST",
             url: base_url + "website/user/Ujian/buka_group",
-            data: 'id_group='+group+'&urutan='+urutan,
+            data: 'id_group=' + group + '&urutan=' + urutan,
             dataType: 'json',
-            success: function (data) {
+            success: function(data) {
                 // Add response in Modal body
                 $('#title-group').html(data.judul);
                 $('#body-group').html(data.petunjuk);
@@ -210,8 +221,8 @@
                 // Display Modal
                 $('#petunjukModal').modal('show');
 
-                $("html, body").animate({ 
-                    scrollTop: $('.lembar_pembahasan').offset().top 
+                $("html, body").animate({
+                    scrollTop: $('.lembar_pembahasan').offset().top
                 }, 1000);
             }
         });
@@ -220,14 +231,13 @@
     function simpan_sementara() {
         var f_asal = $("#ujian");
         var form = getFormData(f_asal);
-        //form = JSON.stringify(form);
         var jml_soal = form.jml_soal;
         jml_soal = parseInt(jml_soal);
 
         var hasil_jawaban = "";
         var group_number = 1;
         var sub_group_before = "";
-        
+
         for (var i = 1; i < jml_soal; i++) {
             //iniatial group mode jawaban
             var gr_m = 'id_group_mode_jwb' + i;
@@ -245,8 +255,12 @@
             var sub_group_after = sub_group_name_split[0];
             var group_name_split = group_name.split(" ");
             var group_name_first = group_name_split[0];
+            var toj = 'tipe_opsi_jawaban_' + i;
+            var omj = 'opsi_multi_jawaban_' + i; //jawaban benar atau salah untuk multi
+            var tipe_opsi_jwb = form[toj];
+            var opsi_multi_jwb = form[omj];
 
-            if(group_m == 1){ //1 Pilihan Ganda 2 Essay
+            if (group_m == 1) { //1 Pilihan Ganda 2 Essay
                 var idx = 'key_' + i;
                 var jwb_exp = form[idx];
                 var jawab_pro = jwb_exp == undefined ? '' : jwb_exp.split('|');
@@ -261,37 +275,47 @@
             var times = '<i style="margin-left:3px;" class="fa fa-times fa-xs"></i>';
 
             //Parent group jika ada
-            if(group != group_before && group != 0) {
-                hasil_jawaban += '<a id="group_petunjuk_'+(i)+'" class="btn btn-primary btn-block text-white btn_group" onclick="return buka_group(' + (i) + ');">' + group_name + "</a>";
+            if (group != group_before && group != 0) {
+                hasil_jawaban += '<a id="group_petunjuk_' + (i) + '" class="btn btn-primary btn-block text-white btn_group" onclick="return buka_group(' + (i) + ');">' + group_name + "</a>";
                 group_number++;
             }
 
             //Sub group
-            if(sub_group_after != sub_group_before && sub_group_after != group_name_first) {
-                hasil_jawaban += '<div class="d-flex justify-content-center"><a id="sub_group_petunjuk_'+(i)+'" class="btn btn-secondary btn-block text-white disabled btn_sub_group">' + sub_group_after + "</a></div>";
+            if (sub_group_after != sub_group_before && sub_group_after != group_name_first) {
+                hasil_jawaban += '<div class="d-flex justify-content-center"><a id="sub_group_petunjuk_' + (i) + '" class="btn btn-secondary btn-block text-white disabled btn_sub_group">' + sub_group_after + "</a></div>";
             }
 
-            if (jawab != undefined){
-                if(jawab_benar == jawab){
-                    if (ragu == "Y") {
-                        if (jawab == "-") {
-                            hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-danger btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
+            if (tipe_opsi_jwb == 1) { //Single
+                if (jawab != undefined) {
+                    if (jawab_benar == jawab) {
+                        if (ragu == "Y") {
+                            if (jawab == "-") {
+                                hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-danger btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
+                            } else {
+                                hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-warning btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
+                            }
                         } else {
-                            hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-warning btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
+                            if (jawab == "-") {
+                                hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-danger btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
+                            } else {
+                                hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-success btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
+                            }
                         }
                     } else {
-                        if (jawab == "-") {
-                            hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-danger btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
-                        } else {
-                            hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-success btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
-                        }
+                        hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-danger btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
                     }
                 } else {
                     hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-danger btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
                 }
-            } else {
-                hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-danger btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
+            } else if (tipe_opsi_jwb == 2) { //Multi
+                console.log(opsi_multi_jwb)
+                if (opsi_multi_jwb == 1) { //Benar
+                    hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-success btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
+                } else { //Salah
+                    hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn button-round btn-danger btn_soal" onclick="return buka(' + (i) + ');">' + (i) + "</a>";
+                }
             }
+
 
             var group_before = group;
             var sub_group_before = sub_group_after;
@@ -303,23 +327,23 @@
 
 <!-- Increase Decrease Font Lembar Soal -->
 <script>
-    function _increase(){
+    function _increase() {
         var fontSize = $('.card-text').css('font-size');
-        var newFontSize = parseInt(fontSize)+1;
-        
-        $('.card-text').css('font-size', newFontSize+'px')
-        $('.huruf_opsi').css('font-size', newFontSize+'px')
+        var newFontSize = parseInt(fontSize) + 1;
+
+        $('.card-text').css('font-size', newFontSize + 'px')
+        $('.huruf_opsi').css('font-size', newFontSize + 'px')
     }
 
-    function _decrease(){
+    function _decrease() {
         var fontSize = $('.card-text').css('font-size');
-        var newFontSize = parseInt(fontSize)-1;
-        
-        $('.card-text').css('font-size', newFontSize+'px')
-        $('.huruf_opsi').css('font-size', newFontSize+'px')
+        var newFontSize = parseInt(fontSize) - 1;
+
+        $('.card-text').css('font-size', newFontSize + 'px')
+        $('.huruf_opsi').css('font-size', newFontSize + 'px')
     }
 
-    function _reset(){
+    function _reset() {
         $('.card-text').css('font-size', '16px')
         $('.huruf_opsi').css('font-size', '16px')
     }

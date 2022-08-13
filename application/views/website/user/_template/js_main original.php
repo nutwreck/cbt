@@ -22,10 +22,11 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
 
-    <script type="text/javascript"> //DOCUMENT SET ROOT
+    <script type="text/javascript">
+        //DOCUMENT SET ROOT
         $(document).ready(function() {
             //Offline JS check koneksi internet user
-            Offline.options = { 
+            Offline.options = {
                 // to check the connection status immediatly on page load.
                 checkOnLoad: false,
 
@@ -48,8 +49,7 @@
     </script>
 
     <script type="text/javascript">
-
-        var base_url = '<?=base_url()?>'; //GLOBAL CONFIG UNTUK BASE URL SEMUA YANG DIPAKAI DI JS
+        var base_url = '<?= base_url() ?>'; //GLOBAL CONFIG UNTUK BASE URL SEMUA YANG DIPAKAI DI JS
 
         //SISA WAKTU UJIAN / TIMER
         function sisawaktu(t) {
@@ -84,7 +84,8 @@
         }
     </script>
 
-    <script type="text/javascript"> //POP UP
+    <script type="text/javascript">
+        //POP UP
         toastr.options = {
             "closeButton": true,
             "debug": false,
@@ -104,24 +105,28 @@
             "escapeHtml": "true"
         }
 
-        <?php if($this->session->flashdata('success')){ ?>
+        <?php if ($this->session->flashdata('success')) { ?>
             toastr.success("<?php echo $this->session->flashdata('success'); ?>");
-        <?php }else if($this->session->flashdata('error')){  ?>
+            <?php $this->session->unset_userdata('success'); ?>
+        <?php } else if ($this->session->flashdata('error')) {  ?>
             toastr.error("<?php echo $this->session->flashdata('error'); ?>");
-        <?php }else if($this->session->flashdata('warning')){  ?>
+            <?php $this->session->unset_userdata('error'); ?>
+        <?php } else if ($this->session->flashdata('warning')) {  ?>
             toastr.warning("<?php echo $this->session->flashdata('warning'); ?>");
-        <?php }else if($this->session->flashdata('info')){  ?>
+            <?php $this->session->unset_userdata('warning'); ?>
+        <?php } else if ($this->session->flashdata('info')) {  ?>
             toastr.info("<?php echo $this->session->flashdata('info'); ?>");
+            <?php $this->session->unset_userdata('info'); ?>
         <?php } ?>
     </script>
 
     <script type="text/javascript">
-        $(document).ready(function () {
+        $(document).ready(function() {
             $("#sidebar").mCustomScrollbar({
                 theme: "minimal"
             });
 
-            $('#sidebarCollapse').on('click', function () {
+            $('#sidebarCollapse').on('click', function() {
                 $('#sidebar, #content').toggleClass('active');
                 $('.collapse.in').toggleClass('in');
                 $('a[aria-expanded=true]').attr('aria-expanded', 'false');

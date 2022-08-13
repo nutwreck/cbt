@@ -89,7 +89,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('url', 'file', 'tanggal_helper', 'form', 'rupiah');
+$autoload['helper'] = array('url', 'file', 'tanggal_helper', 'form', 'rupiah_helper');
 
 /*
 | -------------------------------------------------------------------
@@ -103,7 +103,7 @@ $autoload['helper'] = array('url', 'file', 'tanggal_helper', 'form', 'rupiah');
 | config files.  Otherwise, leave it blank.
 |
 */
-$autoload['config'] = array();
+$autoload['config'] = array('timezone_app');
 
 /*
 | -------------------------------------------------------------------

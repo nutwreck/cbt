@@ -21,6 +21,8 @@ class Tes_online extends CI_Controller
 	private $tbl_sesi_pelaksanaan = 'sesi_pelaksanaan'; //SET SESI PELAKSANAAN
 	private $tbl_sesi_pelaksanaan_komposisi = 'sesi_pelaksanaan_komposisi'; //SET SESI PELAKSANAAN KOMPOSISI
 	private $tbl_sesi_pelaksanaan_user = 'sesi_pelaksanaan_user';
+	private $tbl_jawaban = 'jawaban'; //SET TABEL JAWABAN
+	private $tbl_ujian = 'ujian'; //SET UJIAN
 
 	public function __construct()
 	{
@@ -115,6 +117,17 @@ class Tes_online extends CI_Controller
 			redirect($urly);
 		} else {
 			$this->session->set_flashdata('error', 'Data gagal diaktifkan!');
+			redirect($urlx);
+		}
+	}
+
+	private function reset_end($reset, $urly, $urlx)
+	{
+		if (!empty($reset)) {
+			$this->session->set_flashdata('success', 'Data berhasil direset');
+			redirect($urly);
+		} else {
+			$this->session->set_flashdata('error', 'Data gagal direset!');
 			redirect($urlx);
 		}
 	}
@@ -654,82 +667,99 @@ class Tes_online extends CI_Controller
 		$soal = '';
 		$jawaban = '';
 
-		$paket_soal_id = $this->input->post('paket_soal_id');
-		$_token = $this->input->post('_token', TRUE);
-		$validation = config_item('_token_tampil_soal');
-		$bank_soal_id = $this->input->post('bank_soal_id', TRUE);
-		$bank_soal_id_crypt = urlencode(base64_encode($bank_soal_id));
-		$nomor_soal = $this->input->post('nomor_soal', TRUE);
-		$id_paket_soal = base64_decode(urldecode($paket_soal_id));
+		try {
+			$paket_soal_id = $this->input->post('paket_soal_id');
+			$_token = $this->input->post('_token', TRUE);
+			$validation = config_item('_token_tampil_soal');
+			$bank_soal_id = $this->input->post('bank_soal_id', TRUE);
+			$bank_soal_id_crypt = urlencode(base64_encode($bank_soal_id));
+			$nomor_soal = $this->input->post('nomor_soal', TRUE);
+			$id_paket_soal = base64_decode(urldecode($paket_soal_id));
 
-		if ($validation != $_token || empty($_token)) {
-			$this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
-			redirect('admin/list-soal/' . $paket_soal_id);
-		} else {
-			$soal = $this->tes->get_soal_by_id($id_paket_soal, $bank_soal_id);
-			$jawaban = $this->tes->get_jawaban_by_id($bank_soal_id, $id_paket_soal);
+			if ($validation != $_token || empty($_token)) {
+				$this->session->set_flashdata('warning', 'Terjadi kesalahan lalu lintas data!');
+				redirect('admin/list-soal/' . $paket_soal_id);
+			} else {
+				$soal = $this->tes->get_soal_by_id($id_paket_soal, $bank_soal_id);
+				$jawaban = $this->tes->get_jawaban_by_id($bank_soal_id, $id_paket_soal);
 
-			$acak_soal_badge = $soal->is_acak_soal == 1 ? 'badge-success' : 'badge-danger';
-			$acak_soal_icon = $soal->is_acak_soal == 1 ? 'fa-check' : 'fa-close';
-			$acak_jwb_badge = $soal->is_acak_jawaban == 1 ? 'badge-success' : 'badge-danger';
-			$acak_jwb_icon = $soal->is_acak_jawaban == 1 ? 'fa-check' : 'fa-close';
-			$cek_group_mode_jwb = $soal->group_mode_jwb_id == 1 ? '' : 'style="display:none;"'; //1 Pilihan ganda 2 essay
-			$bacaan_soal = $soal->isi_bacaan_soal <> 0 || !empty($soal->isi_bacaan_soal) ? $soal->isi_bacaan_soal . '<br />' : ''; // bacaan soal
-			$bacaan_soal_name = $soal->bacaan_soal_name <> 0 || !empty($soal->bacaan_soal_name) ? '<b>' . $soal->bacaan_soal_name . '</b><br />' : ''; // bacaan soal judul
-			$group_soal = $soal->group_soal_name <> 0 || !empty($soal->group_soal_name) ? '<div class="col-12 text-left"><span class="badge badge-success">Group Soal ' . $soal->group_soal_name . '</span></div>' : '';
-			$group_soal_petunjuk = $soal->group_soal_petunjuk <> 0 || !empty($soal->group_soal_petunjuk) ? $soal->group_soal_petunjuk . '<br />' : '';
-			$group_soal_audio = $soal->group_soal_audio <> 0 || !empty($soal->group_soal_audio) ? '<audio id="loop-limited" controls><source src="' . config_item('_dir_website') . '/lembaga/grandsbmptn/group_soal/group_' . $soal->paket_soal_id . '/' . $soal->group_soal_audio . '" type="' . $soal->group_soal_tipe_audio . '">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br />' : '';
-			$soal_audio = $soal->file <> 0 || !empty($soal->file) ? '<audio id="loop-limited" controls><source src="' . config_item('_dir_website') . '/lembaga/grandsbmptn/paket_soal/soal_' . $soal->paket_soal_id . '/' . $soal->file . '" type="' . $soal->tipe_file . '">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br />' : '';
-			$pembahasan = $soal->url_pembahasan <> '' || !empty($soal->url_pembahasan) || $soal->pembahasan <> '' || !empty($soal->pembahasan) ? '' : 'style="display:none;"';
+				$acak_soal_badge = $soal->is_acak_soal == 1 ? 'badge-success' : 'badge-danger';
+				$acak_soal_icon = $soal->is_acak_soal == 1 ? 'fa-check' : 'fa-close';
+				$acak_jwb_badge = $soal->is_acak_jawaban == 1 ? 'badge-success' : 'badge-danger';
+				$acak_jwb_icon = $soal->is_acak_jawaban == 1 ? 'fa-check' : 'fa-close';
+				$cek_group_mode_jwb = $soal->group_mode_jwb_id == 1 ? '' : 'style="display:none;"'; //1 Pilihan ganda 2 essay
+				$bacaan_soal = $soal->isi_bacaan_soal <> 0 || !empty($soal->isi_bacaan_soal) ? $soal->isi_bacaan_soal . '<br />' : ''; // bacaan soal
+				$bacaan_soal_name = $soal->bacaan_soal_name <> 0 || !empty($soal->bacaan_soal_name) ? '<b>' . $soal->bacaan_soal_name . '</b><br />' : ''; // bacaan soal judul
+				$group_soal = $soal->group_soal_name <> 0 || !empty($soal->group_soal_name) ? '<div class="col-12 text-left mt-1"><span class="badge badge-success">GROUP SOAL ' . $soal->group_soal_name . '</span></div>' : '';
+				$group_soal_petunjuk = $soal->group_soal_petunjuk <> 0 || !empty($soal->group_soal_petunjuk) ? $soal->group_soal_petunjuk . '<br />' : '';
+				$group_soal_audio = $soal->group_soal_audio <> 0 || !empty($soal->group_soal_audio) ? '<audio id="loop-limited" controls><source src="' . config_item('_dir_website') . '/lembaga/grandsbmptn/group_soal/group_' . $soal->paket_soal_id . '/' . $soal->group_soal_audio . '" type="' . $soal->group_soal_tipe_audio . '">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br />' : '';
+				$soal_audio = $soal->file <> 0 || !empty($soal->file) ? '<audio id="loop-limited" controls><source src="' . config_item('_dir_website') . '/lembaga/grandsbmptn/paket_soal/soal_' . $soal->paket_soal_id . '/' . $soal->file . '" type="' . $soal->tipe_file . '">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br />' : '';
+				$pembahasan = $soal->url_pembahasan <> '' || !empty($soal->url_pembahasan) || $soal->pembahasan <> '' || !empty($soal->pembahasan) ? 'badge-success' : 'badge-danger';
+				$icon_pembahasan = $pembahasan == 'badge-success' ? 'fa-check' : 'fa-close';
 
-			$header_soal = '
-            <div class="row">
-                <div class="col-8 p-1">
-                    <h5 class="text-white">
-                        <i class="fa fa-braille" aria-hidden="true"></i> Soal No ' . $nomor_soal . '
-                        <span class="badge badge-success">' . $soal->group_mode_jwb_name . '</span>
-                        <span class="badge ' . $acak_soal_badge . '">
-                            <i class="fa ' . $acak_soal_icon . '" aria-hidden="true"></i> Acak Soal
-                        </span>
-                        <span ' . $cek_group_mode_jwb . ' class="badge ' . $acak_jwb_badge . '">
-                            <i class="fa ' . $acak_jwb_icon . '" aria-hidden="true"></i> Acak Jawaban
-                        </span>
-                        <span ' . $pembahasan . ' class="badge badge-success">
-                            <i class="fa fa-check" aria-hidden="true"></i> Ada Pembahasan
-                        </span>
-                    </h5>
-                </div>
-                <div class="col-4 text-right">
-                        <a href="' . base_url() . 'admin/edit-soal/' . $paket_soal_id . '/' . $bank_soal_id_crypt . '/' . $nomor_soal . '" class="btn btn-sm btn-success" title="Edit Soal"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                        <a href="' . base_url() . 'admin/disable-soal/' . $paket_soal_id . '/' . $bank_soal_id_crypt . '/' . $nomor_soal . '" class="btn btn-sm btn-danger" title="Hapus Soal" onclick="return confirm(' . "'Apakah kamu yakin menghapus soal no $nomor_soal ? Setelah soal ini dihapus otomatis sistem akan mengurutkan urutan soal kembali'" . ')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                </div>
-                ' . $group_soal . '
-            </div>';
+				$header_soal = '
+				<div class="row">
+					<div class="col-10">
+						<h5 class="text-white">
+							<i class="fa fa-braille" aria-hidden="true"></i> Soal No ' . $nomor_soal . '
+						</h5>
+					</div>
+					<div class="col-2 text-right">
+							<a href="' . base_url() . 'admin/edit-soal/' . $paket_soal_id . '/' . $bank_soal_id_crypt . '/' . $nomor_soal . '" class="btn btn-sm btn-success" title="Edit Soal"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+							<a href="' . base_url() . 'admin/disable-soal/' . $paket_soal_id . '/' . $bank_soal_id_crypt . '/' . $nomor_soal . '" class="btn btn-sm btn-danger" title="Hapus Soal" onclick="return confirm(' . "'Apakah kamu yakin menghapus soal no $nomor_soal ? Setelah soal ini dihapus otomatis sistem akan mengurutkan urutan soal kembali'" . ')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+					</div>
+					<div class="col-12 text-left">
+						<h5 class="text-white">
+							<span class="badge badge-success">' . $soal->group_mode_jwb_name . '</span>
+							<span class="badge badge-success">' . strtoupper($soal->tipe_opsi_jawaban) . '</span>
+							<span class="badge ' . $acak_soal_badge . '">
+								<i class="fa ' . $acak_soal_icon . '" aria-hidden="true"></i> ACAK SOAL
+							</span>
+							<span ' . $cek_group_mode_jwb . ' class="badge ' . $acak_jwb_badge . '">
+								<i class="fa ' . $acak_jwb_icon . '" aria-hidden="true"></i> ACAK JAWABAN
+							</span>
+							<span class="badge ' . $pembahasan . '">
+								<i class="fa ' . $icon_pembahasan . '" aria-hidden="true"></i> PEMBAHASAN
+							</span>
+						</h5>
+					</div>
+					' . $group_soal . '
+				</div>';
 
-			$content_soal = '<div class="card-text text-justify">' . $group_soal_petunjuk . $group_soal_audio . $bacaan_soal_name . $bacaan_soal . $soal_audio . $soal->bank_soal_name . '</div>';
+				$content_soal = '<div class="card-text text-justify">' . $group_soal_petunjuk . $group_soal_audio . $bacaan_soal_name . $bacaan_soal . $soal_audio . $soal->bank_soal_name . '</div>';
 
-			$opsi = config_item('_def_opsi_jawaban');
-			foreach ($jawaban as $key_jawaban => $val_jawaban) {
-				$is_key = $val_jawaban->is_key == 1 ? 'checked' : 'disabled';
-				$jawaban_soal[] = '<div class="funkyradio-success">
-                        <input type="radio" id="opsi_' . $opsi . '" name="opsi" value="' . $val_jawaban->order . '" ' . $is_key . '> 
-                        <label for="opsi_' . $opsi . '">
-                            <div class="huruf_opsi">' . $opsi . '</div> 
-                            <div class="card-text">' . $val_jawaban->name . '</div>
-                        </label>
-                    </div>';
-				$opsi++;
-			};
+				$opsi = config_item('_def_opsi_jawaban');
+				foreach ($jawaban as $key_jawaban => $val_jawaban) {
+					$is_key = $val_jawaban->is_key == 1 ? 'checked' : 'disabled';
+					$jawaban_soal[] = '<div class="funkyradio-success">
+							<input type="checkbox" id="opsi_' . $opsi . '" name="opsi" value="' . $val_jawaban->order . '" ' . $is_key . '> 
+							<label for="opsi_' . $opsi . '">
+								<div class="huruf_opsi">' . $opsi . '</div> 
+								<div class="card-text">' . $val_jawaban->name . '</div>
+							</label>
+						</div>';
+					$opsi++;
+				};
 
+				$datas = array(
+					'status' => 'berhasil',
+					'header_soal' => $header_soal,
+					'content_soal' => $content_soal,
+					'jawaban_soal' => implode(" ", $jawaban_soal),
+					'csrf' => $this->security->get_csrf_hash()
+				);
+			}
+		} catch (Exception $e) {
 			$datas = array(
-				'header_soal' => $header_soal,
-				'content_soal' => $content_soal,
-				'jawaban_soal' => implode(" ", $jawaban_soal),
+				'status' => 'gagal',
+				'header_soal' => "",
+				'content_soal' => "",
+				'jawaban_soal' => "",
 				'csrf' => $this->security->get_csrf_hash()
 			);
-
-			echo json_encode($datas);
 		}
+
+		echo json_encode($datas);
 	}
 
 	public function add_soal($id_paket_soal)
@@ -778,6 +808,7 @@ class Tes_online extends CI_Controller
 		$data['tipe_kesulitan_id']  = $this->input->post('tipe_kesulitan', TRUE);
 		$data['is_acak_soal']  = $this->input->post('acak_soal', TRUE);
 		$data['is_acak_jawaban']  = $this->input->post('acak_jawaban', TRUE);
+		$data['is_opsi_jawaban']  = $this->input->post('opsi_jawaban', TRUE);
 		$data['group_soal_id']  = $this->input->post('group_soal_id', TRUE);
 		$data['bacaan_soal_id']  = $this->input->post('bacaan_soal_id', TRUE);
 		$data['file']  = $this->input->post('soal_audio', TRUE);
@@ -816,16 +847,20 @@ class Tes_online extends CI_Controller
 			if ($type_exam == 1) { //Tipe pilihan ganda memerlukan jawaban
 				$jawaban = $this->input->post('jawaban');
 				$skor_jawaban = $this->input->post('skor_jawaban', TRUE);
-				$tandai_jawaban  = $this->input->post('tanda_jawaban', TRUE);
+				$tandai_jawaban  = $this->input->post('tanda_jawaban');
 				$order = 1;
 				$datas = array();
 				foreach ($jawaban as $key => $value) {
+					$fix_jawaban = array_filter($tandai_jawaban, function ($number) use ($order) {
+						return (int) $number == $order;
+					});
+
 					$datas[]  = array(
 						'bank_soal_id' => $save_soal,
 						'order' => $order,
 						'name' => $jawaban[$key],
 						'score' => $skor_jawaban[$key],
-						'is_key' => $order == $tandai_jawaban ? 1 : 0,
+						'is_key' => count($fix_jawaban) > 0 ? 1 : 0,
 						'created_datetime' => date('Y-m-d H:i:s')
 					);
 					$order++;
@@ -906,6 +941,11 @@ class Tes_online extends CI_Controller
 		$C = '';
 		$D = '';
 		$E = '';
+		$F = '';
+		$G = '';
+		$H = '';
+		$I = '';
+		$J = '';
 		$url_pembahasan = '';
 		$isi_pembahasan = '';
 		$data = [];
@@ -942,19 +982,35 @@ class Tes_online extends CI_Controller
 						$kode_group_bacaan = strtoupper(trim($row[6]));
 						$acak_soal = trim($row[7]);
 						$acak_jawaban = trim($row[8]);
-						$A = trim($row[9]);
-						$B = trim($row[10]);
-						$C = trim($row[11]);
-						$D = trim($row[12]);
-						$E = trim($row[13]);
-						$url_pembahasan = trim($row[14]);
-						$isi_pembahasan = trim($row[15]);
+						$opsi_jawaban = trim($row[9]);
+						$A = trim($row[10]);
+						$B = trim($row[11]);
+						$C = trim($row[12]);
+						$D = trim($row[13]);
+						$E = trim($row[14]);
+						$F = trim($row[15]);
+						$G = trim($row[16]);
+						$H = trim($row[17]);
+						$I = trim($row[18]);
+						$J = trim($row[19]);
+						$scr_A = trim($row[20]);
+						$scr_B = trim($row[21]);
+						$scr_C = trim($row[22]);
+						$scr_D = trim($row[23]);
+						$scr_E = trim($row[24]);
+						$scr_F = trim($row[25]);
+						$scr_G = trim($row[26]);
+						$scr_H = trim($row[27]);
+						$scr_I = trim($row[28]);
+						$scr_J = trim($row[29]);
+						$url_pembahasan = trim($row[30]);
+						$isi_pembahasan = trim($row[31]);
 
 						//Insert data soal
-						$soal = $this->insert_data_soal($paket_soal_id, $group_mode_jwb, $soal, $kata_kunci, $tingkat_kesulitan, $kode_group_soal, $kode_group_bacaan, $acak_soal, $acak_jawaban);
+						$soal = $this->insert_data_soal($paket_soal_id, $group_mode_jwb, $soal, $kata_kunci, $tingkat_kesulitan, $kode_group_soal, $kode_group_bacaan, $acak_soal, $acak_jawaban, $opsi_jawaban);
 
 						//Insert data jawaban
-						$jawaban = $this->insert_data_jawaban($soal, $group_mode_jwb, $A, $B, $C, $D, $E, $jawaban);
+						$jawaban = $this->insert_data_jawaban($soal, $group_mode_jwb, $A, $B, $C, $D, $E, $F, $G, $H, $I, $J, $jawaban, $scr_A, $scr_B, $scr_C, $scr_D, $scr_E, $scr_F, $scr_G, $scr_H, $scr_I, $scr_J);
 
 						//Insert data pembahasan
 						$pembahasan = $this->insert_data_pembahasan($soal, $url_pembahasan, $isi_pembahasan);
@@ -982,7 +1038,7 @@ class Tes_online extends CI_Controller
 		}
 	}
 
-	public function insert_data_soal($paket_soal_id, $group_mode_jwb, $soal, $kata_kunci, $tingkat_kesulitan, $kode_group_soal, $kode_group_bacaan, $acak_soal, $acak_jawaban)
+	public function insert_data_soal($paket_soal_id, $group_mode_jwb, $soal, $kata_kunci, $tingkat_kesulitan, $kode_group_soal, $kode_group_bacaan, $acak_soal, $acak_jawaban, $opsi_jawaban)
 	{
 		$data = [];
 
@@ -1009,20 +1065,21 @@ class Tes_online extends CI_Controller
 
 		if ($kode_group_soal != 0 || $kode_group_soal != '' || $kode_group_soal !== NULL) {
 			$check_kode_group = $this->tes->get_group_soal_by_kode($kode_group_soal, $paket_soal_id);
-			$data['group_soal_id'] = $check_kode_group->id_group_soal;
+			$data['group_soal_id'] = @$check_kode_group->id_group_soal;
 		} else {
 			$data['group_soal_id'] = NULL;
 		}
 
 		if ($kode_group_bacaan != 0 || $kode_group_bacaan != '' || $kode_group_bacaan !== NULL) {
 			$check_kode_bacaan = $this->tes->get_bacaan_soal_by_kode($kode_group_bacaan, $paket_soal_id);
-			$data['bacaan_soal_id'] = $check_kode_bacaan->id;
+			$data['bacaan_soal_id'] = @$check_kode_bacaan->id;
 		} else {
 			$data['bacaan_soal_id'] = NULL;
 		}
 
 		$data['is_acak_soal'] = $acak_soal == '' ? 0 : $acak_soal;
 		$data['is_acak_jawaban'] = $acak_jawaban == '' ? 0 : $acak_jawaban;
+		$data['is_opsi_jawaban'] = $opsi_jawaban == '' ? 1 : $opsi_jawaban;
 		$data['created_datetime'] = date('Y-m-d H:i:s');
 
 		$input = $this->tes->save_soal($data);
@@ -1035,85 +1092,195 @@ class Tes_online extends CI_Controller
 		}
 	}
 
-	public function insert_data_jawaban($soal, $group_mode_jwb, $A, $B, $C, $D, $E, $jawaban)
+	public function insert_data_jawaban($soal, $group_mode_jwb, $A, $B, $C, $D, $E, $F, $G, $H, $I, $J, $jawaban, $scr_A, $scr_B, $scr_C, $scr_D, $scr_E, $scr_F, $scr_G, $scr_H, $scr_I, $scr_J)
 	{
 		if ($group_mode_jwb == 'PG') {
-			if ($jawaban == 'A') {
-				$key = 1;
-			} elseif ($jawaban == 'B') {
-				$key = 2;
-			} elseif ($jawaban == 'C') {
-				$key = 3;
-			} elseif ($jawaban == 'D') {
-				$key = 4;
-			} elseif ($jawaban == 'E') {
-				$key = 5;
+			$jawaban_explode = explode(",", $jawaban);
+			$key = array();
+
+			foreach ($jawaban_explode as $vJE) {
+				if ($vJE == 'A') {
+					$key[] = 1;
+				} elseif ($vJE == 'B') {
+					$key[] = 2;
+				} elseif ($vJE == 'C') {
+					$key[] = 3;
+				} elseif ($vJE == 'D') {
+					$key[] = 4;
+				} elseif ($vJE == 'E') {
+					$key[] = 5;
+				} elseif ($vJE == 'F') {
+					$key[] = 6;
+				} elseif ($vJE == 'G') {
+					$key[] = 7;
+				} elseif ($vJE == 'H') {
+					$key[] = 8;
+				} elseif ($vJE == 'I') {
+					$key[] = 9;
+				} elseif ($vJE == 'J') {
+					$key[] = 10;
+				}
 			}
 
 			if ($A != '') {
 				$data = [];
 				$order_a = 1;
+				$fix_jawaban_a = array_filter($key, function ($number) use ($order_a) {
+					return (int) $number == $order_a;
+				});
 				$data = array(
 					'bank_soal_id' => $soal,
 					'order' => $order_a,
 					'name' => $A,
-					'score' => $order_a == $key ? 1 : 0,
-					'is_key' => $order_a == $key ? 1 : 0,
+					'score' => $scr_A,
+					'is_key' => count($fix_jawaban_a) > 0 ? 1 : 0,
 					'created_datetime' => date('Y-m-d H:i:s')
 				);
-				$input = $this->tes->save_jawaban_single($data);
+				$this->tes->save_jawaban_single($data);
 			}
 			if ($B != '') {
 				$data = [];
 				$order_b = 2;
+				$fix_jawaban_b = array_filter($key, function ($number) use ($order_b) {
+					return (int) $number == $order_b;
+				});
 				$data = array(
 					'bank_soal_id' => $soal,
 					'order' => $order_b,
 					'name' => $B,
-					'score' => $order_b == $key ? 1 : 0,
-					'is_key' => $order_b == $key ? 1 : 0,
+					'score' => $scr_B,
+					'is_key' => count($fix_jawaban_b) > 0 ? 1 : 0,
 					'created_datetime' => date('Y-m-d H:i:s')
 				);
-				$input = $this->tes->save_jawaban_single($data);
+				$this->tes->save_jawaban_single($data);
 			}
 			if ($C != '') {
 				$data = [];
 				$order_c = 3;
+				$fix_jawaban_c = array_filter($key, function ($number) use ($order_c) {
+					return (int) $number == $order_c;
+				});
 				$data = array(
 					'bank_soal_id' => $soal,
 					'order' => $order_c,
 					'name' => $C,
-					'score' => $order_c == $key ? 1 : 0,
-					'is_key' => $order_c == $key ? 1 : 0,
+					'score' => $scr_C,
+					'is_key' => count($fix_jawaban_c) > 0 ? 1 : 0,
 					'created_datetime' => date('Y-m-d H:i:s')
 				);
-				$input = $this->tes->save_jawaban_single($data);
+				$this->tes->save_jawaban_single($data);
 			}
 			if ($D != '') {
 				$data = [];
 				$order_d = 4;
+				$fix_jawaban_d = array_filter($key, function ($number) use ($order_d) {
+					return (int) $number == $order_d;
+				});
 				$data = array(
 					'bank_soal_id' => $soal,
 					'order' => $order_d,
 					'name' => $D,
-					'score' => $order_d == $key ? 1 : 0,
-					'is_key' => $order_d == $key ? 1 : 0,
+					'score' => $scr_D,
+					'is_key' => count($fix_jawaban_d) > 0 ? 1 : 0,
 					'created_datetime' => date('Y-m-d H:i:s')
 				);
-				$input = $this->tes->save_jawaban_single($data);
+				$this->tes->save_jawaban_single($data);
 			}
 			if ($E != '') {
 				$data = [];
 				$order_e = 5;
+				$fix_jawaban_e = array_filter($key, function ($number) use ($order_e) {
+					return (int) $number == $order_e;
+				});
 				$data = array(
 					'bank_soal_id' => $soal,
 					'order' => $order_e,
 					'name' => $E,
-					'score' => $order_e == $key ? 1 : 0,
-					'is_key' => $order_e == $key ? 1 : 0,
+					'score' => $scr_E,
+					'is_key' => count($fix_jawaban_e) > 0 ? 1 : 0,
 					'created_datetime' => date('Y-m-d H:i:s')
 				);
-				$input = $this->tes->save_jawaban_single($data);
+				$this->tes->save_jawaban_single($data);
+			}
+			if ($F != '') {
+				$data = [];
+				$order_f = 6;
+				$fix_jawaban_f = array_filter($key, function ($number) use ($order_f) {
+					return (int) $number == $order_f;
+				});
+				$data = array(
+					'bank_soal_id' => $soal,
+					'order' => $order_f,
+					'name' => $F,
+					'score' => $scr_F,
+					'is_key' => count($fix_jawaban_f) > 0 ? 1 : 0,
+					'created_datetime' => date('Y-m-d H:i:s')
+				);
+				$this->tes->save_jawaban_single($data);
+			}
+			if ($G != '') {
+				$data = [];
+				$order_g = 7;
+				$fix_jawaban_g = array_filter($key, function ($number) use ($order_g) {
+					return (int) $number == $order_g;
+				});
+				$data = array(
+					'bank_soal_id' => $soal,
+					'order' => $order_g,
+					'name' => $G,
+					'score' => $scr_G,
+					'is_key' => count($fix_jawaban_g) > 0 ? 1 : 0,
+					'created_datetime' => date('Y-m-d H:i:s')
+				);
+				$this->tes->save_jawaban_single($data);
+			}
+			if ($H != '') {
+				$data = [];
+				$order_h = 8;
+				$fix_jawaban_h = array_filter($key, function ($number) use ($order_h) {
+					return (int) $number == $order_h;
+				});
+				$data = array(
+					'bank_soal_id' => $soal,
+					'order' => $order_h,
+					'name' => $H,
+					'score' => $scr_H,
+					'is_key' => count($fix_jawaban_h) > 0 ? 1 : 0,
+					'created_datetime' => date('Y-m-d H:i:s')
+				);
+				$this->tes->save_jawaban_single($data);
+			}
+			if ($I != '') {
+				$data = [];
+				$order_i = 9;
+				$fix_jawaban_i = array_filter($key, function ($number) use ($order_i) {
+					return (int) $number == $order_i;
+				});
+				$data = array(
+					'bank_soal_id' => $soal,
+					'order' => $order_i,
+					'name' => $I,
+					'score' => $scr_I,
+					'is_key' => count($fix_jawaban_i) > 0 ? 1 : 0,
+					'created_datetime' => date('Y-m-d H:i:s')
+				);
+				$this->tes->save_jawaban_single($data);
+			}
+			if ($J != '') {
+				$data = [];
+				$order_j = 10;
+				$fix_jawaban_j = array_filter($key, function ($number) use ($order_j) {
+					return (int) $number == $order_j;
+				});
+				$data = array(
+					'bank_soal_id' => $soal,
+					'order' => $order_j,
+					'name' => $J,
+					'score' => $scr_J,
+					'is_key' => count($fix_jawaban_j) > 0 ? 1 : 0,
+					'created_datetime' => date('Y-m-d H:i:s')
+				);
+				$this->tes->save_jawaban_single($data);
 			}
 
 			return true;
@@ -1132,7 +1299,7 @@ class Tes_online extends CI_Controller
 			$data['pembahasan'] = $isi_pembahasan;
 			$data['created_datetime'] = date('Y-m-d H:i:s');
 
-			$save_pembahasan = $this->tes->save_pembahasan($data);
+			$this->tes->save_pembahasan($data);
 
 			return true;
 		} else {
@@ -1219,6 +1386,8 @@ class Tes_online extends CI_Controller
 		$bank_soal_id = base64_decode(urldecode($id_bank_soal));
 		$soal_detail = $this->tes->get_soal_by_id($paket_soal_id, $bank_soal_id); //Detail soal
 		$jawaban_detail = $this->tes->get_jawaban_detail($bank_soal_id); //Detail jawaban
+		$mode_jawaban = $this->tes->get_total_mode_jwb($paket_soal_id); //Untuk soal pilihan ganda
+		$data['content']['count_pilihan_ganda'] = intval($mode_jawaban->count_pilgan);
 		$data['content']['id_paket_soal'] = $id_paket_soal;
 		$data['content']['id_bank_soal'] = $id_bank_soal;
 		$data['content']['nomor_soal'] = $nomor_soal;
@@ -1278,9 +1447,6 @@ class Tes_online extends CI_Controller
 		}
 		$data['updated_datetime']  = date('Y-m-d H:i:s');
 
-		$allowed_type 	= [
-			"audio/mpeg", "audio/mpg", "audio/mpeg3", "audio/mp3", "audio/x-wav", "audio/wave", "audio/wav"
-		];
 		$_id_paket_soal = $data['paket_soal_id'];
 		$config['upload_path']      = FCPATH . 'storage/website/lembaga/grandsbmptn/paket_soal/soal_' . $_id_paket_soal . '/';
 		$config['allowed_types']    = 'mpeg|mpg|mpeg3|mp3|wav|wave';
@@ -1312,38 +1478,55 @@ class Tes_online extends CI_Controller
 		//SAVE JAWABAN
 		if ($update_soal) {
 			if ($type_exam == 1) { //Tipe pilihan ganda memerlukan jawaban
-				$jawaban = $this->input->post('jawaban');
-				$id_jawaban = $this->input->post('id_jawaban', TRUE);
-				$skor_jawaban = $this->input->post('skor_jawaban', TRUE);
-				$tandai_jawaban  = $this->input->post('tanda_jawaban', TRUE);
-				$order = 1;
-				$datas = array();
-				foreach ($jawaban as $key => $value) {
-					$datas[] = array(
-						'id' => $id_jawaban[$key],
-						'bank_soal_id' => $id_bank_soal,
-						'order' => $order,
-						'name' => $jawaban[$key],
-						'score' => $skor_jawaban[$key],
-						'is_key' => $order == $tandai_jawaban ? 1 : 0,
-						'updated_datetime' => date('Y-m-d H:i:s')
-					);
-					$order++;
+				//Hapus semua jawaban dulu
+				$this->db->trans_start();
+				$this->db->where_in('bank_soal_id', $id_bank_soal);
+				$this->db->delete($this->tbl_jawaban);
+				if ($this->db->trans_status() === FALSE) {
+					$this->db->trans_rollback();
+
+					$this->session->set_flashdata('error', 'Update jawaban gagal! Ulangi kembali');
+					redirect('admin/edit-soal/' . $paket_soal_id . '/' . $bank_soal_id . '/' . $nomor_soal);
+				} else {
+					$this->db->trans_commit();
+
+					$jawaban = $this->input->post('jawaban');
+					//$id_jawaban = $this->input->post('id_jawaban');
+					$skor_jawaban = $this->input->post('skor_jawaban', TRUE);
+					$tandai_jawaban  = $this->input->post('tanda_jawaban');
+					$order = 1;
+					$datas = array();
+					foreach ($jawaban as $key => $value) {
+						$fix_jawaban = array_filter($tandai_jawaban, function ($number) use ($order) {
+							return (int) $number == $order;
+						});
+
+						$datas[] = array(
+							//'id' => $id_jawaban[$key],
+							'bank_soal_id' => $id_bank_soal,
+							'order' => $order,
+							'name' => $jawaban[$key],
+							'score' => $skor_jawaban[$key],
+							'is_key' => count($fix_jawaban) > 0 ? 1 : 0,
+							'updated_datetime' => date('Y-m-d H:i:s')
+						);
+						$order++;
+					}
+
+					$update_jawaban = $this->tes->update_jawaban($datas);
+
+					//Update pembahasan
+					$url = $this->input->post('url');
+					$pembahasan['url'] = str_replace("watch?v=", "embed/", $url);
+					$pembahasan['pembahasan'] = $this->input->post('pembahasan');
+					$pembahasan['updated_datetime'] = date('Y-m-d H:i:s');
+
+					$this->tes->update_pembahasan($id_bank_soal, $pembahasan);
+
+					$urly = 'admin/list-soal/' . $paket_soal_id;
+					$urlx = 'admin/edit-soal/' . $paket_soal_id . '/' . $bank_soal_id . '/' . $nomor_soal;
+					$this->update_end($update_jawaban, $urly, $urlx);
 				}
-
-				$update_jawaban = $this->tes->update_jawaban($datas);
-
-				//Update pembahasan
-				$url = $this->input->post('url');
-				$pembahasan['url'] = str_replace("watch?v=", "embed/", $url);
-				$pembahasan['pembahasan'] = $this->input->post('pembahasan');
-				$pembahasan['updated_datetime'] = date('Y-m-d H:i:s');
-
-				$update_pembahasan = $this->tes->update_pembahasan($id_bank_soal, $pembahasan);
-
-				$urly = 'admin/list-soal/' . $paket_soal_id;
-				$urlx = 'admin/edit-soal/' . $paket_soal_id . '/' . $bank_soal_id . '/' . $nomor_soal;
-				$this->update_end($update_jawaban, $urly, $urlx);
 			} else { //tipe essay tidak perlu jawaban
 				//Update pembahasan
 				$url = $this->input->post('url');
@@ -1351,7 +1534,7 @@ class Tes_online extends CI_Controller
 				$pembahasan['pembahasan'] = $this->input->post('pembahasan');
 				$pembahasan['updated_datetime'] = date('Y-m-d H:i:s');
 
-				$update_pembahasan = $this->tes->update_pembahasan($id_bank_soal, $pembahasan);
+				$this->tes->update_pembahasan($id_bank_soal, $pembahasan);
 
 				$this->session->set_flashdata('success', 'Soal no ' . $nomor_soal . ' berhasil diubah');
 				redirect('admin/list-soal/' . $paket_soal_id);
@@ -1370,7 +1553,7 @@ class Tes_online extends CI_Controller
 		$disable_soal = $this->tes->disable_soal($paket_soal_id, $bank_soal_id);
 
 		if (!empty($disable_soal)) {
-			$exam_order = $this->general->exam_order($paket_soal_id); //Urutin no soal lagi
+			$this->general->exam_order($paket_soal_id); //Urutin no soal lagi
 
 			$this->session->set_flashdata('success', 'Soal no ' . $nomor_soal . ' berhasil dihapus');
 			redirect('admin/list-soal/' . $id_paket_soal);
@@ -1989,14 +2172,14 @@ class Tes_online extends CI_Controller
 			}
 
 			$tbl_komposisi = $this->tbl_sesi_pelaksanaan_komposisi;
-			$input_komposisi = $this->general->input_batch($tbl_komposisi, $data_komposisi);
+			$this->general->input_batch($tbl_komposisi, $data_komposisi);
 
 			//SESI USER
 			if ($mode_peserta == 1) { //1 KELOMPOK 2 MANUAL INPUT
 				$group_peserta_id = $this->input->post('group_peserta_id', TRUE);
 
 				foreach ($group_peserta_id as $val_group_peserta) {
-					$insert_user_sesi = $this->insert_group_peserta_komposisi($val_group_peserta, $insert_sesi);
+					$this->insert_group_peserta_komposisi($val_group_peserta, $insert_sesi);
 				}
 			} else {
 				$peserta_id = $this->input->post('manual_peserta_id', TRUE);
@@ -2043,6 +2226,7 @@ class Tes_online extends CI_Controller
 		$sesi_pelaksana_id = base64_decode(urldecode($id_sesi_pelaksana));
 
 		$data_user = [];
+		$data_user_update = [];
 
 		$data_sesi['mode_peserta_id'] = $this->input->post('mode_peserta', TRUE);
 		$mode_peserta = $this->input->post('mode_peserta', TRUE);
@@ -2056,41 +2240,74 @@ class Tes_online extends CI_Controller
 			}
 		} else {
 			$peserta_id = $this->input->post('manual_peserta_id', TRUE);
+			$tbl_sesi_user = $this->tbl_sesi_pelaksanaan_user;
 
 			foreach ($peserta_id as $val_peserta) {
-				$data_user[] = array(
-					'sesi_pelaksanaan_id' => $sesi_pelaksana_id,
-					'group_peserta_id' => 0,
-					'user_id' => $val_peserta,
-					'created_datetime' => date('Y-m-d H:i:s')
-				);
+				$check_user_sesi = $this->tes->get_sesi_pelaksanaan_user_by_sesi($sesi_pelaksana_id, $val_peserta);
+
+				if ($check_user_sesi) { //Jika sudah ada aktifkan kembali
+					array_push($data_user_update, array(
+						'id' => $check_user_sesi->id,
+						'is_enable' => 1,
+						'updated_datetime' => date('Y-m-d H:i:s')
+					));
+				} else {
+					$data_user[] = array(
+						'sesi_pelaksanaan_id' => $sesi_pelaksana_id,
+						'group_peserta_id' => 0,
+						'user_id' => $val_peserta,
+						'created_datetime' => date('Y-m-d H:i:s')
+					);
+				}
 			}
 
-			$tbl_sesi_user = $this->tbl_sesi_pelaksanaan_user;
-			$this->general->input_batch($tbl_sesi_user, $data_user);
+			if (count($data_user_update) > 0) {
+				$this->general->update_batch($tbl_sesi_user, $data_user_update, 'id');
+			}
+
+			if (count($data_user) > 0) {
+				$this->general->input_batch($tbl_sesi_user, $data_user);
+			}
 		}
 
 		$this->session->set_flashdata('success', 'Tambah Peserta pelaksanaan berhasil disimpan!');
-		redirect('admin/sesi-pelaksana');
+		redirect('admin/list-peserta-sesi-pelaksana/' . $id_sesi_pelaksana);
 	}
 
 	private function insert_group_peserta_komposisi($val_group_peserta, $insert_sesi)
 	{
 		$data_user = [];
+		$data_user_update = [];
 
 		$get_peserta_by_group = $this->tes->get_peserta_by_group($val_group_peserta);
+		$tbl_sesi_user = $this->tbl_sesi_pelaksanaan_user;
 
 		foreach ($get_peserta_by_group as $val_peserta) {
-			$data_user[] = array(
-				'sesi_pelaksanaan_id' => $insert_sesi,
-				'group_peserta_id' => $val_group_peserta,
-				'user_id' => $val_peserta->user_id,
-				'created_datetime' => date('Y-m-d H:i:s')
-			);
+			$check_user_sesi = $this->tes->get_sesi_pelaksanaan_user_by_sesi($insert_sesi, $val_peserta->user_id);
+
+			if ($check_user_sesi) { //Jika sudah ada aktifkan kembali
+				array_push($data_user_update, array(
+					'id' => $check_user_sesi->id,
+					'is_enable' => 1,
+					'updated_datetime' => date('Y-m-d H:i:s')
+				));
+			} else {
+				$data_user[] = array(
+					'sesi_pelaksanaan_id' => $insert_sesi,
+					'group_peserta_id' => $val_group_peserta,
+					'user_id' => $val_peserta->user_id,
+					'created_datetime' => date('Y-m-d H:i:s')
+				);
+			}
 		}
 
-		$tbl_sesi_user = $this->tbl_sesi_pelaksanaan_user;
-		$input_user = $this->general->input_batch($tbl_sesi_user, $data_user);
+		if (count($data_user_update) > 0) {
+			$this->general->update_batch($tbl_sesi_user, $data_user_update, 'id');
+		}
+
+		if (count($data_user) > 0) {
+			$this->general->input_batch($tbl_sesi_user, $data_user);
+		}
 
 		return true;
 	}
@@ -2103,7 +2320,7 @@ class Tes_online extends CI_Controller
 		$data['content']['sesi_pelaksana'] = $sesi_pelaksanaan;
 		$data['content']['id_paket_soal'] = urlencode(base64_encode($sesi_pelaksanaan->paket_soal_id));
 		$data['content']['paket_soal'] = $this->tes->get_paket_soal_sesi_selected($sesi_pelaksanaan->paket_soal_id);
-		$data['content']['komposisi_soal'] = $this->tes->get_komposisi_soal_by_id($sesi_pelaksana_id);
+		$data['content']['komposisi_soal'] = $this->tes->get_komposisi_soal_by_id($sesi_pelaksana_id, $sesi_pelaksanaan->paket_soal_id);
 		$data['content']['group_peserta'] = $this->tes->get_group_peserta();
 		$data['title_header'] = ['title' => 'Edit Sesi Pelaksanaan'];
 
@@ -2193,10 +2410,13 @@ class Tes_online extends CI_Controller
 	{
 		$sesi_pelaksana_id = base64_decode(urldecode($id_sesi_pelaksana));
 
-		$name_sesi = $this->tes->get_sesi_pelaksanaan_by_id($sesi_pelaksana_id);
+		$sesi_data = $this->tes->get_sesi_pelaksanaan_by_id($sesi_pelaksana_id);
 		$data['content']['list_peserta_sesi'] = $this->tes->get_list_peserta_sesi($sesi_pelaksana_id);
-		$data['content']['name_sesi_pelaksana'] = $name_sesi->sesi_pelaksanaan_name;
+		$data['content']['name_sesi_pelaksana'] = $sesi_data->sesi_pelaksanaan_name;
 		$data['content']['id_sesi_pelaksana'] = $id_sesi_pelaksana;
+		$data['content']['sesi_pelaksana_id'] = $sesi_data->sesi_pelaksanaan_id;
+		$data['content']['paket_soal_id'] = $sesi_data->paket_soal_id;
+		$data['content']['status_sesi_pelakasanaan'] = $sesi_data->status_sesi_pelakasanaan;
 		$data['title_header'] = ['title' => 'List Peserta Sesi Pelaksanaan'];
 
 		//for load view
@@ -2206,6 +2426,61 @@ class Tes_online extends CI_Controller
 
 		//get function view website
 		$this->_generate_view($view, $data);
+	}
+
+	public function tambahan_waktu_peserta_ujian()
+	{
+		try {
+			$sesi_id = $this->input->post('sesi_id', TRUE);
+			$paket_soal_id = $this->input->post('paket_soal_id', TRUE);
+			$user_id = $this->input->post('user_id', TRUE);
+			$tambahan_waktu = explode(":", $this->input->post('tambahan_waktu', TRUE));
+			$tambahan_jam = (int) $tambahan_waktu[0] * 1;
+			$tambahan_menit = (int) $tambahan_waktu[1] * 1;
+
+			$tbl = $this->tbl_ujian;
+			$arr_id_ujian = array(
+				'sesi_pelaksanaan_id' => $sesi_id,
+				'paket_soal_id' => $paket_soal_id,
+				'user_id' => $user_id,
+				'is_enable' => 1,
+			);
+			$data_ujian = $this->general->get_data_by_id_multi($tbl, $arr_id_ujian);
+
+			$status = "";
+			$text = "";
+			if ($data_ujian) {
+				$data_ujian_update = array(
+					'tgl_selesai' => date('Y-m-d H:i:s', strtotime('+' . $tambahan_jam . ' hour +' . $tambahan_menit . ' minutes', strtotime($data_ujian->tgl_selesai)))
+				);
+				$update_ujian = $this->general->update_data($tbl, $data_ujian_update, $data_ujian->id);
+
+				if ($update_ujian) {
+					$status = "berhasil";
+					$text = "Update tambahan waktu berhasil. Beritahu peserta untuk refresh halaman ujian!";
+				} else {
+					$status = "gagal";
+					$text = "Update tambahan waktu gagal. Mohon ulangi kembali!";
+				}
+			} else {
+				$status = "gagal";
+				$text = "Data ujian peserta tidak ditemukan!";
+			}
+
+			$output = array(
+				'status' => $status,
+				'text' => $text
+			);
+			header("Content-Type: application/json");
+			echo json_encode($output);
+		} catch (Exception $e) {
+			$output = array(
+				'status' => "gagal",
+				'text' => "Permintaan tambahan waktu gagal. Mohon ulangi kembali!"
+			);
+			header("Content-Type: application/json");
+			echo json_encode($output);
+		}
 	}
 
 	public function export_list_peserta_sesi_pelaksana($id_sesi_pelaksana)
@@ -2263,12 +2538,33 @@ class Tes_online extends CI_Controller
 		$this->delete_end($delete, $urly, $urlx);
 	}
 
-	public function disable_peserta_sesi_pelaksana($id_sesi_pelaksana_user, $id_sesi_pelaksanaan)
+	public function reset_peserta_sesi_pelaksana($id_sesi_pelaksanaan, $id_paket_soal, $id_user)
+	{
+		$sesi_pelaksana_id = base64_decode(urldecode($id_sesi_pelaksanaan));
+		$paket_soal_id = base64_decode(urldecode($id_paket_soal));
+		$user_id = base64_decode(urldecode($id_user));
+
+		$reset = $this->tes->reset_data_ujian_peserta($sesi_pelaksana_id, $paket_soal_id, $user_id);
+
+		$urly = 'admin/list-peserta-sesi-pelaksana/' . $id_sesi_pelaksanaan;
+		$urlx = 'admin/list-peserta-sesi-pelaksana/' . $id_sesi_pelaksanaan;
+		$this->reset_end($reset, $urly, $urlx);
+	}
+
+	public function disable_peserta_sesi_pelaksana($id_sesi_pelaksana_user, $id_paket_soal, $id_sesi_pelaksanaan)
 	{
 		$sesi_pelaksana_user_id = base64_decode(urldecode($id_sesi_pelaksana_user));
+		$paket_soal_id = base64_decode(urldecode($id_paket_soal));
 
-		$tbl = $this->tbl_sesi_pelaksanaan_user;
-		$delete = $this->general->delete_data($tbl, $sesi_pelaksana_user_id);
+		//DISABLE SESI PELAKSANAAN USER
+		$tbl_sesi_pelaksanaan_user = $this->tbl_sesi_pelaksanaan_user;
+		$delete = $this->general->delete_data($tbl_sesi_pelaksanaan_user, $sesi_pelaksana_user_id);
+
+		//DISABLE UJIAN USER
+		$data_sesi = $this->general->get_data_by_id($tbl_sesi_pelaksanaan_user, $sesi_pelaksana_user_id);
+		if ($data_sesi) {
+			$delete = $this->tes->delete_data_ujian_by_sesi($data_sesi->sesi_pelaksanaan_id, $paket_soal_id, $data_sesi->user_id);
+		}
 
 		$urly = 'admin/list-peserta-sesi-pelaksana/' . $id_sesi_pelaksanaan;
 		$urlx = 'admin/list-peserta-sesi-pelaksana/' . $id_sesi_pelaksanaan;
@@ -2300,7 +2596,7 @@ class Tes_online extends CI_Controller
 		$data['content']['sesi_pelaksana'] = $sesi_pelaksanaan;
 		$data['content']['id_paket_soal'] = urlencode(base64_encode($sesi_pelaksanaan->paket_soal_id));
 		$data['content']['paket_soal'] = $this->tes->get_paket_soal_sesi_selected($sesi_pelaksanaan->paket_soal_id);
-		$data['content']['komposisi_soal'] = $this->tes->get_komposisi_soal_by_id($sesi_pelaksana_id);
+		$data['content']['komposisi_soal'] = $this->tes->get_komposisi_soal_by_id($sesi_pelaksana_id, $sesi_pelaksanaan->paket_soal_id);
 		$data['content']['group_peserta'] = $this->tes->get_group_peserta();
 		$data['title_header'] = ['title' => 'Detail Sesi Pelaksanaan'];
 
@@ -2635,16 +2931,15 @@ class Tes_online extends CI_Controller
 		$arr_jawab = array();
 		foreach ($pc_list_jawaban as $v) {
 			$pc_v 	= explode("|", $v);
-			$gr     = $pc_v[0];
-			$idx 	= $pc_v[1];
-			$val 	= $pc_v[2];
-			$rg 	= $pc_v[3];
+			$gr     = $pc_v[0]; //Id Group
+			$idx 	= $pc_v[1]; //Id Soal
+			$val 	= $pc_v[2]; //Jawaban
+			$rg 	= $pc_v[3]; //Ragu/Tidak
 
 			$arr_jawab[$idx] = array("g" => $gr, "j" => $val, "r" => $rg);
 		}
 
 		$html = '';
-		$group_soal_name_before = '';
 		$no = 1;
 		if (!empty($soal_urut_ok)) {
 			foreach ($soal_urut_ok as $s) {
@@ -2659,27 +2954,49 @@ class Tes_online extends CI_Controller
 				if ($s->group_mode_jwb_id == 1) {
 					$jawaban = $this->tes->get_jawaban_by_id_pembahasan($s->bank_soal_id, $s->paket_soal_id);
 					$jawaban_benar = $this->tes->get_jawaban_by_id_benar($s->bank_soal_id, $s->paket_soal_id);
+					$tipe_opsi_jawaban = $this->tes->get_opsi_jawaban($s->bank_soal_id);
 					$opsi = config_item('_def_opsi_jawaban');
+					$explode_jawaban = explode(':', $arr_jawab[$s->bank_soal_id]["j"]);
 
 					foreach ($jawaban as $key_jawaban => $val_jawaban) {
-						$checked = $arr_jawab[$s->bank_soal_id]["j"] == $val_jawaban->order ? "jawaban" : "";
+						$order_jawaban_user = $val_jawaban->order;
+						$fix_jawaban = array_filter($explode_jawaban, function ($number) use ($order_jawaban_user) {
+							return (int) $number == $order_jawaban_user;
+						});
+						$checked = count($fix_jawaban) > 0 ? "jawaban" : "";
+
 						$html .= '<table class="tbl-jwb"><tr><td width="5px"><a class="btn ' . $checked . '" href="#">' . $opsi . '</a></td><td>' . $val_jawaban->name . '</td></tr>';
 						$opsi++;
 					}
-
-					if ($jawaban_benar && $jawaban_benar == 1) {
-						$key_opsi = 'A';
-					} elseif ($jawaban_benar && $jawaban_benar == 2) {
-						$key_opsi = 'B';
-					} elseif ($jawaban_benar && $jawaban_benar == 3) {
-						$key_opsi = 'C';
-					} elseif ($jawaban_benar && $jawaban_benar == 4) {
-						$key_opsi = 'D';
-					} elseif ($jawaban_benar && $jawaban_benar == 5) {
-						$key_opsi = 'E';
+					
+					if ($tipe_opsi_jawaban == 1) { //Jawaban Single
+						if ($jawaban_benar && $jawaban_benar == 1) {
+							$key_opsi = 'A';
+						} elseif ($jawaban_benar && $jawaban_benar == 2) {
+							$key_opsi = 'B';
+						} elseif ($jawaban_benar && $jawaban_benar == 3) {
+							$key_opsi = 'C';
+						} elseif ($jawaban_benar && $jawaban_benar == 4) {
+							$key_opsi = 'D';
+						} elseif ($jawaban_benar && $jawaban_benar == 5) {
+							$key_opsi = 'E';
+						} elseif ($jawaban_benar && $jawaban_benar == 6) {
+							$key_opsi = 'F';
+						} elseif ($jawaban_benar && $jawaban_benar == 7) {
+							$key_opsi = 'G';
+						} elseif ($jawaban_benar && $jawaban_benar == 8) {
+							$key_opsi = 'H';
+						} elseif ($jawaban_benar && $jawaban_benar == 9) {
+							$key_opsi = 'I';
+						} elseif ($jawaban_benar && $jawaban_benar == 10) {
+							$key_opsi = 'J';
+						}
+	
+						$html .= '<tr><td colspan="2">Kunci Jawaban : ' . $key_opsi . '</td></tr>';
+					} elseif ($tipe_opsi_jawaban == 2) { //Jawaban Multi
+						$html .= '<tr><td colspan="2">Note : Jawaban dianggap benar jika terdapat 2 jawaban</td></tr>';
 					}
-
-					$html .= '<tr><td colspan="2">Kunci Jawaban : ' . $key_opsi . '</td></tr>';
+					
 				} else {
 					$history_jawab = !empty($arr_jawab[$s->bank_soal_id]["j"]) ? $arr_jawab[$s->bank_soal_id]["j"] : "";
 					$html .= '<tr><td colspan="2">' . $history_jawab . '</td></tr>';
