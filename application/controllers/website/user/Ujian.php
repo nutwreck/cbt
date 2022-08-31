@@ -361,7 +361,8 @@ class Ujian extends CI_Controller
 								return (int) $number == $order_jawaban_user;
 							});
 							$checked = count($fix_jawaban) > 0 ? "checked" : "";
-							$html .= '<div class="funkyradio-success" onclick="return simpan_sementara();">
+							//$html .= '<div class="funkyradio-success" onclick="return simpan_sementara();">
+							$html .= '<div class="funkyradio-success>
 									<input type="checkbox" id="opsi_' . $opsi . '_' . $nomor_soal . '" name="opsi_' . $nomor_soal . '[]" value="' . $order_jawaban_user . '|' . $number_opsi . '" onclick="get_opsi_jawaban_selected(' . $nomor_soal . ',\'' . $opsi . '\')" ' . $checked . '> 
 									<label for="opsi_' . $opsi . '_' . $nomor_soal . '">
 										<div class="huruf_opsi">' . $opsi . '</div>
