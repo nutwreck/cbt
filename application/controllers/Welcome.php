@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-ini_set('max_input_vars', 3000);
 
 class Welcome extends CI_Controller {
 
@@ -21,6 +20,7 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
+		ini_set('max_input_vars', 3000);
 		phpinfo();
 		//$this->load->view('welcome_message');
 	}
