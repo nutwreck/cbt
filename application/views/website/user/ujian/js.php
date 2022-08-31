@@ -428,7 +428,7 @@
     }
 
     function simpan() {
-        simpan_sementara();
+        //simpan_sementara();
         var form = $("#ujian");
 
         $.ajax({
