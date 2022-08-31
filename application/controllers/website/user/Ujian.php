@@ -183,8 +183,8 @@ class Ujian extends CI_Controller
 		}
 
 		if (empty($ujian_data)) { //jika wadah untuk pemilihan soal dan jawaban belum ada
-			$this->db->trans_begin();
 			try {
+				$this->db->trans_begin();
 				$komposisi_soal = $this->tes->get_komposisi_soal_by_id($sesi_pelaksana_id, $paket_soal_id); //Ambil bank soal
 
 				$data_ujian['sesi_pelaksanaan_id'] = $sesi_pelaksana_id;
@@ -239,6 +239,16 @@ class Ujian extends CI_Controller
 		}
 
 		try {
+			if ($ujian_data->list_soal == NULL || $ujian_data->list_soal == '') { //pengecekan jika list soal kosong
+				$this->session->set_flashdata('portal_error', 'List soal anda tidak ditemukan silahkan hubungi admin untuk dilakukkan reset tes jika waktu sesi pelaksanaan masih ada atau lakukkan tes ulang!');
+				redirect('dashboard');
+			}
+
+			if ($ujian_data->list_jawaban == NULL || $ujian_data->list_jawaban == '') { //pengecekan jika list jawaban kosong
+				$this->session->set_flashdata('portal_error', 'List jawaban anda tidak ditemukan silahkan hubungi admin untuk dilakukkan reset tes jika waktu sesi pelaksanaan masih ada atau lakukkan tes ulang!');
+				redirect('dashboard');
+			}
+
 			//Pengambilan data list jawaban, group soal, soalnya, dan hasil jawabannya
 			$urut_soal 		= explode(",", $ujian_data->list_jawaban);
 			$soal_urut_ok	= array();
@@ -361,13 +371,14 @@ class Ujian extends CI_Controller
 								return (int) $number == $order_jawaban_user;
 							});
 							$checked = count($fix_jawaban) > 0 ? "checked" : "";
-							$html .= '<div class="funkyradio-success" onclick="return simpan_sementara();">
+
+							$html .= '<div class="funkyradio-success">
 									<input type="checkbox" id="opsi_' . $opsi . '_' . $nomor_soal . '" name="opsi_' . $nomor_soal . '[]" value="' . $order_jawaban_user . '|' . $number_opsi . '" onclick="get_opsi_jawaban_selected(' . $nomor_soal . ',\'' . $opsi . '\')" ' . $checked . '> 
 									<label for="opsi_' . $opsi . '_' . $nomor_soal . '">
 										<div class="huruf_opsi">' . $opsi . '</div>
 										<div class="card-text">' . $val_jawaban->name . '</div>
 									</label>
-								</div>';
+								</div>'; //onclick="return simpan_sementara();"
 							$opsi++;
 							$number_opsi++;
 						};
@@ -589,9 +600,8 @@ class Ujian extends CI_Controller
 
 	public function simpan_akhir()
 	{
-		$this->db->trans_begin();
-
 		try {
+			$this->db->trans_begin();
 			$d_update = [];
 			$data_group = array();
 			$data_group_skor = array();
@@ -809,7 +819,6 @@ class Ujian extends CI_Controller
 				$this->output_json(['status' => TRUE, 'id' => $id_tes, 'hasil' => $show_hasil, 'ranking' => $show_ranking]);
 			}
 		} catch (Exception $e) {
-			$this->db->trans_rollback();
 			$this->output_json(['status' => FALSE, 'id' => NULL, 'hasil' => NULL, 'ranking' => NULL]);
 		}
 	}

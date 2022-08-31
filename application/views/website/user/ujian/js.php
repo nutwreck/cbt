@@ -61,7 +61,7 @@
                     var ply = document.getElementById('loop-limited-' + no);
                     document.getElementById('audio_soal_' + no).value = loopCounter;
                     ply.style.display = 'none';
-                    //simpan();
+                    simpan();
                 }
             }, false);
         }
@@ -78,7 +78,7 @@
                     var ply = document.getElementById('group-loop-limited-' + no);
                     document.getElementById('audio_group_' + no).value = loopCounter;
                     ply.style.display = 'none';
-                    //simpan();
+                    simpan();
                 }
             }, false);
         }
@@ -86,11 +86,12 @@
 
     function harus_jawab(no) {
         if (is_jawab == 1) {
-            var f_asal = $("#ujian");
-            var form = getFormData(f_asal);
+            //var f_asal = $("#ujian");
+            //var form = getFormData(f_asal);
 
-            var gr_m = 'id_group_mode_jwb' + no;
-            var group_m = form[gr_m];
+            //var gr_m = 'id_group_mode_jwb' + no;
+            //var group_m = form[gr_m];
+            var group_m = $("input[name=id_group_mode_jwb" + no + "]").val();
 
             if (group_m == 1) { //1 Pilihan Ganda 2 Essay
                 var pil_gan = $('input[name=opsi_' + no + '[]]:checked').val();
@@ -155,7 +156,9 @@
                 const index_opsi = 'opsi_' + i;
                 deleteFromObject(index_opsi, indexed_array);
                 indexed_array[index_opsi] = k;
-            } else if ($("input[name='opsi_" + i + "[]']:checked").length == 1) {
+            }
+
+            if ($("input[name='opsi_" + i + "[]']:checked").length == 1) {
                 var s = "";
                 var element_jawaban = $("input[name='opsi_" + i + "[]']:checked");
                 for (var v = 0; v < $("input[name='opsi_" + i + "[]']:checked").length; v++) {
@@ -168,8 +171,6 @@
                 indexed_array[index_opsi] = s;
             }
         });
-
-        console.log(indexed_array, 'system')
 
         return indexed_array;
     }
@@ -380,14 +381,15 @@
 
         cek_status_ragu(id_step);
 
-        //simpan();
+        simpan();
     }
 
     function buka_group(urutan) {
-        var f_asal = $("#ujian");
-        var form = getFormData(f_asal);
-        var gr = 'id_group_soal_' + urutan;
-        var group = form[gr];
+        //var f_asal = $("#ujian");
+        //var form = getFormData(f_asal);
+        //var gr = 'id_group_soal_' + urutan;
+        //var group = form[gr];
+        var group = $("input[name=id_group_soal_" + urutan + "]").val();
 
         $.ajax({
             type: "POST",
@@ -423,12 +425,13 @@
             $('#opsi_' + opsi + '_' + num).prop('checked', false);
             return alert("Hanya boleh pilih " + limit_opsi_choosen + " jawaban");
         } else {
+            simpan_sementara_satu(num, opsi);
             simpan();
         }
     }
 
-    function simpan() {
-        simpan_sementara();
+    async function simpan() {
+        //simpan_sementara();
         var form = $("#ujian");
 
         $.ajax({
@@ -447,7 +450,50 @@
         });
     }
 
-    function simpan_sementara() {
+    //Partial load navigasi soal
+    function simpan_sementara_satu(nums, opsis) {
+        var ragus = $("input[name=rg_" + nums + "]").val();
+
+        //Content jawaban
+        var sp = "";
+        if ($("input[name='opsi_" + nums + "[]']:checked").length > 1) { //Mapping jawaban multi
+            for (var z = 0; z < $("input[name='opsi_" + nums + "[]']:checked").length; z++) {
+                var a = $("input[name='opsi_" + nums + "[]']:checked")[z];
+                sp = $("input[name='opsi_" + nums + "[]']:checked").length = z ? sp + a.value.split('|')[1] : sp + a.value.split('|')[1] + ':';
+            }
+        } else if ($("input[name='opsi_" + nums + "[]']:checked").length == 1) {
+            for (var v = 0; v < $("input[name='opsi_" + nums + "[]']:checked").length; v++) {
+                var h = $("input[name='opsi_" + nums + "[]']:checked")[v];
+                sp = sp + h.value.split('|')[1];
+            }
+        }
+
+        var arr_jawab_content_all = new Array();
+        var jawab_content_all = sp.split(":");
+        for (var d = 0; d < jawab_content_all.length; d++) {
+            arr_jawab_content_all.push(number_opsi_text(jawab_content_all[d]));
+        }
+        jawab_content = arr_jawab_content_all.length > 0 ? arr_jawab_content_all.join() : '-';
+
+        if (ragus == "Y") {
+            if (opsis == "-") {
+                document.getElementById('btn_soal_' + nums).className = "btn button-round btn-outline-secondary text-secondary btn_soal";
+            } else {
+                document.getElementById('btn_soal_' + nums).className = "btn button-round btn-warning btn_soal";
+            }
+        } else {
+            if (opsis == "-") {
+                document.getElementById('btn_soal_' + nums).className = "btn button-round btn-outline-secondary text-secondary btn_soal";
+            } else {
+                document.getElementById('btn_soal_' + nums).className = "btn button-round btn-success btn_soal";
+            }
+        }
+
+        document.getElementById('btn_soal_' + nums).innerHTML = nums + ". " + jawab_content;
+    }
+
+    //Hanya untuk awalan load - navigasi soal
+    async function simpan_sementara() {
         var f_asal = $("#ujian");
         var form = getFormData(f_asal);
         var jml_soal = form.jml_soal;
@@ -498,7 +544,7 @@
             if (sub_group_after != sub_group_before && sub_group_after != group_name_first) {
                 hasil_jawaban += '<div class="d-flex justify-content-center"><a id="sub_group_petunjuk_' + (i) + '" class="btn btn-secondary btn-block text-white disabled btn_sub_group">' + sub_group_after + "</a></div>";
             }
-            
+
             //Isi Nomor
             if (jawab) { //Jika ada jawabannya
                 if (group_m == 1) {
@@ -576,11 +622,12 @@
                         window.location.href = base_url + 'dashboard';
                     }
                 } else {
-                    alert("Gagal memproses menyimpan jawaban. Harap ulangi kembali!");
+                    alert("Gagal memproses menyimpan jawaban. Harap hubungi admin!");
                 }
             },
             error: function(request, status, error) {
-                alert(request.responseText);
+                //alert(request.responseText);
+                alert("Gagal memproses menyimpan jawaban. Harap hubungi admin!");
             }
         });
     }

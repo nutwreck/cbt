@@ -1921,8 +1921,8 @@ class Tes_online extends CI_Controller
 				show_error($error, 500, 'File Audio Soal Error');
 				exit();
 			} else {
-				$data['file'] = $this->upload->data('file_name');
-				$data['tipe_file'] = $this->upload->data('file_type');
+				$data['file'] = $this->upload->data('file_name') == NULL || $this->upload->data('file_name') == '' ? NULL : $this->upload->data('file_name');
+				$data['tipe_file'] = $this->upload->data('file_type') == NULL || $this->upload->data('file_type') == '' ? NULL : $this->upload->data('file_type');
 			}
 		}
 
@@ -2011,12 +2011,12 @@ class Tes_online extends CI_Controller
 				show_error($error, 500, 'File Audio Soal Error');
 				exit();
 			} else {
-				$data['file'] = $this->upload->data('file_name');
-				$data['tipe_file'] = $this->upload->data('file_type');
+				$data['file'] = $this->upload->data('file_name') == NULL || $this->upload->data('file_name') == '' ? NULL : $this->upload->data('file_name');
+				$data['tipe_file'] = $this->upload->data('file_type') == NULL || $this->upload->data('file_type') == '' ? NULL : $this->upload->data('file_type');
 			}
 		} else {
-			$data['file'] = $old_name_audio_x;
-			$data['tipe_file'] = $old_type_audio_x;
+			$data['file'] = $old_name_audio_x == NULL || $old_name_audio_x == '' ? NULL :  $old_name_audio_x;
+			$data['tipe_file'] = $old_type_audio_x == NULL || $old_type_audio_x == '' ? NULL :  $old_type_audio_x;
 		}
 
 		$tbl = $this->tbl_group_soal;
