@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+ini_set('max_input_vars', 3000);
 
 class Welcome extends CI_Controller {
 
