@@ -169,6 +169,8 @@
             }
         });
 
+        console.log(indexed_array, 'system')
+
         return indexed_array;
     }
 
