@@ -8,3 +8,8 @@ RewriteRule ^(.*)$ index.php/$1 [L]
     Header set Access-Control-Allow-Origin "*"
   </FilesMatch>
 </IfModule>
+
+php_value max_input_vars 3000
+php_value suhosin.get.max_vars 3000
+php_value suhosin.post.max_vars 3000
+php_value suhosin.request.max_vars 3000
