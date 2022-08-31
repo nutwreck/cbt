@@ -453,8 +453,8 @@ class Ujian extends CI_Controller
 
 	public function simpan_satu()
 	{
-		$this->db->trans_begin();
 		try {
+			$this->db->trans_begin();
 			// Decrypt Id
 			$id_tes = $this->encryption->decrypt($this->input->post('id', true));
 
@@ -523,7 +523,6 @@ class Ujian extends CI_Controller
 				$this->output_json(['status' => "sukses"]);
 			}
 		} catch (Exception $e) {
-			$this->db->trans_rollback();
 			$this->output_json(['status' => "gagal"]);
 		}
 	}
