@@ -29,7 +29,7 @@
         }
 
         //disable F5
-        /* $(document).on("keydown", disableF5); */
+        $(document).on("keydown", disableF5);
 
         buka(1);
         simpan_sementara();
@@ -382,6 +382,46 @@
         cek_status_ragu(id_step);
 
         simpan();
+    }
+
+    function buka_soal_timer(nomorSoal, timerSoal) {
+        //Buka soal
+        var soalHide = document.getElementById("nomor_soals_" + nomorSoal);
+        soalHide.style.display = "block";
+
+        //Tutup button timer
+        var buttonTimerHide = document.getElementById("btn_timer_soals_" + nomorSoal);
+        buttonTimerHide.style.display = "none";
+
+        //Countdown tutup soal
+        try {
+            var displayTimer = document.getElementById("timer_soals_" + nomorSoal);
+            var minutesTimer = 60 * parseInt(timerSoal);
+            var timer = minutesTimer,
+                minutes, seconds;
+            var timerCountdown = setInterval(function() {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                displayTimer.innerHTML = '<div class="mb-2"><span class="badge badge-info" style="font-size: 18px;"><span class="text-white">Soal Akan ditutup kembali dalam hitungan</span> <span class="text-dark"> ' + minutes + ':' + seconds + '</span></span></div>';
+
+                if (--timer < 0) {
+                    clearInterval(timerCountdown);
+
+                    displayTimer.innerHTML = '<div class="mb-2"><span class="badge badge-danger text-white" style="font-size: 18px;">Waktu menampilkan soal sudah berakhir!</span></div>';
+                    soalHide.style.display = "none";
+                    buttonTimerHide.style.display = "none";
+                }
+            }, 1000);
+        } catch (e) {
+            soalHide.style.display = "none";
+            buttonTimerHide.style.display = "block";
+
+            alert("Kesalahan saat membuka soal. Silahkan ulangi kembali!");
+        }
     }
 
     function buka_group(urutan) {

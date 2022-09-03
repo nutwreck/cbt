@@ -335,6 +335,9 @@ class Ujian extends CI_Controller
 						$ragu_ragu = '<div class="col" data-position="up"><a rel="1" class="ragu_ragu btn btn-md btn-warning text-white" onclick="return tidak_jawab();">Ragu</a></div>';
 					}
 
+					$button_timer_soal = $s->timer != 0 ? '<button id="btn_timer_soals_' . $nomor_soal . '" type="button" class="btn btn-primary" onclick="buka_soal_timer(' . $nomor_soal . ',' . $s->timer . ')" style="display: block;">Buka soal selama ' . $s->timer . ' Menit</button>' : '';
+					$hide_soal_by_timer = $s->timer != 0 ? ' style="display: none;"' : '';
+
 					$html .= '
 						<div class="card-header bg-primary text-white">
 							<div class="row">
@@ -353,7 +356,9 @@ class Ujian extends CI_Controller
 						</div>';
 
 					$html .= '<div class="card-body">
-						<div class="card-text text-justify">' . $group_soal_audio . $bacaan_soal_name . $bacaan_soal . $soal_audio . $s->bank_soal_name . '</div><hr>';
+						<div id="timer_soals_' . $nomor_soal . '" class="card-text text-justify">' . $button_timer_soal . '</div>
+						<div id="nomor_soals_' . $nomor_soal . '" class="card-text text-justify" ' . $hide_soal_by_timer . '>' . $group_soal_audio . $bacaan_soal_name . $bacaan_soal . $soal_audio . $s->bank_soal_name . '</div>
+					<hr>';
 
 					if ($s->group_mode_jwb_id == 1) {
 						$text_info_soal_pilihan = $s->is_opsi_jawaban == 1 ? 'Pilih salah satu jawaban!' : 'Pilih dua jawaban!';

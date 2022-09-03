@@ -692,9 +692,10 @@ class Tes_online extends CI_Controller
 				$bacaan_soal_name = $soal->bacaan_soal_name <> 0 || !empty($soal->bacaan_soal_name) ? '<b>' . $soal->bacaan_soal_name . '</b><br />' : ''; // bacaan soal judul
 				$group_soal = $soal->group_soal_name <> 0 || !empty($soal->group_soal_name) ? '<div class="col-12 text-left mt-1"><span class="badge badge-success">GROUP SOAL ' . $soal->group_soal_name . '</span></div>' : '';
 				$group_soal_petunjuk = $soal->group_soal_petunjuk <> 0 || !empty($soal->group_soal_petunjuk) ? $soal->group_soal_petunjuk . '<br />' : '';
-				$group_soal_audio = $soal->group_soal_audio <> 0 || !empty($soal->group_soal_audio) ? '<audio id="loop-limited" controls><source src="' . config_item('_dir_website') . '/lembaga/grandsbmptn/group_soal/group_' . $soal->paket_soal_id . '/' . $soal->group_soal_audio . '" type="' . $soal->group_soal_tipe_audio . '">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br />' : '';
-				$soal_audio = $soal->file <> 0 || !empty($soal->file) ? '<audio id="loop-limited" controls><source src="' . config_item('_dir_website') . '/lembaga/grandsbmptn/paket_soal/soal_' . $soal->paket_soal_id . '/' . $soal->file . '" type="' . $soal->tipe_file . '">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br />' : '';
+				$group_soal_audio = $soal->group_soal_audio <> 0 || !empty($soal->group_soal_audio) || $soal->group_soal_audio != NULL || $soal->group_soal_audio != "" ? '<audio id="loop-limited" controls><source src="' . config_item('_dir_website') . '/lembaga/grandsbmptn/group_soal/group_' . $soal->paket_soal_id . '/' . $soal->group_soal_audio . '" type="' . $soal->group_soal_tipe_audio . '">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br />' : '';
+				$soal_audio = $soal->file <> 0 || !empty($soal->file) || $soal->file != NULL || $soal->file != "" ? '<audio id="loop-limited" controls><source src="' . config_item('_dir_website') . '/lembaga/grandsbmptn/paket_soal/soal_' . $soal->paket_soal_id . '/' . $soal->file . '" type="' . $soal->tipe_file . '">Browsermu tidak mendukung tag audio, upgrade donk!</audio><br />' : '';
 				$pembahasan = $soal->url_pembahasan <> '' || !empty($soal->url_pembahasan) || $soal->pembahasan <> '' || !empty($soal->pembahasan) ? 'badge-success' : 'badge-danger';
+				$timer_soal = $soal->timer != 0 ? 'fa-clock-o' : '';
 				$icon_pembahasan = $pembahasan == 'badge-success' ? 'fa-check' : 'fa-close';
 
 				$header_soal = '
@@ -720,6 +721,9 @@ class Tes_online extends CI_Controller
 							</span>
 							<span class="badge ' . $pembahasan . '">
 								<i class="fa ' . $icon_pembahasan . '" aria-hidden="true"></i> PEMBAHASAN
+							</span>
+							<span>
+								<i class="fa ' . $timer_soal . ' fa-lg" aria-hidden="true"></i>
 							</span>
 						</h5>
 					</div>
@@ -812,6 +816,7 @@ class Tes_online extends CI_Controller
 		$data['group_soal_id']  = $this->input->post('group_soal_id', TRUE);
 		$data['bacaan_soal_id']  = $this->input->post('bacaan_soal_id', TRUE);
 		$data['file']  = $this->input->post('soal_audio', TRUE);
+		$data['timer']  = $this->input->post('timer_soal', TRUE);
 		$data['created_datetime']  = date('Y-m-d H:i:s');
 
 		$allowed_type 	= [
@@ -948,6 +953,7 @@ class Tes_online extends CI_Controller
 		$J = '';
 		$url_pembahasan = '';
 		$isi_pembahasan = '';
+		$timer_soal = '';
 		$data = [];
 
 		if ($_FILES["data_soal"]["name"] != '') {
@@ -1005,9 +1011,10 @@ class Tes_online extends CI_Controller
 						$scr_J = trim($row[29]);
 						$url_pembahasan = trim($row[30]);
 						$isi_pembahasan = trim($row[31]);
+						$timer_soal = trim($row[32]);
 
 						//Insert data soal
-						$soal = $this->insert_data_soal($paket_soal_id, $group_mode_jwb, $soal, $kata_kunci, $tingkat_kesulitan, $kode_group_soal, $kode_group_bacaan, $acak_soal, $acak_jawaban, $opsi_jawaban);
+						$soal = $this->insert_data_soal($paket_soal_id, $group_mode_jwb, $soal, $kata_kunci, $tingkat_kesulitan, $kode_group_soal, $kode_group_bacaan, $acak_soal, $acak_jawaban, $opsi_jawaban, $timer_soal);
 
 						//Insert data jawaban
 						$jawaban = $this->insert_data_jawaban($soal, $group_mode_jwb, $A, $B, $C, $D, $E, $F, $G, $H, $I, $J, $jawaban, $scr_A, $scr_B, $scr_C, $scr_D, $scr_E, $scr_F, $scr_G, $scr_H, $scr_I, $scr_J);
@@ -1038,7 +1045,7 @@ class Tes_online extends CI_Controller
 		}
 	}
 
-	public function insert_data_soal($paket_soal_id, $group_mode_jwb, $soal, $kata_kunci, $tingkat_kesulitan, $kode_group_soal, $kode_group_bacaan, $acak_soal, $acak_jawaban, $opsi_jawaban)
+	public function insert_data_soal($paket_soal_id, $group_mode_jwb, $soal, $kata_kunci, $tingkat_kesulitan, $kode_group_soal, $kode_group_bacaan, $acak_soal, $acak_jawaban, $opsi_jawaban, $timer_soal)
 	{
 		$data = [];
 
@@ -1080,6 +1087,7 @@ class Tes_online extends CI_Controller
 		$data['is_acak_soal'] = $acak_soal == '' ? 0 : $acak_soal;
 		$data['is_acak_jawaban'] = $acak_jawaban == '' ? 0 : $acak_jawaban;
 		$data['is_opsi_jawaban'] = $opsi_jawaban == '' ? 1 : $opsi_jawaban;
+		$data['timer'] = $timer_soal == '' ? 0 : $timer_soal;
 		$data['created_datetime'] = date('Y-m-d H:i:s');
 
 		$input = $this->tes->save_soal($data);
@@ -1432,6 +1440,7 @@ class Tes_online extends CI_Controller
 		$data['is_acak_jawaban']  = $this->input->post('acak_jawaban', TRUE);
 		$data['group_soal_id']  = $this->input->post('group_soal_id', TRUE);
 		$data['bacaan_soal_id']  = $this->input->post('bacaan_soal_id', TRUE);
+		$data['timer']  = $this->input->post('timer_soal', TRUE);
 		$data['file']  = $this->input->post('soal_audio', TRUE);
 		$old_name_audio = $this->input->post('old_name_audio');
 		if ($old_name_audio == NULL || $old_name_audio == '') {

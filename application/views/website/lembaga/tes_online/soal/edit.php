@@ -177,6 +177,21 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-3" style="margin-top:1%">
+                                <h5 class="label-text">Timer</h5>
+                            </div>
+                            <div class="col-sm-12 col-lg-9">
+                                <div class="form-group">
+                                    <input id="timer_soal" name="timer_soal" type="text" class="form-control" aria-required="true" aria-invalid="false" value="<?= $soal_detail->timer ?>" required>
+                                </div>
+                                <div class="alert alert-info">
+                                    <p>
+                                        Diisi dalam hitungan <b>menit</b>. Jika tidak memakai timer biarkan diisi dengan 0
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                         <hr />
                         <div id="content_jawaban" class="row" style="<?= $soal_detail->group_mode_jwb_id == 2 ? 'display:none;' : 'display:block;' ?>">
                             <div class="col-sm-12">

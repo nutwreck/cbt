@@ -168,6 +168,21 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-3" style="margin-top:1%">
+                                <h5 class="label-text">Timer</h5>
+                            </div>
+                            <div class="col-sm-12 col-lg-9">
+                                <div class="form-group">
+                                    <input id="timer_soal" name="timer_soal" type="text" class="form-control" aria-required="true" aria-invalid="false" value="0" required>
+                                </div>
+                                <div class="alert alert-info">
+                                    <p>
+                                        Diisi dalam hitungan <b>menit</b>. Jika tidak memakai timer biarkan diisi dengan 0
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                         <hr />
                         <div id="content_jawaban" class="row" style="display:block;">
                             <div class="col-sm-12">
@@ -191,7 +206,7 @@
                                                 <td class="text-center font-weight-bold">
                                                     <?= $alpha++ ?>
                                                     <?php if ($totalPilgan == 8) { ?>
-                                                        <br /><button type="button" id="hapus_opsi_jawaban_<?= $x ?>" class="btn btn-sm btn-danger button_hapus_opsi_jawaban" title="Hapus opsi jawaban" style="<?=$x == $totalPilgan ? '' : 'display:none;'?>" onclick="delete_opsi_jawaban(<?= $x ?>)"><i class="fa fa-trash"></i></button>
+                                                        <br /><button type="button" id="hapus_opsi_jawaban_<?= $x ?>" class="btn btn-sm btn-danger button_hapus_opsi_jawaban" title="Hapus opsi jawaban" style="<?= $x == $totalPilgan ? '' : 'display:none;' ?>" onclick="delete_opsi_jawaban(<?= $x ?>)"><i class="fa fa-trash"></i></button>
                                                     <?php } ?>
                                                 </td>
                                                 <td class="text-center">

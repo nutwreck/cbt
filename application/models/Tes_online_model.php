@@ -461,7 +461,7 @@ class Tes_online_model extends CI_Model
                                 ,is_acak_jawaban, acak_jawaban, is_opsi_jawaban, tipe_opsi_jawaban, no_soal, bank_soal_name, kata_kunci, tipe_kesulitan_id
                                 ,tipe_kesulitan_name, file, tipe_file, group_soal_id, bacaan_soal_id, isi_bacaan_soal, 
                                 group_soal_name, group_soal_petunjuk, bacaan_soal_name, group_soal_audio, group_soal_tipe_audio
-                                ,url_pembahasan, pembahasan')
+                                ,url_pembahasan, pembahasan, timer')
             ->get_where('v_bank_soal', array('paket_soal_id' => $paket_soal_id, 'bank_soal_id' => $bank_soal_id, 'is_enable' => 1))->row();
     }
 
