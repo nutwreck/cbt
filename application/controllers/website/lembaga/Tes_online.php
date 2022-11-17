@@ -2693,6 +2693,7 @@ class Tes_online extends CI_Controller
 
 	public function export_detail_report_ujian($id_sesi_pelaksanaan, $id_paket_soal)
 	{
+		ini_set('memory_limit', '8048M');
 		$sesi_pelaksana_id = base64_decode(urldecode($id_sesi_pelaksanaan));
 		$paket_soal_id = base64_decode(urldecode($id_paket_soal));
 
