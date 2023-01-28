@@ -1808,7 +1808,7 @@ class Management extends CI_Controller
 		$invoice_id = base64_decode(urldecode($id_invoice));
 
 		//User Pembelian Buku
-		$delete = $this->general->delete_data($this->tbl_user_pembelian_buku, $invoice_id);
+		$delete = $this->general->delete_data_column($this->tbl_user_pembelian_buku, "invoice_id", $invoice_id);
 		$delete = $this->general->delete_data($this->tbl_invoice, $invoice_id);
 
 		if ($page == 1) { //1 Invoice All 2 Confirm 3 Success 4 Expired

@@ -78,6 +78,20 @@ class General extends CI_Model
 			return $query;
 		}
 	}
+	public function delete_data_column($tbl, $column, $id)
+	{
+		$this->db->trans_start();
+		$this->db->set('is_enable', 0);
+		$this->db->where($column, $id);
+		$query = $this->db->update($tbl);
+		if ($this->db->trans_status() === FALSE) {
+			$this->db->trans_rollback();
+			return null;
+		} else {
+			$this->db->trans_commit();
+			return $query;
+		}
+	}
 	public function delete_data($tbl, $id)
 	{
 		$this->db->trans_start();
