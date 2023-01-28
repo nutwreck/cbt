@@ -117,7 +117,7 @@
 						<table>
 							<tr>
 								<td class="title">
-									<img src="https://scontent.fsub1-1.fna.fbcdn.net/v/t1.6435-9/180731000_5532264243480864_267979682565064452_n.jpg?_nc_cat=109&ccb=1-3&_nc_sid=730e14&_nc_eui2=AeG9XJn5KxCFMEK7wWq9f9uq2TZ9_pVv1MnZNn3-lW_Uyai12h9jrZO75n_RBY9KmXO5pGifHvrjXAhzJsGQkU10&_nc_ohc=ntBtyPJ6PvkAX8vxCN9&_nc_ht=scontent.fsub1-1.fna&oh=e9e2fea971823620b11e90696bb1c22f&oe=60B1E32B" style="width: 100%; max-width: 300px" alt="header-logo"/>
+									<img src="<?= config_item('_assets_general') ?>header_logo/header_logo_menu.png" style="width: 100%; max-width: 300px" alt="header-logo"/>
 								</td>
 
 								<td style="text-align:right">

@@ -190,7 +190,7 @@ class Mutasi_check extends CI_Controller {
                 $this->email->clear(TRUE);
 
                 $from = $this->config->item('smtp_user');
-                $subject = 'Invoice #'.$data_invoice->invoice_number.' '.format_indo($now).' '.(Lunas);
+                $subject = 'Invoice #'.$data_invoice->invoice_number.' '.format_indo($now).' '.'(Lunas)';
                 $message = $this->load->view('website/lembaga/management/invoice/confirm_success/content', $datas, TRUE);
 
                 $this->email->set_newline("\r\n");

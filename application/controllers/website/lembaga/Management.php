@@ -1741,7 +1741,7 @@ class Management extends CI_Controller
 			$this->email->clear(TRUE);
 
 			$from = $this->config->item('smtp_user');
-			$subject = 'Invoice #' . $data_invoice->invoice_number . ' ' . format_indo($now) . ' ' . (Lunas);
+			$subject = 'Invoice #' . $data_invoice->invoice_number . ' ' . format_indo($now) . ' ' . '(Lunas)';
 			$message = $this->load->view('website/lembaga/management/invoice/confirm_success/content', $datas, TRUE);
 
 			$this->email->set_newline("\r\n");
@@ -1807,8 +1807,9 @@ class Management extends CI_Controller
 	{
 		$invoice_id = base64_decode(urldecode($id_invoice));
 
-		$tbl = $this->tbl_invoice;
-		$delete = $this->general->delete_data($tbl, $invoice_id);
+		//User Pembelian Buku
+		$delete = $this->general->delete_data($this->tbl_user_pembelian_buku, $invoice_id);
+		$delete = $this->general->delete_data($this->tbl_invoice, $invoice_id);
 
 		if ($page == 1) { //1 Invoice All 2 Confirm 3 Success 4 Expired
 			$urly = 'admin/invoice';

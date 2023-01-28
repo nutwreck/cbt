@@ -17,7 +17,8 @@
 	'wordwrap' => TRUE
 ];
  */
-$config = Array(
+// LOKAL
+/* $config = Array(
 	'protocol' => 'smtp',
 	'smtp_host' => 'smtp.mailtrap.io',
 	'smtp_port' => 2525,
@@ -25,7 +26,24 @@ $config = Array(
 	'smtp_pass' => '75b535b086d81d',
 	'crlf' => "\r\n",
 	'newline' => "\r\n"
-);
+); */
+$config = [
+	'useragent' => 'zambert system',
+	'protocol' => 'smtp',
+	'mailtype'  => 'html',
+	'mailpath' => '/usr/sbin/sendmail',
+	'charset'   => 'utf-8',
+	'smtp_host' => 'smtp.zoho.com',
+	'smtp_user' => 'cs@zambertclass.com',  // Email gmail
+	'smtp_pass'   => 'Tamankeludselatan5a%',  // Password gmail
+	'smtp_timeout' => 600,
+	'smtp_crypto' => 'tls',
+	'smtp_port'   => 587,
+	'send_multipart' => FALSE,
+	'crlf'    => "\r\n",
+	/* 'newline'    => "\r\n", */
+	'wordwrap' => TRUE
+];
 /* How To Use
     1. Tambah e $this->load->config('email'); //SET CONFIG EMAIL ning function __construct class
     2. Kode email
