@@ -143,10 +143,15 @@ class User_model extends CI_Model
 		}
 	}
 
-	public function checking_user_peserta($role_user_id, $username)
+	public function checking_user_peserta($role_user_id, $username, $all = false)
 	{
-		$query = $this->db->select('id')
+		if ($all === true) {
+			$query = $this->db->select('id')
+			->get_where('user', array('role_user_id' => $role_user_id, 'username' => $username))->row();
+		} else {
+			$query = $this->db->select('id')
 			->get_where('user', array('role_user_id' => $role_user_id, 'username' => $username, 'is_enable' => 1))->row();
+		}
 
 		if ($query) {
 			return $query;

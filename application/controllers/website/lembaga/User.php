@@ -742,7 +742,7 @@ class User extends CI_Controller
 		$tbl = $this->tbl_user;
 
 		//Cek user didatabase
-		$cek_user = $this->user->checking_user_peserta($role_user_id, $username);
+		$cek_user = $this->user->checking_user_peserta($role_user_id, $username, true);
 
 		if (empty($cek_user)) { //Jika data email tersebut belum terdaftar
 			if (empty($username) || $username == '' || $username == NULL) { //Jika email kosong / tidak diisi
@@ -765,6 +765,7 @@ class User extends CI_Controller
 
 			$id_peserta = $cek_user->id;
 			$datas = array(
+				'is_enable' => 1, //Aktifkan user kembali jika sebelumnya dinonaktifkan
 				'password' => $pass_input
 			);
 
